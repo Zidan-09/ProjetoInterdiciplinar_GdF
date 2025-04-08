@@ -14,6 +14,7 @@ FUNÇÕES:
     inserir paciente na fila para a triagem
     realizar triagem atribuindo gravidade
     mover paciente para a fila para consulta
+    ordenar fila de acordo com tempo de espera e severidade
     chamar pacientes na fila de acordo com gravidade e tempo de espera
     médico inicia e finaliza consulta chamando o próximo da fila
     ter relatórios que mostrem:

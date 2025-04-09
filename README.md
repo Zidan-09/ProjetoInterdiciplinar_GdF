@@ -5,7 +5,6 @@ CLASSES:
     patient
     hospital staff
     queue
-    cpf
 
 FUNÇÕES:
     validar cpf utilizando o método de validação (xxx.xxx.xxx-yy => x * 10, x * 9... sum(all) * 10 % 11 => 10 | 11 = 0)

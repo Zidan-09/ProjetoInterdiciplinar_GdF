@@ -83,3 +83,60 @@ FLUXOS:
             FLUXO SECUNDÁRIO:
                 1 - O técnico de enfermagem realiza a triagem no percuso ao hospital e registra no sistema com a classificação de risco de emergência
                 2 - Ao chegar no hospital o paciente é atendido imediatamente
+
+
+REQUISITOS:
+
+✅ Requisitos Funcionais (RF) – Versão Acadêmica
+
+    Cadastro de pacientes
+
+    Triagem com classificação de risco (ex: vermelho, amarelo, verde)
+
+    Atribuição automática de prioridade na fila
+
+    Visualização da fila por profissionais de saúde
+
+    Registro de atendimento médico
+
+    Chamadas para atendimento (painel de senhas)
+
+    Encaminhamento para leitos ou outros setores
+
+    Painel para gestão de capacidade da unidade (leitos, consultórios)
+
+    Relatórios simples (número de atendimentos por dia, tempo médio de espera)
+
+    Cadastro e login de usuários (administradores, triagem, médicos, recepção)
+
+🔧 Requisitos Não Funcionais (RNF)
+
+    Interface simples e amigável
+
+    Sistema web (acessado pelo navegador)
+
+    Dados armazenados localmente (banco de dados relacional, tipo MySQL ou SQLite)
+
+    Permitir múltiplos usuários simultâneos
+
+    Senhas armazenadas de forma segura (criptografia hash, tipo bcrypt)
+
+    Tempo de resposta rápido (menos de 3 segundos por ação)
+
+    Sistema com layout responsivo (acesso via tablet, desktop)
+
+📘 Requisitos Normativos (RN)
+
+(Aqui a gente pode usar apenas normas e boas práticas de software ou simular regras da instituição de saúde, sem citar o governo)
+
+    Adoção de protocolo de triagem baseado na prioridade clínica
+
+    Registro obrigatório do responsável pelo atendimento
+
+    Armazenamento de histórico de atendimentos por paciente
+
+    Controle de acesso baseado em níveis de permissão
+
+    Armazenamento de logs de acesso e alterações em registros críticos
+
+    Tempo máximo de espera por prioridade (ex: vermelho = 0 min, amarelo = até 30 min)

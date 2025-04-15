@@ -1,0 +1,30 @@
+#basic class definition
+CLASS "Patient" as Patient:
+"name"
+"dob"
+"maritalStatus"
+"cpf"
+"rg"
+"contact"
+"gender"
+"heatlhPlan"
+"address"
+"checkIn"
+"status"
+"vitalSigns"
+"severity"
+"simptoms"
+
+CLASS "AttendQueue" as AttendQueue:
+"veryPriorityQueue"
+"priorityQueue"
+"defaultQueue"
+"attendQueue"
+
+CLASS "TriageQueue" as TriageQueue:
+"triagePointer"
+
+CLASS "ConsultQueue" as ConsultQueue:
+"consultPointer"
+
+Patient-AttendQueue

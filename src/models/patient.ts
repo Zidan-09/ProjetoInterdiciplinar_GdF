@@ -36,7 +36,6 @@ export class Patient {
     cpf: undefined | string;
     rg: string;
     contact: string[];
-    email: string;
     gender: Gender;
     healthPlan: string;
     address: string;
@@ -46,14 +45,13 @@ export class Patient {
     severity: Severity | undefined;
     simptoms: undefined | string[];
 
-    constructor(name: string, dob: Date, maritalStatus: MaritalStatus, cpf: string, rg: string, contact: string[], email: string, gender: Gender, healthPlan: string, address: string) {
+    constructor(name: string, dob: Date, maritalStatus: MaritalStatus, cpf: string, rg: string, contact: string[], gender: Gender, healthPlan: string, address: string) {
         this.name = name;
         this.dob = dob;
         this.maritalStatus = maritalStatus;
         this.cpf = cpf;
         this.rg = rg;
         this.contact = contact;
-        this.email = email;
         this.gender = gender;
         this.healthPlan = healthPlan;
         this.address = address;

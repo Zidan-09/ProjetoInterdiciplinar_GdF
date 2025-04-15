@@ -13,7 +13,6 @@ PatientFunctions.register({
     cpf: '100.165.043-30',
     rg: '8329043',
     contact: ['(86)9 9427-9321', '(86)9 9451-5453'],
-    email: 'samuelzindc@gmail.com',
     gender: 'Male',
     healthPlan: 'Sus',
     address: 'Av Pinheiro Machado, 1209'
@@ -26,7 +25,6 @@ PatientFunctions.register({
     cpf: '100.165.043-30',
     rg: '0923465',
     contact: ['(86)9 9448-3184'],
-    email: 'gabriel@gmail.com',
     gender: 'Other',
     healthPlan: 'Sus',
     address: 'Rua dos catapimba, 1010'

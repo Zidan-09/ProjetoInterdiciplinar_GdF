@@ -84,14 +84,14 @@ export class QueueServices {
                 }
 
             case 'consult':
-                let temp = ConsultQ.consultPointer;
+                let temp2 = ConsultQ.consultPointer;
 
                 while (end) {
                     end = false;
 
                     if (temp2 != null) {
                         console.log(temp2);
-                        temp2 = temp2?.pointer;
+                        temp2 = temp2.pointer;
                         end = true;
                     }
                 }
@@ -105,7 +105,7 @@ export class QueueServices {
         TriageQ.triagePointer = next;
 
         console.log(`${call?.patient.name}, vá para a triagem!`)
-        return call?.patient
+        return (call?.patient!)
     }
 
     callNextConsult() {

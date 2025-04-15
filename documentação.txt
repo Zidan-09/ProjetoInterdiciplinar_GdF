@@ -1,0 +1,135 @@
+1. Introdução
+Nome do Sistema:
+Sistema de Gerenciamento de Filas em Pronto-Socorros
+
+Objetivo do Documento:
+Este documento descreve os requisitos funcionais, os módulos de código e os diagramas iniciais para a primeira entrega do Sistema de Gerenciamento de Filas em Pronto-Socorros. Esta versão inicial será atualizada nas próximas entregas conforme o desenvolvimento avança.
+
+Resumo do Sistema:
+O Sistema de Gerenciamento de Filas em Pronto-Socorros tem como objetivo otimizar o atendimento médico, organizando, classificando e monitorando o fluxo de pacientes em tempo real. O sistema prioriza pacientes com base na urgência de atendimento e na capacidade de atendimento das unidades de saúde.
+
+Escopo da Entrega Atual (Entrega 1 de 3)
+
+Nesta primeira entrega, estão cobertos:
+
+    Levantamento dos requisitos funcionais principais;
+
+    Descrição dos módulos de código já implementados e em desenvolvimento;
+
+    Elaboração de diagramas (diagrama de casos de uso e de classes iniciais).
+
+2. Requisitos Funcionais
+
+Aqui estarão os requisitos principais, que podem ser descritos como histórias de usuário ou funcionalidades, conforme o que foi levantado até o momento. Exemplo:
+Requisito 1: Cadastro de Paciente
+
+Como recepcionista,
+Quero cadastrar um paciente no sistema,
+Para que ele seja incluído na fila de atendimento.
+Requisito 2: Triagem de Paciente
+
+Como enfermeiro,
+Quero classificar a gravidade dos sintomas do paciente,
+Para que o atendimento seja priorizado conforme a urgência.
+Requisito 3: Visualização da Fila
+
+Como médico,
+Quero visualizar a lista de pacientes com suas respectivas prioridades,
+Para que eu possa atender conforme a gravidade e tempo de espera.
+
+(Continue descrevendo conforme os requisitos do seu projeto.)
+3. Diagramas do Sistema
+3.1 Diagrama de Casos de Uso
+
+Descrição: Este diagrama ilustra os principais atores do sistema e suas interações com o sistema de filas e atendimento médico.
+
+📎 Imagem do diagrama:
+(Se você tiver a imagem pronta, insira aqui, ou deixe um espaço reservado para ela)
+
+![Diagrama de Casos de Uso](./diagramas/casos-de-uso.png)
+
+Atores principais:
+Ator	Casos de Uso
+Paciente	Realizar check-in, Visualizar tempo de espera
+Recepcionista	Registrar paciente, Atualizar status na fila
+Enfermeiro	Realizar triagem, Classificar gravidade
+Médico	Chamar próximo paciente, Encerrar atendimento
+Sistema	Calcular prioridade, Atualizar fila automaticamente
+3.2 Diagrama de Classes
+
+Descrição: Este diagrama conceitual mostra as principais entidades do sistema e seus relacionamentos.
+
+📎 Imagem do diagrama:
+(Se você tiver a imagem pronta, insira aqui)
+
+![Diagrama de Classes](./diagramas/classes-iniciais.png)
+
+Classes principais:
+Classe	Atributos principais	Observações
+Paciente	id, nome, dataNascimento, prioridade	Vai estar ligado à Triagem
+Triagem	id, sintomas, gravidade, horaRegistro	Associado a Paciente e Fila
+Fila	id, status, tempoEstimado, ordemPrioridade	Responsável por gerenciar a fila
+Atendimento	id, pacienteId, medicoId, diagnostico	Fecha o ciclo do atendimento
+4. Módulos de Código
+
+Descrição: Aqui estão os módulos do sistema, com a função e responsabilidades de cada um, e seu status atual.
+4.1 Estrutura Inicial do Projeto
+
+src/
+├── models/
+│   ├── patient.ts
+│   └── queue.ts
+├── services/
+│   ├── patientServices.ts
+│   ├── queueServices.ts
+│   └── hospitalServices.ts
+├── utils/
+│   ├── validateCPF.ts
+│   ├── createNoTriage.ts
+│   └── createNoConsult.ts
+├── tests/
+│   └── test.ts
+└── index.ts
+
+4.2 Descrição dos Módulos
+Caminho	Responsabilidade	Status
+models/patient.ts	Define a estrutura da entidade Paciente, com os dados necessários para cadastro e triagem	Criado
+models/queue.ts	Representa a estrutura da Fila de Atendimento, com referência a nós que compõem a fila	Criado
+services/patientServices.ts	Implementa a função de cadastro de pacientes (já implementado e funcionando)	Concluído
+services/queueServices.ts	Gerencia a fila de atendimento, incluindo adição e ordenação de pacientes	Em desenvolvimento
+services/hospitalServices.ts	Contém a lógica de triagem de pacientes (implementada) e lógica de consulta médica (pendente)	Parcialmente feito
+utils/validateCPF.ts	Valida o CPF informado no momento do cadastro do paciente	Criado
+utils/createNoTriage.ts	Gera um nó para adicionar pacientes sem triagem à fila, mantendo a estrutura organizada	Criado
+utils/createNoConsult.ts	Cria um nó específico para pacientes que ainda não passaram pela consulta	Criado
+tests/test.ts	Testes iniciais de integração para validar funcionalidades dos serviços e filas	Funcional
+index.ts	Ponto de entrada da aplicação – ainda não possui lógica implementada	Vazio
+
+Paciente:
+
+    O paciente chega ao pronto-socorro, pega uma senha e aguarda o atendimento.
+
+Recepcionista:
+
+    O recepcionista realiza o cadastro do paciente, caso ele ainda não esteja registrado no sistema. O sistema verifica automaticamente se o paciente já está cadastrado.
+
+    Se o paciente já estiver cadastrado, o sistema pergunta ao recepcionista se será uma nova consulta. Se sim, o paciente é movido para a fila de triagem.
+
+    Se o paciente não for encontrado no sistema, o cadastro é realizado e, em seguida, ele é movido para a fila de triagem.
+
+Sistema:
+
+    O sistema verifica automaticamente se o paciente está cadastrado.
+
+    Atualiza automaticamente o status do paciente e o move para a fila da triagem, após o cadastro ou a confirmação de nova consulta.
+
+    O sistema também gerencia a fila de atendimento, incluindo a ordem de prioridade dos pacientes, conforme a triagem e outros parâmetros de urgência.
+
+Enfermeiro:
+
+    O enfermeiro realiza a triagem do paciente, avaliando a gravidade dos sintomas e classificando-o de acordo com a prioridade de atendimento.
+
+Médico:
+
+    O médico chama o próximo paciente da fila conforme a urgência e realiza a consulta.
+
+    Após a consulta, o médico encerra o atendimento e o paciente é removido da fila.

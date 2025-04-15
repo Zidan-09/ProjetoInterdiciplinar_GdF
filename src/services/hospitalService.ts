@@ -1,5 +1,6 @@
 import { Patient, VitalSigns, BloodPreassure, Severity } from "../models/patient";
-import { No } from "../utils/createNo";
+import { NoConsult } from "../utils/createNoConsult";
+import { NoTriage } from "../utils/createNoTriage";
 import { QueueFunctions } from "./queueService";
 
 class HospitalServices {
@@ -11,7 +12,7 @@ class HospitalServices {
         patient.vitalSigns = vitalSigns;
         patient.severity = severity;
 
-        const no: No = new No(patient);
+        const no: NoConsult = new NoConsult(patient);
         QueueFunctions.insertConsultQueue(no);
     }
 

@@ -1,5 +1,5 @@
-import { Patient } from "./patient";
-import { No } from "../utils/createNo";
+import { NoConsult } from "../utils/createNoConsult";
+import { NoTriage } from "../utils/createNoTriage";
 
 
 class AttendQueue {
@@ -19,18 +19,18 @@ class AttendQueue {
 }
 
 class TriageQueue {
-    triageQueue: Patient[];
+    triagePointer: undefined | null | NoTriage;
 
     constructor() {
-        this.triageQueue = [];
+        this.triagePointer = null;
     }
 }
 
 class ConsultQueue {
-    pointer: undefined | null | No;
+    consultPointer: undefined | null | NoConsult;
 
     constructor() {
-        this.pointer = null;
+        this.consultPointer = null;
     }
 }
 

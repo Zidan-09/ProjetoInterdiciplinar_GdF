@@ -1,18 +1,18 @@
 import { Patient } from "../models/patient";
 
-export class No {
+export class NoConsult {
     patient: Patient;
     severity: number | undefined;
     time: Date;
     limit: number;
-    pointer: null | No;
+    pointer: null | NoConsult;
 
     constructor(patientRecive: Patient) {
         this.patient = patientRecive;
         this.pointer = null;
         this.time = new Date();
 
-        switch (patientRecive.severity) {
+        switch (patientRecive.severity!) {
             case 'Non-urgent': 
                 this.severity = 1;
                 this.limit = 240;

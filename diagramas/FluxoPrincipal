@@ -1,0 +1,67 @@
+Fluxo Normal (Pacientes)  
+
+1. O paciente chega ao hospital e pega uma senha.  
+2. A senha é chamada e o paciente vai para a recepção.  
+3. A recepcionista realiza o cadastro do paciente no sistema com:  
+   - Nome  
+   - Data de nascimento  
+   - Contato  
+   - CPF  
+   (O sistema insere data de chegada, status: Aguardando triagem e sintomas: nulo)  
+4. O sistema move o paciente para uma fila para a triagem.  
+5. A enfermeira realiza a triagem atribuindo ao paciente uma classificação de risco e sinais vitais:  
+   - Azul: não urgente  
+   - Verde: baixa urgência  
+   - Amarelo: urgente  
+   - Laranja: muito urgente  
+   - Vermelho: emergência  
+   Sinais vitais incluem: pressão arterial, frequência cardíaca, frequência respiratória, temperatura corporal, saturação de oxigênio, nível de dor (1 - 10).  
+6. A enfermeira atribui ao paciente os dados e o relato do paciente (sintomas resumidos).  
+7. De acordo com esses dados, o sistema move o paciente para uma fila. É marcado um tempo máximo de permanência e seu status é alterado para: Aguardando consulta.  
+8. Ao finalizar a consulta, o médico indica ao sistema para chamar o próximo.  
+9. O sistema chama o paciente para a consulta.  
+10. Quando a entrada do paciente é confirmada no consultório, seu status é alterado para: Em consulta.  
+11. Ao finalizar a consulta, o status do paciente é alterado para: Foi tratado.  
+12. O cadastrado é armazenado no banco de dados para agilizar futuras consultas.  
+
+# Fluxos Secundários  
+
+## Paciente Já Cadastrado  
+1. O sistema informa que o paciente já está cadastrado e pergunta se é uma nova consulta.  
+2. A enfermeira confirma.  
+3. O sistema adiciona uma nova data de chegada, sintomas e status.  
+4. O processo é repetido a cada nova consulta do mesmo paciente.  
+
+## Paciente Não Compareceu ao Ser Chamado  
+1. O sistema chama o próximo da fila.  
+2. O médico ainda não confirmou a entrada do paciente chamado ao consultório.  
+3. O sistema chama mais 2 vezes o paciente.  
+4. O sistema pede confirmação da recepcionista se o paciente está no local.  
+5. A recepcionista informa se está ou não.  
+6. **Caso esteja:**  
+   7. O paciente é movido para a próxima posição da fila.  
+   8. O sistema chama o posterior da fila.  
+   9. O médico finaliza a consulta.  
+   10. O sistema chama o próximo da fila (paciente que perdeu a vez).  
+6. **Caso não esteja:**  
+   7. O paciente é retirado da fila.  
+   8. O sistema segue o fluxo padrão.  
+
+## Caso de Agravamento  
+1. A recepcionista comunica o médico.  
+2. O médico é direcionado à recepção.  
+3. O paciente é levado às pressas para atendimento.  
+4. A recepcionista altera os dados do paciente: atendimento de emergência.  
+5. O sistema pausa a fila em caso de apenas um médico.  
+
+# Ambulância  
+
+## Fluxo Normal  
+1. A ambulância chega ao local.  
+2. O técnico de enfermagem realiza os procedimentos necessários.  
+3. O técnico de enfermagem realiza a triagem no percurso ao hospital e registra no sistema com a classificação de risco.  
+4. Ao chegar no hospital, o paciente já tem seu lugar na fila definido.  
+
+## Fluxo Secundário  
+1. O técnico de enfermagem realiza a triagem no percurso ao hospital e registra no sistema com a classificação de risco de emergência.  
+2. Ao chegar no hospital, o paciente é atendido imediatamente.  

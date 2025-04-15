@@ -39,13 +39,14 @@ export class Patient {
     email: string;
     gender: Gender;
     healthPlan: string;
+    address: string;
     checkIn: Date;
     status: Status;
     vitalSigns: VitalSigns | undefined;
     severity: Severity | undefined;
     simptoms: undefined | string[];
 
-    constructor(name: string, dob: Date, maritalStatus: MaritalStatus, cpf: string, rg: string, contact: string[], email: string, gender: Gender, healthPlan: string) {
+    constructor(name: string, dob: Date, maritalStatus: MaritalStatus, cpf: string, rg: string, contact: string[], email: string, gender: Gender, healthPlan: string, address: string) {
         this.name = name;
         this.dob = dob;
         this.maritalStatus = maritalStatus;
@@ -55,6 +56,7 @@ export class Patient {
         this.email = email;
         this.gender = gender;
         this.healthPlan = healthPlan;
+        this.address = address;
         this.checkIn = new Date();
         this.status = 'In triage queue'
         this.vitalSigns = undefined;

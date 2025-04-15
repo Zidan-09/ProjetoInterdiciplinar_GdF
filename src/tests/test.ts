@@ -15,7 +15,8 @@ PatientFunctions.register({
     contact: ['(86)9 9427-9321', '(86)9 9451-5453'],
     email: 'samuelzindc@gmail.com',
     gender: 'Male',
-    healthPlan: 'Sus'
+    healthPlan: 'Sus',
+    address: 'Av Pinheiro Machado, 1209'
 })
 
 PatientFunctions.register({
@@ -27,12 +28,13 @@ PatientFunctions.register({
     contact: ['(86)9 9448-3184'],
     email: 'gabriel@gmail.com',
     gender: 'Other',
-    healthPlan: 'Sus'
+    healthPlan: 'Sus',
+    address: 'Rua dos catapimba, 1010'
 })
 
 // QueueFunctions.showQueue('triage')
 
-patient= QueueFunctions.callNextTriage()
+patient = QueueFunctions.callNextTriage()
 HospitalFunctions.triage(patient, 'Non-urgent', {
     systolic: 120,
     diastolic: 80,

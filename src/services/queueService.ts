@@ -98,13 +98,14 @@ export class QueueServices {
         }
     }
 
-    callNextTriage() {
+    callNextTriage(): Patient {
         const call = TriageQ.triagePointer;
         const next = call?.pointer;
 
         TriageQ.triagePointer = next;
 
         console.log(`${call?.patient.name}, vá para a triagem!`)
+        return call?.patient
     }
 
     callNextConsult() {

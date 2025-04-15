@@ -1,16 +1,20 @@
-import { Patient } from "../models/patient";
+import { Patient, MaritalStatus, Gender } from "../models/patient";
 import { ValidadeCPF } from "../utils/validateCPF";
+import { QueueServices } from "./queueService";
+import { QueueFunctions } from "./queueService";
 
-export class PatientRegistration {
-    register(data: {name: string; dob: Date; cpf: string, contact: string}): Patient {
+class PatientRegistration {
+    register(data: {name: string; dob: Date; maritalStatus: MaritalStatus; cpf: string, rg: string, contact: string[], email: string, gender: Gender, healthPlan: string}): Patient {
         const verify = ValidadeCPF(data.cpf);
         if (verify === true) {
-            const temp: Patient = new Patient(data.name, data.dob, data.cpf, data.contact);
+            const temp: Patient = new Patient(data.name, data.dob, data.maritalStatus, data.cpf, data.rg, data.contact, data.email, data.gender, data.healthPlan);
+            QueueFunctions.insertTriageQueue(temp)
+            console.log('Paciente Cadastrado com Sucesso!')
             return temp;
         } else {
             throw new Error('Cpf Inválido')
-        }
+        } 
     }
 }
 
-export const patientFunctions: PatientRegistration = new PatientRegistration();
+export const PatientFunctions: PatientRegistration = new PatientRegistration();

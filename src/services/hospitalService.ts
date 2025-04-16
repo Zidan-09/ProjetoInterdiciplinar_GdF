@@ -1,16 +1,21 @@
-import { Patient, VitalSigns, BloodPreassure, Severity } from "../models/patient";
+import { Patient, Severity } from "../models/patient";
 import { NoConsult } from "../utils/createNoConsult";
 import { NoTriage } from "../utils/createNoTriage";
 import { QueueFunctions } from "./queueService";
 
 class HospitalServices {
 
-    triage(patient: Patient, severity: Severity, data: {systolic: number, diastolic: number, heartRate: number, respiratoryRate: number, bodyTemperature: number, oxygenSaturation: number}) {
-        let bloodPreassure: BloodPreassure = new BloodPreassure(data.systolic, data.diastolic)
-        let vitalSigns: VitalSigns = new VitalSigns(bloodPreassure, data.heartRate, data.respiratoryRate, data.bodyTemperature, data.oxygenSaturation)
-
-        patient.vitalSigns = vitalSigns;
-        patient.severity = severity;
+    static triage(patient: Patient, severity: Severity, data: {systolic: number, diastolic: number, heartRate: number, respiratoryRate: number, bodyTemperature: number, oxygenSaturation: number}) {
+        patient.vitalSigns = {
+            bloodPreassure: {
+                systolicPreassure: data.systolic,
+                diastolicPreassure: data.diastolic,
+            },
+            heartRate: data.heartRate,
+            respiratoryRate: data.respiratoryRate,
+            bodyTemperature: data.bodyTemperature,
+            oxygenSaturation: data.oxygenSaturation,
+        }
 
         const no: NoConsult = new NoConsult(patient);
         QueueFunctions.insertConsultQueue(no);
@@ -20,5 +25,3 @@ class HospitalServices {
             
     // }
 }
-
-export const HospitalFunctions: HospitalServices = new HospitalServices();

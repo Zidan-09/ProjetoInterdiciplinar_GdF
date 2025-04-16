@@ -1,5 +1,5 @@
 import { Patient } from "../models/patient";
-import { AttendQ, TriageQ, ConsultQ } from "../models/queue";
+import { AttendQ, TriageQ, ConsultQ, Priority } from "../models/queue";
 import { NoConsult } from "../utils/createNoConsult";
 import { NoTriage } from "../utils/createNoTriage";
 
@@ -7,10 +7,22 @@ export type typeQueue = 'attend' | 'triage' | 'consult'
 
 export class QueueServices {
 
-    static insertAttendQueue() {
-
-
-        // AttendQ.attendQueue.push()
+    static insertAttendQueue(priority: Priority) {
+        switch (priority) {
+            case 'NonPriority':
+                AttendQ.qtyPatientsNonPriority++;
+                AttendQ.nonPriorityQueue.push(AttendQ.qtyPatientsNonPriority);
+                break;
+            case 'Priority':
+                AttendQ.qtyPatientesPriority++;
+                AttendQ.priorityQueue.push(AttendQ.qtyPatientesPriority);
+                break;
+            case 'VeryPriority':
+                AttendQ.qtyPatientsVeryPriority++;
+                AttendQ.veryPriorityQueue.push(AttendQ.qtyPatientsVeryPriority);
+                break;
+        }
+        AttendQ.qtyPatients++;
     }
 
     static insertTriageQueue(no: NoTriage) {
@@ -37,8 +49,9 @@ export class QueueServices {
     static showQueue(queue: typeQueue) {
         switch (queue) {
             case 'attend':
-                console.log(AttendQ.attendQueue);
-                break;
+                console.log(`Muita Prioridade: ${AttendQ.veryPriorityQueue}`)
+                console.log(`Prioridade: ${AttendQ.priorityQueue}`)
+                console.log(`Padrão: ${AttendQ.nonPriorityQueue}`)
 
             case 'triage':
                 let tempT = TriageQ.firstPointer;
@@ -57,6 +70,22 @@ export class QueueServices {
         }
     }
 
+    static callNextAttend(): void {
+        let call: Boolean = false;
+        let index: number = -1;
+        for (let i of AttendQ.attendQueue) {
+            index++;
+            for (let o of i) {
+                console.log('Senha:', o);
+                AttendQ.attendQueue[index].shift()
+                call = true;
+                break;
+            }
+            if (call) {
+                break;
+            }
+        }
+    }
     static callNextTriage(): Patient {
         const call = TriageQ.firstPointer;
         const next = call?.pointer;

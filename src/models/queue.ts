@@ -1,20 +1,26 @@
 import { NoConsult } from "../utils/createNoConsult";
 import { NoTriage } from "../utils/createNoTriage";
-
+export type Priority = 'VeryPriority' | 'Priority' | 'NonPriority' 
 
 class AttendQueue {
     veryPriorityQueue: number[];
     priorityQueue: number[];
-    defaultQueue: number[];
-
-    attendQueue: [number[], number[], number[]];
+    nonPriorityQueue: number[];
+    attendQueue: [number[], number[], number[]]
+    qtyPatientsVeryPriority: number;
+    qtyPatientesPriority: number;
+    qtyPatientsNonPriority: number;
+    qtyPatients: number;
 
     constructor() {
         this.veryPriorityQueue = [];
         this.priorityQueue = [];
-        this.defaultQueue = [];
-        
-        this.attendQueue = [this.veryPriorityQueue, this.priorityQueue, this.defaultQueue];
+        this.nonPriorityQueue = [];
+        this.attendQueue = [this.veryPriorityQueue, this.priorityQueue, this.nonPriorityQueue]
+        this.qtyPatientsVeryPriority = 0;
+        this.qtyPatientesPriority = 0;
+        this.qtyPatientsNonPriority = 0;
+        this.qtyPatients = 0;
     }
 }
 

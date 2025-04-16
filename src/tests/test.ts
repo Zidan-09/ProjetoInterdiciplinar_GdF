@@ -6,6 +6,11 @@ import { Patient, Severity } from "../models/patient";
 
 let patient: Patient;
 
+QueueServices.insertAttendQueue('NonPriority')
+QueueServices.insertAttendQueue('NonPriority')
+
+QueueServices.callNextAttend()
+
 PatientRegistration.register({
     name: 'Samuel da Penha Nascimento',
     dob: new Date(2006, 4, 19),
@@ -17,6 +22,8 @@ PatientRegistration.register({
     healthPlan: 'Sus',
     address: 'Av Pinheiro Machado, 1209'
 })
+
+QueueServices.callNextAttend()
 
 PatientRegistration.register({
     name: 'Gabriel Lima Silva Oliveira',
@@ -30,7 +37,7 @@ PatientRegistration.register({
     address: 'Rua dos catapimba, 1010'
 })
 
-QueueServices.showQueue('triage')
+// QueueServices.showQueue('triage')
 
 patient = QueueServices.callNextTriage()
 HospitalServices.triage(patient, 'Non-urgent', ['tosse', 'espirros'], {
@@ -41,7 +48,6 @@ HospitalServices.triage(patient, 'Non-urgent', ['tosse', 'espirros'], {
     bodyTemperature: 36,
     oxygenSaturation: 73
 })
-console.log(patient)
 
 patient = QueueServices.callNextTriage()
 HospitalServices.triage(patient, 'Low-urgency', ['dor abdominal'], {
@@ -52,7 +58,7 @@ HospitalServices.triage(patient, 'Low-urgency', ['dor abdominal'], {
     bodyTemperature: 40,
     oxygenSaturation: 90
 })
-QueueServices.showQueue('consult')
+// QueueServices.showQueue('consult')
 
 QueueServices.callNextConsult();
 QueueServices.callNextConsult();

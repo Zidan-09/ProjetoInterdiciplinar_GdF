@@ -1,12 +1,12 @@
-import { HospitalFunctions } from "../services/hospitalService";
-import { QueueFunctions } from "../services/queueService";
-import { PatientFunctions } from "../services/patientServices";
+import { HospitalServices } from "../services/hospitalService";
+import { QueueServices } from "../services/queueService";
+import { PatientRegistration } from "../services/patientServices";
 import { typeQueue } from "../services/queueService";
 import { Patient, Severity } from "../models/patient";
 
 let patient: Patient;
 
-PatientFunctions.register({
+PatientRegistration.register({
     name: 'Samuel da Penha Nascimento',
     dob: new Date(2006, 4, 19),
     maritalStatus: 'Single',
@@ -18,7 +18,7 @@ PatientFunctions.register({
     address: 'Av Pinheiro Machado, 1209'
 })
 
-PatientFunctions.register({
+PatientRegistration.register({
     name: 'Gabriel Lima Silva Oliveira',
     dob: new Date(2005, 7, 7),
     maritalStatus: 'Single',
@@ -30,10 +30,10 @@ PatientFunctions.register({
     address: 'Rua dos catapimba, 1010'
 })
 
-// QueueFunctions.showQueue('triage')
+QueueServices.showQueue('triage')
 
-patient = QueueFunctions.callNextTriage()
-HospitalFunctions.triage(patient, 'Non-urgent', {
+patient = QueueServices.callNextTriage()
+HospitalServices.triage(patient, 'Non-urgent', ['tosse', 'espirros'], {
     systolic: 120,
     diastolic: 80,
     heartRate: 80,
@@ -41,9 +41,10 @@ HospitalFunctions.triage(patient, 'Non-urgent', {
     bodyTemperature: 36,
     oxygenSaturation: 73
 })
+console.log(patient)
 
-patient = QueueFunctions.callNextTriage()
-HospitalFunctions.triage(patient, 'Low-urgency', {
+patient = QueueServices.callNextTriage()
+HospitalServices.triage(patient, 'Low-urgency', ['dor abdominal'], {
     systolic: 250,
     diastolic: 210,
     heartRate: 400,
@@ -51,7 +52,7 @@ HospitalFunctions.triage(patient, 'Low-urgency', {
     bodyTemperature: 40,
     oxygenSaturation: 90
 })
-QueueFunctions.showQueue('consult')
+QueueServices.showQueue('consult')
 
-QueueFunctions.callNextConsult();
-QueueFunctions.callNextConsult();
+QueueServices.callNextConsult();
+QueueServices.callNextConsult();

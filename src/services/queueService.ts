@@ -7,117 +7,74 @@ export type typeQueue = 'attend' | 'triage' | 'consult'
 
 export class QueueServices {
 
-    insertAttendQueue() {
+    static insertAttendQueue() {
 
 
         // AttendQ.attendQueue.push()
     }
 
-    insertTriageQueue(no: NoTriage) {
-        let temp1 = TriageQ;
-        let temp2 = TriageQ.triagePointer;
-        let end: Boolean = true;
-        let first: Boolean = true;
-
-        if (first) {
-            if (temp1.triagePointer == null) {
-                temp1.triagePointer = no;
-            } else {
-                first = false
-            }
+    static insertTriageQueue(no: NoTriage) {
+        if (TriageQ.firstPointer == null) {
+            TriageQ.firstPointer = no;
         } else {
-            while (end) {
-                if (temp2!.pointer == null) {
-                    temp2!.pointer = no;
-                    break
-                } else {
-                    temp2 = temp2!.pointer;
-                }
-            }
+            TriageQ.lastPointer!.pointer = no;
         }
+        TriageQ.lastPointer = no;
+        TriageQ.qtyPatients++;
     }
 
-    insertConsultQueue(no: NoConsult) {
-        let temp1 = ConsultQ;
-        let temp2 = ConsultQ.consultPointer;
-        let end: Boolean = true;
-        let first: Boolean = true;
-
-        if (first) {
-            if (temp1.consultPointer == null) {
-                temp1.consultPointer = no;
-            } else {
-                first = false
-            }
+    static insertConsultQueue(no: NoConsult) {
+        if (ConsultQ.firstPointer == null) {
+            ConsultQ.firstPointer = no;
+            ConsultQ.lastPointer = no;
         } else {
-            while (end) {
-                if (temp2!.pointer == null) {
-                    temp2!.pointer = no;
-                    break
-                } else {
-                    temp2 = temp2!.pointer;
-                }
-            }
+            ConsultQ.lastPointer!.pointer = no;
         }
+        ConsultQ.lastPointer = no;
+        ConsultQ.qtyPatients++;
     }
 
-    showQueue(queue: typeQueue) {
-        let end: boolean = true;
-        let temp1;
-        let temp2;
-
+    static showQueue(queue: typeQueue) {
         switch (queue) {
             case 'attend':
-                console.log(AttendQ.attendQueue)
+                console.log(AttendQ.attendQueue);
+                break;
 
             case 'triage':
-                let temp1 = ConsultQ.consultPointer;
-
-                while (end) {
-                    end = false;
-
-                    if (temp1 != null) {
-                        console.log(temp1);
-                        temp1 = temp1?.pointer;
-                        end = true;
-                    }
+                let tempT = TriageQ.firstPointer;
+                for (let i = 0; i < TriageQ.qtyPatients; i++) {
+                    console.log(tempT?.patient);
+                    tempT = tempT?.pointer;
                 }
 
             case 'consult':
-                let temp2 = ConsultQ.consultPointer;
-
-                while (end) {
-                    end = false;
-
-                    if (temp2 != null) {
-                        console.log(temp2);
-                        temp2 = temp2.pointer;
-                        end = true;
-                    }
+                let tempC = ConsultQ.firstPointer;
+                for (let i = 0; i < ConsultQ.qtyPatients; i++) {
+                    console.log(tempC?.patient);
+                    tempC = tempC?.pointer;
                 }
+                break;
         }
     }
 
-    callNextTriage(): Patient {
-        const call = TriageQ.triagePointer;
+    static callNextTriage(): Patient {
+        const call = TriageQ.firstPointer;
         const next = call?.pointer;
 
-        TriageQ.triagePointer = next;
+        TriageQ.firstPointer = next;
 
         console.log(`${call?.patient.name}, vá para a triagem!`)
         return (call?.patient!)
     }
 
-    callNextConsult() {
-        const call = ConsultQ.consultPointer;
+    static callNextConsult() {
+        const call = ConsultQ.firstPointer;
         const next = call?.pointer;
 
-        ConsultQ.consultPointer = next;
+        ConsultQ.firstPointer = next;
 
         console.log(`${call?.patient.name}, vá ao consultório!`);
     }
 
     toSort() {}
 }
-
-export const QueueFunctions: QueueServices = new QueueServices();

@@ -19,18 +19,26 @@ class AttendQueue {
 }
 
 class TriageQueue {
-    triagePointer: undefined | null | NoTriage;
+    firstPointer: undefined | null | NoTriage;
+    lastPointer: undefined | null | NoTriage;
+    qtyPatients: number;
 
     constructor() {
-        this.triagePointer = null;
+        this.firstPointer = null;
+        this.lastPointer = null;
+        this.qtyPatients = 0;
     }
 }
 
 class ConsultQueue {
-    consultPointer: undefined | null | NoConsult;
+    firstPointer: undefined | null | NoConsult;
+    lastPointer: undefined | null | NoConsult;
+    qtyPatients: number;
 
     constructor() {
-        this.consultPointer = null;
+        this.firstPointer = null;
+        this.lastPointer = null;
+        this.qtyPatients = 0;
     }
 }
 

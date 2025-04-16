@@ -1,11 +1,10 @@
 import { Patient, Severity } from "../models/patient";
 import { NoConsult } from "../utils/createNoConsult";
 import { NoTriage } from "../utils/createNoTriage";
-import { QueueFunctions } from "./queueService";
+import { QueueServices } from "./queueService";
 
-class HospitalServices {
-
-    static triage(patient: Patient, severity: Severity, data: {systolic: number, diastolic: number, heartRate: number, respiratoryRate: number, bodyTemperature: number, oxygenSaturation: number}) {
+export class HospitalServices {
+    static triage(patient: Patient, severity: Severity, simptoms: string[], data: {systolic: number, diastolic: number, heartRate: number, respiratoryRate: number, bodyTemperature: number, oxygenSaturation: number}) {
         patient.vitalSigns = {
             bloodPreassure: {
                 systolicPreassure: data.systolic,
@@ -16,9 +15,11 @@ class HospitalServices {
             bodyTemperature: data.bodyTemperature,
             oxygenSaturation: data.oxygenSaturation,
         }
+        patient.severity = severity;
+        patient.simptoms = simptoms;
 
         const no: NoConsult = new NoConsult(patient);
-        QueueFunctions.insertConsultQueue(no);
+        QueueServices.insertConsultQueue(no);
     }
 
     // consult(patient: No) {

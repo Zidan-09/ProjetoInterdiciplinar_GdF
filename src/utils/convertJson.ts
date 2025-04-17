@@ -1,17 +1,58 @@
 import fs from 'fs';
-import { Patient } from '../models/patient';
+import { MaritalStatus, Gender, Severity } from '../models/patient';
+
+export interface PatientData {
+    name: string;
+  dob: Date;
+  maritalStatus: MaritalStatus;
+  cpf: string;
+  rg: string;
+  contact: string[];
+  gender: Gender;
+  healthPlan: string;
+  address: string;
+}
+
+export interface TriageData {
+    bloodPreassure: {
+        systolicPreassure: number,
+        diastolicPreassure: number,
+    },
+    heartRate: number,
+    respiratoryRate: number,
+    bodyTemperature: number,
+    oxygenSaturation: number,
+    simptoms: string[],
+    severity: Severity
+}
 
 export class Convert {
-    static JsonToPatient(json) {
-        const file = fs.readFileSync(json, 'utf-8');
-        const patient = JSON.parse(file);
-        patient.dob = new Date(patient.dob);
-        return patient;
-    }
+    static JsonToData(json: any): PatientData {
+        return {
+            name: json.name,
+            dob: new Date(json.dob),
+    maritalStatus: json.maritalStatus,
+    cpf: json.cpf,
+    rg: json.rg,
+    contact: json.contact,
+    gender: json.gender,
+    healthPlan: json.healthPlan,
+    address: json.address,
+        }
+    };
 
-    static JsonToTriage(json): Patient {
-        const file = fs.readFileSync(json, 'utf-8');
-        const patient = JSON.parse(file);
-        return patient;
+    static JsonToTriage(json: any): TriageData {
+        return {
+            bloodPreassure: {
+                systolicPreassure: json.systolic,
+                diastolicPreassure: json.diastolic,
+            },
+            heartRate: json.heartRate,
+            respiratoryRate: json.respiratoryRate,
+            bodyTemperature: json.bodyTemperature,
+            oxygenSaturation: json.oxygenSaturation,
+            simptoms: json.simptoms,
+            severity: json.severity
+        }
     }
 }

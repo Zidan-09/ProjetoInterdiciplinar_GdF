@@ -1,0 +1,26 @@
+{
+  "name": "projetointegrador_gdf",
+  "version": "1.0.0",
+  "description": "Sistema de Gerenciamento de Filas - Projeto Integrador",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "ts-node src/tests/test.ts",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/Zidan-09/ProjetoIntegrador_GdF.git"
+  },
+  "keywords": [],
+  "author": "Samuel da Penha Nascimento, Gabriel Lima Oliveira, Gabriel Oliveira",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "bugs": {
+    "url": "https://github.com/Zidan-09/ProjetoIntegrador_GdF/issues"
+  },
+  "homepage": "https://github.com/Zidan-09/ProjetoIntegrador_GdF#readme"
+}

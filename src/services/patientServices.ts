@@ -1,10 +1,11 @@
 import { Patient, MaritalStatus, Gender } from "../models/patient";
+import { PatientData } from "../utils/convertJson";
 import { NoTriage } from "../utils/createNoTriage";
 import { ValidadeCPF } from "../utils/validateCPF";
 import { QueueServices } from "./queueService";
 
 export class PatientRegistration {
-    static register(data: {name: string; dob: Date; maritalStatus: MaritalStatus; cpf: string, rg: string, contact: string[], gender: Gender, healthPlan: string, address: string}): Patient {
+    static register(data: PatientData): Patient {
         const verify = ValidadeCPF(data.cpf);
         if (verify === true) {
             const temp: Patient = new Patient(data.name, data.dob, data.maritalStatus, data.cpf, data.rg, data.contact, data.gender, data.healthPlan, data.address);

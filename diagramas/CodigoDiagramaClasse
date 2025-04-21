@@ -1,4 +1,4 @@
-#basic class definition
+
 CLASS "Patient" as Patient:
 "name"
 "dob"
@@ -27,4 +27,31 @@ CLASS "TriageQueue" as TriageQueue:
 CLASS "ConsultQueue" as ConsultQueue:
 "consultPointer"
 
-Patient-AttendQueue
+CLASS "HospitalServices" as HospitalServices:
+-""
++"triage()"
+
+CLASS "PatientServices" as PatientServices:
+-""
++"register()"
+
+
+AttendQueue-Patient: dependency
+A fila de atendimento (AttendQueue) depende do paciente (Patient)
+
+
+AttendQueue-PatientServices: implementation
+A fila de atendimento (AttendQueue) implementa os serviços de paciente (PatientServices)
+
+
+AttendQueue-TriageQueue: association
+Chamadas nas filas AttendQueue e TriageQueue, além do acesso mútuo entre elas
+
+TriageQueue-HospitalServices: dependency 
+A fila de triagem (TriageQueue) depende dos serviços hospitalares (HospitalServices)
+
+TriageQueue-ConsultQueue: association 
+Chamadas nas filas 'TriageQueue' e 'ConsultQueue' e o acesso mútuo entre elas
+
+ConsultQueue-PatientServices: dependency
+A fila de consultas(ConsultQueue) depende dos serviços relacionados aos pacientes(PatientServices)

@@ -27,7 +27,7 @@ export class HospitalServices {
         const search = QueueServices.search(patientCPF);
 
         if (search == undefined || null) {
-            console.log('Paciente não encontrado!')
+            console.log('Erro')
         } else {
             search!.patient.severity = newSeverity;
 
@@ -67,9 +67,6 @@ export class HospitalServices {
 
     static endConsult() {
         const endDate = new Date();
-
-        QueueServices.callNextConsult();
-
         return endDate;
     }
 }

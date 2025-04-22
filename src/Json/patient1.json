@@ -6,5 +6,9 @@
     "rg": "8329043",
     "contact": ["(86)9 9427-9321", "(86)9 9451-5453"],
     "gender": "Sus",
-    "address": "Av Pinheiro Machado, 1209"
+    "address": {
+        "street": "Av. Pinheiro Machado",
+        "number": "1209",
+        "neighborhood": "Piauí"
+    }
 }

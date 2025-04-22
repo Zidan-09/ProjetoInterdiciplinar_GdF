@@ -6,7 +6,7 @@ import { QueueServices } from "./queueService";
 
 export class PatientRegistration {
     static register(data: PatientData): Patient {
-        const verify = ValidadeCPF(data.cpf);
+        const verify = ValidadeCPF.validate(data.cpf);
         if (verify === true) {
             const temp: Patient = new Patient(data.name, data.dob, data.maritalStatus, data.cpf, data.rg, data.contact, data.gender, data.healthPlan, data.address);
             

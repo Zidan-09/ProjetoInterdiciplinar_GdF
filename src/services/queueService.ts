@@ -1,5 +1,7 @@
+import { NaptrRecord } from "dns";
 import { Patient } from "../models/patient";
 import { AttendQ, TriageQ, ConsultQ, Priority } from "../models/queue";
+import { NoAttend } from "../utils/createNoAttend";
 import { NoConsult } from "../utils/createNoConsult";
 import { NoTriage } from "../utils/createNoTriage";
 
@@ -7,22 +9,18 @@ export type typeQueue = 'attend' | 'triage' | 'consult'
 
 export class QueueServices {
 
-    static insertAttendQueue(priority: Priority) {
-        switch (priority) {
-            case 'NonPriority':
-                AttendQ.qtyPatientsNonPriority++;
-                AttendQ.nonPriorityQueue.push(AttendQ.qtyPatientsNonPriority);
-                break;
-            case 'Priority':
-                AttendQ.qtyPatientesPriority++;
-                AttendQ.priorityQueue.push(AttendQ.qtyPatientesPriority);
-                break;
-            case 'VeryPriority':
-                AttendQ.qtyPatientsVeryPriority++;
-                AttendQ.veryPriorityQueue.push(AttendQ.qtyPatientsVeryPriority);
-                break;
+    static insertAttendQueue(priority: number) {
+        const no = new NoAttend(priority);
+
+        if (AttendQ.firstPointer == null) {
+            AttendQ.firstPointer = no;
+        } else {
+            AttendQ.lastPointer!.pointer = no;
         }
+        AttendQ.lastPointer = no;
         AttendQ.qtyPatients++;
+
+        QueueServices.toSortAttend();
     }
 
     static insertTriageQueue(no: NoTriage) {
@@ -49,9 +47,11 @@ export class QueueServices {
     static showQueue(queue: typeQueue) {
         switch (queue) {
             case 'attend':
-                console.log(`Muita Prioridade: ${AttendQ.veryPriorityQueue}`)
-                console.log(`Prioridade: ${AttendQ.priorityQueue}`)
-                console.log(`Padrão: ${AttendQ.nonPriorityQueue}`)
+                let tempA = AttendQ.firstPointer;
+                for (let i = 0; i < AttendQ.qtyPatients; i++) {
+                    console.log(tempA?.ticket);
+                    tempA = tempA?.pointer;
+                }
 
             case 'triage':
                 let tempT = TriageQ.firstPointer;
@@ -71,20 +71,12 @@ export class QueueServices {
     }
 
     static callNextAttend(): void {
-        let call: Boolean = false;
-        let index: number = -1;
-        for (let i of AttendQ.attendQueue) {
-            index++;
-            for (let o of i) {
-                console.log('Senha:', o);
-                AttendQ.attendQueue[index].shift()
-                call = true;
-                break;
-            }
-            if (call) {
-                break;
-            }
-        }
+        const call = AttendQ.firstPointer;
+        const next = call?.pointer;
+
+        AttendQ.firstPointer = next;
+
+        console.log(`Senha: ${call?.ticket}`)
     }
     static callNextTriage(): Patient {
         const call = TriageQ.firstPointer;
@@ -105,5 +97,27 @@ export class QueueServices {
         console.log(`${call?.patient.name}, vá ao consultório!`);
     }
 
-    toSort() {}
+    static search(patientCPF: Patient['cpf']): NoConsult | undefined | null {
+        let find: Boolean = false;
+        let temp = ConsultQ.firstPointer;
+
+        for (let i = 0; i < ConsultQ.qtyPatients; i++) {
+            if (temp!.patient.cpf === patientCPF) {
+                console.log('Paciente:', temp!.patient.name);
+                find = true;
+                return temp!;
+            } else {
+                temp = temp?.pointer;
+            }
+        }
+
+        if (!find) {
+            console.log('Paciente não encontrado.');
+            return temp;
+        }
+    }
+
+    static toSortAttend() {
+        
+    }
 }

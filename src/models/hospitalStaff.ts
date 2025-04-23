@@ -1,5 +1,3 @@
-import { hasUncaughtExceptionCaptureCallback } from "process";
-
 type JobTitle = 'Doctor' | 'Nurse' | 'Recepcionist' | 'Administrator'
 
 class Employee {

@@ -5,15 +5,17 @@ type JobTitle = 'Doctor' | 'Nurse' | 'Recepcionist' | 'Administrator'
 class Employee {
     name: string;
     cpf: string;
+    contacts: string[];
     registrationNumber: number;
     hireDate: Date;
     shift: string;
     salary: number;
     cnesCode: string;
 
-    constructor(name: string, cpf: string, registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string) {
+    constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string) {
         this.name = name;
         this.cpf = cpf;
+        this.contacts = contacts;
         this.registrationNumber = registrationNumber;
         this.hireDate = hireDate;
         this.shift = shift;
@@ -29,12 +31,12 @@ export class Doctor extends Employee {
     weeklyHours: number;
     onDuty: Boolean;
 
-    constructor(name: string, cpf: string, registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string, crm: string, speciality: string, weeklyHours: number, onDuty: Boolean) {
-        super(name, cpf, registrationNumber, hireDate, shift, salary, cnesCode);
+    constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string, crm: string, speciality: string, weeklyHours: number) {
+        super(name, cpf, contacts, registrationNumber, hireDate, shift, salary, cnesCode);
         this.crm = crm;
         this.specialty = speciality;
         this.weeklyHours = weeklyHours;
-        this.onDuty = onDuty;
+        this.onDuty = false;
     }
 }
 
@@ -43,25 +45,32 @@ export class Nurse extends Employee {
     department: string;
     roleType: string;
     weeklyHours: number;
+    onDuty: Boolean;
 
-    constructor(name: string, cpf: string, registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string, coren: string, department: string, roleType: string, weeklyHours: number) {
-        super(name, cpf, registrationNumber, hireDate, shift, salary, cnesCode);
+    constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string, coren: string, department: string, roleType: string, weeklyHours: number) {
+        super(name, cpf, contacts, registrationNumber, hireDate, shift, salary, cnesCode);
         this.coren = coren;
         this.department = department;
         this.roleType = roleType;
         this.weeklyHours = weeklyHours;
+        this.onDuty = false;
     }
 }
 
 export class Recepcionist extends Employee {
-    assignedDepartment: string;
+    weeklyHours: number;
 
-    constructor(name: string, cpf: string, registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string, assignedDepartment: string) {
-        super(name, cpf, registrationNumber, hireDate, shift, salary, cnesCode);
-        this.assignedDepartment = assignedDepartment;
+    constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string, weeklyHours: number) {
+        super(name, cpf, contacts, registrationNumber, hireDate, shift, salary, cnesCode);
+        this.weeklyHours = weeklyHours;
     }
 }
 
 export class Administrator extends Employee {
-    
+    lastLogin: Date | undefined;
+
+    constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string) {
+        super(name, cpf, contacts, registrationNumber, hireDate, shift, salary, cnesCode);
+        this.lastLogin = undefined;
+    }
 }

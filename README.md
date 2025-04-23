@@ -141,3 +141,105 @@ REQUISITOS:
     Armazenamento de logs de acesso e alterações em registros críticos
 
     Tempo máximo de espera por prioridade (ex: vermelho = 0 min, amarelo = até 30 min)
+
+Médico
+
+Atributos:
+
+    Nome: Nome completo do médico.
+
+    CPF: Número do CPF (Cadastro de Pessoas Físicas) do médico.
+
+    Contatos: Lista de contatos do médico (como telefone, email, etc.).
+
+    Número de Registro: Número de registro profissional, geralmente o CRM (Conselho Regional de Medicina).
+
+    Data de Admissão: Data em que o médico foi contratado pelo hospital ou clínica.
+
+    Turno: O turno em que o médico trabalha, como "manhã", "tarde" ou "noite".
+
+    Salário: O valor pago ao médico pelo seu trabalho.
+
+    Código CNES: Código que identifica o estabelecimento de saúde no Cadastro Nacional de Estabelecimentos de Saúde.
+
+    CRM: Número de registro no Conselho Regional de Medicina, que certifica a qualificação do médico.
+
+    Especialidade: A especialidade médica do profissional, como "Cardiologia", "Neurologia", etc.
+
+    Carga Horária Semanal: Número de horas semanais que o médico deve trabalhar.
+
+    Está de Plantão: Indica se o médico está de plantão (valor booleano: verdadeiro ou falso).
+
+Enfermeiro
+
+Atributos:
+
+    Nome: Nome completo do enfermeiro.
+
+    CPF: Número do CPF do enfermeiro.
+
+    Contatos: Lista de contatos do enfermeiro.
+
+    Número de Registro: Número de registro profissional, que pode ser o COREN (Conselho Regional de Enfermagem).
+
+    Data de Admissão: Data em que o enfermeiro foi admitido no hospital.
+
+    Turno: O turno de trabalho do enfermeiro.
+
+    Salário: O salário do enfermeiro.
+
+    Código CNES: Código do hospital ou clínica registrado no Cadastro Nacional de Estabelecimentos de Saúde.
+
+    COREN: Número de registro no Conselho Regional de Enfermagem.
+
+    Departamento: O setor em que o enfermeiro trabalha, como "UTI", "Emergência", "Enfermaria", etc.
+
+    Tipo de Função: A função desempenhada, como "Enfermeiro" ou "Técnico de Enfermagem".
+
+    Carga Horária Semanal: O número de horas que o enfermeiro deve trabalhar semanalmente.
+
+    Está de Plantão: Indica se o enfermeiro está de plantão (valor booleano: verdadeiro ou falso).
+
+Recepcionista
+
+Atributos:
+
+    Nome: Nome completo da recepcionista.
+
+    CPF: Número do CPF da recepcionista.
+
+    Contatos: Lista de contatos da recepcionista (como telefone, email, etc.).
+
+    Número de Registro: Número de registro ou matrícula no sistema.
+
+    Data de Admissão: Data em que a recepcionista foi contratada.
+
+    Turno: O turno de trabalho da recepcionista (por exemplo, "manhã", "tarde" ou "noite").
+
+    Salário: O salário da recepcionista.
+
+    Código CNES: Código de registro do estabelecimento de saúde no Cadastro Nacional de Estabelecimentos de Saúde.
+
+    Carga Horária Semanal: O número de horas que a recepcionista deve trabalhar semanalmente.
+
+Administrador
+
+Atributos:
+
+    Nome: Nome completo do administrador.
+
+    CPF: Número do CPF do administrador.
+
+    Contatos: Lista de contatos do administrador (como telefone, email, etc.).
+
+    Número de Registro: Número de registro ou matrícula do administrador no sistema.
+
+    Data de Admissão: Data de contratação do administrador.
+
+    Turno: O turno em que o administrador trabalha (pode ser "manhã", "tarde" ou "noite").
+
+    Salário: O salário do administrador.
+
+    Código CNES: Código do hospital ou clínica no Cadastro Nacional de Estabelecimentos de Saúde.
+
+    Último Login: A data e hora do último login do administrador no sistema, o que ajuda a monitorar quando ele acessou o sistema pela última vez.

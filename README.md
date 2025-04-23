@@ -28,10 +28,11 @@ FLUXOS:
         2 - O sistema abre a inferface de acordo com a função do funcionário e altera o status do funcionário: ativo
 
     FLUXO NORMAL (PACIENTES):
-        1 - O paciente chega ao hospital e pega uma senha
+        1 - O paciente chega ao hospital e solicita uma senha
+        2 - A recepcionista gera uma senha e faz os chamados
         2 - A senha é chamada e o paciente vai para a recepção
         3 - A recepcionista realiza o cadastrado do paciente no sistema com:
-            nome, data de nascimento, contato e cpf (o sistema insere data de chegada, status: Aguardando triagem e sintomas: nulo)
+            nome, data de nascimento, estado civil, cpf, rg, contatos, gênero, plano de saúde e endereço (o sistema insere data de chegada, status: Aguardando triagem e sintomas: nulo)
         4 - O sistema move o paciente para uma fila para a triagem
         5 - A enfermeira realiza a triagem atribuindo ao paciente uma classificação de risco e sinais vitais:
             azul: não urgente, verde: baixa urgência, amarelo, urgente, laranja: muito urgente, vermelho: emergência;

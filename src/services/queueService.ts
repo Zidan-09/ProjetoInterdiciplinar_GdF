@@ -9,8 +9,8 @@ export type typeQueue = 'attend' | 'triage' | 'consult'
 export class QueueServices {
     static createTicket(priority: number) {
         const no: NoAttend = new NoAttend(priority);
-        
-        if (AttendQ.lastPointer == null || undefined) {
+
+        if (!AttendQ.lastPointer) {
             switch (priority) {
                 case 1:
                     no.ticket = 'N001';
@@ -22,36 +22,48 @@ export class QueueServices {
                     no.ticket = 'V001';
                     break;
             }
-        } else if (priority === 1 && AttendQ.lastPointer != null || undefined) {
-            no.ticket = 'N' + (parseInt(AttendQ.lastPointer!.ticket!.slice(1)) + 1).toString().padStart(3, '0');
         } else {
             let find: Boolean = false;
             let temp: NoAttend = AttendQ.firstPointer!;
+
             while (!find) {
                 find = true;
 
                 for (let i = 0; i < AttendQ.qtyPatients; i++) {
                     switch (priority) {
+                        case 1:
+                            if (temp.priority != 1 && temp.pointer == null) {
+                                no.ticket = 'N001';
+                            } else if (temp.priority == 1 && (temp.pointer == null || temp.pointer!.priority != 1)) {
+                                no.ticket = 'N' + (parseInt(temp.ticket!.slice(1)) + 1).toString().padStart(3, '0');
+                            } else {
+                                temp = temp.pointer!;
+                            }
+                            break;
+
                         case 2:
-                            if (temp.priority < 2 && (temp.pointer === null || temp.pointer === undefined)) {
+                            if (temp.priority < 2 && temp.pointer == null) {
                                 no.ticket = 'P001';
-                            } else if (temp.priority === 2 && (temp.pointer == null || temp.pointer == undefined)) {
+                            } else if (temp.priority == 2 && temp.pointer == null) {
+                                no.ticket = 'P' + (parseInt(temp.ticket!.slice(1)) + 1).toString().padStart(3, '0');
+                            } else if (temp.priority == 2 && temp.pointer!.priority < 2) {
                                 no.ticket = 'P' + (parseInt(temp.ticket!.slice(1)) + 1).toString().padStart(3, '0');
                             } else {
                                 temp = temp.pointer!;
                             }
                             break;
-                    }                    
-                    switch (priority) {
+                    
                         case 3:
-                            if (temp.priority < 3 && (temp.pointer === null || temp.pointer === undefined)) {
+                            if (temp.priority < 3 && temp.pointer == null) {
                                 no.ticket = 'V001';
-                            } else if (temp.priority === 3 && (temp.pointer == null || temp.pointer == undefined)) {
+                            } else if (temp.priority == 3 && temp.pointer == null) {
+                                no.ticket = 'V' + (parseInt(temp.ticket!.slice(1)) + 1).toString().padStart(3, '0');
+                            } else if (temp.priority < 3 && temp.pointer!.priority < 3) {
                                 no.ticket = 'V' + (parseInt(temp.ticket!.slice(1)) + 1).toString().padStart(3, '0');
                             } else {
                                 temp = temp.pointer!;
                             }
-                            break;                    
+                            break;
                     }
                 }
             }
@@ -171,6 +183,39 @@ export class QueueServices {
     }
 
     static toSortAttend() {
-        
+        if (AttendQ.qtyPatients < 2) return;
+
+        let done: Boolean = false;
+        while (!done) {
+            done = true;
+
+            let temp: NoAttend | null | undefined = AttendQ.firstPointer;
+            let current: NoAttend | null | undefined = AttendQ.firstPointer;
+            let next: NoAttend | null | undefined = current!.pointer;
+
+            for (let i = 0; i < AttendQ.qtyPatients; i++) {
+                if (next?.pointer == null) {
+                    current!.pointer = null;
+                    next!.pointer = current;
+                    temp!.pointer = next;
+                    break;
+                } else if (current!.priority < next!.priority) {
+                    current!.pointer = next?.pointer;
+                    next!.pointer = current;
+                    temp!.pointer = next;
+                    done = false;
+                } else {
+                    temp = temp?.pointer;
+                    current = current?.pointer;
+                    next = next?.pointer;
+                }
+            }
+
+            let end: NoAttend | null | undefined = AttendQ.firstPointer!;
+            while (!end?.pointer) {
+                end = end?.pointer;
+            }
+            AttendQ.lastPointer = end;
+        }
     }
 }

@@ -6,11 +6,17 @@ export type Priority = 'VeryPriority' | 'Priority' | 'NonPriority'
 class AttendQueue {
     firstPointer: undefined | null | NoAttend;
     lastPointer: undefined | null | NoAttend;
+    qtyN: number;
+    qtyP: number;
+    qtyV: number;
     qtyPatients: number;
 
     constructor() {
         this.firstPointer = null;
         this.lastPointer = null;
+        this.qtyN = 0;
+        this.qtyP = 0;
+        this.qtyV = 0;
         this.qtyPatients = 0;
     }
 }

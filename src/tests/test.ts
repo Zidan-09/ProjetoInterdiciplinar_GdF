@@ -10,17 +10,6 @@ import triage1 from '../Json/triage1.json'
 
 let patient: Patient;
 
-QueueServices.insertAttendQueue(1)
-QueueServices.insertAttendQueue(1)
-QueueServices.insertAttendQueue(2)
-QueueServices.insertAttendQueue(2)
-QueueServices.insertAttendQueue(1)
-QueueServices.insertAttendQueue(1)
-QueueServices.insertAttendQueue(3)
-QueueServices.insertAttendQueue(3)
-QueueServices.insertAttendQueue(1)
-QueueServices.insertAttendQueue(1)
-
 QueueServices.callNextAttend()
 PatientRegistration.register(Convert.JsonToData(patient1));
 

@@ -10,7 +10,11 @@ export interface PatientData {
   contact: string[];
   gender: Gender;
   healthPlan: string;
-  address: string;
+  address: {
+    street: string,
+    number: number,
+    neighborhood: string
+  };
 }
 
 export interface TriageData {

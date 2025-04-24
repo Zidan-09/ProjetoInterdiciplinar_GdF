@@ -1,4 +1,3 @@
-import { NaptrRecord } from "dns";
 import { Patient } from "../models/patient";
 import { AttendQ, TriageQ, ConsultQ, Priority } from "../models/queue";
 import { NoAttend } from "../utils/createNoAttend";
@@ -8,9 +7,59 @@ import { NoTriage } from "../utils/createNoTriage";
 export type typeQueue = 'attend' | 'triage' | 'consult'
 
 export class QueueServices {
+    static createTicket(priority: number) {
+        const no: NoAttend = new NoAttend(priority);
+        
+        if (AttendQ.lastPointer == null || undefined) {
+            switch (priority) {
+                case 1:
+                    no.ticket = 'N001';
+                    break;
+                case 2:
+                    no.ticket = 'P001';
+                    break;
+                case 3:
+                    no.ticket = 'V001';
+                    break;
+            }
+        } else if (priority === 1 && AttendQ.lastPointer != null || undefined) {
+            no.ticket = 'N' + (parseInt(AttendQ.lastPointer!.ticket!.slice(1)) + 1).toString().padStart(3, '0');
+        } else {
+            let find: Boolean = false;
+            let temp: NoAttend = AttendQ.firstPointer!;
+            while (!find) {
+                find = true;
 
-    static insertAttendQueue(priority: number) {
-        const no = new NoAttend(priority);
+                for (let i = 0; i < AttendQ.qtyPatients; i++) {
+                    switch (priority) {
+                        case 2:
+                            if (temp.priority < 2 && (temp.pointer === null || temp.pointer === undefined)) {
+                                no.ticket = 'P001';
+                            } else if (temp.priority === 2 && (temp.pointer == null || temp.pointer == undefined)) {
+                                no.ticket = 'P' + (parseInt(temp.ticket!.slice(1)) + 1).toString().padStart(3, '0');
+                            } else {
+                                temp = temp.pointer!;
+                            }
+                            break;
+                    }                    
+                    switch (priority) {
+                        case 3:
+                            if (temp.priority < 3 && (temp.pointer === null || temp.pointer === undefined)) {
+                                no.ticket = 'V001';
+                            } else if (temp.priority === 3 && (temp.pointer == null || temp.pointer == undefined)) {
+                                no.ticket = 'V' + (parseInt(temp.ticket!.slice(1)) + 1).toString().padStart(3, '0');
+                            } else {
+                                temp = temp.pointer!;
+                            }
+                            break;                    
+                    }
+                }
+            }
+        }
+        this.insertAttendQueue(no);
+    }
+
+    static insertAttendQueue(no: NoAttend) {
 
         if (AttendQ.firstPointer == null) {
             AttendQ.firstPointer = no;
@@ -49,8 +98,12 @@ export class QueueServices {
             case 'attend':
                 let tempA = AttendQ.firstPointer;
                 for (let i = 0; i < AttendQ.qtyPatients; i++) {
-                    console.log(tempA?.ticket);
-                    tempA = tempA?.pointer;
+                    console.log(tempA!.ticket);
+                    if (tempA?.pointer == null || undefined) {
+                        break
+                    } else {
+                        tempA = tempA?.pointer;
+                    }
                 }
 
             case 'triage':

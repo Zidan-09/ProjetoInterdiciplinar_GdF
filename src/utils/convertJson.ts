@@ -2,15 +2,16 @@ import fs from 'fs';
 import { MaritalStatus, Gender, Severity } from '../models/patient';
 
 export interface PatientData {
+    id: number;
     name: string;
-  dob: Date;
-  maritalStatus: MaritalStatus;
-  cpf: string;
-  rg: string;
-  contact: string[];
-  gender: Gender;
-  healthPlan: string;
-  address: string;
+    dob: Date;
+    maritalStatus: MaritalStatus;
+    cpf: string;
+    rg: string;
+    contact: string[];
+    gender: Gender;
+    healthPlan: string;
+    address: string;
 }
 
 export interface TriageData {
@@ -29,15 +30,16 @@ export interface TriageData {
 export class Convert {
     static JsonToData(json: any): PatientData {
         return {
+            id: json.id,
             name: json.name,
             dob: new Date(json.dob),
-    maritalStatus: json.maritalStatus,
-    cpf: json.cpf,
-    rg: json.rg,
-    contact: json.contact,
-    gender: json.gender,
-    healthPlan: json.healthPlan,
-    address: json.address,
+            maritalStatus: json.maritalStatus,
+            cpf: json.cpf,
+            rg: json.rg,
+            contact: json.contact,
+            gender: json.gender,
+            healthPlan: json.healthPlan,
+            address: json.address,
         }
     };
 

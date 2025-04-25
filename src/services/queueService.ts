@@ -117,21 +117,30 @@ export class QueueServices {
     }
 
     static callNextAttend(): void {
-        const call = AttendQ.firstPointer;
-        const next = call?.pointer;
+        if (AttendQ.qtyPatients == 0) {
+            console.log('Fila vazia');
+        } else {
+            const call = AttendQ.firstPointer;
+            const next = call?.pointer;
 
-        AttendQ.firstPointer = next;
+            AttendQ.firstPointer = next;
 
-        console.log(`Senha: ${call?.ticket}`)
+            console.log(`Senha: ${call?.ticket}`)
+        }
     }
     static callNextTriage(): Patient {
-        const call = TriageQ.firstPointer;
-        const next = call?.pointer;
+        if (TriageQ.qtyPatients == 0) {
+            console.log('Fila vazia');
+            return TriageQ.firstPointer?.patient!;
+        } else {
+            const call = TriageQ.firstPointer;
+            const next = call?.pointer;
 
-        TriageQ.firstPointer = next;
+            TriageQ.firstPointer = next;
 
-        console.log(`${call?.patient.name}, vá para a triagem!`)
-        return (call?.patient!)
+            console.log(`${call?.patient.name}, vá para a triagem!`)
+            return (call?.patient!)
+        }
     }
 
     static callNextConsult() {

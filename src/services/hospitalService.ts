@@ -21,6 +21,7 @@ export class HospitalServices {
 
         const no: NoConsult = new NoConsult(patient);
         QueueServices.insertConsultQueue(no);
+        console.log('Triagem realizada com sucesso!')
     }
 
     static changeSeverity(patientCPF: Patient['cpf'], newSeverity: Severity) {

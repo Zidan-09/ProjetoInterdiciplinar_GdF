@@ -1,10 +1,10 @@
 type JobTitle = 'Doctor' | 'Nurse' | 'Recepcionist' | 'Administrator'
 
 class Employee {
+    registrationNumber: number;
     name: string;
     cpf: string;
     contacts: string[];
-    registrationNumber: number;
     hireDate: Date;
     shift: string;
     salary: number;

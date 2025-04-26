@@ -3,6 +3,7 @@ import { PatientData } from "../utils/convertJson";
 import { ValidateRegister } from "../utils/validateRegister";
 import { NoTriage } from "../utils/createNoTriage";
 import { QueueServices } from "./queueService";
+import { Attend } from "../careFlow/attend";
 
 export class PatientRegistration {
     static register(data: PatientData): Patient {

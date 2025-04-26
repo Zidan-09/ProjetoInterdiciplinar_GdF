@@ -4,10 +4,11 @@ import { QueueServices } from "./queueService";
 import { TriageData } from "../utils/convertJson";
 import { Triage } from "../careFlow/triage";
 import { Nurse } from "../models/hospitalStaff";
+import { Attend } from "../careFlow/attend";
 
 export class HospitalServices {
-    static triage(nurse: Nurse, patient: Patient, data: TriageData) {
-        const triage = new Triage(nurse, patient, data.vitalSigns, data.severity, data.simptoms, data.painLevel);
+    static triage(nurse: Nurse, attend: Attend, data: TriageData) {
+        const triage = new Triage(nurse, attend, data.vitalSigns, data.severity, data.simptoms, data.painLevel);
 
         const no: NoConsult = new NoConsult(triage);
         QueueServices.insertConsultQueue(no);

@@ -14,8 +14,6 @@ export class Patient {
     gender: Gender;
     healthPlan: string;
     address: string;
-    checkIn: Date;
-    status: Status;
 
     constructor(name: string, dob: Date, maritalStatus: MaritalStatus, cpf: string, rg: string, contact: string[], gender: Gender, healthPlan: string, address: string) {
         this.id = 0;
@@ -28,7 +26,5 @@ export class Patient {
         this.gender = gender;
         this.healthPlan = healthPlan;
         this.address = address;
-        this.checkIn = new Date();
-        this.status = 'In triage queue'
     }
 }

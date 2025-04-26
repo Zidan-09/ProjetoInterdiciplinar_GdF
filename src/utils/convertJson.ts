@@ -1,4 +1,3 @@
-import fs from 'fs';
 import { MaritalStatus, Gender, Severity } from '../models/patient';
 
 export interface PatientData {
@@ -38,8 +37,47 @@ export interface CriteriaData {
     nonUrgent: number;
 }
 
-export interface UserData {
+export interface RecepcionistData {
+    registrationNumber: number;
     name: string;
+    cpf: string;
+    contacts: string[];
+    hireDate: Date;
+    shift: string;
+    salary: number;
+    cnesCode: string;
+    weeaklyHours: number;
+}
+
+export interface NurseData {
+    registrationNumber: number;
+    name: string;
+    cpf: string;
+    contacts: string[];
+    hireDate: Date;
+    shift: string;
+    salary: number;
+    cnesCode: string;
+    coren: string;
+    department: string;
+    roleType: string;
+    weeklyHours: number;
+    onDuty: Boolean;
+}
+
+export interface DoctorData {
+    registrationNumber: number;
+    name: string;
+    cpf: string;
+    contacts: string[];
+    hireDate: Date;
+    shift: string;
+    salary: number;
+    cnesCode: string;
+    crm: string;
+    specialty: string;
+    weeklyHours: number;
+    onDuty: Boolean;
 }
 
 export class Convert {
@@ -74,5 +112,54 @@ export class Convert {
             severity: json.severity,
             painLevel: json.painLevel
         }
-    }
-}
+    };
+
+    static JsonToRecepcionist(json: any): RecepcionistData {
+        return {
+            registrationNumber: json.registrationNumber,
+            name: json.name,
+            cpf: json.cpf,
+            contacts: json.contacts,
+            hireDate: json.hireDate,
+            shift: json.shift,
+            salary: json.salary,
+            cnesCode: json.cnesCode,
+            weeaklyHours: json.weeaklyHours
+        }
+    };
+
+    static JsonToNurse(json: any): NurseData {
+        return {
+            registrationNumber: json.registrationNumber,
+            name: json.name,
+            cpf: json.cpf,
+            contacts: json.contacts,
+            hireDate: json.hireDate,
+            shift: json.shift,
+            salary: json.salary,
+            cnesCode: json.cnesCode,
+            coren: json.coren,
+            department: json.department,
+            roleType: json.roleType,
+            weeklyHours: json.weeaklyHours,
+            onDuty: json.onDuty
+        }
+    };
+
+    static JsonToDoctor(json: any): DoctorData {
+        return {
+            registrationNumber: json.registrationNumber,
+            name: json.name,
+            cpf: json.cpf,
+            contacts: json.contacts,
+            hireDate: json.hireDate,
+            shift: json.shift,
+            salary: json.salary,
+            cnesCode: json.cnesCode,
+            crm: json.crm,
+            specialty: json.speciality,
+            weeklyHours: json.weeaklyHours,
+            onDuty: json.onDuty
+        }
+    };
+}   

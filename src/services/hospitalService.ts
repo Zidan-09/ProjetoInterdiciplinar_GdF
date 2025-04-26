@@ -3,8 +3,9 @@ import { NoConsult } from "../utils/createNoConsult";
 import { QueueServices } from "./queueService";
 import { TriageData } from "../utils/convertJson";
 import { Triage } from "../careFlow/triage";
-import { Nurse } from "../models/hospitalStaff";
+import { Doctor, Nurse } from "../models/hospitalStaff";
 import { Attend } from "../careFlow/attend";
+import { Consult } from "../careFlow/consult";
 
 export class HospitalServices {
     static triage(nurse: Nurse, attend: Attend, data: TriageData) {
@@ -48,17 +49,23 @@ export class HospitalServices {
         }
     }
 
-    static startConsult(start: Boolean) {
+    static startConsult(start: Boolean, triage: Triage, doctor: Doctor) {
         if (start) {
+            const consult: Consult = new Consult(triage, doctor);
             const startDate = new Date();
-            return startDate;
+            consult.checkInConsult = startDate;
+            return consult;
         } else {
             //XXXX
         }
     }
 
-    static endConsult() {
+    static endConsult(consult: Consult, diagnosis: string, prescriptions: string[], notes: string) {
         const endDate = new Date();
-        return endDate;
+        consult.checkOutConsult = endDate;
+        consult.diagnosis = diagnosis;
+        consult.prescriptions = prescriptions;
+        consult.notes = notes;
+        return consult;
     }
 }

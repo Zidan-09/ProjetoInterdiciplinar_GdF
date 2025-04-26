@@ -4,6 +4,7 @@ export type MaritalStatus = 'Single' | 'Married' | 'Divorcied' | 'Separated'
 export type Gender = 'Male' | 'Female' | 'Other'
 
 export class Patient {
+    id: number;
     name: string;
     dob: Date;
     maritalStatus: MaritalStatus;
@@ -15,20 +16,9 @@ export class Patient {
     address: string;
     checkIn: Date;
     status: Status;
-    vitalSigns: undefined | {
-        bloodPreassure: {
-            systolicPreassure: number;
-            diastolicPreassure: number;
-        };
-        heartRate: number;
-        respiratoryRate: number;
-        bodyTemperature: number;
-        oxygenSaturation: number;
-    };
-    severity: undefined | Severity;
-    simptoms: undefined | string[];
 
     constructor(name: string, dob: Date, maritalStatus: MaritalStatus, cpf: string, rg: string, contact: string[], gender: Gender, healthPlan: string, address: string) {
+        this.id = 0;
         this.name = name;
         this.dob = dob;
         this.maritalStatus = maritalStatus;
@@ -40,8 +30,5 @@ export class Patient {
         this.address = address;
         this.checkIn = new Date();
         this.status = 'In triage queue'
-        this.vitalSigns = undefined;
-        this.severity = undefined;
-        this.simptoms = undefined;
     }
 }

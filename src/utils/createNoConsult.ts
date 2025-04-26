@@ -1,18 +1,19 @@
+import { Triage } from "../careFlow/triage";
 import { Patient } from "../models/patient";
 
 export class NoConsult {
-    patient: Patient;
+    triage: Triage;
     severity: number | undefined;
     time: Date;
     limit: number;
     pointer: null | NoConsult;
 
-    constructor(patientRecive: Patient) {
-        this.patient = patientRecive;
+    constructor(patientTriage: Triage) {
+        this.triage = patientTriage;
         this.pointer = null;
         this.time = new Date();
 
-        switch (patientRecive.severity!) {
+        switch (patientTriage.severity!) {
             case 'Non-urgent': 
                 this.severity = 1;
                 this.limit = 240;

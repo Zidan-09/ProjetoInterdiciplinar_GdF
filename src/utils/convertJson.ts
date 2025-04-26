@@ -15,16 +15,31 @@ export interface PatientData {
 }
 
 export interface TriageData {
-    bloodPreassure: {
-        systolicPreassure: number,
-        diastolicPreassure: number,
-    },
-    heartRate: number,
-    respiratoryRate: number,
-    bodyTemperature: number,
-    oxygenSaturation: number,
+    vitalSigns: {
+        bloodPreassure: {
+            systolicPreassure: number,
+            diastolicPreassure: number,
+        },
+        heartRate: number,
+        respiratoryRate: number,
+        bodyTemperature: number,
+        oxygenSaturation: number
+    };
     simptoms: string[],
-    severity: Severity
+    severity: Severity,
+    painLevel: number
+}
+
+export interface CriteriaData {
+    immediate: number;
+    veryUrcency: number;
+    urgent: number;
+    lowUrgency: number;
+    nonUrgent: number;
+}
+
+export interface UserData {
+    name: string;
 }
 
 export class Convert {
@@ -45,16 +60,19 @@ export class Convert {
 
     static JsonToTriage(json: any): TriageData {
         return {
-            bloodPreassure: {
-                systolicPreassure: json.systolic,
-                diastolicPreassure: json.diastolic,
+            vitalSigns: {
+                bloodPreassure: {
+                    systolicPreassure: json.systolic,
+                    diastolicPreassure: json.diastolic,
+                },
+                heartRate: json.heartRate,
+                respiratoryRate: json.respiratoryRate,
+                bodyTemperature: json.bodyTemperature,
+                oxygenSaturation: json.oxygenSaturation
             },
-            heartRate: json.heartRate,
-            respiratoryRate: json.respiratoryRate,
-            bodyTemperature: json.bodyTemperature,
-            oxygenSaturation: json.oxygenSaturation,
             simptoms: json.simptoms,
-            severity: json.severity
+            severity: json.severity,
+            painLevel: json.painLevel
         }
     }
 }

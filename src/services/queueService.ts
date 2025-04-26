@@ -109,7 +109,7 @@ export class QueueServices {
             case 'consult':
                 let tempC = ConsultQ.firstPointer;
                 for (let i = 0; i < ConsultQ.qtyPatients; i++) {
-                    console.log(tempC?.patient);
+                    console.log(tempC?.triage.patient);
                     tempC = tempC?.pointer;
                 }
                 break;
@@ -149,16 +149,16 @@ export class QueueServices {
 
         ConsultQ.firstPointer = next;
 
-        console.log(`${call?.patient.name}, vá ao consultório!`);
+        console.log(`${call?.triage.patient.name}, vá ao consultório!`);
     }
 
-    static search(patientCPF: Patient['cpf']): NoConsult | undefined | null {
+    static search(patientCPF: Patient['id']): NoConsult | undefined | null {
         let find: Boolean = false;
         let temp = ConsultQ.firstPointer;
 
         for (let i = 0; i < ConsultQ.qtyPatients; i++) {
-            if (temp!.patient.cpf === patientCPF) {
-                console.log('Paciente:', temp!.patient.name);
+            if (temp!.triage.patient.id === patientCPF) {
+                console.log('Paciente:', temp!.triage.patient.name);
                 find = true;
                 return temp!;
             } else {

@@ -1,36 +1,26 @@
 import { Patient, Severity } from "../models/patient";
 import { NoConsult } from "../utils/createNoConsult";
-import { NoTriage } from "../utils/createNoTriage";
 import { QueueServices } from "./queueService";
 import { TriageData } from "../utils/convertJson";
+import { Triage } from "../careFlow/triage";
+import { Nurse } from "../models/hospitalStaff";
 
 export class HospitalServices {
-    static triage(patient: Patient, data: TriageData) {
-        patient.vitalSigns = {
-            bloodPreassure: {
-                systolicPreassure: data.bloodPreassure.systolicPreassure,
-                diastolicPreassure: data.bloodPreassure.diastolicPreassure,
-            },
-            heartRate: data.heartRate,
-            respiratoryRate: data.respiratoryRate,
-            bodyTemperature: data.bodyTemperature,
-            oxygenSaturation: data.oxygenSaturation,
-        }
-        patient.severity = data.severity;
-        patient.simptoms = data.simptoms;
+    static triage(nurse: Nurse, patient: Patient, data: TriageData) {
+        const triage = new Triage(nurse, patient, data.vitalSigns, data.severity, data.simptoms, data.painLevel);
 
-        const no: NoConsult = new NoConsult(patient);
+        const no: NoConsult = new NoConsult(triage);
         QueueServices.insertConsultQueue(no);
         console.log('Triagem realizada com sucesso!')
     }
 
-    static changeSeverity(patientCPF: Patient['cpf'], newSeverity: Severity) {
-        const search = QueueServices.search(patientCPF);
+    static changeSeverity(id: number, newSeverity: Severity) {
+        const search = QueueServices.search(id);
 
         if (search == undefined || null) {
             console.log('Erro')
         } else {
-            search!.patient.severity = newSeverity;
+            search!.triage.severity = newSeverity;
 
             switch (newSeverity) {
                 case 'Non-urgent': 

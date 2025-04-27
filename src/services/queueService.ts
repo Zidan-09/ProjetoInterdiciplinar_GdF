@@ -1,3 +1,4 @@
+import { Attend } from "../careFlow/attend";
 import { Patient } from "../models/patient";
 import { AttendQ, TriageQ, ConsultQ, Priority } from "../models/queue";
 import { NoAttend } from "../utils/createNoAttend";
@@ -66,7 +67,7 @@ export class QueueServices {
     }
 
     static insertTriageQueue(no: NoTriage) {
-        if (TriageQ.firstPointer == null) {
+        if (TriageQ.qtyPatients == 0) {
             TriageQ.firstPointer = no;
         } else {
             TriageQ.lastPointer!.pointer = no;
@@ -76,13 +77,30 @@ export class QueueServices {
     }
 
     static insertConsultQueue(no: NoConsult) {
-        if (ConsultQ.firstPointer == null) {
+        if (ConsultQ.qtyPatients == 0) {
             ConsultQ.firstPointer = no;
             ConsultQ.lastPointer = no;
         } else {
-            ConsultQ.lastPointer!.pointer = no;
+            let temp: NoConsult | null | undefined = ConsultQ.firstPointer!;
+            for (let i = 0; i < ConsultQ.qtyPatients; i++) {
+                if (temp.severity! < no.severity!) {
+                    no.pointer = temp;
+                    ConsultQ.firstPointer = no;
+                } else if (temp.severity! >= no.severity!) {
+                    if (temp.pointer == null) {
+                        no.pointer = temp.pointer;
+                        temp.pointer = no;
+                        break;
+                    } else if (temp.pointer!.severity! < no.severity!) {
+                        no.pointer = temp.pointer;
+                        temp.pointer = no;
+                        break;
+                    } else {
+                        temp = temp?.pointer;
+                    }
+                }
+            }
         }
-        ConsultQ.lastPointer = no;
         ConsultQ.qtyPatients++;
     }
 
@@ -102,14 +120,14 @@ export class QueueServices {
             case 'triage':
                 let tempT = TriageQ.firstPointer;
                 for (let i = 0; i < TriageQ.qtyPatients; i++) {
-                    console.log(tempT?.patient);
+                    console.log(tempT?.attend.patient.name);
                     tempT = tempT?.pointer;
                 }
 
             case 'consult':
                 let tempC = ConsultQ.firstPointer;
                 for (let i = 0; i < ConsultQ.qtyPatients; i++) {
-                    console.log(tempC?.triage.attend.patient);
+                    console.log(tempC?.triage.attend.patient.name);
                     tempC = tempC?.pointer;
                 }
                 break;
@@ -128,18 +146,18 @@ export class QueueServices {
             console.log(`Senha: ${call?.ticket}`)
         }
     }
-    static callNextTriage(): Patient {
+    static callNextTriage(): Attend {
         if (TriageQ.qtyPatients == 0) {
             console.log('Fila vazia');
-            return TriageQ.firstPointer?.patient!;
+            return TriageQ.firstPointer?.attend!;
         } else {
             const call = TriageQ.firstPointer;
             const next = call?.pointer;
 
             TriageQ.firstPointer = next;
 
-            console.log(`${call?.patient.name}, vá para a triagem!`)
-            return (call?.patient!)
+            console.log(`${call?.attend.patient.name}, vá para a triagem!`)
+            return call?.attend!
         }
     }
 

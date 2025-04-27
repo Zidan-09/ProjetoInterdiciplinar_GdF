@@ -1,0 +1,12 @@
+{
+    "id": 3,
+    "name": "João",
+    "dob": "2005-04-27T00:00:00.000Z",
+    "maritalStatus": "Single",
+    "cpf": "chinelo",
+    "rg": "urubu",
+    "contact": ["9898-8375"],
+    "gender": "Não Binário",
+    "healthPlan": "",
+    "address": "Rua Afonso Pena, Bairro João Silva Filha, 324"
+}

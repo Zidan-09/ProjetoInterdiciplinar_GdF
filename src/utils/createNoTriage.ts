@@ -1,11 +1,11 @@
-import { Patient } from "../models/patient";
+import { Attend } from "../careFlow/attend";
 
 export class NoTriage {
-    patient: Patient;
+    attend: Attend;
     pointer: null | NoTriage;
 
-    constructor(patient: Patient) {
-        this.patient = patient;
+    constructor(attend: Attend) {
+        this.attend = attend;
         this.pointer = null;
     }
 }

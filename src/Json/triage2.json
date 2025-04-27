@@ -1,0 +1,12 @@
+{
+    "bloodPreassure": {
+        "systolicPreassure": 100,
+        "diastolicPreassure": 60
+    },
+    "heartRate": 180,
+    "respiratoryRate": 60,
+    "bodyTemperature": 16,
+    "oxygenSaturation": 56,
+    "simptoms": ["tosse", "espirros", "dor abdominais"],
+    "severity": "Urgent"
+}

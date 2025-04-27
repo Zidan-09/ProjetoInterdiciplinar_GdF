@@ -1,5 +1,5 @@
 import { Nurse } from "../models/hospitalStaff";
-import { Patient, Severity } from "../models/patient";
+import { Severity } from "../models/patient";
 import { Attend } from "./attend";
 
 export class Triage {

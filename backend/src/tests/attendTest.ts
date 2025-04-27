@@ -1,7 +1,8 @@
 import { QueueServices } from "../services/queueService";
-import { PatientRegistration } from "../services/patientServices";
 import { Convert } from "../utils/convertJson";
 import patient1 from "../Json/patient1.json";
+import { ValidateRegister } from "../utils/validateRegister";
+import { recepcionist } from "./test";
 
 console.log('GERAÇÃO DE SENHAS:');
 console.log('/'.repeat(20));
@@ -15,4 +16,4 @@ console.log('CHAMADAS/CADASTROS:')
 console.log('/'.repeat(20));
 
 QueueServices.callNextAttend();
-PatientRegistration.register(Convert.JsonToData(patient1));
+ValidateRegister.verify(Convert.JsonToData(patient1), recepcionist);

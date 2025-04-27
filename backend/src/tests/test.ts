@@ -1,9 +1,6 @@
-import { AttendQ, TriageQ, ConsultQ } from "../models/queue";
 import { HospitalServices } from "../services/hospitalService";
 import { QueueServices } from "../services/queueService";
-import { PatientRegistration } from "../services/patientServices";
 import { Convert } from "../utils/convertJson";
-import { Patient } from "../models/patient";
 import patient1 from '../Json/patient1.json'
 import patient2 from '../Json/patient2.json'
 import patient3 from '../Json/patient3.json'
@@ -33,8 +30,8 @@ import { ValidateRegister } from "../utils/validateRegister";
 import { Attend } from "../careFlow/attend";
 
 let patient: Attend;
-let recepcionist: Recepcionist = HospitalManager.registerUser(Convert.JsonToRecepcionist(recepcionist1)) as Recepcionist;
-let nurse: Nurse = HospitalManager.registerUser(Convert.JsonToNurse(nurse1)) as Nurse;
+export let recepcionist: Recepcionist = HospitalManager.registerUser(Convert.JsonToRecepcionist(recepcionist1)) as Recepcionist;
+export let nurse: Nurse = HospitalManager.registerUser(Convert.JsonToNurse(nurse1)) as Nurse;
 export let doctor: Doctor = HospitalManager.registerUser(Convert.JsonToDoctor(doctor1)) as Doctor;
 
 QueueServices.createTicket(2);

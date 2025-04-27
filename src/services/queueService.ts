@@ -1,4 +1,5 @@
 import { Attend } from "../careFlow/attend";
+import { Triage } from "../careFlow/triage";
 import { Patient } from "../models/patient";
 import { AttendQ, TriageQ, ConsultQ, Priority } from "../models/queue";
 import { NoAttend } from "../utils/createNoAttend";
@@ -107,28 +108,40 @@ export class QueueServices {
     static showQueue(queue: typeQueue) {
         switch (queue) {
             case 'attend':
-                let tempA = AttendQ.firstPointer;
-                for (let i = 0; i < AttendQ.qtyPatients; i++) {
-                    console.log(tempA!.ticket);
-                    if (tempA?.pointer == null || undefined) {
-                        break
-                    } else {
-                        tempA = tempA?.pointer;
+                if (AttendQ.qtyPatients == 0) {
+                    console.log('Lista vazia!')
+                } else {
+                    let tempA = AttendQ.firstPointer;
+                    for (let i = 0; i < AttendQ.qtyPatients; i++) {
+                        console.log(tempA!.ticket);
+                        if (tempA?.pointer == null || undefined) {
+                            break
+                        } else {
+                            tempA = tempA?.pointer;
+                        }
                     }
                 }
-
+                break;
             case 'triage':
-                let tempT = TriageQ.firstPointer;
-                for (let i = 0; i < TriageQ.qtyPatients; i++) {
-                    console.log(tempT?.attend.patient.name);
-                    tempT = tempT?.pointer;
+                if (TriageQ.qtyPatients == 0) {
+                    console.log('Lista vazia!')
+                } else {
+                    let tempT = TriageQ.firstPointer;
+                    for (let i = 0; i < TriageQ.qtyPatients; i++) {
+                        console.log(tempT?.attend.patient.name);
+                        tempT = tempT?.pointer;
+                    }
                 }
-
+                break;
             case 'consult':
-                let tempC = ConsultQ.firstPointer;
-                for (let i = 0; i < ConsultQ.qtyPatients; i++) {
-                    console.log(tempC?.triage.attend.patient.name);
-                    tempC = tempC?.pointer;
+                if (ConsultQ.qtyPatients == 0) {
+                    console.log('Fila vazia!')
+                } else {
+                    let tempC = ConsultQ.firstPointer;
+                    for (let i = 0; i < ConsultQ.qtyPatients; i++) {
+                        console.log(tempC?.triage.attend.patient.name, tempC?.severity);
+                        tempC = tempC?.pointer;
+                    }
                 }
                 break;
         }
@@ -144,6 +157,7 @@ export class QueueServices {
             AttendQ.firstPointer = next;
 
             console.log(`Senha: ${call?.ticket}`)
+            AttendQ.qtyPatients--;
         }
     }
     static callNextTriage(): Attend {
@@ -157,25 +171,33 @@ export class QueueServices {
             TriageQ.firstPointer = next;
 
             console.log(`${call?.attend.patient.name}, vá para a triagem!`)
+            TriageQ.qtyPatients--;
             return call?.attend!
         }
     }
 
-    static callNextConsult() {
-        const call = ConsultQ.firstPointer;
-        const next = call?.pointer;
+    static callNextConsult(): Triage {
+        if (ConsultQ.qtyPatients == 0) {
+            console.log('Fila vazia')
+            return ConsultQ.firstPointer?.triage!;
+        } else {
+            const call = ConsultQ.firstPointer;
+            const next = call?.pointer;
 
-        ConsultQ.firstPointer = next;
+            ConsultQ.firstPointer = next;
 
-        console.log(`${call?.triage.attend.patient.name}, vá ao consultório!`);
+            console.log(`${call?.triage.attend.patient.name}, vá ao consultório!`);
+            ConsultQ.qtyPatients--;
+            return call!.triage;
+        }
     }
 
-    static search(patientCPF: Patient['id']): NoConsult | undefined | null {
+    static search(patientId: Patient['id']): NoConsult | undefined | null {
         let find: Boolean = false;
         let temp = ConsultQ.firstPointer;
 
         for (let i = 0; i < ConsultQ.qtyPatients; i++) {
-            if (temp!.triage.attend.patient.id === patientCPF) {
+            if (temp!.triage.attend.patient.id === patientId) {
                 console.log('Paciente:', temp!.triage.attend.patient.name);
                 find = true;
                 return temp!;
@@ -188,5 +210,9 @@ export class QueueServices {
             console.log('Paciente não encontrado.');
             return temp;
         }
+    }
+
+    static toSort() {
+        
     }
 }

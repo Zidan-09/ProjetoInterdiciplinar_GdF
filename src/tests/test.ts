@@ -35,7 +35,7 @@ import { Attend } from "../careFlow/attend";
 let patient: Attend;
 let recepcionist: Recepcionist = HospitalManager.registerUser(Convert.JsonToRecepcionist(recepcionist1)) as Recepcionist;
 let nurse: Nurse = HospitalManager.registerUser(Convert.JsonToNurse(nurse1)) as Nurse;
-let doctor: Doctor = HospitalManager.registerUser(Convert.JsonToDoctor(doctor1)) as Doctor;
+export let doctor: Doctor = HospitalManager.registerUser(Convert.JsonToDoctor(doctor1)) as Doctor;
 
 QueueServices.createTicket(2);
 QueueServices.createTicket(1);
@@ -119,13 +119,13 @@ QueueServices.showQueue('consult');
 
 console.log('\nCONSULTAS:\n');
 
-QueueServices.callNextConsult();
-QueueServices.callNextConsult();
-QueueServices.callNextConsult();
-QueueServices.callNextConsult();
-QueueServices.callNextConsult();
-QueueServices.callNextConsult();
-QueueServices.callNextConsult();
-QueueServices.callNextConsult();
-QueueServices.callNextConsult();
-QueueServices.callNextConsult();
+HospitalServices.startConsult(true);
+HospitalServices.startConsult(true);
+HospitalServices.startConsult(true);
+HospitalServices.startConsult(true);
+HospitalServices.startConsult(true);
+HospitalServices.startConsult(true);
+HospitalServices.startConsult(true);
+HospitalServices.startConsult(true);
+HospitalServices.startConsult(true);
+HospitalServices.startConsult(true);

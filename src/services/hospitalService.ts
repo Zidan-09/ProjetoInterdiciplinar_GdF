@@ -6,6 +6,7 @@ import { Triage } from "../careFlow/triage";
 import { Doctor, Nurse } from "../models/hospitalStaff";
 import { Attend } from "../careFlow/attend";
 import { Consult } from "../careFlow/consult";
+import { doctor } from "../tests/test";
 
 export class HospitalServices {
     static triage(nurse: Nurse, attend: Attend, data: TriageData) {
@@ -49,14 +50,13 @@ export class HospitalServices {
         }
     }
 
-    static startConsult(start: Boolean, triage: Triage, doctor: Doctor) {
+    static startConsult(start: Boolean) {
+        const triage: Triage = QueueServices.callNextConsult();
         if (start) {
-            const consult: Consult = new Consult(triage, doctor);
+            const consult: Consult = new Consult(triage!, doctor);
             const startDate = new Date();
             consult.checkInConsult = startDate;
-            return consult;
         } else {
-            //XXXX
         }
     }
 

@@ -49,34 +49,34 @@ QueueServices.showQueue('attend');
 console.log('\nCADASTROS\n');
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient1), recepcionist, ticket);
+ValidateRegister.verify(Convert.JsonToData(patient1));
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient2), recepcionist, ticket);
+ValidateRegister.verify(Convert.JsonToData(patient2));
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient3), recepcionist, ticket);
+ValidateRegister.verify(Convert.JsonToData(patient3));
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient4), recepcionist, ticket);
+ValidateRegister.verify(Convert.JsonToData(patient4));
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient5), recepcionist, ticket);
+ValidateRegister.verify(Convert.JsonToData(patient5));
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient6), recepcionist, ticket);
+ValidateRegister.verify(Convert.JsonToData(patient6));
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient7), recepcionist, ticket);
+ValidateRegister.verify(Convert.JsonToData(patient7));
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient8), recepcionist, ticket);
+ValidateRegister.verify(Convert.JsonToData(patient8));
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient9), recepcionist, ticket);
+ValidateRegister.verify(Convert.JsonToData(patient9));
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient10), recepcionist, ticket);
+ValidateRegister.verify(Convert.JsonToData(patient10));
 console.log('\nFILA DA TRIAGEM:\n')
 QueueServices.showQueue('triage');
 console.log('\nTRIAGENS:\n');

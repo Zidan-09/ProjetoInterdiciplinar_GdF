@@ -1,4 +1,4 @@
-import { Attend } from "../careFlow/attend";
+import { Attend } from "../models/attend";
 
 export class NoTriage {
     attend: Attend;

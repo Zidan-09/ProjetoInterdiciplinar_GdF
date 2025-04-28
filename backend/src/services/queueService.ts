@@ -5,6 +5,7 @@ import { AttendQ, TriageQ, ConsultQ, Priority } from "../models/queue";
 import { NoAttend } from "../utils/createNoAttend";
 import { NoConsult } from "../utils/createNoConsult";
 import { NoTriage } from "../utils/createNoTriage";
+import { DB } from "../simulateBD/Bd";
 
 export type typeQueue = 'attend' | 'triage' | 'consult'
 
@@ -128,7 +129,7 @@ export class QueueServices {
                 } else {
                     let tempT = TriageQ.firstPointer;
                     for (let i = 0; i < TriageQ.qtyPatients; i++) {
-                        console.log(tempT?.attend.patient.name);
+                        console.log();
                         tempT = tempT?.pointer;
                     }
                 }
@@ -139,7 +140,7 @@ export class QueueServices {
                 } else {
                     let tempC = ConsultQ.firstPointer;
                     for (let i = 0; i < ConsultQ.qtyPatients; i++) {
-                        console.log(tempC?.triage.attend.patient.name, tempC?.severity);
+                        console.log();
                         tempC = tempC?.pointer;
                     }
                 }
@@ -170,7 +171,7 @@ export class QueueServices {
 
             TriageQ.firstPointer = next;
 
-            console.log(`${call?.attend.patient.name}, vá para a triagem!`)
+            console.log(`${123}, vá para a triagem!`)
             TriageQ.qtyPatients--;
             return call?.attend!
         }
@@ -186,7 +187,7 @@ export class QueueServices {
 
             ConsultQ.firstPointer = next;
 
-            console.log(`${call?.triage.attend.patient.name}, vá ao consultório!`);
+            console.log(`${123}, vá ao consultório!`);
             ConsultQ.qtyPatients--;
             return call!.triage;
         }
@@ -197,8 +198,8 @@ export class QueueServices {
         let temp = ConsultQ.firstPointer;
 
         for (let i = 0; i < ConsultQ.qtyPatients; i++) {
-            if (temp!.triage.attend.patient.id === patientId) {
-                console.log('Paciente:', temp!.triage.attend.patient.name);
+            if (temp!.triage.id === patientId) {
+                console.log('Paciente:');
                 find = true;
                 return temp!;
             } else {

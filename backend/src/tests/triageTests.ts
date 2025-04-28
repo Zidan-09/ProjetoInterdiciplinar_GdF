@@ -14,7 +14,7 @@ QueueServices.callNextAttend();
 
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient1), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient1), recepcionist, '');
 
 // TRIAGEM:
 let patient: Attend = QueueServices.callNextTriage();

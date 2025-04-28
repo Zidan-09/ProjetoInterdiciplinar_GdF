@@ -6,6 +6,7 @@ import { Nurse } from "../models/hospitalStaff";
 import { doctor } from "../tests/test";
 import { Triage } from "../models/triage";
 import { Consult } from "../models/consult";
+import { DB } from "../simulateBD/Bd";
 
 export class HospitalServices {
     static triage(nurse: Nurse, data: TriageData) {
@@ -14,6 +15,7 @@ export class HospitalServices {
         const no: NoConsult = new NoConsult(triage);
         QueueServices.insertConsultQueue(no);
         console.log('Triagem realizada com sucesso!')
+
     }
 
     static changeSeverity(id: number, newSeverity: Severity) {

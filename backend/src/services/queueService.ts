@@ -1,5 +1,5 @@
-import { Attend } from "../careFlow/attend";
-import { Triage } from "../careFlow/triage";
+import { Attend } from "../models/attend";
+import { Triage } from "../models/triage";
 import { Patient } from "../models/patient";
 import { AttendQ, TriageQ, ConsultQ, Priority } from "../models/queue";
 import { NoAttend } from "../utils/createNoAttend";

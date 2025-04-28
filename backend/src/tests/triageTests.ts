@@ -5,7 +5,7 @@ import patient1 from "../Json/patient1.json";
 import triage1 from "../Json/triage1.json"
 import { ValidateRegister } from "../utils/validateRegister";
 import { nurse, recepcionist } from "./test";
-import { Attend } from "../careFlow/attend";
+import { Attend } from "../models/attend";
 
 // Parte Antes:
 QueueServices.createTicket(1);
@@ -21,4 +21,4 @@ let patient: Attend = QueueServices.callNextTriage();
 
 console.log('\nTRIAGEM:\n')
 
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage1));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage1));

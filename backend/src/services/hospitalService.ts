@@ -1,16 +1,15 @@
-import { Patient, Severity } from "../models/patient";
+import { Severity } from "../models/triage";
 import { NoConsult } from "../utils/createNoConsult";
 import { QueueServices } from "./queueService";
 import { TriageData } from "../utils/convertJson";
-import { Triage } from "../careFlow/triage";
-import { Doctor, Nurse } from "../models/hospitalStaff";
-import { Attend } from "../careFlow/attend";
-import { Consult } from "../careFlow/consult";
+import { Nurse } from "../models/hospitalStaff";
 import { doctor } from "../tests/test";
+import { Triage } from "../models/triage";
+import { Consult } from "../models/consult";
 
 export class HospitalServices {
-    static triage(nurse: Nurse, attend: Attend, data: TriageData) {
-        const triage = new Triage(nurse, attend, data.vitalSigns, data.severity, data.simptoms, data.painLevel);
+    static triage(nurse: Nurse, data: TriageData) {
+        const triage = new Triage(nurse, data.vitalSigns, data.severity, data.simptoms, data.painLevel);
 
         const no: NoConsult = new NoConsult(triage);
         QueueServices.insertConsultQueue(no);
@@ -51,9 +50,8 @@ export class HospitalServices {
     }
 
     static startConsult(start: Boolean) {
-        const triage: Triage = QueueServices.callNextConsult();
         if (start) {
-            const consult: Consult = new Consult(triage!, doctor);
+            const consult: Consult = new Consult(doctor);
             const startDate = new Date();
             consult.checkInConsult = startDate;
         } else {

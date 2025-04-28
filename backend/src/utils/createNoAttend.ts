@@ -1,7 +1,5 @@
-import { AttendQ } from "../models/queue";
-
 export class NoAttend {
-    ticket: string | undefined;
+    public ticket: string | undefined;
     priority: number;
     pointer: null | undefined | NoAttend;
 

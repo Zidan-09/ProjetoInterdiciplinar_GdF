@@ -1,5 +1,6 @@
 import { Recepcionist } from "../models/hospitalStaff";
-import { Status } from "../models/patient";
+
+export type Status = 'In triage queue'| 'In consult queue' | 'In consult' | 'Was treated' | 'Left before consult'
 
 export class Attend {
     id: number;

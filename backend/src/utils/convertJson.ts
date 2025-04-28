@@ -1,4 +1,5 @@
-import { MaritalStatus, Gender, Severity } from '../models/patient';
+import { MaritalStatus, Gender} from '../models/patient';
+import { Severity } from '../models/triage';
 
 export interface PatientData {
     id: number;

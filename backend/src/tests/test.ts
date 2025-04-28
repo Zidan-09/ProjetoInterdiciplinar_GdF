@@ -27,7 +27,7 @@ import doctor1 from '../Json/doctor.json'
 import { Doctor, Nurse, Recepcionist } from "../models/hospitalStaff";
 import { HospitalManager } from "../services/hospitalManager";
 import { ValidateRegister } from "../utils/validateRegister";
-import { Attend } from "../careFlow/attend";
+import { Attend } from "../models/attend";
 
 let patient: Attend;
 export let recepcionist: Recepcionist = HospitalManager.registerUser(Convert.JsonToRecepcionist(recepcionist1)) as Recepcionist;
@@ -49,67 +49,67 @@ QueueServices.showQueue('attend');
 console.log('\nCADASTROS\n');
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient1), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient1), recepcionist, ticket);
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient2), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient2), recepcionist, ticket);
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient3), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient3), recepcionist, ticket);
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient4), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient4), recepcionist, ticket);
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient5), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient5), recepcionist, ticket);
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient6), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient6), recepcionist, ticket);
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient7), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient7), recepcionist, ticket);
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient8), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient8), recepcionist, ticket);
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient9), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient9), recepcionist, ticket);
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient10), recepcionist);
+ValidateRegister.verify(Convert.JsonToData(patient10), recepcionist, ticket);
 console.log('\nFILA DA TRIAGEM:\n')
 QueueServices.showQueue('triage');
 console.log('\nTRIAGENS:\n');
 
 patient = QueueServices.callNextTriage();
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage1));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage1));
 
 patient = QueueServices.callNextTriage();
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage2));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage2));
 
 patient = QueueServices.callNextTriage();
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage3));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage3));
 
 patient = QueueServices.callNextTriage();
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage4));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage4));
 
 patient = QueueServices.callNextTriage();
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage5));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage5));
 
 patient = QueueServices.callNextTriage();
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage6));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage6));
 
 patient = QueueServices.callNextTriage();
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage7));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage7));
 
 patient = QueueServices.callNextTriage();
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage8));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage8));
 
 patient = QueueServices.callNextTriage();
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage9));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage9));
 
 patient = QueueServices.callNextTriage();
-HospitalServices.triage(nurse, patient, Convert.JsonToTriage(triage10));
+HospitalServices.triage(nurse, Convert.JsonToTriage(triage10));
 
 console.log('\nFILA DA CONSULTA:\n');
 QueueServices.showQueue('consult');

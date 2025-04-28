@@ -1,6 +1,7 @@
 import { Doctor } from "../models/hospitalStaff";
 
 export class Consult {
+    id: number;
     doctor: Doctor;
     checkInConsult: Date;
     checkOutConsult: Date | null;
@@ -9,6 +10,7 @@ export class Consult {
     notes: string | null;
 
     constructor(doctor: Doctor) {
+        this.id = 0;
         this.doctor = doctor;
         this.checkInConsult = new Date();
         this.checkOutConsult = null;

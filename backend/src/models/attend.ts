@@ -1,14 +1,16 @@
 import { Recepcionist } from "../models/hospitalStaff";
-import { Patient, Status } from "../models/patient";
+import { Status } from "../models/patient";
 
 export class Attend {
-    patient: Patient;
+    id: number;
+    ticket: string;
     recepcionist: Recepcionist;
     checkIn: Date;
     status: Status;
 
-    constructor(patient: Patient, recepcionist: Recepcionist) {
-        this.patient = patient;
+    constructor(ticket: string, recepcionist: Recepcionist) {
+        this.id = 0;
+        this.ticket = ticket;
         this.recepcionist = recepcionist;
         this.checkIn = new Date();
         this.status = 'In triage queue';

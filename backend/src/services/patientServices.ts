@@ -4,7 +4,6 @@ import { NoTriage } from "../utils/createNoTriage";
 import { QueueServices } from "./queueService";
 import { Attend } from "../models/attend";
 import { Recepcionist } from "../models/hospitalStaff";
-import { NoAttend } from "../utils/createNoAttend";
 
 export class PatientRegistration {
     static register(data: PatientData, recepcionist: Recepcionist, ticket: string): Patient {

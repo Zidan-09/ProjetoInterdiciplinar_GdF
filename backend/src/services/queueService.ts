@@ -193,26 +193,6 @@ export class QueueServices {
         }
     }
 
-    static search(patientId: Patient['id']): NoConsult | undefined | null {
-        let find: Boolean = false;
-        let temp = ConsultQ.firstPointer;
-
-        for (let i = 0; i < ConsultQ.qtyPatients; i++) {
-            if (temp!.triage.id === patientId) {
-                console.log('Paciente:');
-                find = true;
-                return temp!;
-            } else {
-                temp = temp?.pointer;
-            }
-        }
-
-        if (!find) {
-            console.log('Paciente não encontrado.');
-            return temp;
-        }
-    }
-
     static toSort() {
         
     }

@@ -13,6 +13,7 @@ export class ValidateRegister {
 		creable = true;
 		if (!creable) {
 			console.log('Paciente já cadastrado!');
+			
 		} else {
 			PatientRegistration.register(data, recepcionist!, ticket!);
 		}

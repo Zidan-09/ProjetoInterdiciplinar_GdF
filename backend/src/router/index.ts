@@ -18,4 +18,25 @@ router.get('/users/admins', (req: Request, res: Response) => {
     res.send('Tomar no rabo, nada funciona nessa bosta')
 });
 
+router.post('/users/recepcionists', (req: Request, res: Response) => {
+    res.send('Recepcinista cadastrado com sucesso!')
+});
+
+router.post('/users/nurse', (req: Request, res: Response) => {
+    res.send('Enfermeiro(a) cadastrado(a) com sucesso!')
+});
+
+router.post('/users/doctor', (req: Request, res: Response) => {
+    res.send('Médico(a) cadastrado(a) com sucesso!')
+});
+
+router.post('/users/admin', (req: Request, res: Response) => {
+    res.send('Administrador(a) cadastrado(a) com sucesso!')
+});
+
+router.delete('/users/recepcionists', (req: Request, res: Response) => {
+    const recepcionist_id = req.query.id
+    res.send('Recepcionista deletado do banco de dados!')
+})
+
 export default router;

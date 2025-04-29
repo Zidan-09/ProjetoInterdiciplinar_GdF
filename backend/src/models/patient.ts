@@ -8,7 +8,7 @@ export class Patient {
     maritalStatus: MaritalStatus;
     cpf: string;
     rg: string;
-    contact: string[];
+    contacts: string[];
     gender: Gender;
     healthPlan: string;
     address: string;
@@ -20,7 +20,7 @@ export class Patient {
         this.maritalStatus = maritalStatus;
         this.cpf = cpf;
         this.rg = rg;
-        this.contact = contact;
+        this.contacts = contact;
         this.gender = gender;
         this.healthPlan = healthPlan;
         this.address = address;

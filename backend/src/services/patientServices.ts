@@ -1,17 +1,16 @@
 import { Patient } from "../models/patient";
-import { PatientData } from "../utils/convertJson";
 import { NoTriage } from "../utils/createNoTriage";
 import { QueueServices } from "./queueService";
-import { Attend } from "../models/attend";
-import { Recepcionist } from "../models/hospitalStaff";
+import { Attend } from "../models/careFlow";
+import { Convert } from "../utils/convertJson";
 
 export class PatientRegistration {
-    static register(data: PatientData, recepcionist: Recepcionist, ticket: string): Patient {
-        const temp: Patient = new Patient(data.name, data.dob, data.maritalStatus, data.cpf, data.rg, data.contact, data.gender, data.healthPlan, data.address);
-        const attend: Attend = new Attend(ticket, recepcionist);
+    static register(json: any): Patient {
+        const patient: Patient = Convert.JsonToPatient(json);
+        const attend: Attend = Convert.JsonToAttend(json);
         const no: NoTriage = new NoTriage(attend);
         QueueServices.insertTriageQueue(no);
         console.log('Paciente Cadastrado com Sucesso!')
-        return temp;
+        return patient;
     }
 }

@@ -8,7 +8,6 @@ app.use(cors());
 
 app.use(router);
 
-const PORT = 3333;
-app.listen(PORT, () => {
-    console.log('Server rodando');
-})
+
+
+export default app;

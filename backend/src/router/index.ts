@@ -15,7 +15,7 @@ router.get('/users/doctors', (req: Request, res: Response) => {
 });
 
 router.get('/users/admins', (req: Request, res: Response) => {
-    res.send('Tomar no rabo, nada funciona nessa bosta')
+    res.send('Será que alteraa?')
 });
 
 router.post('/users/recepcionists', (req: Request, res: Response) => {
@@ -34,9 +34,24 @@ router.post('/users/admin', (req: Request, res: Response) => {
     res.send('Administrador(a) cadastrado(a) com sucesso!')
 });
 
-router.delete('/users/recepcionists', (req: Request, res: Response) => {
+router.delete('/users/recepcionists/recepcionist', (req: Request, res: Response) => {
     const recepcionist_id = req.query.id
     res.send('Recepcionista deletado do banco de dados!')
-})
+});
+
+router.delete('/users/nurses/nurse', (req: Request, res: Response) => {
+    const recepcionist_id = req.query.id
+    res.send('Recepcionista deletado do banco de dados!')
+});
+
+router.delete('/users/doctors/doctor', (req: Request, res: Response) => {
+    const recepcionist_id = req.query.id
+    res.send('Recepcionista deletado do banco de dados!')
+});
+
+router.delete('/users/admins/admin', (req: Request, res: Response) => {
+    const recepcionist_id = req.query.id
+    res.send('Recepcionista deletado do banco de dados!')
+});
 
 export default router;

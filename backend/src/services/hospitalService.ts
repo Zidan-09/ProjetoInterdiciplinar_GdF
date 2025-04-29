@@ -1,21 +1,18 @@
-import { Severity } from "../models/triage";
 import { NoConsult } from "../utils/createNoConsult";
 import { QueueServices } from "./queueService";
-import { TriageData } from "../utils/convertJson";
 import { Nurse } from "../models/hospitalStaff";
 import { doctor } from "../tests/test";
-import { Triage } from "../models/triage";
-import { Consult } from "../models/consult";
 import { DB } from "../simulateBD/Bd";
+import { Triage, Consult, Attend, Severity } from "../models/careFlow";
+import { Convert } from "../utils/convertJson";
 
 export class HospitalServices {
-    static triage(nurse: Nurse, data: TriageData) {
-        const triage = new Triage(nurse, data.vitalSigns, data.severity, data.simptoms, data.painLevel);
+    static triage(nurse: Nurse, json: any) {
+        const triage: Triage = Convert.JsonToTriage(json);
 
         const no: NoConsult = new NoConsult(triage);
         QueueServices.insertConsultQueue(no);
         console.log('Triagem realizada com sucesso!')
-
     }
 
     static changeSeverity(id: number, newSeverity: Severity) {

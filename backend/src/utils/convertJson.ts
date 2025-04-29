@@ -1,166 +1,36 @@
-import { MaritalStatus, Gender} from '../models/patient';
-import { Severity } from '../models/triage';
-
-export interface PatientData {
-    id: number;
-    name: string;
-    dob: Date;
-    maritalStatus: MaritalStatus;
-    cpf: string;
-    rg: string;
-    contact: string[];
-    gender: Gender;
-    healthPlan: string;
-    address: string;
-}
-
-export interface TriageData {
-    vitalSigns: {
-        bloodPreassure: {
-            systolicPreassure: number,
-            diastolicPreassure: number,
-        },
-        heartRate: number,
-        respiratoryRate: number,
-        bodyTemperature: number,
-        oxygenSaturation: number
-    };
-    simptoms: string[],
-    severity: Severity,
-    painLevel: number
-}
-
-export interface CriteriaData {
-    immediate: number;
-    veryUrcency: number;
-    urgent: number;
-    lowUrgency: number;
-    nonUrgent: number;
-}
-
-export interface RecepcionistData {
-    registrationNumber: number;
-    name: string;
-    cpf: string;
-    contacts: string[];
-    hireDate: Date;
-    shift: string;
-    salary: number;
-    cnesCode: string;
-    weeaklyHours: number;
-}
-
-export interface NurseData {
-    registrationNumber: number;
-    name: string;
-    cpf: string;
-    contacts: string[];
-    hireDate: Date;
-    shift: string;
-    salary: number;
-    cnesCode: string;
-    coren: string;
-    department: string;
-    roleType: string;
-    weeklyHours: number;
-    onDuty: Boolean;
-}
-
-export interface DoctorData {
-    registrationNumber: number;
-    name: string;
-    cpf: string;
-    contacts: string[];
-    hireDate: Date;
-    shift: string;
-    salary: number;
-    cnesCode: string;
-    crm: string;
-    specialty: string;
-    weeklyHours: number;
-    onDuty: Boolean;
-}
+import { Doctor, Nurse, Recepcionist } from '../models/hospitalStaff';
+import { Patient } from '../models/patient';
+import {Triage, Consult, Attend} from '../models/careFlow';
+import { DataBase } from '../simulateBD/Bd';
 
 export class Convert {
-    static JsonToData(json: any): PatientData {
-        return {
-            id: json.id,
-            name: json.name,
-            dob: new Date(json.dob),
-            maritalStatus: json.maritalStatus,
-            cpf: json.cpf,
-            rg: json.rg,
-            contact: json.contact,
-            gender: json.gender,
-            healthPlan: json.healthPlan,
-            address: json.address,
-        }
+    static JsonToPatient(json: any): Patient {
+        const patient: Patient = new Patient(json.name, json.dob, json.MaritalStatus, json.cpf, json.rg, json.contacts, json.Gender, json.healthPlan, json.adrress);
+        return patient;
     };
 
-    static JsonToTriage(json: any): TriageData {
-        return {
-            vitalSigns: {
-                bloodPreassure: {
-                    systolicPreassure: json.systolic,
-                    diastolicPreassure: json.diastolic,
-                },
-                heartRate: json.heartRate,
-                respiratoryRate: json.respiratoryRate,
-                bodyTemperature: json.bodyTemperature,
-                oxygenSaturation: json.oxygenSaturation
-            },
-            simptoms: json.simptoms,
-            severity: json.severity,
-            painLevel: json.painLevel
-        }
+    static JsonToAttend(json: any): Attend {
+    const recepcionist: Recepcionist = DataBase.searchRecepcionist(json.id_recepcionist);
+        const attend: Attend = new Attend(json.ticket, recepcionist);
+        return attend;
+    }
+    static JsonToTriage(json: any): Triage {
+        const triage: Triage = new Triage(json.nurse, json.vitalSigns, json.severity, json.simptoms, json.painLevel);
+        return triage;
     };
 
-    static JsonToRecepcionist(json: any): RecepcionistData {
-        return {
-            registrationNumber: json.registrationNumber,
-            name: json.name,
-            cpf: json.cpf,
-            contacts: json.contacts,
-            hireDate: json.hireDate,
-            shift: json.shift,
-            salary: json.salary,
-            cnesCode: json.cnesCode,
-            weeaklyHours: json.weeaklyHours
-        }
+    static JsonToRecepcionist(json: any): Recepcionist {
+        const  recepcionist: Recepcionist = new Recepcionist(json.name, json.cpf, json.contacts, json.registrationNumber, json.hireDate, json.shift, json.salary, json.cnesCode,json.weeaklyHours);
+        return recepcionist;
     };
 
-    static JsonToNurse(json: any): NurseData {
-        return {
-            registrationNumber: json.registrationNumber,
-            name: json.name,
-            cpf: json.cpf,
-            contacts: json.contacts,
-            hireDate: json.hireDate,
-            shift: json.shift,
-            salary: json.salary,
-            cnesCode: json.cnesCode,
-            coren: json.coren,
-            department: json.department,
-            roleType: json.roleType,
-            weeklyHours: json.weeaklyHours,
-            onDuty: json.onDuty
-        }
+    static JsonToNurse(json: any): Nurse {
+        const nurse: Nurse = new Nurse(json.name, json.cpf, json.contacts, json.registrationNumber, json.hireDate, json.shift, json.salary, json.cnesCode, json.coren, json.department, json.roleType, json.weeaklyHours);
+        return nurse;
     };
 
-    static JsonToDoctor(json: any): DoctorData {
-        return {
-            registrationNumber: json.registrationNumber,
-            name: json.name,
-            cpf: json.cpf,
-            contacts: json.contacts,
-            hireDate: json.hireDate,
-            shift: json.shift,
-            salary: json.salary,
-            cnesCode: json.cnesCode,
-            crm: json.crm,
-            specialty: json.speciality,
-            weeklyHours: json.weeaklyHours,
-            onDuty: json.onDuty
-        }
+    static JsonToDoctor(json: any): Doctor {
+        const doctor: Doctor = new Doctor(json.name, json.cpf, json.contacts, json.registrationNumber, json.hireDate, json.shift, json.salary, json.cnesCode, json.crm, json.speciality, json.weeaklyHours);
+        return doctor;
     };
 }   

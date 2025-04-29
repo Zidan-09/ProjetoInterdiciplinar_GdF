@@ -1,0 +1,14 @@
+{
+    "id": 1,
+    "id_recepcionist": 1,
+    "ticket": "P001",
+    "name": "Ronaldo",
+    "dob": "1990-05-12T00:00:00.000Z",
+    "maritalStatus": "",
+    "cpf": "123.456.789-10",
+    "rg": "1045030",
+    "contacts": [""],
+    "gender": "Male",
+    "healthPlan": "Sus",
+    "address": "Rua Catapimbas, 164"
+}

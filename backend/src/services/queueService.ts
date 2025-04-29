@@ -1,5 +1,4 @@
-import { Attend } from "../models/attend";
-import { Triage } from "../models/triage";
+import { Triage, Consult, Attend } from "../models/careFlow";
 import { Patient } from "../models/patient";
 import { AttendQ, TriageQ, ConsultQ, Priority } from "../models/queue";
 import { NoAttend } from "../utils/createNoAttend";
@@ -191,6 +190,10 @@ export class QueueServices {
             ConsultQ.qtyPatients--;
             return call!.triage;
         }
+    }
+
+    static search(id: number): NoConsult {
+        return ConsultQ.firstPointer!;
     }
 
     static toSort() {

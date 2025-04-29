@@ -1,6 +1,5 @@
 import { QueueServices } from "../services/queueService";
 import { Convert } from "../utils/convertJson";
-import patient1 from "../Json/patient1.json";
 import { ValidateRegister } from "../utils/validateRegister";
 import { recepcionist } from "./test";
 
@@ -16,4 +15,4 @@ console.log('CHAMADAS/CADASTROS:')
 console.log('/'.repeat(20));
 
 QueueServices.callNextAttend();
-ValidateRegister.verify(Convert.JsonToData(patient1), recepcionist);
+// ValidateRegister.verify();

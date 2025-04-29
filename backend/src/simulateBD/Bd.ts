@@ -1,8 +1,6 @@
-import { Attend } from "../models/attend";
-import { Consult } from "../models/consult";
+import { Attend, Triage, Consult } from "../models/careFlow";
 import { Doctor, Nurse, Recepcionist } from "../models/hospitalStaff";
 import { Patient } from "../models/patient";
-import { Triage } from "../models/triage";
 
 export class DataBase {
     name: string = 'GdF_DB';
@@ -40,12 +38,15 @@ export class DataBase {
         }
     }
 
-    static searchRecepcionist(id: number): Recepcionist | undefined {
+    static searchRecepcionist(id: number): Recepcionist {
+        let recepcionist: Recepcionist;
         for (let i of DB.recepcionists) {
             if (i.id == id) {
-                return i;
+                recepcionist = i;
+                break;
             }
         }
+        return recepcionist!;
     }
 
     static searchAttend(id: number): string | undefined {
@@ -54,6 +55,16 @@ export class DataBase {
                 return i.ticket;
             }
         }
+    }
+
+    static searchByName(name: string): Patient | undefined {
+        let patient: Patient | undefined;
+        for (let i of DB.patients) {
+            if (i.name == name) {
+                patient = i;
+            }
+        }
+        return patient;
     }
 }
 

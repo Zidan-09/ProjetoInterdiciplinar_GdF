@@ -6,7 +6,7 @@ const app = express();
 
 app.use(cors());
 
-app.use('/api', router);
+app.use(router);
 
 const PORT = 3333;
 app.listen(PORT, () => {

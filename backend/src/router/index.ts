@@ -1,57 +1,25 @@
 import { Router, Request, Response } from "express";
+import { RecepcionistPayLoad } from "../models/hospitalStaff";
 
-const router = Router();
+const router: Router = Router();
 
-router.get('/users/recepcionists', (req, res) => {
-    res.send('Ola, teste')
-});
+router.post('/recepcionists', (req: Request<{}, {}, RecepcionistPayLoad, {}>, res: Response) => {
+    const { registrationNumber, name, cpf, contacts, hireDate, shift, salary, cnesCode, weeklyHours } = req.body;
 
-router.get('/users/nurses', (req, res) => {
-    res.send('Oi, teste')
-});
-
-router.get('/users/doctors', (req: Request, res: Response) => {
-    res.send('Ola')
-});
-
-router.get('/users/admins', (req: Request, res: Response) => {
-    res.send('Será que alteraa?')
-});
-
-router.post('/users/recepcionists', (req: Request, res: Response) => {
-    res.send('Recepcinista cadastrado com sucesso!')
-});
-
-router.post('/users/nurse', (req: Request, res: Response) => {
-    res.send('Enfermeiro(a) cadastrado(a) com sucesso!')
-});
-
-router.post('/users/doctor', (req: Request, res: Response) => {
-    res.send('Médico(a) cadastrado(a) com sucesso!')
-});
-
-router.post('/users/admin', (req: Request, res: Response) => {
-    res.send('Administrador(a) cadastrado(a) com sucesso!')
-});
-
-router.delete('/users/recepcionists/recepcionist', (req: Request, res: Response) => {
-    const recepcionist_id = req.query.id
-    res.send('Recepcionista deletado do banco de dados!')
-});
-
-router.delete('/users/nurses/nurse', (req: Request, res: Response) => {
-    const recepcionist_id = req.query.id
-    res.send('Recepcionista deletado do banco de dados!')
-});
-
-router.delete('/users/doctors/doctor', (req: Request, res: Response) => {
-    const recepcionist_id = req.query.id
-    res.send('Recepcionista deletado do banco de dados!')
-});
-
-router.delete('/users/admins/admin', (req: Request, res: Response) => {
-    const recepcionist_id = req.query.id
-    res.send('Recepcionista deletado do banco de dados!')
+    return res.json({
+        mensage: 'Usuário recepcionista cadastrado com sucesso!',
+        data: {
+            registrationNumber,
+            name,
+            cpf,
+            contacts,
+            hireDate,
+            shift,
+            salary,
+            cnesCode,
+            weeklyHours
+        }
+    });
 });
 
 export default router;

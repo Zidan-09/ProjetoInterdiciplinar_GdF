@@ -12,5 +12,9 @@ export class PatientRegistration {
         QueueServices.insertTriageQueue(no);
         console.log('Paciente Cadastrado com Sucesso!')
         return patient;
+    };
+
+    static list() {
+        
     }
-}
+};

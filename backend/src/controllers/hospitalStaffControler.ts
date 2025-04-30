@@ -1,12 +1,15 @@
 import { Response, Request } from "express";
-import { Convert } from "../utils/convertJson";
+import { Recepcionist, Nurse, Doctor, Administrator, RecepcionistPayLoad } from "../models/hospitalStaff";
+import { HospitalManager } from "../services/hospitalManager";
 
-let id: number = 1;
+export const RecepcionistController = {
+    async listAll(req: Request, res: Response) {
+        const recepcionists = await Recepcionist.list();
+        return res.json(recepcionists);
+    },
 
-export const RegisterRecepcionist = (req: Request, res: Response) => {
-    const { RecepcionistData } = req.body;
-
-    if (!RecepcionistData) {
-        return res.status(400).json({error: 'dados obrigatórios!'});
+    async register(req: Request, res: Response) {
+        const newRecepcionist = await HospitalManager.registerUser(req.body);
+        return res.status(201).json(newRecepcionist);
     }
 }

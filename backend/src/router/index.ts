@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
-import { RecepcionistPayLoad } from "../models/hospitalStaff";
+import { Recepcionist, RecepcionistPayLoad } from "../models/hospitalStaff";
+import { HospitalManager } from "../services/hospitalManager";
 
 const router: Router = Router();
 
@@ -33,6 +34,28 @@ router.get('/users/doctors/doctor', (req: Request, res: Response) => {
 
 router.get('/users/admins/admin', (req: Request, res: Response) => {
     res.send('admin')
+});
+
+router.post('/users/register/recepcionist', (req: Request<{}, {}, RecepcionistPayLoad>, res: Response) => {
+    const data: RecepcionistPayLoad = req.body;
+
+    if (!data.cnesCode || !data.contacts || !data.cpf || !data.hireDate || !data.name || !data.registrationNumber || !data.salary || !data.shift || !data.weeklyHours) {
+        res.json('Dados incompletos, tente novamente!');
+    } else {
+        
+    }
+});
+
+router.post('/users/register/nurse', (req: Request, res: Response) => {
+
+});
+
+router.post('/users/register/doctor', (req: Request, res: Response) => {
+
+});
+
+router.post('/users/register/admin', (req: Request, res: Response) => {
+
 });
 
 export default router;

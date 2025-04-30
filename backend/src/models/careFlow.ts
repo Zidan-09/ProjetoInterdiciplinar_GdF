@@ -6,16 +6,14 @@ export type Status = 'In triage queue'| 'In consult queue' | 'In consult' | 'Was
 export type Severity = 'Non-urgent' | 'Low-urgency' | 'Urgent' | 'Very-urgent' | 'Immediate'
 
 export class Attend {
-    id: number;
     ticket: string;
-    recepcionist: Recepcionist;
+    recepcionist_id: number;
     checkIn: Date;
     status: Status;
 
-    constructor(ticket: string, recepcionist: Recepcionist) {
-        this.id = 0;
+    constructor(ticket: string, recepcionist_id: number) {
         this.ticket = ticket;
-        this.recepcionist = recepcionist;
+        this.recepcionist_id = recepcionist_id;
         this.checkIn = new Date();
         this.status = 'In triage queue';
     }

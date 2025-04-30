@@ -10,8 +10,4 @@ app.use(cors());
 app.use("/", router);
 app.use("/patient", patientRouter);
 
-app.listen(3333, () => {
-    console.log('Server rodando em: http://localhost:3333/')
-});
-
 export default app;

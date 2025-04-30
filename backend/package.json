@@ -2,19 +2,27 @@
   "name": "projetointegrador_gdf",
   "version": "1.0.0",
   "description": "Sistema de Gerenciamento de Filas - Projeto Integrador",
-  "main": "src/index.ts",
+  "main": "src/server.ts",
   "scripts": {
-    "dev": "ts-node src/tests/test.ts",
-    "build": "tsc"
+    "dev": "ts-node src/server.ts",
+    "build": "tsc",
+    "prisma": "prisma",
+    "migrate": "prisma migrate dev --name init",
+    "generate": "prisma generate",
+    "studio": "prisma studio"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@prisma/client": "^5.13.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Zidan-09/ProjetoIntegrador_GdF.git"
   },
-  "keywords": [],
   "author": "Samuel da Penha Nascimento, Gabriel Lima Oliveira, Gabriel Oliveira",
   "license": "MIT",
   "devDependencies": {
+    "prisma": "^5.13.0",
     "@types/node": "^20.11.30",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"

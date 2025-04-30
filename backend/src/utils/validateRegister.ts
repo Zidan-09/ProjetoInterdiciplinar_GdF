@@ -1,4 +1,4 @@
-import { PatientRegistration } from "../services/patientServices";
+import { PatientServices } from "../services/patientServices";
 import { Patient } from "../models/patient";
 import { Registration } from "../models/interfaces";
 

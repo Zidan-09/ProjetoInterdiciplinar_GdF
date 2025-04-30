@@ -1,4 +1,4 @@
-import { Triage } from "../models/triage";
+import { Triage } from "../models/careFlow";
 
 export class NoConsult {
     triage: Triage;

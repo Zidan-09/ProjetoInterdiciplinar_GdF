@@ -14,8 +14,119 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  name  String
-  email String  @unique
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Severity {
+  NON-URGENT
+  LOWURGENCY
+  URGENT
+  VERY-URGENT
+  IMMEDIATE
+}
+
+model Patient {
+  id            Int      @id @default(autoincrement())
+  name          String
+  dob           DateTime
+  maritalStatus MaritalStatus
+  cpf           String   @unique
+  rg            String
+  contacts      String[]
+  gender        Gender
+  healthPlan    String
+  address       String
+}
+
+model Employee {
+  id                Int      @id @default(autoincrement())
+  registrationNumber Int
+  name              String
+  cpf               String   @unique
+  contacts          String[]
+  hireDate          DateTime
+  shift             String
+  salary            Float
+  cnesCode          String
+  Doctor            Doctor?
+  Nurse             Nurse?
+  Recepcionist      Recepcionist?
+  Administrator     Administrator?
+}
+
+model Doctor {
+  id          Int     @id @default(autoincrement())
+  employeeId  Int     @unique
+  crm         String
+  specialty   String
+  weeklyHours Int
+  onDuty      Boolean
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  consults    Consult[]
+}
+
+model Nurse {
+  id          Int     @id @default(autoincrement())
+  employeeId  Int     @unique
+  coren       String
+  department  String
+  roleType    String
+  weeklyHours Int
+  onDuty      Boolean
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  triages     Triage[]
+}
+
+model Recepcionist {
+  id          Int     @id @default(autoincrement())
+  employeeId  Int     @unique
+  weeklyHours Int
+  employee    Employee @relation(fields: [employeeId], references: [id])
+  attends     Attend[]
+}
+
+model Administrator {
+  id         Int      @id @default(autoincrement())
+  employeeId Int      @unique
+  lastLogin  DateTime?
+  employee   Employee @relation(fields: [employeeId], references: [id])
+}
+
+model Attend {
+  id              Int      @id @default(autoincrement())
+  ticket          String
+  checkIn         DateTime
+  recepcionistId  Int
+  recepcionist    Recepcionist @relation(fields: [recepcionistId], references: [id])
+}
+
+model Triage {
+  id          Int     @id @default(autoincrement())
+  vitalSigns  Json?
+  severity    Severity?
+  simptoms    String[]?
+  painLevel   Int
+  nurseId     Int
+  nurse       Nurse @relation(fields: [nurseId], references: [id])
+}
+
+model Consult {
+  id              Int       @id @default(autoincrement())
+  doctorId        Int
+  checkInConsult  DateTime
+  checkOutConsult DateTime?
+  diagnosis       String?
+  prescriptions   String[]?
+  notes           String?
+  doctor          Doctor    @relation(fields: [doctorId], references: [id])
 }

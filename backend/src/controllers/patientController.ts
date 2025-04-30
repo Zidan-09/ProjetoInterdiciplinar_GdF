@@ -1,12 +1,27 @@
 import { Request, Response } from "express";
-import { Patient, PatientData } from "../models/patient";
+import { Patient } from "../models/patient";
+import { Registration } from "../models/interfaces";
 import { Attend } from "../models/careFlow";
+import { ValidateRegister } from "../utils/validateRegister";
+import { PatientRegistration } from "../services/patientServices";
 
 export const PatientController = {
     async register(req: Request, res: Response) {
-        const patientdata: PatientData = req.body;
-        patientdata.dob = new Date(patientdata.dob)
-        const patient: Patient = new Patient(patientdata.name, patientdata.dob, patientdata.maritalStatus, patientdata.cpf, patientdata.rg, patientdata.contacts, patientdata.gender, patientdata.healthPlan, patientdata.address);
-        const attend: Attend = new Attend('', 1)
-    }
+        const data: Registration = req.body;
+        let validate: Boolean = ValidateRegister.verify(data.patient);
+
+        if (validate) {
+            let done: Boolean = PatientRegistration.register(data.patient);
+            if (done) {
+                res.json({
+                    mensage: "Paciente cadastrado com sucesso!"
+                });
+                const attend: Attend = new Attend(data.attend.ticket, data.attend.recepcionist_id);
+            }
+        } else {
+            res.json({
+                mensage: "Paciente já cadastrado",
+            })
+        }
+    }   
 }

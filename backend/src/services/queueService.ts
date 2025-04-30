@@ -4,7 +4,6 @@ import { AttendQ, TriageQ, ConsultQ, Priority } from "../models/queue";
 import { NoAttend } from "../utils/createNoAttend";
 import { NoConsult } from "../utils/createNoConsult";
 import { NoTriage } from "../utils/createNoTriage";
-import { DB } from "../simulateBD/Bd";
 
 export type typeQueue = 'attend' | 'triage' | 'consult'
 
@@ -160,35 +159,31 @@ export class QueueServices {
             AttendQ.qtyPatients--;
         }
     }
-    static callNextTriage(): Attend {
+    static callNextTriage() {
         if (TriageQ.qtyPatients == 0) {
             console.log('Fila vazia');
-            return TriageQ.firstPointer?.attend!;
         } else {
             const call = TriageQ.firstPointer;
             const next = call?.pointer;
 
             TriageQ.firstPointer = next;
 
-            console.log(`${123}, vá para a triagem!`)
+            console.log(`${call!.patient}, vá para a triagem!`)
             TriageQ.qtyPatients--;
-            return call?.attend!
         }
     }
 
-    static callNextConsult(): Triage {
+    static callNextConsult() {
         if (ConsultQ.qtyPatients == 0) {
             console.log('Fila vazia')
-            return ConsultQ.firstPointer?.triage!;
         } else {
             const call = ConsultQ.firstPointer;
             const next = call?.pointer;
 
             ConsultQ.firstPointer = next;
 
-            console.log(`${123}, vá ao consultório!`);
+            console.log(`${call?.triage}, vá ao consultório!`);
             ConsultQ.qtyPatients--;
-            return call!.triage;
         }
     }
 

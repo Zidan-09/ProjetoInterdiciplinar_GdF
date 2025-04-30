@@ -1,18 +1,32 @@
 import { Patient } from "../models/patient";
 import { NoTriage } from "../utils/createNoTriage";
 import { QueueServices } from "./queueService";
-import { Attend } from "../models/careFlow";
-import { Convert } from "../utils/convertJson";
+import { Registration } from "../models/interfaces";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export class PatientRegistration {
-    static register(json: any): Patient {
-        const patient: Patient = Convert.JsonToPatient(json);
-        const attend: Attend = Convert.JsonToAttend(json);
-        const no: NoTriage = new NoTriage(attend);
+    static async register(data: Registration['patient']): Promise<boolean> {
+        const no: NoTriage = new NoTriage(data.name);
         QueueServices.insertTriageQueue(no);
-        console.log('Paciente Cadastrado com Sucesso!')
-        return patient;
-    };
+    
+        await prisma.patient.create({
+            data: {
+                name: data.name,
+                dob: new Date(data.dob),
+                maritalStatus: data.maritalStatus,
+                cpf: data.cpf,
+                rg: data.rg,
+                contacts: data.contacts,
+                gender: data.gender,
+                healthPlan: data.healthPlan,
+                address: data.address,
+            }
+        });
+    
+        return true;
+    }
 
     static list() {
         

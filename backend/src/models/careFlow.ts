@@ -1,4 +1,3 @@
-import { Recepcionist } from "../models/hospitalStaff";
 import { Doctor } from "../models/hospitalStaff";
 import { Nurse } from "../models/hospitalStaff";
 
@@ -9,13 +8,11 @@ export class Attend {
     ticket: string;
     recepcionist_id: number;
     checkIn: Date;
-    status: Status;
 
     constructor(ticket: string, recepcionist_id: number) {
         this.ticket = ticket;
         this.recepcionist_id = recepcionist_id;
         this.checkIn = new Date();
-        this.status = 'In triage queue';
     }
 };
 

@@ -1,15 +1,14 @@
 import { PatientRegistration } from "../services/patientServices";
-import { DB } from "../simulateBD/Bd";
-import { DataBase } from "../simulateBD/Bd";
 import { Patient } from "../models/patient";
+import { Registration } from "../models/interfaces";
 
 export class ValidateRegister {
-	static verify(json: any) {
-		const patient: Patient | undefined = DataBase.searchByName(json.name);
-		if (patient != undefined) {
-			console.log('Paciente já cadastrado!');
+	static verify(patient: Registration['patient']): boolean {
+		const temporario: number = 10;
+		if (temporario > 0) {
+			return true;
 		} else {
-			PatientRegistration.register(json);
+			return false;
 		}
 	}
 }

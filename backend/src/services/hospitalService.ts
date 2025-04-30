@@ -2,7 +2,6 @@ import { NoConsult } from "../utils/createNoConsult";
 import { QueueServices } from "./queueService";
 import { Nurse } from "../models/hospitalStaff";
 import { doctor } from "../tests/test";
-import { DB } from "../simulateBD/Bd";
 import { Triage, Consult, Attend, Severity } from "../models/careFlow";
 import { Convert } from "../utils/convertJson";
 

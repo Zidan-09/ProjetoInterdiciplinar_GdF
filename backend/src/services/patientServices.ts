@@ -6,7 +6,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export class PatientRegistration {
+export class PatientServices {
     static async register(data: Registration['patient']): Promise<boolean> {
         const no: NoTriage = new NoTriage(data.name);
         QueueServices.insertTriageQueue(no);
@@ -26,9 +26,9 @@ export class PatientRegistration {
         });
     
         return true;
-    }
+    };
 
-    static list() {
-        
-    }
+    static async list() {
+        await prisma.patient.findMany();
+    };
 };

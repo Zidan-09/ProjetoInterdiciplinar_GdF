@@ -5,7 +5,7 @@ import { NoAttend } from "../utils/createNoAttend";
 import { NoConsult } from "../utils/createNoConsult";
 import { NoTriage } from "../utils/createNoTriage";
 
-export type typeQueue = 'attend' | 'triage' | 'consult'
+type typeQueue = 'attend' | 'triage' | 'consult'
 
 export class QueueServices {
     static createTicket(priority: number) {
@@ -127,7 +127,7 @@ export class QueueServices {
                 } else {
                     let tempT = TriageQ.firstPointer;
                     for (let i = 0; i < TriageQ.qtyPatients; i++) {
-                        console.log();
+                        console.log(tempT?.patient);
                         tempT = tempT?.pointer;
                     }
                 }
@@ -138,7 +138,7 @@ export class QueueServices {
                 } else {
                     let tempC = ConsultQ.firstPointer;
                     for (let i = 0; i < ConsultQ.qtyPatients; i++) {
-                        console.log();
+                        console.log(tempC?.triage);
                         tempC = tempC?.pointer;
                     }
                 }

@@ -1,4 +1,5 @@
 import { Triage } from "../models/careFlow";
+import { Patient } from "../models/patient";
 
 export class NoConsult {
     triage: Triage;

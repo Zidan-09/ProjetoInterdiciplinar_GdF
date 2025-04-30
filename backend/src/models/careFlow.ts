@@ -1,5 +1,6 @@
 import { Doctor } from "../models/hospitalStaff";
 import { Nurse } from "../models/hospitalStaff";
+import { Patient } from "./patient";
 
 export type Status = 'In triage queue'| 'In consult queue' | 'In consult' | 'Was treated' | 'Left before consult'
 export type Severity = 'Non-urgent' | 'Low-urgency' | 'Urgent' | 'Very-urgent' | 'Immediate'
@@ -18,6 +19,7 @@ export class Attend {
 
 export class Triage {
     id: number;
+    patient: Patient['name'];
     nurse: Nurse;
     vitalSigns: undefined | {
             bloodPreassure: {
@@ -33,8 +35,9 @@ export class Triage {
     simptoms: undefined | string[];
     painLevel: number;
 
-        constructor(nurse: Nurse, vitalSigns: {bloodPreassure: {systolicPreassure: number, diastolicPreassure: number}, heartRate: number, respiratoryRate: number, bodyTemperature: number, oxygenSaturation: number}, severity: Severity, simptoms: string[], painLevel: number) {
+        constructor(patient: Patient['name'], nurse: Nurse, vitalSigns: {bloodPreassure: {systolicPreassure: number, diastolicPreassure: number}, heartRate: number, respiratoryRate: number, bodyTemperature: number, oxygenSaturation: number}, severity: Severity, simptoms: string[], painLevel: number) {
             this.id = 0;
+            this.patient = patient;
             this.nurse = nurse;
             this.vitalSigns = vitalSigns;
             this.severity = severity;

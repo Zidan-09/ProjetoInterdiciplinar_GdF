@@ -1,6 +1,8 @@
 import { Router, Request, Response } from "express";
 import { Recepcionist, RecepcionistPayLoad } from "../models/hospitalStaff";
 import { HospitalManager } from "../services/hospitalManager";
+import { Registration } from "../models/interfaces";
+import { PatientController } from "../controllers/patientController";
 
 const router: Router = Router();
 

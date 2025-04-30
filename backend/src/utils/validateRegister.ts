@@ -1,14 +1,16 @@
-import { PatientServices } from "../services/patientServices";
-import { Patient } from "../models/patient";
-import { Registration } from "../models/interfaces";
+import { RecepcionistData, RegistrationPatient } from "../models/interfaces";
 
 export class ValidateRegister {
-	static verify(patient: Registration['patient']): boolean {
+	static verifyPatient(patient: RegistrationPatient['patient']): Boolean {
 		const temporario: number = 10;
 		if (temporario > 0) {
 			return true;
 		} else {
 			return false;
 		}
+	};
+
+	static verifyUser(user: RecepcionistData): Boolean {
+		return true;
 	}
 }

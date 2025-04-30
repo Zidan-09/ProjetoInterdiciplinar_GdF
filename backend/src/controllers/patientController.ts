@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { Registration } from "../models/interfaces";
+import { RegistrationPatient } from "../models/interfaces";
 import { Attend } from "../models/careFlow";
 import { ValidateRegister } from "../utils/validateRegister";
 import { PatientServices } from "../services/patientServices";
 
 export const PatientController = {
     async register(req: Request, res: Response) {
-        const data: Registration = req.body;
-        let validate: Boolean = ValidateRegister.verify(data.patient);
+        const data: RegistrationPatient = req.body;
+        let validate: Boolean = ValidateRegister.verifyPatient(data.patient);
 
         if (validate) {
             let done: Boolean = await PatientServices.register(data.patient);

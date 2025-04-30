@@ -79,16 +79,4 @@ export class Administrator extends Employee {
         this.id = 0;
         this.lastLogin = undefined;
     }
-}
-
-export interface RecepcionistPayLoad {
-    registrationNumber: number;
-    name: string;
-    cpf: string;
-    contacts: string[];
-    hireDate: Date;
-    shift: string;
-    salary: number;
-    cnesCode: string;
-    weeklyHours: number
-}
+};

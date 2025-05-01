@@ -1,4 +1,4 @@
-import { prisma } from "../prismaTests";
+import { patients, prisma } from "../prismaTests";
 import { NoTriage } from "../utils/createNoTriage";
 import { QueueServices } from "./queueService";
 import { RegistrationPatient } from "../models/interfaces";
@@ -8,7 +8,7 @@ export class PatientServices {
         const no: NoTriage = new NoTriage(data.name);
         QueueServices.insertTriageQueue(no);
     
-        await prisma.patient.create({
+        const patient = await prisma.patient.create({
             data: {
                 name: data.name,
                 dob: new Date(data.dob),
@@ -21,6 +21,7 @@ export class PatientServices {
                 address: data.address,
             }
         });
+        patients.push(patient);
     
         return true;
     };

@@ -75,7 +75,6 @@ export interface AdminData {
     shift: string;
     salary: number;
     cnesCode: string;
-    lastLogin: Date;
 }
 
 export interface CriteriaData {

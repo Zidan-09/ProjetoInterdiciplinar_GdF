@@ -14,7 +14,7 @@ export const PatientController = {
             let done: Boolean = await PatientServices.register(data.patient);
             if (done) {
                 res.status(201).json({
-                    mensage: "Paciente cadastrado com sucesso!"
+                    mensage: "Paciente cadastrado com sucesso!",
                 });
                 const attend: Attend = new Attend(data.attend.ticket, data.attend.recepcionist_id);
             } else {

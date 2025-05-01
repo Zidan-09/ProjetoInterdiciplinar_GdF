@@ -1,0 +1,14 @@
+{
+    "registrationNumber": 12648,
+    "name": "Yasmin",
+    "cpf": "123.654.254-28",
+    "contacts": ["(82) 91234-6528"],
+    "shift": "tarde",
+    "salary": 2000,
+    "cnesCode": "12f34",
+    "coren": "123/PI",
+    "department": "pronto-socorro",
+    "roleType": "nurse",
+    "weeklyHours": 40,
+    "onDuty": "true"
+}

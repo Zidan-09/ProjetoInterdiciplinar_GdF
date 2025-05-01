@@ -72,11 +72,9 @@ export class Recepcionist extends Employee {
 
 export class Administrator extends Employee {
     id: number;
-    lastLogin: Date | undefined;
 
     constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string) {
         super(name, cpf, contacts, registrationNumber, hireDate, shift, salary, cnesCode);
         this.id = 0;
-        this.lastLogin = undefined;
     }
 };

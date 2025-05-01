@@ -1,0 +1,10 @@
+{
+    "registrationNumber": 1234,
+    "name": "Rosângela",
+    "cpf": "232.653.745-29",
+    "contacts": ["(83) 93254-6523"],
+    "shift": "tarde",
+    "salary": 2000,
+    "cnesCode": "12j43",
+    "weeklyHours": 40
+}

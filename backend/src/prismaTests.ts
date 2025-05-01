@@ -5,7 +5,7 @@ export const prisma = {
         return { id: 1, ...data }; // Simula o retorno
       },
       findMany: async () => {
-        return [{ id: 1, name: 'Paciente Fictício', cpf: '123' }];
+        return [{ id: 1, name: 'Paciente Fictício', cpf: '123' },  { id: 2, name: 'Paciente Fictício 2', cpf: '1232' }, { id: 3, name: 'Paciente Fictício 3', cpf: '1233' }, { id: 4, name: 'Paciente Fictício 4', cpf: '1234' }];
       }
     },
     recepcionist: {

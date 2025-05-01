@@ -30,9 +30,8 @@ export const PatientController = {
     },
 
     async list(req: Request, res: Response) {
-        const patients = prisma.patient.findMany();
         res.status(201).json({
-            patients: patients,
+            patients: await prisma.patient.findMany(),
             mensage: "Lista de pacientes exibida"
         })
     }

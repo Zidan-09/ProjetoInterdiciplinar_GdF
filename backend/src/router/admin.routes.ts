@@ -1,9 +1,7 @@
 import { Router } from "express";
-import { AdminController } from "../controllers/hospitalController";
+import { AdminController } from "../controllers/hospitalStaffControler";
 
 const adminRouter = Router();
-
-adminRouter.put('/settings/criteria', AdminController.changeCriteria);
 
 adminRouter.get('/list', AdminController.list);
 

@@ -29,7 +29,7 @@ export const RecepcionistController = {
 
     async list(req: Request, res: Response) {
         res.status(201).json({
-            recepcionists: prisma.recepcionist.findMany(),
+            recepcionists: await prisma.recepcionist.findMany(),
             mensage: "recepcionistas exibidos!"
         })
     }
@@ -60,7 +60,7 @@ export const NurseController = {
 
     async list(req: Request, res: Response) {
         res.status(201).json({
-            nurses: prisma.nurse.findMany(),
+            nurses: await prisma.nurse.findMany(),
             mensage: "Enfermeiros exibidos!"
         })
     }
@@ -91,7 +91,7 @@ export const DoctorController = {
 
     async list(req: Request, res: Response) {
         res.status(201).json({
-            doctor: prisma.doctor.findMany(),
+            doctor: await prisma.doctor.findMany(),
             mensage: "Médicos exibidos!"
         })
     }
@@ -122,7 +122,7 @@ export const AdminController = {
 
     async list(req: Request, res: Response) {
         res.status(201).json({
-            admins: prisma.admin.findMany(),
+            admins: await prisma.admin.findMany(),
             mensage: "Administradores exibidos!"
         })
     }

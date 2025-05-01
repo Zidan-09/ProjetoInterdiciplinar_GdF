@@ -3,7 +3,7 @@ import { RegistrationPatient } from "../models/interfaces";
 import { Attend } from "../models/careFlow";
 import { ValidateRegister } from "../utils/validateRegister";
 import { PatientServices } from "../services/patientServices";
-import { prisma } from "../prismaTests";
+import { prisma, somarID } from "../prismaTests";
 
 export const PatientController = {
     async register(req: Request<{}, {}, RegistrationPatient>, res: Response) {
@@ -16,7 +16,7 @@ export const PatientController = {
                 res.status(201).json({
                     mensage: "Paciente cadastrado com sucesso!",
                 });
-                const attend: Attend = new Attend(data.attend.ticket, data.attend.recepcionist_id);
+                somarID('patient');
             } else {
                 res.status(400).json({
                     mensage: "Erro ao cadastrar!"
@@ -30,7 +30,7 @@ export const PatientController = {
     },
 
     async list(req: Request, res: Response) {
-        res.status(201).json({
+        res.status(200).json({
             patients: await prisma.patient.findMany(),
             mensage: "Lista de pacientes exibida"
         })

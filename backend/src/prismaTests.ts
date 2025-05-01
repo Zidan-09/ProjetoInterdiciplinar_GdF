@@ -1,14 +1,40 @@
+export function somarID(tipo: string) {
+  switch (tipo) {
+    case 'patient':
+      patientID++;
+      break;
+    case 'recepcionist':
+      recepcionistID++;
+      break;
+    case 'nurse':
+      nurseID++;
+      break
+    case 'doctor':
+      doctorID++;
+      break;
+    case 'admin':
+      adminID++;
+      break;
+  }
+}
+
 export const patients: {}[] = [];
 export const recepcionists: {}[] = [];
 export const nurses: {}[] = [];
 export const doctors: {}[] = [];
 export const admins: {}[] = [];
 
+export let patientID: number = 1;
+export let recepcionistID: number = 1;
+export let nurseID: number = 1;
+export let doctorID: number = 1;
+export let adminID: number = 1;
+
 export const prisma = {
     patient: {
       create: async (data: any) => {
         console.log('[MOCK] Criando paciente:', data);
-        return { id: 1, ...data }; // Simula o retorno
+        return { id: patientID, ...data };
       },
       findMany: async () => {
         return patients;
@@ -17,7 +43,7 @@ export const prisma = {
     recepcionist: {
       create: async (data: any) => {
         console.log('[MOCK] Criando recepcionista', data);
-        return { id: 1, ...data };
+        return { id: recepcionistID, ...data };
       },
       findMany: async () => {
         return recepcionists;
@@ -26,7 +52,7 @@ export const prisma = {
     nurse: {
       create: async (data: any) => {
         console.log('[MOCK] Criando enfermeiro', data);
-        return { id: 1, ...data };
+        return { id: nurseID, ...data };
       },
       findMany: async () => {
         return nurses;
@@ -35,7 +61,7 @@ export const prisma = {
     doctor: {
       create: async (data: any) => {
         console.log('[MOCK] Criando médico', data);
-        return { id: 1, ...data };
+        return { id: doctorID, ...data };
       },
       findMany: async () => {
         return doctors;
@@ -44,7 +70,7 @@ export const prisma = {
     admin: {
       create: async (data: any) => {
         console.log('[MOCK] Criando admin', data);
-        return { id: 1, ...data };
+        return { id: adminID, ...data };
       },
       findMany: async () => {
         return admins;

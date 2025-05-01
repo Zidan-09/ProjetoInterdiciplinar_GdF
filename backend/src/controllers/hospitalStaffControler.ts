@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { HospitalManager } from "../services/hospitalManager";
-import { prisma } from "../prismaTests"
+import { prisma, somarID } from "../prismaTests"
 import { AdminData, DoctorData, NurseData, RecepcionistData } from "../models/interfaces";
 import { ValidateRegister } from "../utils/validateRegister";
 
@@ -19,6 +19,7 @@ export const RecepcionistController = {
                 res.status(400).json({
                     mensage: "Erro ao cadastrar!"
                 });
+                somarID('recepcionist');
             }
         } else {
             res.json({
@@ -46,6 +47,7 @@ export const NurseController = {
                 res.status(201).json({
                     mensage: "Enfermeiro(a) cadastrado(a) com sucesso!"
                 });
+                somarID('nurse');
             } else {
                 res.status(400).json({
                     mensage: "Erro ao cadastrar!"
@@ -77,6 +79,7 @@ export const DoctorController = {
                 res.status(201).json({
                     mensage: "Médico(a) cadastrado(a) com sucesso!"
                 });
+                somarID('doctor');
             } else {
                 res.status(400).json({
                     mensage: "Erro ao cadastrar!"
@@ -108,6 +111,7 @@ export const AdminController = {
                 res.status(201).json({
                     mensage: "Administrador(a) cadastrado(a) com sucesso!"
                 });
+                somarID('admin');
             } else {
                 res.status(400).json({
                     mensage: "Erro ao cadastrar!"

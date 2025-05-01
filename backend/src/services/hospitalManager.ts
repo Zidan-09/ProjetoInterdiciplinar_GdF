@@ -1,4 +1,4 @@
-import { RecepcionistData, NurseData, DoctorData, CriteriaData } from "../models/interfaces";
+import { RecepcionistData, NurseData, DoctorData, CriteriaData, AdminData } from "../models/interfaces";
 import { criteria } from "../models/criteria";
 
 export class HospitalManager {
@@ -14,15 +14,15 @@ export class HospitalManager {
 
     }
 
-    static registerUser(user: RecepcionistData | NurseData | DoctorData): Boolean {
+    static registerUser(user: RecepcionistData | NurseData | DoctorData | AdminData): Boolean {
         return true;
     }
 
-    static editUser(user: RecepcionistData | NurseData | DoctorData) {
+    static editUser(user: RecepcionistData | NurseData | DoctorData | AdminData) {
 
     }
 
-    static deleteUser(user: RecepcionistData | NurseData | DoctorData) {
+    static deleteUser(user: RecepcionistData | NurseData | DoctorData | AdminData) {
 
     }
 }

@@ -5,4 +5,6 @@ const patientRouter = Router();
 
 patientRouter.post('/register', PatientController.register);
 
+patientRouter.get('/list', PatientController.list);
+
 export default patientRouter;

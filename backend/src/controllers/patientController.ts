@@ -3,6 +3,7 @@ import { RegistrationPatient } from "../models/interfaces";
 import { Attend } from "../models/careFlow";
 import { ValidateRegister } from "../utils/validateRegister";
 import { PatientServices } from "../services/patientServices";
+import { prisma } from "../prismaTests";
 
 export const PatientController = {
     async register(req: Request, res: Response) {
@@ -26,5 +27,13 @@ export const PatientController = {
                 mensage: "Paciente já cadastrado",
             })
         }
+    },
+
+    async list(req: Request, res: Response) {
+        const patients = prisma.patient.findMany();
+        res.status(201).json({
+            patients: patients,
+            mensage: "Lista de pacientes exibida"
+        })
     }
 }

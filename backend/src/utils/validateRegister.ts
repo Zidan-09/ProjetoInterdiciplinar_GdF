@@ -1,4 +1,4 @@
-import { RecepcionistData, RegistrationPatient } from "../models/interfaces";
+import { AdminData, DoctorData, NurseData, RecepcionistData, RegistrationPatient } from "../models/interfaces";
 
 export class ValidateRegister {
 	static verifyPatient(patient: RegistrationPatient['patient']): Boolean {
@@ -10,7 +10,7 @@ export class ValidateRegister {
 		}
 	};
 
-	static verifyUser(user: RecepcionistData): Boolean {
+	static verifyUser(user: RecepcionistData | NurseData | DoctorData | AdminData): Boolean {
 		return true;
 	}
 }

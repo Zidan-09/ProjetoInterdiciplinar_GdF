@@ -6,7 +6,7 @@ import { PatientServices } from "../services/patientServices";
 import { prisma } from "../prismaTests";
 
 export const PatientController = {
-    async register(req: Request, res: Response) {
+    async register(req: Request<{}, {}, RegistrationPatient>, res: Response) {
         const data: RegistrationPatient = req.body;
         let validate: Boolean = ValidateRegister.verifyPatient(data.patient);
 

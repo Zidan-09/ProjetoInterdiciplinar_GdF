@@ -103,11 +103,13 @@ export interface TriageData {
     painLevel: number;
 }
 
-export interface ConsultData {
+export interface ConsultStartData {
     doctor_id: number;
-    checkInConsult: Date;
-    checkOutConsult: Date | null;
+}
+
+export interface ConsultEndData {
+    consult_id: number;
     diagnosis: string | null;
     prescriptions: string[] | null;
-    notes: string | null;
+    notes: string | null;     
 }

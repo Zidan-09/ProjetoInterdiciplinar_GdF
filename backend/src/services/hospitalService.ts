@@ -1,23 +1,21 @@
 import { NoConsult } from "../utils/createNoConsult";
 import { QueueServices } from "./queueService";
-import { Nurse } from "../models/hospitalStaff";
 import { Triage, Consult, Attend, Severity } from "../models/careFlow";
 import { criteria } from "../models/criteria";
-import { TriageData, ConsultData } from "../models/interfaces";
+import { TriageData, ConsultStartData, ConsultEndData } from "../models/interfaces";
+import { prisma } from "../prismaTests";
 
 export class HospitalServices {
-    static triage(data: TriageData): string {
-        const triage: Triage = new Triage(
-            data.patient, data.nurse_id, data.vitalSigns, data.severity, data.simptoms, data.painLevel
-        );
+    static async triage(data: TriageData): Promise<string> {
+        const triage: Triage = await prisma.triage.create(data)
 
         const no: NoConsult = new NoConsult(triage);
         QueueServices.insertConsultQueue(no);
         return 'Triagem realizada com sucesso!'
     }
 
-    static changeSeverity(id: number, newSeverity: Severity) {
-        const search = QueueServices.search(id);
+    static async changeSeverity(patient_id: number, newSeverity: Severity) {
+        const search = QueueServices.search(patient_id);
 
         if (search == undefined || null) {
             console.log('Erro')
@@ -49,17 +47,18 @@ export class HospitalServices {
         }
     }
 
-    static startConsult(): string {
-        return 'oi';
-        //FAZER LÓGICA DE CONSULTA (INÍCIO/FIM)
+    static async startConsult(data: ConsultStartData): Promise<[number, Date]> {
+        const consult: Consult = await prisma.consult.create(data);
+        return [consult.id, consult.checkInConsult];
     }
 
-    static endConsult(consult: Consult, diagnosis: string, prescriptions: string[], notes: string) {
+    static async endConsult(data: ConsultEndData) {
         const endDate = new Date();
+        const consult: Consult = await prisma.consult.end(data.consult_id);
         consult.checkOutConsult = endDate;
-        consult.diagnosis = diagnosis;
-        consult.prescriptions = prescriptions;
-        consult.notes = notes;
+        consult.diagnosis = data.diagnosis;
+        consult.prescriptions = data.prescriptions;
+        consult.notes = data.notes;
         return consult;
     }
 }

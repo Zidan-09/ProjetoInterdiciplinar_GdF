@@ -4,6 +4,7 @@ import { CriteriaData, AdminData, TriageData } from "../models/interfaces";
 import { criteria } from "../models/criteria";
 import { QueueServices } from "../services/queueService";
 import { HospitalServices } from "../services/hospitalService";
+import { Consult } from "../models/careFlow";
 
 export const HospitalController = {
     async createTicket(req: Request, res: Response) {
@@ -39,12 +40,25 @@ export const HospitalController = {
     },
 
     async consultConfirm(req: Request, res: Response) {
-        const confirm: Boolean = req.body;
+        const data = req.body;
 
-        if (confirm) {
-            HospitalServices.startConsult();
+        if (data.confirm) {
+            const consult: [number, Date] = await HospitalServices.startConsult(data.doctor_id);
+            res.status(200).json({
+                consult: consult
+            });
+
         } else {
             // FAZER LÓGICA DE NÃO COMPARECIMENTO
         }
+    },
+
+    async consultEnd(req: Request, res: Response) {
+        const data = req.body;
+        const result = await HospitalServices.endConsult(data);
+
+        res.status(200).json({
+            consult: result
+        })
     }
 }

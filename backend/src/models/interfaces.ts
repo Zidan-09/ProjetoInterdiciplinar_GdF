@@ -1,5 +1,5 @@
-import { Interface } from "readline";
 import { Gender, MaritalStatus } from "./patient";
+import { Severity } from "./careFlow";
 
 interface PatientData {
     name: string;
@@ -83,4 +83,31 @@ export interface CriteriaData {
     "urgent": 60,
     "lowUrgency": 120,
     "nonUrgent": 240
+}
+
+export interface TriageData {
+    nurse_id: number,
+    patient: RegistrationPatient['patient']['name'],
+    vitalSigns: {
+        bloodPreassure: {
+            systolicPreassure: number,
+            diastolicPreassure: number
+        },
+        heartRate: number;
+        respiratoryRate: number;
+        bodyTemperature: number;
+        oxygenSaturation: number;
+    },
+    severity: Severity;
+    simptoms: string[];
+    painLevel: number;
+}
+
+export interface ConsultData {
+    doctor_id: number;
+    checkInConsult: Date;
+    checkOutConsult: Date | null;
+    diagnosis: string | null;
+    prescriptions: string[] | null;
+    notes: string | null;
 }

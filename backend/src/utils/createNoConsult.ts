@@ -1,5 +1,5 @@
 import { Triage } from "../models/careFlow";
-import { Patient } from "../models/patient";
+import { criteria } from "../models/criteria";
 
 export class NoConsult {
     triage: Triage;
@@ -16,23 +16,23 @@ export class NoConsult {
         switch (patientTriage.severity!) {
             case 'Non-urgent': 
                 this.severity = 1;
-                this.limit = 240;
+                this.limit = criteria.nonUrgent;
                 break;
             case 'Low-urgency':
                 this.severity = 2;
-                this.limit = 120;
+                this.limit = criteria.lowUrgency;
                 break;
             case 'Urgent':
                 this.severity = 3;
-                this.limit = 60;
+                this.limit = criteria.urgent;
                 break;
             case 'Very-urgent':
                 this.severity = 4;
-                this.limit = 10;
+                this.limit = criteria.veryUrgent;
                 break;
             case 'Immediate':
                 this.severity = 5;
-                this.limit = 0;
+                this.limit = criteria.immediate;
                 break;
         }
     }

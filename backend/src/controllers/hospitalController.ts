@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
 import { HospitalManager } from "../services/hospitalManager";
-import { CriteriaData, AdminData } from "../models/interfaces";
+import { CriteriaData, AdminData, TriageData } from "../models/interfaces";
 import { criteria } from "../models/criteria";
-import { prisma } from "../prismaTests";
-import { ValidateRegister } from "../utils/validateRegister";
+import { QueueServices } from "../services/queueService";
+import { HospitalServices } from "../services/hospitalService";
 
 export const HospitalController = {
+    async createTicket(req: Request, res: Response) {
+        const priority: number = req.body;
+        QueueServices.createTicket(priority)
+    },
+
     async changeCriteria(req: Request, res: Response) {
         const newCriteria: CriteriaData = req.body;
 
@@ -15,5 +20,18 @@ export const HospitalController = {
             mensage: "Critérios atualizados!",
             newCriteria: criteria
         })
+    },
+
+    async triage(req: Request, res: Response) {
+        const triageData: TriageData = req.body;
+
+        const result = await HospitalServices.triage(triageData);
+
+        res.status(201).json({
+            mensage: result
+        })
+    },
+
+    async consult(req: Request, res: Response) {
     }
 }

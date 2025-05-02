@@ -5,7 +5,11 @@ import { NoAttend } from "../utils/createNoAttend";
 import { NoConsult } from "../utils/createNoConsult";
 import { NoTriage } from "../utils/createNoTriage";
 
-type typeQueue = 'attend' | 'triage' | 'consult'
+export const attendQueue: string[] = [];
+export const triageQueue: string[] = [];
+export const consultQueue: string[] = [];
+
+export type typeQueue = 'attend' | 'triage' | 'consult'
 
 export class QueueServices {
     static createTicket(priority: number) {
@@ -108,82 +112,85 @@ export class QueueServices {
         switch (queue) {
             case 'attend':
                 if (AttendQ.qtyPatients == 0) {
-                    console.log('Lista vazia!')
+                    return 'Lista vazia!'
                 } else {
                     let tempA = AttendQ.firstPointer;
                     for (let i = 0; i < AttendQ.qtyPatients; i++) {
-                        console.log(tempA!.ticket);
+                        attendQueue.push(tempA!.ticket!);
                         if (tempA?.pointer == null || undefined) {
                             break
                         } else {
                             tempA = tempA?.pointer;
                         }
                     }
+                    return attendQueue;
                 }
                 break;
             case 'triage':
                 if (TriageQ.qtyPatients == 0) {
-                    console.log('Lista vazia!')
+                    return 'Lista vazia!'
                 } else {
                     let tempT = TriageQ.firstPointer;
                     for (let i = 0; i < TriageQ.qtyPatients; i++) {
-                        console.log(tempT?.patient);
+                        triageQueue.push(tempT!.patient);
                         tempT = tempT?.pointer;
                     }
+                    return triageQueue;
                 }
                 break;
             case 'consult':
                 if (ConsultQ.qtyPatients == 0) {
-                    console.log('Fila vazia!')
+                    return 'Lista vazia!'
                 } else {
                     let tempC = ConsultQ.firstPointer;
                     for (let i = 0; i < ConsultQ.qtyPatients; i++) {
-                        console.log(tempC?.triage);
+                        consultQueue.push(tempC!.triage.patient);
                         tempC = tempC?.pointer;
                     }
+                    return consultQueue;
                 }
                 break;
         }
     }
 
-    static callNextAttend(): void {
+    static callNextAttend(): string {
         if (AttendQ.qtyPatients == 0) {
-            console.log('Fila vazia');
+            return 'Fila vazia'
         } else {
             const call = AttendQ.firstPointer;
             const next = call?.pointer;
 
             AttendQ.firstPointer = next;
 
-            console.log(`Senha: ${call?.ticket}`)
             AttendQ.qtyPatients--;
+            return `Senha: ${call?.ticket}`
         }
     }
-    static callNextTriage() {
+    static callNextTriage(): string {
         if (TriageQ.qtyPatients == 0) {
-            console.log('Fila vazia');
+            return 'Fila vazia'
         } else {
             const call = TriageQ.firstPointer;
             const next = call?.pointer;
 
             TriageQ.firstPointer = next;
 
-            console.log(`${call!.patient}, vá para a triagem!`)
             TriageQ.qtyPatients--;
+            return `${call!.patient}, vá para a triagem!`
         }
     }
 
-    static callNextConsult() {
+    static callNextConsult(): string {
         if (ConsultQ.qtyPatients == 0) {
-            console.log('Fila vazia')
+            return 'Fila vazia'
         } else {
             const call = ConsultQ.firstPointer;
             const next = call?.pointer;
 
             ConsultQ.firstPointer = next;
 
-            console.log(`${call?.triage}, vá ao consultório!`);
             ConsultQ.qtyPatients--;
+            return `${call?.triage}, vá ao consultório!`
         }
     }
 

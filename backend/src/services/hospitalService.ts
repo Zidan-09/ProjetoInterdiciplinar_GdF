@@ -49,8 +49,9 @@ export class HospitalServices {
         }
     }
 
-    static startConsult(start: Boolean): string {
+    static startConsult(): string {
         return 'oi';
+        //FAZER LÓGICA DE CONSULTA (INÍCIO/FIM)
     }
 
     static endConsult(consult: Consult, diagnosis: string, prescriptions: string[], notes: string) {

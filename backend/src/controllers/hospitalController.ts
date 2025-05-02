@@ -8,7 +8,12 @@ import { HospitalServices } from "../services/hospitalService";
 export const HospitalController = {
     async createTicket(req: Request, res: Response) {
         const priority: number = req.body;
-        QueueServices.createTicket(priority)
+        const ticket: string = QueueServices.createTicket(priority)
+
+        res.status(201).json({
+            mensage: "Senha criada",
+            ticket: ticket
+        })
     },
 
     async changeCriteria(req: Request, res: Response) {
@@ -28,10 +33,18 @@ export const HospitalController = {
         const result = await HospitalServices.triage(triageData);
 
         res.status(201).json({
-            mensage: result
+            mensage: "Triagem realizada com sucesso",
+            result: result
         })
     },
 
-    async consult(req: Request, res: Response) {
+    async consultConfirm(req: Request, res: Response) {
+        const confirm: Boolean = req.body;
+
+        if (confirm) {
+            HospitalServices.startConsult();
+        } else {
+            // FAZER LÓGICA DE NÃO COMPARECIMENTO
+        }
     }
 }

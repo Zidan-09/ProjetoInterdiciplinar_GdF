@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { RegistrationPatient } from "../models/interfaces";
-import { Attend } from "../models/careFlow";
 import { ValidateRegister } from "../utils/validateRegister";
 import { PatientServices } from "../services/patientServices";
 import { prisma, somarID } from "../prismaTests";

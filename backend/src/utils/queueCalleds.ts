@@ -1,13 +1,19 @@
 export function AttendCalled(): string {
-    return attendCalled[0];
+    const call = attendCalled[0];
+    attendCalled.shift();
+    return call;
 };
 
-export function TriageCalled() {
-    return triageCalled[0];
+export function TriageCalled(): string {
+    const call = triageCalled[0];
+    triageCalled.shift();
+    return call;
 };
 
-export function ConsultCalled() {
-    return consultCalled[0];
+export function ConsultCalled(): string {
+    const call = consultCalled[0];
+    consultCalled.shift();
+    return call;
 }
 
 

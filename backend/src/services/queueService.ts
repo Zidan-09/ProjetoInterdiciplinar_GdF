@@ -1,6 +1,4 @@
-import { Triage, Consult, Attend } from "../models/careFlow";
-import { Patient } from "../models/patient";
-import { AttendQ, TriageQ, ConsultQ, Priority } from "../models/queue";
+import { AttendQ, TriageQ, ConsultQ } from "../models/queue";
 import { NoAttend } from "../utils/createNoAttend";
 import { NoConsult } from "../utils/createNoConsult";
 import { NoTriage } from "../utils/createNoTriage";
@@ -12,7 +10,7 @@ export const consultQueue: string[] = [];
 export type typeQueue = 'attend' | 'triage' | 'consult'
 
 export class QueueServices {
-    static createTicket(priority: number) {
+    static createTicket(priority: number): string {
         const no: NoAttend = new NoAttend(priority);
 
         switch (priority) {
@@ -27,6 +25,7 @@ export class QueueServices {
                 break;
         }
         this.insertAttendQueue(no);
+        return no.ticket!;
     }
 
     static insertAttendQueue(no: NoAttend) {
@@ -190,7 +189,7 @@ export class QueueServices {
             ConsultQ.firstPointer = next;
 
             ConsultQ.qtyPatients--;
-            return `${call?.triage}, vá ao consultório!`
+            return `${call?.triage.patient}, vá ao consultório!`
         }
     }
 

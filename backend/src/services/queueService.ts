@@ -107,7 +107,7 @@ export class QueueServices {
         ConsultQ.qtyPatients++;
     }
 
-    static showQueue(queue: typeQueue) {
+    static showQueue(queue: typeQueue): string | string[] {
         switch (queue) {
             case 'attend':
                 if (AttendQ.qtyPatients == 0) {
@@ -124,7 +124,6 @@ export class QueueServices {
                     }
                     return attendQueue;
                 }
-                break;
             case 'triage':
                 if (TriageQ.qtyPatients == 0) {
                     return 'Lista vazia!'
@@ -136,7 +135,6 @@ export class QueueServices {
                     }
                     return triageQueue;
                 }
-                break;
             case 'consult':
                 if (ConsultQ.qtyPatients == 0) {
                     return 'Lista vazia!'
@@ -148,7 +146,6 @@ export class QueueServices {
                     }
                     return consultQueue;
                 }
-                break;
         }
     }
 

@@ -93,6 +93,8 @@ export const prisma = {
     triage: {
       create: async (data: any) => {
         const triage = new Triage(data.patient, data.nurse_id, data.vitalSigns, data.severity, data.simptoms, data.painLevel);
+        triage.id = triageID;
+        triageID++;
         console.log('[MOCK] Cadastrando triagem', data);
         return triage;
       }
@@ -101,6 +103,8 @@ export const prisma = {
       create: async (data: any) => {
         const consult: Consult = new Consult(data.doctor_id);
         consult.checkInConsult = new Date();
+        consult.id = consultID;
+        consultID++;
         console.log('[MOCK] Cadastrando inicio da consulta')
         return consult;
       },

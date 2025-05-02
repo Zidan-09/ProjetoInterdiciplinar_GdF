@@ -3,8 +3,9 @@ import { HospitalManager } from "../services/hospitalManager";
 import { QueueServices, typeQueue } from "../services/queueService";
 import { PatientServices } from "../services/patientServices";
 import { ConsultEndData, ConsultStartData, CriteriaData, RegistrationPatient, TriageData } from "../models/interfaces";
-import { Consult } from "../models/careFlow";
+import { Consult, Triage } from "../models/careFlow";
 import { ValidateRegister } from "../utils/validateRegister";
+import { prisma } from "../prismaTests";
 
 export class HospitalControllerTeste {
     static criarSenha(prioridade: number) {
@@ -18,9 +19,9 @@ export class HospitalControllerTeste {
         console.log('Critérios atualizados!:', novosCriterios)
     };
 
-    static triagem(triagem: TriageData) {
-        const result = HospitalServices.triage(triagem);
-        console.log('Triagem realizada:', result)
+    static async triagem(triagem: TriageData) {
+        const result: Triage = await HospitalServices.triage(triagem);
+        console.log('Triagem realizada!')
     };
 
     static async confirmarConsulta(confirmar: ConsultStartData) {
@@ -34,7 +35,7 @@ export class HospitalControllerTeste {
 
     static async finalizarConsult(dados: ConsultEndData) {
         const result: Consult = await HospitalServices.endConsult(dados);
-        console.log('Consulta realizada:', result)
+        console.log('Consulta realizada')
     }
 };
 
@@ -43,7 +44,7 @@ export class PatientControllerTeste {
         let validate = ValidateRegister.verifyPatient(dados['patient']);
 
         if (validate) {
-            let done = await PatientServices.register(dados['patient']);
+            let done: Boolean = await PatientServices.register(dados['patient']);
 
             if (done) {
                 console.log('Paciente cadastrado com sucesso!');
@@ -73,6 +74,21 @@ export class QueueControllerTeste {
     };
 
     static seeQueue(queue: typeQueue) {
-        QueueServices.showQueue(queue);
+        const requestQueue: string | string[] = QueueServices.showQueue(queue);
+
+        if (typeof requestQueue == "string") {
+            console.log(requestQueue);
+        } else {
+            for (let i of requestQueue) {
+                console.log(i);
+            }
+        }
     }
+};
+
+export class DataBase {
+    static async patient() {
+        const patients = await prisma.patient.findMany();
+        return patients;
+    };
 }

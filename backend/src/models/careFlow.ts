@@ -19,7 +19,7 @@ export class Attend {
 };
 
 export class Triage {
-    id: number
+    id: number | null;
     patient: RegistrationPatient['patient']['name'];
     nurse: number;
     vitalSigns: undefined | {
@@ -37,7 +37,7 @@ export class Triage {
     painLevel: number;
 
         constructor(patient: Patient['name'], nurse: number, vitalSigns: {bloodPreassure: {systolicPreassure: number, diastolicPreassure: number}, heartRate: number, respiratoryRate: number, bodyTemperature: number, oxygenSaturation: number}, severity: Severity, simptoms: string[], painLevel: number) {
-            this.id = 0;
+            this.id = null;
             this.patient = patient;
             this.nurse = nurse;
             this.vitalSigns = vitalSigns;
@@ -48,7 +48,7 @@ export class Triage {
 };
 
 export class Consult {
-    id: number;
+    id: number | null;
     doctor_id: number;
     checkInConsult: Date;
     checkOutConsult: Date | null;
@@ -57,7 +57,7 @@ export class Consult {
     notes: string | null;
 
     constructor(doctor_id: number) {
-        this.id = 0;
+        this.id = null;
         this.doctor_id = doctor_id;
         this.checkInConsult = new Date();
         this.checkOutConsult = null;

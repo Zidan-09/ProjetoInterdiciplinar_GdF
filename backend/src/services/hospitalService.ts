@@ -14,11 +14,11 @@ export class HospitalServices {
         return triage;
     }
 
-    static async changeSeverity(patient_id: number, newSeverity: Severity) {
+    static async changeSeverity(patient_id: number, newSeverity: Severity): Promise<string> {
         const search = QueueServices.search(patient_id);
 
         if (search == undefined || null) {
-            console.log('Erro')
+            return 'Erro'
         } else {
             search!.triage.severity = newSeverity;
 
@@ -45,11 +45,12 @@ export class HospitalServices {
                     break;
             }
         }
+        return 'Severidade Alterada!'
     }
 
     static async startConsult(data: ConsultStartData): Promise<[number, Date]> {
         const consult: Consult = await prisma.consult.create(data);
-        return [consult.id, consult.checkInConsult];
+        return [consult.id!, consult.checkInConsult];
     }
 
     static async endConsult(data: ConsultEndData): Promise<Consult> {

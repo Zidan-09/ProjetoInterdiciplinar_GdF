@@ -4,7 +4,6 @@ import { CriteriaData, AdminData, TriageData } from "../models/interfaces";
 import { criteria } from "../models/criteria";
 import { QueueServices } from "../services/queueService";
 import { HospitalServices } from "../services/hospitalService";
-import { Consult } from "../models/careFlow";
 
 export const HospitalController = {
     async createTicket(req: Request, res: Response) {

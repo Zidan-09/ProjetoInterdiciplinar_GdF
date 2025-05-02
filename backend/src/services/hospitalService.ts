@@ -6,12 +6,12 @@ import { TriageData, ConsultStartData, ConsultEndData } from "../models/interfac
 import { prisma } from "../prismaTests";
 
 export class HospitalServices {
-    static async triage(data: TriageData): Promise<string> {
+    static async triage(data: TriageData): Promise<Triage> {
         const triage: Triage = await prisma.triage.create(data)
 
         const no: NoConsult = new NoConsult(triage);
         QueueServices.insertConsultQueue(no);
-        return 'Triagem realizada com sucesso!'
+        return triage;
     }
 
     static async changeSeverity(patient_id: number, newSeverity: Severity) {
@@ -52,7 +52,7 @@ export class HospitalServices {
         return [consult.id, consult.checkInConsult];
     }
 
-    static async endConsult(data: ConsultEndData) {
+    static async endConsult(data: ConsultEndData): Promise<Consult> {
         const endDate = new Date();
         const consult: Consult = await prisma.consult.end(data.consult_id);
         consult.checkOutConsult = endDate;

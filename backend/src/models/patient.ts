@@ -1,18 +1,15 @@
-export type MaritalStatus = 'Single' | 'Married' | 'Divorcied' | 'Separated' | 'Widowed'
-export type Gender = 'Male' | 'Female' | 'Other'
-
 export class Patient {
     name: string;
     dob: Date;
-    maritalStatus: MaritalStatus;
+    maritalStatus: 'Single' | 'Married' | 'Divorcied' | 'Separated' | 'Widowed';
     cpf: string;
     rg: string;
     contacts: string[];
-    gender: Gender;
+    gender: 'Male' | 'Female' | 'Other';
     healthPlan: string;
     address: string;
 
-    constructor(name: string, dob: Date, maritalStatus: MaritalStatus, cpf: string, rg: string, contact: string[], gender: Gender, healthPlan: string, address: string) {
+    constructor(name: string, dob: Date, maritalStatus: string, cpf: string, rg: string, contact: string[], gender: string, healthPlan: string, address: string) {
         this.name = name;
         this.dob = dob;
         this.maritalStatus = maritalStatus;

@@ -1,12 +1,9 @@
 {
     "attend": {
         "ticket": "P001",
-        "id_recepcionist": 1
+        "recepcionist_id": 1
     },
     "patient": {
-        "id": 1,
-        "id_recepcionist": 1,
-        "ticket": "P001",
         "name": "Ronaldo",
         "dob": "1990-04-12T00:00:00.000Z",
         "maritalStatus": "Single",

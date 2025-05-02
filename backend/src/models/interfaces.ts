@@ -105,6 +105,7 @@ export interface TriageData {
 
 export interface ConsultStartData {
     doctor_id: number;
+    confirm: Boolean;
 }
 
 export interface ConsultEndData {

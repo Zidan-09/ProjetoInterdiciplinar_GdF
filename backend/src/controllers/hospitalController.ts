@@ -7,8 +7,8 @@ import { HospitalServices } from "../services/hospitalService";
 
 export const HospitalController = {
     async createTicket(req: Request, res: Response) {
-        const priority: number = req.body;
-        const ticket: string = QueueServices.createTicket(priority)
+        const data = req.body;
+        const ticket: string = await QueueServices.createTicket(data.priority)
 
         res.status(201).json({
             mensage: "Senha criada",

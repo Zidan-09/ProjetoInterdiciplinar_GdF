@@ -22,13 +22,16 @@ export const QueueController = {
     async callConsult(req: Request, res: Response) {
         const call: string = await QueueServices.callNextConsult();
         res.json({
-            call: await QueueServices.callNextConsult()
+            call: call
         })
         consultCalled.push(call);
     },
 
     async queue(req: Request, res: Response) {
-        const queueType: typeQueue = req.body;
-        QueueServices.showQueue(queueType);
+        const queueType = req.body;
+        const queue = await QueueServices.showQueue(queueType.typeQueue);
+        res.status(200).json({
+            queue: queue
+        })
     }
 }

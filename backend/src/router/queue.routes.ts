@@ -6,6 +6,6 @@ const queueRouter: Router = Router();
 queueRouter.get('/attend', QueueController.callAttend);
 queueRouter.get('/triage', QueueController.callTriage);
 queueRouter.get('/consult', QueueController.callConsult);
-queueRouter.get('queue', QueueController.queue);
+queueRouter.post('/queue', QueueController.queue);
 
 export default queueRouter;

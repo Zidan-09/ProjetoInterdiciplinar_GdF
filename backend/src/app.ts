@@ -7,6 +7,7 @@ import recepcionistRoutes from "./router/recepcionist.routes";
 import nurseRouter from "./router/nurse.routes";
 import hospitalRouter from "./router/hospital.routes";
 import homeRouter from "./router/home.routes";
+import queueRouter from "./router/queue.routes";
 
 const app: Application = express();
 
@@ -20,5 +21,6 @@ app.use("/admin", adminRouter);
 app.use("/doctor", doctorRouter);
 app.use("/nurse", nurseRouter);
 app.use("/recepcionist", recepcionistRoutes);
+app.use("/queue", queueRouter);
 
 export default app;

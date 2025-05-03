@@ -14,11 +14,11 @@ export class NoConsult {
         this.time = new Date();
 
         switch (patientTriage.severity!) {
-            case 'Non-urgent': 
+            case 'NonUrgent': 
                 this.severity = 1;
                 this.limit = criteria.nonUrgent;
                 break;
-            case 'Low-urgency':
+            case 'LowUrgency':
                 this.severity = 2;
                 this.limit = criteria.lowUrgency;
                 break;
@@ -26,7 +26,7 @@ export class NoConsult {
                 this.severity = 3;
                 this.limit = criteria.urgent;
                 break;
-            case 'Very-urgent':
+            case 'VeryUrgent':
                 this.severity = 4;
                 this.limit = criteria.veryUrgent;
                 break;

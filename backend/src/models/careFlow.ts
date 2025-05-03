@@ -4,7 +4,7 @@ import { RegistrationPatient } from "./interfaces";
 import { Patient } from "./patient";
 
 export type Status = 'In triage queue'| 'In consult queue' | 'In consult' | 'Was treated' | 'Left before consult'
-export type Severity = 'Non-urgent' | 'Low-urgency' | 'Urgent' | 'Very-urgent' | 'Immediate'
+export type Severity = 'NonUrgent' | 'LowUrgency' | 'Urgent' | 'VeryUrgent' | 'Immediate'
 
 export class Attend {
     ticket: string;

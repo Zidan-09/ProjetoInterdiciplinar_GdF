@@ -60,13 +60,12 @@ async function rodarTeste() {
     QueueControllerTeste.seeQueue('triage');
     
     QueueControllerTeste.callTriageTest();
-    console.log(triages, consults)
     await HospitalControllerTeste.triagem(triagem);
-    console.log(triages, consults)
     QueueControllerTeste.seeQueue('consult');
 
-    // HospitalControllerTeste.confirmarConsulta(startC);
-    // HospitalControllerTeste.finalizarConsult(endC);
+    HospitalControllerTeste.confirmarConsulta(startC);
+    console.log(consults);
+    HospitalControllerTeste.finalizarConsult(endC);
 }
 
 rodarTeste();

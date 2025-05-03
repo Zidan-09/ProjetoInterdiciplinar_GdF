@@ -3,7 +3,7 @@ import { QueueServices } from "./queueService";
 import { Triage, Consult, Attend, Severity } from "../models/careFlow";
 import { criteria } from "../models/criteria";
 import { TriageData, ConsultStartData, ConsultEndData } from "../models/interfaces";
-import { prisma } from "../prismaTests";
+import { consults, prisma, triages } from "../prismaTests";
 
 export class HospitalServices {
     static async triage(data: TriageData): Promise<Triage> {
@@ -11,6 +11,7 @@ export class HospitalServices {
 
         const no: NoConsult = new NoConsult(triage);
         QueueServices.insertConsultQueue(no);
+        triages.push(triage);
         return triage;
     }
 
@@ -23,11 +24,11 @@ export class HospitalServices {
             search!.triage.severity = newSeverity;
 
             switch (newSeverity) {
-                case 'Non-urgent': 
+                case 'NonUrgent': 
                     search.severity = 1;
                     search.limit = criteria.nonUrgent;
                     break;
-                case 'Low-urgency':
+                case 'LowUrgency':
                     search.severity = 2;
                     search.limit = criteria.lowUrgency;
                     break;
@@ -35,7 +36,7 @@ export class HospitalServices {
                     search.severity = 3;
                     search.limit = criteria.urgent;
                     break;
-                case 'Very-urgent':
+                case 'VeryUrgent':
                     search.severity = 4;
                     search.limit = criteria.veryUrgent;
                     break;
@@ -50,13 +51,14 @@ export class HospitalServices {
 
     static async startConsult(data: ConsultStartData): Promise<[number, Date]> {
         const consult: Consult = await prisma.consult.create(data);
+        consults.push(consult);
+        console.log('TESTE 1, CONSULTAS:', consults);
         return [consult.id!, consult.checkInConsult];
     }
 
     static async endConsult(data: ConsultEndData): Promise<Consult> {
-        const endDate = new Date();
         const consult: Consult = await prisma.consult.end(data.consult_id);
-        consult.checkOutConsult = endDate;
+        consult.checkOutConsult = new Date();
         consult.diagnosis = data.diagnosis;
         consult.prescriptions = data.prescriptions;
         consult.notes = data.notes;

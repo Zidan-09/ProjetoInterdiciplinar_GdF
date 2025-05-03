@@ -21,7 +21,7 @@ export class HospitalControllerTeste {
 
     static async triagem(triagem: TriageData) {
         const result: Triage = await HospitalServices.triage(triagem);
-        console.log('Triagem realizada!')
+        console.log('Triagem realizada!', result)
     };
 
     static async confirmarConsulta(confirmar: ConsultStartData) {
@@ -35,7 +35,7 @@ export class HospitalControllerTeste {
 
     static async finalizarConsult(dados: ConsultEndData) {
         const result: Consult = await HospitalServices.endConsult(dados);
-        console.log('Consulta realizada')
+        console.log('Consulta realizada:', result)
     }
 };
 

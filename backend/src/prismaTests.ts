@@ -109,11 +109,15 @@ export const prisma = {
         return consult;
       },
 
-      end: async (data: any) => {
+      end: async (data: number) => {
         let consult: Consult;
+        console.log(data);
+        console.log('Teste:\n',consults)
         for (let i of consults) {
-          if (i.id == data.id) {
+          console.log(i)
+          if (i.id == data) {
             consult = i;
+            break;
           }
         }
         return consult!;

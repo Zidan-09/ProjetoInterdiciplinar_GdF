@@ -10,7 +10,7 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('', homeRouter)
+app.use('/', homeRouter)
 app.use('/hospital', hospitalRouter);
 app.use('/employee', employeeRouter);
 app.use('/queue', queueRouter);

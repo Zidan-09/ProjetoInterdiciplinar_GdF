@@ -155,7 +155,7 @@ export class QueueServices {
         return queueList;
     }
 
-    static callNextAttend(): string {
+    static callNextRecep(): string {
         if (RecepQueue.qtyPatients == 0) {
             return 'Fila vazia'
         } else {

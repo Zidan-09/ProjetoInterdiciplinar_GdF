@@ -3,7 +3,7 @@ import { QueueController } from "../controllers/queueController";
 
 const queueRouter: Router = Router();
 
-queueRouter.get('/attend', QueueController.callAttend);
+queueRouter.get('/recep', QueueController.callRecep);
 queueRouter.get('/triage', QueueController.callTriage);
 queueRouter.get('/consult', QueueController.callConsult);
 queueRouter.post('/queue', QueueController.queue);

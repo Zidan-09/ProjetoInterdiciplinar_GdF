@@ -3,8 +3,8 @@ import { QueueServices, typeQueue } from "../services/queueService";
 // import { attendCalled, consultCalled, triageCalled } from "../utils/queueCalleds";
 
 export const QueueController = {
-    async callAttend(req: Request, res: Response) {
-        const call: string = await QueueServices.callNextAttend()
+    async callRecep(req: Request, res: Response) {
+        const call: string = await QueueServices.callNextRecep()
         res.json({
             call: call
         })

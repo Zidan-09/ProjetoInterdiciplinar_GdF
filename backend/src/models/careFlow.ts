@@ -1,27 +1,17 @@
-import { Doctor } from "../models/hospitalStaff";
-import { Nurse } from "../models/hospitalStaff";
-import { RegistrationPatient } from "./interfaces";
 import { Patient } from "./patient";
 
 export type Status = 'In triage queue'| 'In consult queue' | 'In consult' | 'Was treated' | 'Left before consult'
-export type Severity = 'NonUrgent' | 'LowUrgency' | 'Urgent' | 'VeryUrgent' | 'Immediate'
+export type TriageCategory = 'Non-Urgent' | 'Standard' | 'Urgent' | 'VeryUrgent' | 'Immediate'
 
-export class Attend {
-    ticket: string;
+export interface Reception {
     recepcionist_id: number;
+    patient: Patient
     checkIn: Date;
-
-    constructor(ticket: string, recepcionist_id: number) {
-        this.ticket = ticket;
-        this.recepcionist_id = recepcionist_id;
-        this.checkIn = new Date();
-    }
 };
 
-export class Triage {
-    id: number | null;
-    patient: RegistrationPatient['patient']['name'];
-    nurse: number;
+export interface Triage {
+    patient: Reception['patient']['name'];
+    nurse_id: number;
     vitalSigns: undefined | {
             bloodPreassure: {
                 systolicPreassure: number;
@@ -32,37 +22,19 @@ export class Triage {
             bodyTemperature: number;
             oxygenSaturation: number;
         };
-    severity: undefined | Severity;
-    simptoms: undefined | string[];
+    triageCategory: TriageCategory;
+    simptoms: string[];
     painLevel: number;
-
-        constructor(patient: Patient['name'], nurse: number, vitalSigns: {bloodPreassure: {systolicPreassure: number, diastolicPreassure: number}, heartRate: number, respiratoryRate: number, bodyTemperature: number, oxygenSaturation: number}, severity: Severity, simptoms: string[], painLevel: number) {
-            this.id = null;
-            this.patient = patient;
-            this.nurse = nurse;
-            this.vitalSigns = vitalSigns;
-            this.severity = severity;
-            this.simptoms = simptoms;
-            this.painLevel = painLevel;
-        }
 };
 
-export class Consult {
-    id: number | null;
+export interface StartConsult {
     doctor_id: number;
-    checkInConsult: Date;
-    checkOutConsult: Date | null;
+    confirm: Boolean;
+};
+
+export interface EndConsult {
+    consult_id: number;
     diagnosis: string | null;
     prescriptions: string[] | null;
     notes: string | null;
-
-    constructor(doctor_id: number) {
-        this.id = null;
-        this.doctor_id = doctor_id;
-        this.checkInConsult = new Date();
-        this.checkOutConsult = null;
-        this.diagnosis = null;
-        this.prescriptions = null;
-        this.notes = null;
-    }
 };

@@ -1,80 +1,48 @@
-type JobTitle = 'Doctor' | 'Nurse' | 'Recepcionist' | 'Administrator'
+type EmployeeStatus = 'a' | 'b' | 'c'
 
-class Employee {
+interface Employee{
     registrationNumber: number;
     name: string;
     cpf: string;
-    contacts: string[];
+    email: string;
+    phone: string;
+    dob: Date;
+    address: string;
     hireDate: Date;
-    shift: string;
+    workShift: string;
+    status: EmployeeStatus;
     salary: number;
     cnesCode: string;
+};
 
-    constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string) {
-        this.name = name;
-        this.cpf = cpf;
-        this.contacts = contacts;
-        this.registrationNumber = registrationNumber;
-        this.hireDate = hireDate;
-        this.shift = shift;
-        this.salary = salary;
-        this.cnesCode = cnesCode;
-
-    }
-}
-
-export class Doctor extends Employee {
-    id: number;
+export interface Doctor extends Employee {
     crm: string;
     specialty: string;
+    professionalType: string;
     weeklyHours: number;
-    onDuty: Boolean;
+};
 
-    constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string, crm: string, speciality: string, weeklyHours: number) {
-        super(name, cpf, contacts, registrationNumber, hireDate, shift, salary, cnesCode);
-        this.id = 0;
-        this.crm = crm;
-        this.specialty = speciality;
-        this.weeklyHours = weeklyHours;
-        this.onDuty = false;
-    }
-}
-
-export class Nurse extends Employee {
-    id: number;
+export interface Nurse extends Employee {
     coren: string;
     department: string;
-    roleType: string;
+    specialty: string;
     weeklyHours: number;
-    onDuty: Boolean;
-
-    constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string, coren: string, department: string, roleType: string, weeklyHours: number) {
-        super(name, cpf, contacts, registrationNumber, hireDate, shift, salary, cnesCode);
-        this.id = 0;
-        this.coren = coren;
-        this.department = department;
-        this.roleType = roleType;
-        this.weeklyHours = weeklyHours;
-        this.onDuty = false;
-    }
-}
-
-export class Recepcionist extends Employee {
-    id: number;
-    weeklyHours: number;
-
-    constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string, weeklyHours: number) {
-        super(name, cpf, contacts, registrationNumber, hireDate, shift, salary, cnesCode);
-        this.id = 0;
-        this.weeklyHours = weeklyHours;
-    }
-}
-
-export class Administrator extends Employee {
-    id: number;
-
-    constructor(name: string, cpf: string, contacts: string[], registrationNumber: number, hireDate: Date, shift: string, salary: number, cnesCode: string) {
-        super(name, cpf, contacts, registrationNumber, hireDate, shift, salary, cnesCode);
-        this.id = 0;
-    }
 };
+
+export interface Recepcionist extends Employee {
+    weeklyHours: number;
+}
+
+export interface Admin extends Employee {
+    accessLevel: string;
+    weeklyHours: number;
+};
+
+export interface User {
+    user_id: number;
+    username: string;
+    password: string;
+    lastLogin: Date;
+    isActive: Boolean;
+    permitions: string;
+}

@@ -1,7 +1,7 @@
-import { AttendQ, TriageQ, ConsultQ } from "../models/queue";
-import { NoAttend } from "../utils/createNoAttend";
-import { NoConsult } from "../utils/createNoConsult";
-import { NoTriage } from "../utils/createNoTriage";
+import { AttendQueue, TriageQueue, ConsultQueue } from "../models/queue";
+import { NodeRecep } from "../utils/createNoRecep";
+import { NodeConsult } from "../utils/createNoConsult";
+import { NodeTriage } from "../utils/createNoTriage";
 
 export const attendQueue: string[] = [];
 export const triageQueue: string[] = [];
@@ -11,33 +11,33 @@ export type typeQueue = 'attend' | 'triage' | 'consult'
 
 export class QueueServices {
     static createTicket(priority: number): string {
-        const no: NoAttend = new NoAttend(priority);
+        const no: NodeRecep = new NodeRecep(priority);
 
         switch (priority) {
             case 1:
-                no.ticket = 'N' + (AttendQ.qtyN + 1).toString().padStart(3, '0');
+                no.ticket = 'N' + (AttendQueue.qtyN + 1).toString().padStart(3, '0');
                 break;
             case 2:
-                no.ticket = 'P' + (AttendQ.qtyP + 1).toString().padStart(3, '0');
+                no.ticket = 'P' + (AttendQueue.qtyP + 1).toString().padStart(3, '0');
                 break;
             case 3:
-                no.ticket = 'V' + (AttendQ.qtyV + 1).toString().padStart(3, '0');
+                no.ticket = 'V' + (AttendQueue.qtyV + 1).toString().padStart(3, '0');
                 break;
         }
         this.insertAttendQueue(no);
         return no.ticket!;
-    }
+    };
 
-    static insertAttendQueue(no: NoAttend) {
-        if (AttendQ.qtyPatients == 0) {
-            AttendQ.firstPointer = no;
-            AttendQ.lastPointer = no;
+    static insertAttendQueue(no: NodeRecep) {
+        if (AttendQueue.qtyPatients == 0) {
+            AttendQueue.firstPointer = no;
+            AttendQueue.lastPointer = no;
         } else {
-            let temp: NoAttend | null | undefined = AttendQ.firstPointer!;
-            for (let i = 0; i < AttendQ.qtyPatients; i++) {
-                if (temp.priority < no.priority) {
+            let temp: NodeRecep = AttendQueue.firstPointer!;
+            for (let i = 0; i < AttendQueue.qtyPatients; i++) {
+                if (temp.priority! < no.priority!) {
                     no.pointer = temp;
-                    AttendQ.firstPointer = no;
+                    AttendQueue.firstPointer = no;
                 } else if (temp.priority >= no.priority) {
                     if (temp.pointer == null) {
                         no.pointer = temp.pointer;
@@ -54,41 +54,40 @@ export class QueueServices {
             }
         }
         
-
         switch (no.priority) {
             case 1:
-                AttendQ.qtyN++;
+                AttendQueue.qtyN++;
                 break;
             case 2:
-                AttendQ.qtyP++;
+                AttendQueue.qtyP++;
                 break;
             case 3:
-                AttendQ.qtyV++;
+                AttendQueue.qtyV++;
                 break
         }
-        AttendQ.qtyPatients++;
-    }
+        AttendQueue.qtyPatients++;
+    };
 
-    static insertTriageQueue(no: NoTriage) {
-        if (TriageQ.qtyPatients == 0) {
-            TriageQ.firstPointer = no;
+    static insertTriageQueue(no: NodeTriage) {
+        if (TriageQueue.qtyPatients == 0) {
+            TriageQueue.firstPointer = no;
         } else {
-            TriageQ.lastPointer!.pointer = no;
+            TriageQueue.lastPointer!.pointer = no;
         }
-        TriageQ.lastPointer = no;
-        TriageQ.qtyPatients++;
-    }
+        TriageQueue.lastPointer = no;
+        TriageQueue.qtyPatients++;
+    };
 
-    static insertConsultQueue(no: NoConsult) {
-        if (ConsultQ.qtyPatients == 0) {
-            ConsultQ.firstPointer = no;
-            ConsultQ.lastPointer = no;
+    static insertConsultQueue(no: NodeConsult) {
+        if (ConsultQueue.qtyPatients == 0) {
+            ConsultQueue.firstPointer = no;
+            ConsultQueue.lastPointer = no;
         } else {
-            let temp: NoConsult | null | undefined = ConsultQ.firstPointer!;
-            for (let i = 0; i < ConsultQ.qtyPatients; i++) {
+            let temp: NodeConsult = ConsultQueue.firstPointer!;
+            for (let i = 0; i < ConsultQueue.qtyPatients; i++) {
                 if (temp.severity! < no.severity!) {
                     no.pointer = temp;
-                    ConsultQ.firstPointer = no;
+                    ConsultQueue.firstPointer = no;
                 } else if (temp.severity! >= no.severity!) {
                     if (temp.pointer == null) {
                         no.pointer = temp.pointer;
@@ -104,19 +103,19 @@ export class QueueServices {
                 }
             }
         }
-        ConsultQ.qtyPatients++;
-    }
+        ConsultQueue.qtyPatients++;
+    };
 
     static showQueue(queue: typeQueue): string | string[] {
         switch (queue) {
             case 'attend':
-                if (AttendQ.qtyPatients == 0) {
+                if (AttendQueue.qtyPatients == 0) {
                     return 'Lista vazia!'
                 } else {
-                    let tempA = AttendQ.firstPointer;
-                    for (let i = 0; i < AttendQ.qtyPatients; i++) {
+                    let tempA = AttendQueue.firstPointer;
+                    for (let i = 0; i < AttendQueue.qtyPatients; i++) {
                         attendQueue.push(tempA!.ticket!);
-                        if (tempA?.pointer == null || undefined) {
+                        if (tempA?.pointer == undefined) {
                             break
                         } else {
                             tempA = tempA?.pointer;
@@ -125,22 +124,22 @@ export class QueueServices {
                     return attendQueue;
                 }
             case 'triage':
-                if (TriageQ.qtyPatients == 0) {
+                if (TriageQueue.qtyPatients == 0) {
                     return 'Lista vazia!'
                 } else {
-                    let tempT = TriageQ.firstPointer;
-                    for (let i = 0; i < TriageQ.qtyPatients; i++) {
+                    let tempT = TriageQueue.firstPointer;
+                    for (let i = 0; i < TriageQueue.qtyPatients; i++) {
                         triageQueue.push(tempT!.patient);
                         tempT = tempT?.pointer;
                     }
                     return triageQueue;
                 }
             case 'consult':
-                if (ConsultQ.qtyPatients == 0) {
+                if (ConsultQueue.qtyPatients == 0) {
                     return 'Lista vazia!'
                 } else {
-                    let tempC = ConsultQ.firstPointer;
-                    for (let i = 0; i < ConsultQ.qtyPatients; i++) {
+                    let tempC = ConsultQueue.firstPointer;
+                    for (let i = 0; i < ConsultQueue.qtyPatients; i++) {
                         consultQueue.push(tempC!.triage.patient);
                         tempC = tempC?.pointer;
                     }
@@ -150,48 +149,48 @@ export class QueueServices {
     }
 
     static callNextAttend(): string {
-        if (AttendQ.qtyPatients == 0) {
+        if (AttendQueue.qtyPatients == 0) {
             return 'Fila vazia'
         } else {
-            const call = AttendQ.firstPointer;
+            const call = AttendQueue.firstPointer;
             const next = call?.pointer;
 
-            AttendQ.firstPointer = next;
+            AttendQueue.firstPointer = next;
 
-            AttendQ.qtyPatients--;
+            AttendQueue.qtyPatients--;
             return `Senha: ${call?.ticket}`
         }
     }
     static callNextTriage(): string {
-        if (TriageQ.qtyPatients == 0) {
+        if (TriageQueue.qtyPatients == 0) {
             return 'Fila vazia'
         } else {
-            const call = TriageQ.firstPointer;
+            const call = TriageQueue.firstPointer;
             const next = call?.pointer;
 
-            TriageQ.firstPointer = next;
+            TriageQueue.firstPointer = next;
 
-            TriageQ.qtyPatients--;
+            TriageQueue.qtyPatients--;
             return `${call!.patient}, vá para a triagem!`
         }
     }
 
     static callNextConsult(): string {
-        if (ConsultQ.qtyPatients == 0) {
+        if (ConsultQueue.qtyPatients == 0) {
             return 'Fila vazia'
         } else {
-            const call = ConsultQ.firstPointer;
+            const call = ConsultQueue.firstPointer;
             const next = call?.pointer;
 
-            ConsultQ.firstPointer = next;
+            ConsultQueue.firstPointer = next;
 
-            ConsultQ.qtyPatients--;
+            ConsultQueue.qtyPatients--;
             return `${call?.triage.patient}, vá ao consultório!`
         }
     }
 
-    static search(id: number): NoConsult {
-        return ConsultQ.firstPointer!;
+    static search(id: number): NodeConsult {
+        return ConsultQueue.firstPointer!;
     }
 
     static toSort() {

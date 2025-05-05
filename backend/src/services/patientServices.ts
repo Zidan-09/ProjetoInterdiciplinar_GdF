@@ -1,32 +1,30 @@
-import { patients, prisma } from "../prismaTests";
-import { NoTriage } from "../utils/createNoTriage";
+import { NodeTriage } from "../utils/createNoTriage";
 import { QueueServices } from "./queueService";
-import { RegistrationPatient } from "../models/interfaces";
+import { Reception } from "../models/careFlow";
 
 export class PatientServices {
-    static async register(data: RegistrationPatient['patient']): Promise<boolean> {
-        const no: NoTriage = new NoTriage(data.name);
+    static async register(data: Reception['patient']): Promise<string> {
+        const no: NodeTriage = new NodeTriage(data.name);
         QueueServices.insertTriageQueue(no);
     
-        const patient = await prisma.patient.create({
-            data: {
-                name: data.name,
-                dob: new Date(data.dob),
-                maritalStatus: data.maritalStatus,
-                cpf: data.cpf,
-                rg: data.rg,
-                contacts: data.contacts,
-                gender: data.gender,
-                healthPlan: data.healthPlan,
-                address: data.address,
-            }
-        });
-        patients.push(patient);
+        // const patient = await prisma.patient.create({
+        //     data: {
+        //         name: data.name,
+        //         dob: new Date(data.dob),
+        //         maritalStatus: data.maritalStatus,
+        //         cpf: data.cpf,
+        //         rg: data.rg,
+        //         contacts: data.contacts,
+        //         gender: data.gender,
+        //         healthPlan: data.healthPlan,
+        //         address: data.address,
+        //     }
+        // });
     
-        return true;
+        return 'Paciente Cadastrado com Sucesso!';
     };
 
     static async list() {
-        await prisma.patient.findMany();
+        // await prisma.patient.findMany();
     };
 };

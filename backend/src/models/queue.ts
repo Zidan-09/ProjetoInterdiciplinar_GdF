@@ -1,19 +1,20 @@
-import { NoAttend } from "../utils/createNoAttend";
-import { NoConsult } from "../utils/createNoConsult";
-import { NoTriage } from "../utils/createNoTriage";
-export type Priority = 'VeryPriority' | 'Priority' | 'NonPriority' 
+import { NodeRecep } from "../utils/createNoRecep";
+import { NodeConsult } from "../utils/createNoConsult";
+import { NodeTriage } from "../utils/createNoTriage";
 
-class AttendQueue {
-    firstPointer: undefined | null | NoAttend;
-    lastPointer: undefined | null | NoAttend;
+export type Priority = 'VeryPriority' | 'Priority' | 'Non-Priority' 
+
+class AttendQueueClass {
+    firstPointer: undefined | NodeRecep;
+    lastPointer: undefined | NodeRecep;
     qtyN: number;
     qtyP: number;
     qtyV: number;
     qtyPatients: number;
 
     constructor() {
-        this.firstPointer = null;
-        this.lastPointer = null;
+        this.firstPointer = undefined;
+        this.lastPointer = undefined;
         this.qtyN = 0;
         this.qtyP = 0;
         this.qtyV = 0;
@@ -21,30 +22,30 @@ class AttendQueue {
     }
 }
 
-class TriageQueue {
-    firstPointer: undefined | null | NoTriage;
-    lastPointer: undefined | null | NoTriage;
+class TriageQueueClass {
+    firstPointer: undefined | NodeTriage;
+    lastPointer: undefined | NodeTriage;
     qtyPatients: number;
 
     constructor() {
-        this.firstPointer = null;
-        this.lastPointer = null;
+        this.firstPointer = undefined;
+        this.lastPointer = undefined;
         this.qtyPatients = 0;
     }
 }
 
-class ConsultQueue {
-    firstPointer: undefined | null | NoConsult;
-    lastPointer: undefined | null | NoConsult;
+class ConsultQueueClass {
+    firstPointer: undefined | NodeConsult;
+    lastPointer: undefined | NodeConsult;
     qtyPatients: number;
 
     constructor() {
-        this.firstPointer = null;
-        this.lastPointer = null;
+        this.firstPointer = undefined;
+        this.lastPointer = undefined;
         this.qtyPatients = 0;
     }
 }
 
-export const AttendQ: AttendQueue = new AttendQueue()
-export const TriageQ: TriageQueue = new TriageQueue()
-export const ConsultQ: ConsultQueue = new ConsultQueue()
+export const AttendQueue: AttendQueueClass = new AttendQueueClass()
+export const TriageQueue: TriageQueueClass = new TriageQueueClass()
+export const ConsultQueue: ConsultQueueClass = new ConsultQueueClass()

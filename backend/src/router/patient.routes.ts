@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { PatientController } from "../controllers/patientController";
 
 const patientRouter = Router();
 
-patientRouter.get('/list', PatientController.list);
+patientRouter.get('/list');
 
-patientRouter.post('/register', PatientController.register);
+patientRouter.post('/register');
 
 export default patientRouter;

@@ -1,9 +1,9 @@
 export type Gender = 'Male' | 'Female' | 'Other';
 export type MaritalStatus = 'Single' | 'Married' | 'Divorcied' | 'Separated' | 'Widowed';
 
-export class Patient {
+export interface Patient {
     name: string;
-    dob: Date;
+    dob: string | Date;
     maritalStatus: MaritalStatus;
     cpf: string;
     rg: string;
@@ -11,16 +11,4 @@ export class Patient {
     gender: Gender;
     healthPlan: string;
     address: string;
-
-    constructor(name: string, dob: Date, maritalStatus: MaritalStatus, cpf: string, rg: string, contact: string[], gender: Gender, healthPlan: string, address: string) {
-        this.name = name;
-        this.dob = dob;
-        this.maritalStatus = maritalStatus;
-        this.cpf = cpf;
-        this.rg = rg;
-        this.contacts = contact;
-        this.gender = gender;
-        this.healthPlan = healthPlan;
-        this.address = address;
-    }
 };

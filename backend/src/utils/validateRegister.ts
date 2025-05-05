@@ -1,16 +1,12 @@
-import { AdminData, DoctorData, NurseData, RecepcionistData, RegistrationPatient } from "../models/interfaces";
+import { Reception } from "../models/careFlow";
+import { Doctor, Nurse, Recepcionist, Admin } from "../models/hospitalStaff";
 
 export class ValidateRegister {
-	static verifyPatient(patient: RegistrationPatient['patient']): Boolean {
-		const temporario: number = 10;
-		if (temporario > 0) {
-			return true;
-		} else {
-			return false;
-		}
+	static verifyPatient(patient: Reception['patient']) { //Boolean
+		return true
 	};
 
-	static verifyUser(user: RecepcionistData | NurseData | DoctorData | AdminData): Boolean {
-		return true;
-	}
+	static verifyEmployee(user: Doctor | Nurse | Recepcionist | Admin) { // Boolean
+		return true
+	};
 }

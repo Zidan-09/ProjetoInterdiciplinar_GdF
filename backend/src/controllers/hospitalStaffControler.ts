@@ -1,16 +1,15 @@
 import { Response, Request } from "express";
 import { HospitalManager } from "../services/hospitalManager";
-import { prisma, somarID } from "../prismaTests"
-import { AdminData, DoctorData, NurseData, RecepcionistData } from "../models/interfaces";
 import { ValidateRegister } from "../utils/validateRegister";
+import { Recepcionist, Nurse, Doctor, Admin } from "../models/hospitalStaff";
 
 export const RecepcionistController = {
-    async register(req: Request, res: Response) {
-        const data: RecepcionistData = req.body;
-        let validate: Boolean = ValidateRegister.verifyUser(data);
+    async register(req: Request<{}, {}, Recepcionist>, res: Response) {
+        const data: Recepcionist = req.body;
+        let validate: Boolean | void = ValidateRegister.verifyEmployee(data); // TIRAR O VOID
 
         if (validate) {
-            let done: Boolean = await HospitalManager.registerUser(data);
+            let done: Boolean = await HospitalManager.registerEmployee(data); // TIRAR O VOID
             if (done) {
                 res.status(201).json({
                     mensage: "Recepcionista cadastrado com sucesso!"
@@ -19,7 +18,6 @@ export const RecepcionistController = {
                 res.status(400).json({
                     mensage: "Erro ao cadastrar!"
                 });
-                somarID('recepcionist');
             }
         } else {
             res.json({
@@ -30,7 +28,7 @@ export const RecepcionistController = {
 
     async list(req: Request, res: Response) {
         res.status(200).json({
-            recepcionists: await prisma.recepcionist.findMany(),
+            // recepcionists: await prisma.recepcionist.findMany(),
             mensage: "recepcionistas exibidos!"
         })
     }
@@ -38,16 +36,15 @@ export const RecepcionistController = {
 
 export const NurseController = {
     async register(req: Request, res: Response) {
-        const data: NurseData = req.body;
-        let validate: Boolean = ValidateRegister.verifyUser(data);
+        const data: Nurse = req.body;
+        let validate: Boolean | void = ValidateRegister.verifyEmployee(data);
 
         if (validate) {
-            let done: Boolean = await HospitalManager.registerUser(data);
+            let done: Boolean | void = await HospitalManager.registerEmployee(data);
             if (done) {
                 res.status(201).json({
                     mensage: "Enfermeiro(a) cadastrado(a) com sucesso!"
                 });
-                somarID('nurse');
             } else {
                 res.status(400).json({
                     mensage: "Erro ao cadastrar!"
@@ -62,24 +59,23 @@ export const NurseController = {
 
     async list(req: Request, res: Response) {
         res.status(200).json({
-            nurses: await prisma.nurse.findMany(),
+            // nurses: await prisma.nurse.findMany(),
             mensage: "Enfermeiros exibidos!"
         })
     }
 }
 
 export const DoctorController = {
-    async register(req: Request, res: Response) {
-        const data: DoctorData = req.body;
-        let validate: Boolean = ValidateRegister.verifyUser(data);
+    async register(req: Request<{}, {}, Doctor>, res: Response) {
+        const data: Doctor = req.body;
+        let validate: Boolean = ValidateRegister.verifyEmployee(data);
 
         if (validate) {
-            let done: Boolean = await HospitalManager.registerUser(data);
+            let done: Boolean = await HospitalManager.registerEmployee(data);
             if (done) {
                 res.status(201).json({
                     mensage: "Médico(a) cadastrado(a) com sucesso!"
                 });
-                somarID('doctor');
             } else {
                 res.status(400).json({
                     mensage: "Erro ao cadastrar!"
@@ -94,7 +90,7 @@ export const DoctorController = {
 
     async list(req: Request, res: Response) {
         res.status(200).json({
-            doctor: await prisma.doctor.findMany(),
+            // doctor: await prisma.doctor.findMany(),
             mensage: "Médicos exibidos!"
         })
     }
@@ -102,16 +98,15 @@ export const DoctorController = {
 
 export const AdminController = {
     async register(req: Request, res: Response) {
-        const data: AdminData = req.body;
-        let validate: Boolean = ValidateRegister.verifyUser(data);
+        const data: Admin = req.body;
+        let validate: Boolean = ValidateRegister.verifyEmployee(data);
 
         if (validate) {
-            let done: Boolean = await HospitalManager.registerUser(data);
+            let done: Boolean = await HospitalManager.registerEmployee(data);
             if (done) {
                 res.status(201).json({
                     mensage: "Administrador(a) cadastrado(a) com sucesso!"
                 });
-                somarID('admin');
             } else {
                 res.status(400).json({
                     mensage: "Erro ao cadastrar!"
@@ -126,7 +121,7 @@ export const AdminController = {
 
     async list(req: Request, res: Response) {
         res.status(200).json({
-            admins: await prisma.admin.findMany(),
+            // admins: await prisma.admin.findMany(),
             mensage: "Administradores exibidos!"
         })
     }

@@ -4,8 +4,15 @@ import { criteria, CriteriaData } from "../models/criteria";
 import { QueueServices } from "../services/queueService";
 import { HospitalServices } from "../services/hospitalService";
 import { EndConsult, StartConsult, Triage } from "../models/careFlow";
+import { Patient } from "../models/patient";
 
 export const HospitalController = {
+    async register(req: Request<{}, {}, Patient>, res: Response) {
+        const data: Patient = req.body;
+
+        const result = await HospitalServices.register(data);
+    },
+
     async createTicket(req: Request<number>, res: Response) {
         const data: number = req.body;
         const ticket: string = await QueueServices.createTicket(data)

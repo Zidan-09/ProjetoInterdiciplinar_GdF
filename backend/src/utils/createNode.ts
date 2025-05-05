@@ -2,39 +2,43 @@ import { Patient } from "../models/patient";
 import { Triage } from "../models/careFlow";
 import { criteria } from "../models/criteria";
 
-export class NodeRecep {
-    public ticket: string | undefined;
+class NodeRecep {
+    ticket: string | null;
     priority: number;
-    pointer: undefined | NodeRecep;
+    pointer: null | NodeRecep;
 
     constructor(priority: number) {
-        this.ticket = undefined;
+        this.ticket = null;
         this.priority = priority;
-        this.pointer = undefined;
+        this.pointer = null;
     }
 };
 
-export class NodeTriage {
+class NodeTriage {
     patient: Patient['name'];
-    pointer: undefined | NodeTriage;
+    pointer: null | NodeTriage;
 
     constructor(patientName: Patient['name']) {
         this.patient = patientName;
-        this.pointer = undefined;
+        this.pointer = null;
     }
 };
 
-export class NodeConsult {
+class NodeConsult {
     triage: Triage;
-    severity: number | undefined;
+    severity: number;
     time: Date;
     limit: number;
-    pointer: undefined | NodeConsult;
+    pointer: null | NodeConsult;
 
     constructor(patientTriage: Triage) {
         this.triage = patientTriage;
-        this.pointer = undefined;
+        this.pointer = null;
         this.time = new Date();
+
+        if (!patientTriage.triageCategory) {
+            throw new Error('Categoria de triagem ausente')
+        };
 
         switch (patientTriage.triageCategory!) {
             case 'Non-Urgent': 
@@ -60,3 +64,5 @@ export class NodeConsult {
         }
     }
 };
+
+export { NodeConsult, NodeTriage, NodeRecep }

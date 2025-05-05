@@ -1,6 +1,5 @@
 import express, { Application } from "express";
 import cors from "cors";
-import patientRouter from "./router/patient.routes";
 import employeeRouter from "./router/employee.routes";
 import hospitalRouter from "./router/hospital.routes";
 import homeRouter from "./router/home.routes";
@@ -13,8 +12,7 @@ app.use(express.json());
 
 app.use('', homeRouter)
 app.use('/hospital', hospitalRouter);
-app.use('/patient', patientRouter);
-app.use('employee', employeeRouter);
+app.use('/employee', employeeRouter);
 app.use('/queue', queueRouter);
 
 export default app;

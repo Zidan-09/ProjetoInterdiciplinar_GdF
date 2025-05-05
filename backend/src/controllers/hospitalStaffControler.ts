@@ -12,16 +12,17 @@ export const RecepcionistController = {
             let done: Boolean = await HospitalManager.registerEmployee(data); // TIRAR O VOID
             if (done) {
                 res.status(201).json({
-                    mensage: "Recepcionista cadastrado com sucesso!"
+                    status: "success",
+                    message: "Recepcionista cadastrado com sucesso!"
                 });
             } else {
                 res.status(400).json({
-                    mensage: "Erro ao cadastrar!"
+                    message: "Erro ao cadastrar!"
                 });
             }
         } else {
             res.json({
-                mensage: "Recepcionista já cadastrado",
+                message: "Recepcionista já cadastrado",
             })
         }
     },
@@ -29,8 +30,12 @@ export const RecepcionistController = {
     async list(req: Request, res: Response) {
         res.status(200).json({
             // recepcionists: await prisma.recepcionist.findMany(),
-            mensage: "recepcionistas exibidos!"
+            message: "recepcionistas exibidos!"
         })
+    },
+
+    async edit(req: Request, res: Response) {
+
     }
 }
 
@@ -43,16 +48,17 @@ export const NurseController = {
             let done: Boolean = await HospitalManager.registerEmployee(data);
             if (done) {
                 res.status(201).json({
-                    mensage: "Enfermeiro(a) cadastrado(a) com sucesso!"
+                    status: "success",
+                    message: "Enfermeiro(a) cadastrado(a) com sucesso!"
                 });
             } else {
                 res.status(400).json({
-                    mensage: "Erro ao cadastrar!"
+                    message: "Erro ao cadastrar!"
                 });
             }
         } else {
             res.json({
-                mensage: "Enfermeiro(a) já cadastrado(a)",
+                message: "Enfermeiro(a) já cadastrado(a)",
             })
         }
     },
@@ -60,8 +66,12 @@ export const NurseController = {
     async list(req: Request, res: Response) {
         res.status(200).json({
             // nurses: await prisma.nurse.findMany(),
-            mensage: "Enfermeiros exibidos!"
+            message: "Enfermeiros exibidos!"
         })
+    },
+
+    async edit(req: Request, res: Response) {
+        
     }
 }
 
@@ -74,16 +84,17 @@ export const DoctorController = {
             let done: Boolean = await HospitalManager.registerEmployee(data);
             if (done) {
                 res.status(201).json({
-                    mensage: "Médico(a) cadastrado(a) com sucesso!"
+                    status: "success",
+                    message: "Médico(a) cadastrado(a) com sucesso!"
                 });
             } else {
                 res.status(400).json({
-                    mensage: "Erro ao cadastrar!"
+                    message: "Erro ao cadastrar!"
                 });
             }
         } else {
             res.json({
-                mensage: "Médico(a) já cadastrado(a)",
+                message: "Médico(a) já cadastrado(a)",
             })
         }
     },
@@ -91,8 +102,12 @@ export const DoctorController = {
     async list(req: Request, res: Response) {
         res.status(200).json({
             // doctor: await prisma.doctor.findMany(),
-            mensage: "Médicos exibidos!"
+            message: "Médicos exibidos!"
         })
+    },
+
+    async edit(req: Request, res: Response) {
+        
     }
 }
 
@@ -105,16 +120,17 @@ export const AdminController = {
             let done: Boolean = await HospitalManager.registerEmployee(data);
             if (done) {
                 res.status(201).json({
-                    mensage: "Administrador(a) cadastrado(a) com sucesso!"
+                    status: "success",
+                    message: "Administrador(a) cadastrado(a) com sucesso!"
                 });
             } else {
                 res.status(400).json({
-                    mensage: "Erro ao cadastrar!"
+                    message: "Erro ao cadastrar!"
                 });
             }
         } else {
             res.json({
-                mensage: "Administrador(a) já cadastrado(a)",
+                message: "Administrador(a) já cadastrado(a)",
             })
         }
     },
@@ -122,7 +138,11 @@ export const AdminController = {
     async list(req: Request, res: Response) {
         res.status(200).json({
             // admins: await prisma.admin.findMany(),
-            mensage: "Administradores exibidos!"
+            message: "Administradores exibidos!"
         })
+    },
+
+    async edit(req: Request, res: Response) {
+        
     }
 }

@@ -3,9 +3,9 @@ import { Doctor, Nurse, Recepcionist, Admin } from "../models/hospitalStaff";
 import { prisma } from "./prisma";
 
 export class ValidateRegister {
-	static async verifyPatient(patient: Reception['patient']): Promise<Boolean> {
+	static async verifyPatient(patient: Reception['patient']): Promise<boolean> {
 		// const patients = await prisma.patient.findMany();
-		let valid: Boolean = true;
+		let valid: boolean = true;
 		// for (let i of patients) {
 		//     if (patient['name'] == i['name'] && patient['dob'] == i['dob']) {
 					// valid = false;
@@ -14,9 +14,9 @@ export class ValidateRegister {
 		return valid
 	};
 
-	static async verifyEmployee(user: Doctor | Nurse | Recepcionist | Admin): Promise<Boolean> {
+	static async verifyEmployee(user: Doctor | Nurse | Recepcionist | Admin): Promise<boolean> {
 		// const employeers = await prisma.employee.findMany();
-		let valid: Boolean = true;
+		let valid: boolean = true;
 		// for (let i of employeers) {
 		//     if (patient['name'] == i['name'] && patient['dob'] == i['dob']) {
 					// valid = false;

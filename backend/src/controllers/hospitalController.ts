@@ -6,6 +6,8 @@ import { HospitalServices } from "../services/hospitalService";
 import { EndConsult, StartConsult, Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
 
+type TicketRequest = { priority: number };
+
 export const HospitalController = {
     async register(req: Request<{}, {}, Patient>, res: Response) {
         const data: Patient = req.body;
@@ -13,27 +15,30 @@ export const HospitalController = {
         const result = await HospitalServices.register(data);
 
         res.status(201).json({
-            mensage: result
+            status: 'success',
+            message: result
         })
     },
 
-    async createTicket(req: Request<number>, res: Response) {
-        const data: number = req.body;
-        const ticket: string = await QueueServices.createTicket(data)
+    async createTicket(req: Request<{}, {}, TicketRequest>, res: Response) {
+        const data: TicketRequest = req.body;
+        const ticket: string = await QueueServices.createTicket(data.priority)
 
         res.status(201).json({
-            mensage: "Senha criada",
-            ticket: ticket
+            status: "success",
+            message: "Senha criada",
+            data: ticket
         })
     },
 
     async changeCriteria(req: Request<{}, {}, CriteriaData>, res: Response) {
         const newCriteria: CriteriaData = req.body;
 
-        HospitalManager.changeCriteria(newCriteria);
+        await HospitalManager.changeCriteria(newCriteria);
 
         res.status(201).json({
-            mensage: "Critérios atualizados!",
+            status: "success",
+            message: "Critérios atualizados!",
             newCriteria: criteria
         })
     },
@@ -44,7 +49,8 @@ export const HospitalController = {
         const result = await HospitalServices.triage(data);
 
         res.status(201).json({
-            mensage: "Triagem realizada com sucesso",
+            status: "success",
+            message: "Triagem realizada com sucesso",
             result: result
         })
     },
@@ -68,6 +74,7 @@ export const HospitalController = {
         const result = await HospitalServices.endConsult(data);
 
         res.status(200).json({
+            status: "success",
             consult: result
         })
     }

@@ -2,17 +2,17 @@ import { NodeConsult, NodeRecep, NodeTriage } from "../utils/createNode";
 
 export type Priority = 'VeryPriority' | 'Priority' | 'Non-Priority' 
 
-class AttendQueueClass {
-    firstPointer: undefined | NodeRecep;
-    lastPointer: undefined | NodeRecep;
+class RecepQueueClass {
+    firstPointer: null | NodeRecep;
+    lastPointer: null | NodeRecep;
     qtyN: number;
     qtyP: number;
     qtyV: number;
     qtyPatients: number;
 
     constructor() {
-        this.firstPointer = undefined;
-        this.lastPointer = undefined;
+        this.firstPointer = null;
+        this.lastPointer = null;
         this.qtyN = 0;
         this.qtyP = 0;
         this.qtyV = 0;
@@ -21,29 +21,29 @@ class AttendQueueClass {
 }
 
 class TriageQueueClass {
-    firstPointer: undefined | NodeTriage;
-    lastPointer: undefined | NodeTriage;
+    firstPointer: null | NodeTriage;
+    lastPointer: null | NodeTriage;
     qtyPatients: number;
 
     constructor() {
-        this.firstPointer = undefined;
-        this.lastPointer = undefined;
+        this.firstPointer = null;
+        this.lastPointer = null;
         this.qtyPatients = 0;
     }
 }
 
 class ConsultQueueClass {
-    firstPointer: undefined | NodeConsult;
-    lastPointer: undefined | NodeConsult;
+    firstPointer: null | NodeConsult;
+    lastPointer: null | NodeConsult;
     qtyPatients: number;
 
     constructor() {
-        this.firstPointer = undefined;
-        this.lastPointer = undefined;
+        this.firstPointer = null;
+        this.lastPointer = null;
         this.qtyPatients = 0;
     }
 }
 
-export const AttendQueue: AttendQueueClass = new AttendQueueClass()
+export const RecepQueue: RecepQueueClass = new RecepQueueClass()
 export const TriageQueue: TriageQueueClass = new TriageQueueClass()
 export const ConsultQueue: ConsultQueueClass = new ConsultQueueClass()

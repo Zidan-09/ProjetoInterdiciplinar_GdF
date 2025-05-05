@@ -34,4 +34,4 @@ export const QueueController = {
             queue: queue
         })
     }
-}
+};

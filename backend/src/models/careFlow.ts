@@ -3,6 +3,14 @@ import { Patient } from "./patient";
 export type Status = 'In triage queue'| 'In consult queue' | 'In consult' | 'Was treated' | 'Left before consult'
 export type TriageCategory = 'Non-Urgent' | 'Standard' | 'Urgent' | 'VeryUrgent' | 'Immediate'
 
+export interface VitalSigns {
+    bloodPreassure: { systolicPreassure: number; diastolicPreassure: number };
+    heartRate: number;
+    respiratoryRate: number;
+    bodyTemperature: number;
+    oxygenSaturation: number;
+};
+
 export interface Reception {
     recepcionist_id: number;
     patient: Patient
@@ -10,18 +18,9 @@ export interface Reception {
 };
 
 export interface Triage {
-    patient: Reception['patient']['name'];
+    patient_id: number;
     nurse_id: number;
-    vitalSigns: undefined | {
-            bloodPreassure: {
-                systolicPreassure: number;
-                diastolicPreassure: number;
-            };
-            heartRate: number;
-            respiratoryRate: number;
-            bodyTemperature: number;
-            oxygenSaturation: number;
-        };
+    vitalSigns: VitalSigns;
     triageCategory: TriageCategory;
     simptoms: string[];
     painLevel: number;
@@ -29,7 +28,7 @@ export interface Triage {
 
 export interface StartConsult {
     doctor_id: number;
-    confirm: Boolean;
+    confirm: boolean;
 };
 
 export interface EndConsult {

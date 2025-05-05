@@ -1,4 +1,4 @@
-type EmployeeStatus = 'a' | 'b' | 'c'
+type EmployeeStatus = 'active' | 'onLeave' | 'Resigned'
 
 interface Employee{
     registrationNumber: number;
@@ -43,6 +43,6 @@ export interface User {
     username: string;
     password: string;
     lastLogin: Date;
-    isActive: Boolean;
+    isActive: boolean;
     permitions: string;
 }

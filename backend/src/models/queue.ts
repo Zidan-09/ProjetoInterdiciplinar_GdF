@@ -1,6 +1,4 @@
-import { NodeRecep } from "../utils/createNoRecep";
-import { NodeConsult } from "../utils/createNoConsult";
-import { NodeTriage } from "../utils/createNoTriage";
+import { NodeConsult, NodeRecep, NodeTriage } from "../utils/createNode";
 
 export type Priority = 'VeryPriority' | 'Priority' | 'Non-Priority' 
 

@@ -1,9 +1,8 @@
-import { NodeConsult } from "../utils/createNoConsult";
+import { NodeConsult, NodeRecep, NodeTriage } from "../utils/createNode";
 import { QueueServices } from "./queueService";
 import { criteria } from "../models/criteria";
 import { Triage, StartConsult, EndConsult, TriageCategory, Reception } from "../models/careFlow";
 import { Patient } from "../models/patient";
-import { NodeTriage } from "../utils/createNoTriage";
 
 export class HospitalServices {
     static async register(data: Reception['patient']): Promise<string> {

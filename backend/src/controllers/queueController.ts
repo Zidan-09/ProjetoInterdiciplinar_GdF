@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { QueueServices, typeQueue } from "../services/queueService";
-import { attendCalled, consultCalled, triageCalled } from "../utils/queueCalleds";
+// import { attendCalled, consultCalled, triageCalled } from "../utils/queueCalleds";
 
 export const QueueController = {
     async callAttend(req: Request, res: Response) {
@@ -8,7 +8,7 @@ export const QueueController = {
         res.json({
             call: call
         })
-        attendCalled.push(call);
+        // attendCalled.push(call);
     },
 
     async callTriage(req: Request, res: Response) {
@@ -16,7 +16,7 @@ export const QueueController = {
         res.json({
             call: call
         })
-        triageCalled.push(call);
+        // triageCalled.push(call);
     },
 
     async callConsult(req: Request, res: Response) {
@@ -24,7 +24,7 @@ export const QueueController = {
         res.json({
             call: call
         })
-        consultCalled.push(call);
+        // consultCalled.push(call);
     },
 
     async queue(req: Request, res: Response) {

@@ -1,5 +1,28 @@
+import { Patient } from "../models/patient";
 import { Triage } from "../models/careFlow";
 import { criteria } from "../models/criteria";
+
+export class NodeRecep {
+    public ticket: string | undefined;
+    priority: number;
+    pointer: undefined | NodeRecep;
+
+    constructor(priority: number) {
+        this.ticket = undefined;
+        this.priority = priority;
+        this.pointer = undefined;
+    }
+};
+
+export class NodeTriage {
+    patient: Patient['name'];
+    pointer: undefined | NodeTriage;
+
+    constructor(patientName: Patient['name']) {
+        this.patient = patientName;
+        this.pointer = undefined;
+    }
+};
 
 export class NodeConsult {
     triage: Triage;
@@ -36,4 +59,4 @@ export class NodeConsult {
                 break;
         }
     }
-}
+};

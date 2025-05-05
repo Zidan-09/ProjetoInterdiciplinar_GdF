@@ -11,6 +11,10 @@ export const HospitalController = {
         const data: Patient = req.body;
 
         const result = await HospitalServices.register(data);
+
+        res.status(201).json({
+            mensage: result
+        })
     },
 
     async createTicket(req: Request<number>, res: Response) {

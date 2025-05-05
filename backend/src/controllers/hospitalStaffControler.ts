@@ -1,12 +1,12 @@
 import { Response, Request } from "express";
 import { HospitalManager } from "../services/hospitalManager";
-import { ValidateRegister } from "../utils/validateRegister";
+import { ValidateRegister } from "../utils/validators";
 import { Recepcionist, Nurse, Doctor, Admin } from "../models/hospitalStaff";
 
 export const RecepcionistController = {
     async register(req: Request<{}, {}, Recepcionist>, res: Response) {
         const data: Recepcionist = req.body;
-        let validate: Boolean | void = ValidateRegister.verifyEmployee(data); // TIRAR O VOID
+        let validate: Boolean = await ValidateRegister.verifyEmployee(data); // TIRAR O VOID
 
         if (validate) {
             let done: Boolean = await HospitalManager.registerEmployee(data); // TIRAR O VOID
@@ -35,12 +35,12 @@ export const RecepcionistController = {
 }
 
 export const NurseController = {
-    async register(req: Request, res: Response) {
+    async register(req: Request<{}, {}, Nurse>, res: Response) {
         const data: Nurse = req.body;
-        let validate: Boolean | void = ValidateRegister.verifyEmployee(data);
+        let validate: Boolean = await ValidateRegister.verifyEmployee(data);
 
         if (validate) {
-            let done: Boolean | void = await HospitalManager.registerEmployee(data);
+            let done: Boolean = await HospitalManager.registerEmployee(data);
             if (done) {
                 res.status(201).json({
                     mensage: "Enfermeiro(a) cadastrado(a) com sucesso!"
@@ -68,7 +68,7 @@ export const NurseController = {
 export const DoctorController = {
     async register(req: Request<{}, {}, Doctor>, res: Response) {
         const data: Doctor = req.body;
-        let validate: Boolean = ValidateRegister.verifyEmployee(data);
+        let validate: Boolean = await ValidateRegister.verifyEmployee(data);
 
         if (validate) {
             let done: Boolean = await HospitalManager.registerEmployee(data);
@@ -97,9 +97,9 @@ export const DoctorController = {
 }
 
 export const AdminController = {
-    async register(req: Request, res: Response) {
+    async register(req: Request<{}, {}, Admin>, res: Response) {
         const data: Admin = req.body;
-        let validate: Boolean = ValidateRegister.verifyEmployee(data);
+        let validate: Boolean = await ValidateRegister.verifyEmployee(data);
 
         if (validate) {
             let done: Boolean = await HospitalManager.registerEmployee(data);

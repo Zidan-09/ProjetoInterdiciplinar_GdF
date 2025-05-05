@@ -1,7 +1,5 @@
 import { AttendQueue, TriageQueue, ConsultQueue } from "../models/queue";
-import { NodeRecep } from "../utils/createNoRecep";
-import { NodeConsult } from "../utils/createNoConsult";
-import { NodeTriage } from "../utils/createNoTriage";
+import { NodeConsult, NodeRecep, NodeTriage } from "../utils/createNode";
 
 export const attendQueue: string[] = [];
 export const triageQueue: string[] = [];

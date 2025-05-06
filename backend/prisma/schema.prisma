@@ -1,12 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../node_modules/generated/prisma"
 }
 
 datasource db {
@@ -28,7 +22,7 @@ enum Gender {
 }
 
 enum TriageCategory {
-  NON-URGENT
+  NONURGENT
   STANDARD
   URGENT
   VERYURGENT
@@ -42,7 +36,7 @@ model Patient {
   maritalStatus MaritalStatus
   cpf           String   @unique
   rg            String
-  contact      String
+  contact       String
   gender        Gender
   healthPlan    String
   address       String
@@ -53,7 +47,7 @@ model Employee {
   registrationNumber Int
   name              String
   cpf               String   @unique
-  contacts          String[]
+  contacts          Json
   hireDate          DateTime
   shift             String
   salary            Float
@@ -92,7 +86,7 @@ model Recepcionist {
   employeeId  Int     @unique
   weeklyHours Int
   employee    Employee @relation(fields: [employeeId], references: [id])
-  attends     Attend[]
+  reception     Reception[]
 }
 
 model Administrator {

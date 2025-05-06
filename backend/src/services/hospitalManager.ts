@@ -12,7 +12,7 @@ export class HospitalManager {
         return 'Alteração Feita com Sucesso!'
     }
 
-    static async showRelatories(period: Date) {
+    static async showReports(period: Date) {
 
     }
 

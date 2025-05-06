@@ -1,3 +1,4 @@
+import { Patient } from "../models/patient";
 import { RecepQueue, TriageQueue, ConsultQueue } from "../models/queue";
 import { NodeConsult, NodeRecep, NodeTriage } from "../utils/createNode";
 
@@ -100,8 +101,8 @@ export class QueueServices {
         ConsultQueue.qtyPatients++;
     };
 
-    static showQueue(queue: typeQueue): string | string[] {
-        let queueList = [];
+    static showQueue(queue: typeQueue): string | Patient[] | string[] {
+        let queueList: any[] = [];
 
         switch (queue) {
             case 'recep':
@@ -142,7 +143,7 @@ export class QueueServices {
                 } else {
                     let tempC = ConsultQueue.firstPointer;
                     for (let i = 0; i < ConsultQueue.qtyPatients; i++) {
-                        queueList.push('BOTAR NOME DO PACIENTE DE ALGUM JEITO'); // BOTAR NOME DO PACIENTE DE ALGUM JEITO
+                        queueList.push(tempC?.triage.patient);
                         if (tempC?.pointer == null) {
                             break
                         } else {
@@ -152,6 +153,7 @@ export class QueueServices {
                 }
                 break;
         }
+        console.log(queueList)
         return queueList;
     }
 

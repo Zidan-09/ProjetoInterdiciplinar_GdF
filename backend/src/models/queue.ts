@@ -18,6 +18,17 @@ class RecepQueueClass {
         this.qtyV = 0;
         this.qtyPatients = 0;
     }
+    public getFirstPointer(): null | NodeRecep {
+        return this.firstPointer;
+    };
+
+    public setFirstPointer(no: NodeRecep) {
+        this.firstPointer = no;
+    };
+
+    public setLastPointer(no: NodeRecep) {
+        this.lastPointer = no;
+    };
 }
 
 class TriageQueueClass {

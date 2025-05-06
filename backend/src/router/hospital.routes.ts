@@ -5,7 +5,8 @@ const hospitalRouter = Router();
 
 hospitalRouter.put('/settings/criteria', HospitalController.changeCriteria);
 hospitalRouter.post('/ticket', HospitalController.createTicket);
-hospitalRouter.post('/register', HospitalController.register);
+hospitalRouter.post('/patient/register', HospitalController.register);
+hospitalRouter.get('/patient/list', HospitalController.list)
 hospitalRouter.post('/triage', HospitalController.triage);
 hospitalRouter.post('/consultInit', HospitalController.consultConfirm);
 hospitalRouter.post('/consultEnd', HospitalController.consultEnd);

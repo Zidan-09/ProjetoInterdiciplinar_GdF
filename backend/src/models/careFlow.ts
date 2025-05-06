@@ -18,21 +18,22 @@ export interface Reception {
 };
 
 export interface Triage {
-    patient_id: number;
+    patient: Patient;
     nurse_id: number;
     vitalSigns: VitalSigns;
     triageCategory: TriageCategory;
-    simptoms: string[];
+    simptoms:string[]
     painLevel: number;
 };
 
 export interface StartConsult {
     doctor_id: number;
+    patient_id: number
     confirm: boolean;
 };
 
 export interface EndConsult {
-    consult_id: number;
+    id: number;
     diagnosis: string | null;
     prescriptions: string[] | null;
     notes: string | null;

@@ -3,10 +3,12 @@ import { QueueServices } from "./queueService";
 import { criteria } from "../models/criteria";
 import { Triage, StartConsult, EndConsult, TriageCategory, Reception } from "../models/careFlow";
 import { Patient } from "../models/patient";
+import { prisma } from "../utils/prisma";
+import { Consult } from "../models/hospital";
 
 export class HospitalServices {
-    static async register(data: Reception['patient']): Promise<string> {
-        const no: NodeTriage = new NodeTriage(data.name);
+    static async register(data: Patient): Promise<string> {
+        const no: NodeTriage = new NodeTriage(data);
         QueueServices.insertTriageQueue(no);
     
         // const patient = await prisma.patient.create({
@@ -68,17 +70,18 @@ export class HospitalServices {
         return 'Severidade Alterada!'
     };
 
-    static async startConsult(data: StartConsult) { //Promise<[number, Date]>
-        // const consult: Consult = await prisma.consult.create(data);
-        // return [consult.id!, consult.checkInConsult];
+    static async startConsult(data: StartConsult): Promise<Consult> {
+        const consult: Consult = new Consult(data.doctor_id, data.patient_id);
+        consult.id = await prisma.consult.create(consult.doctor_id, consult.patient_id, consult.checkInConsult);
+        return consult
     };
 
-    static async endConsult(data: EndConsult) { // Promise<Consult>
-    //     const consult: Consult = await prisma.consult.end(data.consult_id);
-    //     consult.checkOutConsult = new Date();
-    //     consult.diagnosis = data.diagnosis;
-    //     consult.prescriptions = data.prescriptions;
-    //     consult.notes = data.notes;
-    //     return consult;
+    static async endConsult(data: EndConsult) {
+        const consult: Consult = await prisma.consult.end(data.id);
+        consult.checkOutConsult = new Date();
+        consult.diagnosis = data.diagnosis;
+        consult.prescriptions = data.prescriptions;
+        consult.notes = data.notes;
+        return consult;
     };
 };

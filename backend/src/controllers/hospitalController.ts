@@ -5,6 +5,7 @@ import { QueueServices } from "../services/queueService";
 import { HospitalServices } from "../services/hospitalService";
 import { EndConsult, StartConsult, Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
+import { Consult } from "../models/hospital";
 
 type TicketRequest = { priority: number };
 
@@ -15,8 +16,15 @@ export const HospitalController = {
         const result = await HospitalServices.register(data);
 
         res.status(201).json({
-            status: 'success',
+            status: "success",
             message: result
+        })
+    },
+
+    async list(req: Request, res: Response) {
+        res.status(200).json({
+            status: "sucess",
+            message: "Pacientes exibidos"
         })
     },
 
@@ -59,9 +67,11 @@ export const HospitalController = {
         const data: StartConsult = req.body;
 
         if (data.confirm) {
-            const consult: [number, Date] | void = await HospitalServices.startConsult(data); // TIRAR O VOID
+            const consult: Consult = await HospitalServices.startConsult(data);
             res.status(200).json({
-                consult: consult
+                status: "sucesso",
+                message: "Consulta iniciada",
+                consult: consult.id
             });
 
         } else {
@@ -75,6 +85,7 @@ export const HospitalController = {
 
         res.status(200).json({
             status: "success",
+            message: "Consulta finalizada",
             consult: result
         })
     }

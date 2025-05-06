@@ -27,11 +27,11 @@ enum Gender {
   OTHER
 }
 
-enum Severity {
+enum TriageCategory {
   NON-URGENT
-  LOWURGENCY
+  STANDARD
   URGENT
-  VERY-URGENT
+  VERYURGENT
   IMMEDIATE
 }
 
@@ -42,7 +42,7 @@ model Patient {
   maritalStatus MaritalStatus
   cpf           String   @unique
   rg            String
-  contacts      String[]
+  contact      String
   gender        Gender
   healthPlan    String
   address       String
@@ -102,7 +102,7 @@ model Administrator {
   employee   Employee @relation(fields: [employeeId], references: [id])
 }
 
-model Attend {
+model Reception {
   id              Int      @id @default(autoincrement())
   ticket          String
   checkIn         DateTime
@@ -112,9 +112,9 @@ model Attend {
 
 model Triage {
   id          Int     @id @default(autoincrement())
-  vitalSigns  Json?
-  severity    Severity?
-  simptoms    String[]?
+  vitalSigns  Json
+  severity    TriageCategory
+  simptoms    Json
   painLevel   Int
   nurseId     Int
   nurse       Nurse @relation(fields: [nurseId], references: [id])
@@ -123,10 +123,11 @@ model Triage {
 model Consult {
   id              Int       @id @default(autoincrement())
   doctorId        Int
+  patientId       Int
   checkInConsult  DateTime
   checkOutConsult DateTime?
   diagnosis       String?
-  prescriptions   String[]?
+  prescriptions   Json?
   notes           String?
   doctor          Doctor    @relation(fields: [doctorId], references: [id])
 }

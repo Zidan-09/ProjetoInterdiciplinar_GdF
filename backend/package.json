@@ -5,14 +5,9 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "ts-node src/server.ts",
-    "build": "tsc",
-    "prisma": "prisma",
-    "migrate": "prisma migrate dev --name init",
-    "generate": "prisma generate",
-    "studio": "prisma studio"
+    "build": "tsc"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
     "cors": "^2.8.5",
     "express": "^4.18.2"
   },
@@ -26,7 +21,6 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.32",
-    "prisma": "^5.13.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },

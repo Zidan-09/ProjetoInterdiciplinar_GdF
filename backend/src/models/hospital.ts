@@ -1,5 +1,3 @@
-import { prisma } from "../utils/prisma";
-
 class Consult {
     id: number | null;
     doctor_id: number;

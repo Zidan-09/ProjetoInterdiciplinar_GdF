@@ -1,6 +1,5 @@
 import { Reception } from "../models/careFlow";
 import { Doctor, Nurse, Recepcionist, Admin } from "../models/hospitalStaff";
-import { prisma } from "./prisma";
 
 export class ValidateRegister {
 	static async verifyPatient(patient: Reception['patient']): Promise<boolean> {

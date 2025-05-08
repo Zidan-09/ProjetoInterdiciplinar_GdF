@@ -80,15 +80,17 @@ export class QueueServices {
         } else {
             let temp: NodeConsult = ConsultQueue.firstPointer!;
             for (let i = 0; i < ConsultQueue.qtyPatients; i++) {
-                if (temp.severity! < no.severity!) {
-                    no.pointer = temp;
-                    ConsultQueue.firstPointer = no;
-                } else if (temp.severity! >= no.severity!) {
+                if (temp.triageCategory! < no.triageCategory!) {
+                    if (!temp.maxPriority) {
+                        no.pointer = temp;
+                        ConsultQueue.firstPointer = no;
+                    }
+                } else if (temp.triageCategory! >= no.triageCategory!) {
                     if (temp.pointer == null) {
                         no.pointer = temp.pointer;
                         temp.pointer = no;
                         break;
-                    } else if (temp.pointer!.severity! < no.severity!) {
+                    } else if (temp.pointer!.triageCategory! < no.triageCategory!) {
                         no.pointer = temp.pointer;
                         temp.pointer = no;
                         break;
@@ -143,7 +145,7 @@ export class QueueServices {
                 } else {
                     let tempC = ConsultQueue.firstPointer;
                     for (let i = 0; i < ConsultQueue.qtyPatients; i++) {
-                        queueList.push(tempC?.triage.patient);
+                        queueList.push(tempC?.triage.patient.name);
                         if (tempC?.pointer == null) {
                             break
                         } else {
@@ -155,7 +157,7 @@ export class QueueServices {
         }
         console.log(queueList)
         return queueList;
-    }
+    };
 
     static callNextRecep(): string {
         if (RecepQueue.qtyPatients == 0) {
@@ -169,7 +171,8 @@ export class QueueServices {
             RecepQueue.qtyPatients--;
             return `Senha: ${call?.ticket}`
         }
-    }
+    };
+
     static callNextTriage(): string {
         if (TriageQueue.qtyPatients == 0) {
             return 'Fila vazia'
@@ -182,7 +185,7 @@ export class QueueServices {
             TriageQueue.qtyPatients--;
             return `${call!.patient}, vá para a triagem!`
         }
-    }
+    };
 
     static callNextConsult(): string {
         if (ConsultQueue.qtyPatients == 0) {
@@ -196,13 +199,70 @@ export class QueueServices {
             ConsultQueue.qtyPatients--;
             return `${call}, vá ao consultório!`
         }
-    }
+    };
 
     static search(id: number): NodeConsult {
         return ConsultQueue.firstPointer!;
-    }
+    };
 
-    static toSort() {
-        
+    static verify() {
+        let temp: NodeConsult | null = ConsultQueue.firstPointer;
+
+        if (!temp) {
+            return 'Fila vazia'
+
+        } else {
+            let dateNow: Date = new Date();
+
+            for (let i = 0; i < ConsultQueue.qtyPatients; i++) {
+                let next: NodeConsult | null = temp!.pointer
+
+                const limit: Date = new Date()
+                limit.setUTCHours(temp!.limitDate.limitHours, temp!.limitDate.limitMinuts, 0, 0);
+
+                if (dateNow >= limit) {
+                    temp!.maxPriority = true;
+                    this.toSort(temp!);
+                }
+
+                temp = next;
+            } 
+        }
+    };
+
+    static toSort(no: NodeConsult) {
+        if (ConsultQueue.firstPointer === no) {
+            ConsultQueue.firstPointer = no.pointer;
+        } else {
+            let temp: NodeConsult | null = ConsultQueue.firstPointer;
+
+            while (temp?.pointer && temp.pointer !== no) {
+                temp = temp.pointer;
+            }
+            
+            if (temp?.pointer === no) {
+                temp.pointer = no.pointer
+            }
+        }
+
+        if (!ConsultQueue.firstPointer || !ConsultQueue.firstPointer.maxPriority || ConsultQueue.firstPointer.triageCategory > no.triageCategory) {
+            no.pointer = ConsultQueue.firstPointer;
+            ConsultQueue.firstPointer = no;
+            return;
+        }
+
+        let current: NodeConsult | null = ConsultQueue.firstPointer;
+        while (current.pointer && current.pointer.maxPriority && current.pointer.triageCategory <= no.triageCategory) {
+            current = current?.pointer
+        }
+
+        no.pointer = current.pointer;
+        current.pointer = no;
     }
 }
+
+// Algorítimo:
+// verifica se a fila está vazia, se sim = 'Fila vazia', se não:
+// registrar hora atual
+// percorrer a fila com o temp
+// se temp.limit <= atual = temp.maxPriority = true, se não = passa pra frente

@@ -26,15 +26,20 @@ class NodeTriage {
 
 class NodeConsult {
     triage: Triage;
-    severity: number;
+    triageCategory: number;
     time: Date;
-    limit: number;
+    limitDate: {
+        limitHours: number;
+        limitMinuts: number;
+    };
+    maxPriority: boolean;
     pointer: null | NodeConsult;
 
     constructor(patientTriage: Triage) {
         this.triage = patientTriage;
         this.pointer = null;
         this.time = new Date();
+        this.maxPriority = false;
 
         if (!patientTriage.triageCategory) {
             throw new Error('Categoria de triagem ausente')
@@ -42,24 +47,40 @@ class NodeConsult {
 
         switch (patientTriage.triageCategory!) {
             case 'Non-Urgent': 
-                this.severity = 1;
-                this.limit = criteria.nonUrgent;
+                this.triageCategory = 1;
+                this.limitDate = {
+                    limitHours: Math.round(this.time.getUTCHours() + (criteria.nonUrgent / 60)),
+                    limitMinuts: this.time.getUTCMinutes() + (criteria.nonUrgent % 60)
+                };
                 break;
             case 'Standard':
-                this.severity = 2;
-                this.limit = criteria.standard;
+                this.triageCategory = 2;
+                this.limitDate = {
+                    limitHours: Math.round(this.time.getUTCHours() + criteria.standard / 60),
+                    limitMinuts: this.time.getUTCMinutes() + (criteria.standard % 60)
+                };
                 break;
             case 'Urgent':
-                this.severity = 3;
-                this.limit = criteria.urgent;
+                this.triageCategory = 3;
+                this.limitDate = {
+                    limitHours: Math.round(this.time.getUTCHours() + criteria.urgent / 60),
+                    limitMinuts: this.time.getUTCMinutes() + (criteria.urgent % 60)
+                };
                 break;
             case 'VeryUrgent':
-                this.severity = 4;
-                this.limit = criteria.veryUrgent;
+                this.triageCategory = 4;
+                this.limitDate = {
+                    limitHours: Math.round(this.time.getUTCHours() + criteria.veryUrgent / 60),
+                    limitMinuts: this.time.getUTCMinutes() + (criteria.veryUrgent % 60)
+                };
                 break;
             case 'Immediate':
-                this.severity = 5;
-                this.limit = criteria.immediate;
+                this.triageCategory = 5;
+                this.limitDate = {
+                    limitHours: Math.round(this.time.getUTCHours() + criteria.immediate / 60),
+                    limitMinuts: this.time.getUTCMinutes() + (criteria.immediate % 60)
+                };
+                this.maxPriority = true;
                 break;
         }
     }

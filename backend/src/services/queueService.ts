@@ -103,7 +103,7 @@ export class QueueServices {
         ConsultQueue.qtyPatients++;
     };
 
-    static showQueue(queue: typeQueue): string | Patient[] | string[] {
+    static async showQueue(queue: typeQueue): Promise<string|string[]|Patient[]> {
         let queueList: any[] = [];
 
         switch (queue) {

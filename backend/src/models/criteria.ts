@@ -18,7 +18,7 @@ class Criteria {
         this.veryUrgent = 10;
         this.urgent = 60;
         this.standard = 120;
-        this.nonUrgent = 1;
+        this.nonUrgent = 240;
     }
 }
 

@@ -197,7 +197,7 @@ export class QueueServices {
             ConsultQueue.firstPointer = next ?? null;
 
             ConsultQueue.qtyPatients--;
-            return `${call}, vá ao consultório!`
+            return `${call?.triage.patient.name}, vá ao consultório!`
         }
     };
 
@@ -205,7 +205,7 @@ export class QueueServices {
         return ConsultQueue.firstPointer!;
     };
 
-    static verify() {
+    static verify(): string {
         let temp: NodeConsult | null = ConsultQueue.firstPointer;
 
         if (!temp) {
@@ -226,11 +226,12 @@ export class QueueServices {
                 }
 
                 temp = next;
-            } 
+            }
+            return 'Fila atualizada'
         }
     };
 
-    static toSort(no: NodeConsult) {
+    static toSort(no: NodeConsult): void {
         if (ConsultQueue.firstPointer === no) {
             ConsultQueue.firstPointer = no.pointer;
         } else {
@@ -245,7 +246,7 @@ export class QueueServices {
             }
         }
 
-        if (!ConsultQueue.firstPointer || !ConsultQueue.firstPointer.maxPriority || ConsultQueue.firstPointer.triageCategory > no.triageCategory) {
+        if (!ConsultQueue.firstPointer || !ConsultQueue.firstPointer.maxPriority || ConsultQueue.firstPointer.triageCategory < no.triageCategory) {
             no.pointer = ConsultQueue.firstPointer;
             ConsultQueue.firstPointer = no;
             return;

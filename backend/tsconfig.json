@@ -12,5 +12,5 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "json/**/*", "prisma/**/*", "src/models/.ts"]
+  "include": ["src/**/*", "json/**/*", "src/models/.ts"]
 }

@@ -5,6 +5,7 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "ts-node src/server.ts",
+    "test": "ts-node src/tests/test.ts",
     "build": "tsc"
   },
   "dependencies": {

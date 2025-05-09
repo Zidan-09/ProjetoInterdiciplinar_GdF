@@ -6,10 +6,10 @@ import { Recepcionist, Nurse, Doctor, Admin } from "../models/hospitalStaff";
 export const RecepcionistController = {
     async register(req: Request<{}, {}, Recepcionist>, res: Response) {
         const data: Recepcionist = req.body;
-        let validate: Boolean = await ValidateRegister.verifyEmployee(data); // TIRAR O VOID
+        let validate: Boolean = await ValidateRegister.verifyEmployee(data);
 
         if (validate) {
-            let done: Boolean = await HospitalManager.registerEmployee(data); // TIRAR O VOID
+            let done: Boolean = await HospitalManager.registerEmployee(data);
             if (done) {
                 res.status(201).json({
                     status: "success",
@@ -29,7 +29,7 @@ export const RecepcionistController = {
 
     async list(req: Request, res: Response) {
         res.status(200).json({
-            // recepcionists: await prisma.recepcionist.findMany(),
+            // Recepcionistas cadastrados!
             message: "recepcionistas exibidos!"
         })
     },
@@ -65,7 +65,7 @@ export const NurseController = {
 
     async list(req: Request, res: Response) {
         res.status(200).json({
-            // nurses: await prisma.nurse.findMany(),
+            // Enfermeiros(as) cadastrados(as)
             message: "Enfermeiros exibidos!"
         })
     },
@@ -101,7 +101,7 @@ export const DoctorController = {
 
     async list(req: Request, res: Response) {
         res.status(200).json({
-            // doctor: await prisma.doctor.findMany(),
+            // Médicos(as) cadastrados(as)
             message: "Médicos exibidos!"
         })
     },
@@ -137,7 +137,7 @@ export const AdminController = {
 
     async list(req: Request, res: Response) {
         res.status(200).json({
-            // admins: await prisma.admin.findMany(),
+            // Admins cadastrados
             message: "Administradores exibidos!"
         })
     },

@@ -6,6 +6,7 @@ import { HospitalServices } from "../services/hospitalService";
 import { EndConsult, StartConsult, Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
 import { Consult } from "../models/hospital";
+import { lastCalled } from "./queueController";
 
 type TicketRequest = { priority: number };
 
@@ -30,7 +31,7 @@ export const HospitalController = {
 
     async createTicket(req: Request<{}, {}, TicketRequest>, res: Response) {
         const data: TicketRequest = req.body;
-        const ticket: string = await QueueServices.createTicket(data.priority)
+        const ticket: string = QueueServices.createTicket(data.priority)
 
         res.status(201).json({
             status: "success",
@@ -64,24 +65,29 @@ export const HospitalController = {
     },
 
     async consultConfirm(req: Request<{}, {}, StartConsult>, res: Response) {
-        const data: StartConsult = req.body;
+        const confirmStartData: StartConsult = req.body;
+        if (confirmStartData.confirm) {
+            const consult: Consult = new Consult(
+                confirmStartData.doctor_id,
+                lastCalled.patient_id
+            );
 
-        if (data.confirm) {
-            const consult: Consult = await HospitalServices.startConsult(data);
-            res.status(200).json({
-                status: "sucesso",
-                message: "Consulta iniciada",
-                consult: consult.id
-            });
+            // Armazenar no DB
+            
+            res.status(201).json({
+                status: "sucess",
+                message: "Consulta confirmada e iniciada",
+                consult: consult
+            })
 
         } else {
-            // FAZER LÓGICA DE NÃO COMPARECIMENTO
+            // Lógica de não comparecimento
         }
     },
 
     async consultEnd(req: Request<{}, {}, EndConsult>, res: Response) {
-        const data: EndConsult = req.body;
-        const result = await HospitalServices.endConsult(data);
+        const endData: EndConsult = req.body;
+        const result = await HospitalServices.endConsult(endData);
 
         res.status(200).json({
             status: "success",

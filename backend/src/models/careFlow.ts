@@ -26,9 +26,15 @@ export interface Triage {
     painLevel: number;
 };
 
+export interface CallsConsult {
+    patient_id: number;
+    ticket: string;
+    status: string;
+    calls: number
+};
+
 export interface StartConsult {
     doctor_id: number;
-    patient_id: number
     confirm: boolean;
 };
 

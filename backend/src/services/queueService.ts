@@ -1,3 +1,4 @@
+import { Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
 import { RecepQueue, TriageQueue, ConsultQueue } from "../models/queue";
 import { NodeConsult, NodeRecep, NodeTriage } from "../utils/createNode";
@@ -187,7 +188,7 @@ export class QueueServices {
         }
     };
 
-    static callNextConsult(): string {
+    static callNextConsult(): Triage | string {
         if (ConsultQueue.qtyPatients == 0) {
             return 'Fila vazia'
         } else {
@@ -197,7 +198,7 @@ export class QueueServices {
             ConsultQueue.firstPointer = next ?? null;
 
             ConsultQueue.qtyPatients--;
-            return `${call?.triage.patient.name}, vá ao consultório!`
+            return call!.triage
         }
     };
 
@@ -261,9 +262,3 @@ export class QueueServices {
         current.pointer = no;
     }
 }
-
-// Algorítimo:
-// verifica se a fila está vazia, se sim = 'Fila vazia', se não:
-// registrar hora atual
-// percorrer a fila com o temp
-// se temp.limit <= atual = temp.maxPriority = true, se não = passa pra frente

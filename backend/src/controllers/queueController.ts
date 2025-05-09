@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { QueueServices, typeQueue } from "../services/queueService";
-// import { attendCalled, consultCalled, triageCalled } from "../utils/queueCalleds";
+import { CallsConsult, Triage } from "../models/careFlow";
+
+export let lastCalled: CallsConsult;
 
 export const QueueController = {
     async callRecep(req: Request, res: Response) {
@@ -20,16 +22,33 @@ export const QueueController = {
     },
 
     async callConsult(req: Request, res: Response) {
-        const call: string = await QueueServices.callNextConsult();
-        res.json({
-            call: call
-        })
-        // consultCalled.push(call);
+        const called: string | Triage = await QueueServices.callNextConsult();
+
+        if (typeof called == 'string') {
+            res.status(200).json({
+                message: called
+            });
+
+        } else {
+            const call: CallsConsult = {
+                patient_id: 1,
+                ticket: 'N001',
+                calls: 1,
+                status: 'Called'
+            }
+            lastCalled = call;
+            
+            res.status(201).json({
+                status: "sucess",
+                message: "Paciente chamado",
+                call: call
+            })
+        }
     },
 
     async queue(req: Request, res: Response) {
-        const queueType = req.body;
-        const queue = await QueueServices.showQueue(queueType.typeQueue);
+        const queueType: typeQueue = req.params.name as typeQueue;
+        const queue = await QueueServices.showQueue(queueType);
         res.status(200).json({
             queue: queue
         })

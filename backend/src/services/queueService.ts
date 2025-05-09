@@ -1,7 +1,10 @@
-import { Triage } from "../models/careFlow";
+import { db } from "../db";
+import { CallsConsult, Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
 import { RecepQueue, TriageQueue, ConsultQueue } from "../models/queue";
 import { NodeConsult, NodeRecep, NodeTriage } from "../utils/createNode";
+
+export let lastCalled: CallsConsult | null = null;
 
 export type typeQueue = 'recep' | 'triage' | 'consult'
 
@@ -201,6 +204,28 @@ export class QueueServices {
             return call!.triage
         }
     };
+
+    static callCalled(patient_id: number): CallsConsult {
+        const [rows]: any = db.query('SELECT name FROM Patients WHERE id = ?', [patient_id]);
+
+        const call: CallsConsult = {
+            patient_id: patient_id,
+            patient_name: rows[0].name,
+            calls: 1
+        }
+        lastCalled = call;
+        return call
+    };
+
+    static testCalled(): string {
+        lastCalled!.calls++;
+        if (lastCalled!.calls === 3) {
+            lastCalled = null;
+            return 'Não compareceu, chame próximo'
+        } else {
+            return lastCalled!.patient_name;
+        }
+    }
 
     static search(id: number): NodeConsult {
         return ConsultQueue.firstPointer!;

@@ -28,8 +28,7 @@ export interface Triage {
 
 export interface CallsConsult {
     patient_id: number;
-    ticket: string;
-    status: string;
+    patient_name: string;
     calls: number
 };
 

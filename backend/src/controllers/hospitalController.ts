@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { HospitalManager } from "../services/hospitalManager";
 import { criteria, CriteriaData } from "../models/criteria";
-import { QueueServices } from "../services/queueService";
+import { lastCalled, QueueServices } from "../services/queueService";
 import { HospitalServices } from "../services/hospitalService";
 import { EndConsult, StartConsult, Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
@@ -65,7 +65,7 @@ export const HospitalController = {
     async consultConfirm(req: Request<{}, {}, StartConsult>, res: Response) {
         const confirmStartData: StartConsult = req.body;
         if (confirmStartData.confirm) {
-            const consult_id: number = await HospitalServices.startConsult(confirmStartData); // Armazenar no DB
+            const consult_id: number = await HospitalServices.startConsult(confirmStartData);
             
             res.status(201).json({
                 status: "sucess",
@@ -74,7 +74,10 @@ export const HospitalController = {
             })
 
         } else {
-            // Lógica de não comparecimento
+            const result: string = QueueServices.testCalled();
+            res.status(200).json({
+                message: result
+            })
         }
     },
 

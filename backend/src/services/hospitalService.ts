@@ -1,10 +1,10 @@
-import { NodeConsult, NodeRecep, NodeTriage } from "../utils/createNode";
+import { NodeConsult, NodeTriage } from "../utils/createNode";
 import { QueueServices } from "./queueService";
 import { criteria } from "../models/criteria";
-import { Triage, StartConsult, EndConsult, TriageCategory, Reception } from "../models/careFlow";
+import { Triage, StartConsult, EndConsult, TriageCategory } from "../models/careFlow";
 import { Patient } from "../models/patient";
 import { Consult } from "../models/hospital";
-import { lastCalled } from "../controllers/queueController";
+import { lastCalled } from "../services/queueService";
 import { db } from "../db";
 
 export class HospitalServices {
@@ -77,7 +77,7 @@ export class HospitalServices {
     };
 
     static async startConsult(data: StartConsult): Promise<number> {
-        const consult: Consult = new Consult(data.doctor_id, lastCalled.patient_id);
+        const consult: Consult = new Consult(data.doctor_id, lastCalled!.patient_id);
         const [result]: any = await db.execute('INSERT INTO Consults (patient_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())', [consult.patient_id, consult.doctor_id]);
         const consult_id: number = result.insertId;
         return consult_id

@@ -2,23 +2,19 @@ import { Request, Response } from "express";
 import { QueueServices, typeQueue } from "../services/queueService";
 import { CallsConsult, Triage } from "../models/careFlow";
 
-export let lastCalled: CallsConsult;
-
 export const QueueController = {
     async callRecep(req: Request, res: Response) {
-        const call: string = await QueueServices.callNextRecep()
+        const call: string = QueueServices.callNextRecep()
         res.json({
             call: call
         })
-        // attendCalled.push(call);
     },
 
     async callTriage(req: Request, res: Response) {
-        const call: string = await QueueServices.callNextTriage()
+        const call: string = QueueServices.callNextTriage()
         res.json({
             call: call
         })
-        // triageCalled.push(call);
     },
 
     async callConsult(req: Request, res: Response) {
@@ -30,18 +26,12 @@ export const QueueController = {
             });
 
         } else {
-            const call: CallsConsult = {
-                patient_id: 1,
-                ticket: 'N001',
-                calls: 1,
-                status: 'Called'
-            }
-            lastCalled = call;
+            const result: CallsConsult = QueueServices.callCalled(called.patient_id)
             
             res.status(201).json({
                 status: "sucess",
                 message: "Paciente chamado",
-                call: call
+                call: result
             })
         }
     },

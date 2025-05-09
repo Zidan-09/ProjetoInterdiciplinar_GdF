@@ -1,6 +1,6 @@
 {
     "nurse_id": 1,
-    "patient": "Ronaldo",
+    "patient_id": 1,
     "vitalSigns": {
         "bloodPreassure": {
             "systolicPreassure": 120,

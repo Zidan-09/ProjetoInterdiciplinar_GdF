@@ -67,17 +67,12 @@ export const HospitalController = {
     async consultConfirm(req: Request<{}, {}, StartConsult>, res: Response) {
         const confirmStartData: StartConsult = req.body;
         if (confirmStartData.confirm) {
-            const consult: Consult = new Consult(
-                confirmStartData.doctor_id,
-                lastCalled.patient_id
-            );
-
-            // Armazenar no DB
+            const consult_id: number = await HospitalServices.startConsult(confirmStartData); // Armazenar no DB
             
             res.status(201).json({
                 status: "sucess",
                 message: "Consulta confirmada e iniciada",
-                consult: consult
+                consult: consult_id
             })
 
         } else {

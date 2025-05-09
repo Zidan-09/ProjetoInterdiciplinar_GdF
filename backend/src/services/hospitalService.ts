@@ -4,35 +4,25 @@ import { criteria } from "../models/criteria";
 import { Triage, StartConsult, EndConsult, TriageCategory, Reception } from "../models/careFlow";
 import { Patient } from "../models/patient";
 import { Consult } from "../models/hospital";
+import { searchBD, validateForTest } from "./returnForValidate";
+import { lastCalled } from "../controllers/queueController";
 
 export class HospitalServices {
-    static async register(data: Patient): Promise<string> {
-        const no: NodeTriage = new NodeTriage(data);
-        QueueServices.insertTriageQueue(no);
-    
-        // const patient = await prisma.patient.create({
-        //     data: {
-        //         name: data.name,
-        //         dob: new Date(data.dob),
-        //         maritalStatus: data.maritalStatus,
-        //         cpf: data.cpf,
-        //         rg: data.rg,
-        //         contacts: data.contacts,
-        //         gender: data.gender,
-        //         healthPlan: data.healthPlan,
-        //         address: data.address,
-        //     }
-        // });
-    
-        return 'Paciente Cadastrado com Sucesso!';
-    };
+    static async register(data: Patient) {
+        const patient_id: number = await validateForTest() as number;//BD
 
-    static async triage(data: Triage) { // Promise<Triage>    ESPERAR BANCO DE DADOS
-        // const triage: Triage = await prisma.triage.create(data)
+        const triage: NodeTriage = new NodeTriage(patient_id);
+        QueueServices.insertTriageQueue(triage);
 
-        // const no: NoConsult = new NoConsult(triage);
-        // QueueServices.insertConsultQueue(no);
-        // return triage;
+        return `Paciente ${data.name} cadastrado(a) com sucesso`
+    }
+
+    static async triage(data: Triage) {
+        const triage: number = await validateForTest();
+
+        const no: NodeConsult = new NodeConsult(data);
+        QueueServices.insertConsultQueue(no);
+        return triage;
     };
 
     static async changeSeverity(patient_id: number, newSeverity: TriageCategory): Promise<string> {
@@ -85,18 +75,19 @@ export class HospitalServices {
         return 'Severidade Alterada!'
     };
 
-    static async startConsult(data: StartConsult): Promise<Consult> {
-        const consult: Consult = new Consult(data.doctor_id, data.patient_id);
-        // consult.id = await prisma.consult.create(consult.doctor_id, consult.patient_id, consult.checkInConsult);
-        return consult
+    static async startConsult(data: StartConsult): Promise<number> {
+        const consult: Consult = new Consult(data.doctor_id, lastCalled.patient_id);
+        const consult_id: number = await validateForTest(); //BD
+        return consult_id
     };
 
     static async endConsult(data: EndConsult) {
-        // const consult: Consult = await prisma.consult.end(data.id);
-        // consult.checkOutConsult = new Date();
-        // consult.diagnosis = data.diagnosis;
-        // consult.prescriptions = data.prescriptions;
-        // consult.notes = data.notes;
-        // return consult;
+        const consult: Consult = await searchBD(data.id);
+        consult.checkOutConsult = new Date();
+        consult.diagnosis = data.diagnosis;
+        consult.prescriptions = data.prescriptions;
+        consult.notes = data.notes;
+        // Atualizar no BD a consulta
+        return consult;
     };
 };

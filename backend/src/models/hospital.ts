@@ -1,5 +1,4 @@
 class Consult {
-    id: number | null;
     doctor_id: number;
     patient_id: number;
     checkInConsult: Date;
@@ -10,7 +9,6 @@ class Consult {
     status: string;
   
     constructor(doctor_id: number, patient_id: number) {
-        this.id = null;
         this.doctor_id = doctor_id;
         this.patient_id = patient_id;
         this.checkInConsult = new Date();

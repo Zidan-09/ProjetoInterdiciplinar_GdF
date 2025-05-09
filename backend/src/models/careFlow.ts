@@ -18,7 +18,7 @@ export interface Reception {
 };
 
 export interface Triage {
-    patient: Patient;
+    patient_id: number;
     nurse_id: number;
     vitalSigns: VitalSigns;
     triageCategory: TriageCategory;

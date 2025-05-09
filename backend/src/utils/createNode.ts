@@ -15,11 +15,11 @@ class NodeRecep {
 };
 
 class NodeTriage {
-    patient: Patient;
+    patient_id: number;
     pointer: null | NodeTriage;
 
-    constructor(patient: Patient) {
-        this.patient = patient;
+    constructor(patient_id: number) {
+        this.patient_id = patient_id;
         this.pointer = null;
     }
 };

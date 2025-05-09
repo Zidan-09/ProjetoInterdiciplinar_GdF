@@ -130,7 +130,7 @@ export class QueueServices {
                 } else {
                     let tempT = TriageQueue.firstPointer;
                     for (let i = 0; i < TriageQueue.qtyPatients; i++) {
-                        queueList.push(tempT!.patient);
+                        queueList.push(tempT!.patient_name);
                         if (tempT?.pointer == null) {
                             break
                         } else {
@@ -146,7 +146,7 @@ export class QueueServices {
                 } else {
                     let tempC = ConsultQueue.firstPointer;
                     for (let i = 0; i < ConsultQueue.qtyPatients; i++) {
-                        queueList.push(tempC?.triage.patient.name);
+                        queueList.push(tempC?.triage.patient_id);
                         if (tempC?.pointer == null) {
                             break
                         } else {
@@ -184,7 +184,7 @@ export class QueueServices {
             TriageQueue.firstPointer = next;
 
             TriageQueue.qtyPatients--;
-            return `${call!.patient}, vá para a triagem!`
+            return `${call!.patient_name}, vá para a triagem!`
         }
     };
 

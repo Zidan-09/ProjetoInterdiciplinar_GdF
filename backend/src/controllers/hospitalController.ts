@@ -5,8 +5,6 @@ import { QueueServices } from "../services/queueService";
 import { HospitalServices } from "../services/hospitalService";
 import { EndConsult, StartConsult, Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
-import { Consult } from "../models/hospital";
-import { lastCalled } from "./queueController";
 
 type TicketRequest = { priority: number };
 

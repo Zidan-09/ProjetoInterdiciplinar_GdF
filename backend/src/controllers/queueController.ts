@@ -22,7 +22,7 @@ export const QueueController = {
     },
 
     async callConsult(req: Request, res: Response) {
-        const called: string | Triage = await QueueServices.callNextConsult();
+        const called: string | Triage = QueueServices.callNextConsult();
 
         if (typeof called == 'string') {
             res.status(200).json({

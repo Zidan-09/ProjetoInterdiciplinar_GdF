@@ -7,7 +7,7 @@ export interface Patient {
     maritalStatus: MaritalStatus;
     cpf: string;
     rg: string;
-    contacts: string[];
+    contact: string;
     gender: Gender;
     healthPlan: string;
     address: string;

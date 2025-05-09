@@ -1,6 +1,7 @@
 import { Patient } from "../models/patient";
 import { Triage } from "../models/careFlow";
 import { criteria } from "../models/criteria";
+import { db } from "../db";
 
 class NodeRecep {
     ticket: string | null;
@@ -16,16 +17,20 @@ class NodeRecep {
 
 class NodeTriage {
     patient_id: number;
+    patient_name: string;
     pointer: null | NodeTriage;
 
     constructor(patient_id: number) {
         this.patient_id = patient_id;
+        const [rows]: any = db.query('SELECT name FROM Patients WHERE id = ?', [patient_id])
+        this.patient_name = rows[0].name;
         this.pointer = null;
     }
 };
 
 class NodeConsult {
     triage: Triage;
+    patient_name: string;
     triageCategory: number;
     time: Date;
     limitDate: {
@@ -37,6 +42,8 @@ class NodeConsult {
 
     constructor(patientTriage: Triage) {
         this.triage = patientTriage;
+        const [rows]: any = db.query('SELECT name FROM Patients WHERE id = ?', [patientTriage.patient_id])
+        this.patient_name = rows[0].name;
         this.pointer = null;
         this.time = new Date();
         this.maxPriority = false;

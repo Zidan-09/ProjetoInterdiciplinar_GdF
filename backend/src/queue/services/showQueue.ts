@@ -1,5 +1,5 @@
 import { ConsultQueue, RecepQueue, TriageQueue } from "../../models/queue";
-import { typeQueue } from "../../services/queueService";
+import { typeQueue } from "../../models/queue";
 
 export class ShowQueue {
     static showQueue(queue: typeQueue) {
@@ -10,7 +10,7 @@ export class ShowQueue {
 
                 for (let i = 0; i < RecepQueue.getQty(); i++) {
                     if (tempR) {
-                    queueList.push(tempR);
+                    queueList.push(tempR.ticket);
                     tempR = tempR.pointer
                     }
                 }
@@ -21,7 +21,7 @@ export class ShowQueue {
 
                 for (let i = 0; i < TriageQueue.getQty(); i++) {
                     if (tempT) {
-                    queueList.push(tempT);
+                    queueList.push(tempT.patient_name);
                     tempT = tempT.pointer
                     }
                 }
@@ -31,7 +31,7 @@ export class ShowQueue {
 
                 for (let i = 0; i < ConsultQueue.getQty(); i++) {
                     if (tempC) {
-                    queueList.push(tempC);
+                    queueList.push(tempC.patient_name);
                     tempC = tempC.pointer
                     }
                 }

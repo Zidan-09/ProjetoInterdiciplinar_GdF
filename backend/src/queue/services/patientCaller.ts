@@ -1,13 +1,13 @@
 import { RecepQueue, TriageQueue, ConsultQueue } from "../../models/queue";
 
 export class PatientCaller {
-    static callNextRecep() {
+    static callNextRecep(): string {
         const call = RecepQueue.callNext();
 
-        if (typeof call == 'string') {
+        if (call === 'Fila vazia') {
             return call
         } else {
-            return call.ticket
+            return call.ticket!
         }
     };
 

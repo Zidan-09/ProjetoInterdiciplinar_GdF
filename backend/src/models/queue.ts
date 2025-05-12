@@ -1,6 +1,7 @@
 import { NodeConsult, NodeRecep, NodeTriage } from "../utils/createNode";
 
-export type Priority = 'VeryPriority' | 'Priority' | 'Non-Priority' 
+export type Priority = 'VeryPriority' | 'Priority' | 'Non-Priority'
+export type typeQueue = 'recep' | 'triage' | 'consult'
 
 abstract class Queue<T extends { pointer: T | null }> {
     protected firstPointer: T | null;
@@ -13,7 +14,7 @@ abstract class Queue<T extends { pointer: T | null }> {
         this.qtyPatients = 0;
     }
 
-    public callNext(): T | string {
+    public callNext(): T | 'Fila vazia' {
         const call = this.firstPointer;
 
         if (call) {

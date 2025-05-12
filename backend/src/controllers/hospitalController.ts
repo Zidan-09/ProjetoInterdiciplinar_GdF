@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { HospitalManager } from "../services/hospitalManager";
 import { criteria, CriteriaData } from "../models/criteria";
-import { QueueServices } from "../services/queueService";
 import { HospitalServices } from "../services/hospitalService";
 import { EndConsult, StartConsult, Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
@@ -75,10 +74,10 @@ export const HospitalController = {
             })
 
         } else {
-            const result: string = QueueServices.testCalled();
-            res.status(200).json({
-                message: result
-            })
+            // const result: string = QueueServices.testCalled();
+            // res.status(200).json({
+            //     message: result
+            // })
         }
     },
 

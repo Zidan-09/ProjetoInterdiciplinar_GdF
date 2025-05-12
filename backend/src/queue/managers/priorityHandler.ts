@@ -3,7 +3,7 @@ import { NodeConsult } from "../../utils/createNode";
 
 export class PriorityHandler {
     static verify(): string {
-        let temp: NodeConsult | null = ConsultQueue.firstPointer;
+        let temp: NodeConsult | null = ConsultQueue.getFirst();
 
         if (!temp) {
             return 'Fila vazia'
@@ -11,7 +11,7 @@ export class PriorityHandler {
         } else {
             let dateNow: Date = new Date();
 
-            for (let i = 0; i < ConsultQueue.qtyPatients; i++) {
+            for (let i = 0; i < ConsultQueue.getQty(); i++) {
                 let next: NodeConsult | null = temp!.pointer
 
                 const limit: Date = new Date()
@@ -29,10 +29,9 @@ export class PriorityHandler {
     };
 
     static toSort(no: NodeConsult): void {
-        if (ConsultQueue.firstPointer === no) {
-            ConsultQueue.firstPointer = no.pointer;
-        } else {
-            let temp: NodeConsult | null = ConsultQueue.firstPointer;
+        if (ConsultQueue.getFirst() != no) {
+
+            let temp: NodeConsult | null = ConsultQueue.getFirst();
 
             while (temp?.pointer && temp.pointer !== no) {
                 temp = temp.pointer;
@@ -42,19 +41,21 @@ export class PriorityHandler {
                 temp.pointer = no.pointer
             }
         }
-
-        if (!ConsultQueue.firstPointer || !ConsultQueue.firstPointer.maxPriority || ConsultQueue.firstPointer.triageCategory < no.triageCategory) {
-            no.pointer = ConsultQueue.firstPointer;
-            ConsultQueue.firstPointer = no;
+        const first = ConsultQueue.getFirst();
+        if (!first || !first.maxPriority || first.triageCategory < no.triageCategory) {
+            no.pointer = first;
+            ConsultQueue.setFirst(no);
             return;
         }
 
-        let current: NodeConsult | null = ConsultQueue.firstPointer;
-        while (current.pointer && current.pointer.maxPriority && current.pointer.triageCategory <= no.triageCategory) {
-            current = current?.pointer
+        let current: NodeConsult | null = ConsultQueue.getFirst();
+        while (current && current.pointer && current.pointer.maxPriority && current.pointer.triageCategory <= no.triageCategory) {
+            current = current.pointer
         }
 
-        no.pointer = current.pointer;
-        current.pointer = no;
+        if (current) {
+            no.pointer = current.pointer;
+            current.pointer = no;
+        }
     }
 }

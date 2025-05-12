@@ -6,6 +6,7 @@ import { Patient } from "../models/patient";
 import { Consult } from "../models/hospital";
 import { lastCalled } from "../services/queueService";
 import { db } from "../db";
+import { InsertQueue } from "../queue/services/insertQueue";
 
 export class HospitalServices {
     static async register(data: Patient) {
@@ -14,7 +15,7 @@ export class HospitalServices {
         );
         const patient_id = patient.insertId;
         const nodeTriage: NodeTriage = new NodeTriage(patient_id);
-        QueueServices.insertTriageQueue(nodeTriage);
+        InsertQueue.insertTriageQueue(nodeTriage);
 
         return `Paciente ${data.name} cadastrado(a) com sucesso`
     }
@@ -22,7 +23,7 @@ export class HospitalServices {
     static async triage(data: Triage) {
         const [result]: any = await db.execute('INSERT INTO Triages (nurse_id, patient_id, vitalSigns, simptoms, painLevel, triageCategory) VALUES (?, ?, ?, ?, ?, ?)', [data.nurse_id, data.patient_id, data.vitalSigns, data.simptoms, data.painLevel, data.triageCategory]);
         const no: NodeConsult = new NodeConsult(data);
-        QueueServices.insertConsultQueue(no);
+        InsertQueue.insertConsultQueue(no);
         return result;
     };
 

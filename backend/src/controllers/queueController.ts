@@ -1,51 +1,51 @@
 import { Request, Response } from "express";
-import { QueueServices, typeQueue } from "../services/queueService";
-import { CallsConsult, Triage } from "../models/careFlow";
+import { PatientCaller } from "../queue/services/patientCaller";
+import { PriorityHandler } from "../queue/managers/priorityHandler";
+import { typeQueue } from "../services/queueService";
+import { ShowQueue } from "../services/showQueue";
 
 export const QueueController = {
     async callRecep(req: Request, res: Response) {
-        const call: string = QueueServices.callNextRecep()
+        const call = PatientCaller.callNextRecep()
         res.json({
             call: call
         })
     },
 
     async callTriage(req: Request, res: Response) {
-        const call: string = QueueServices.callNextTriage()
+        const call = PatientCaller.callNextTriage()
         res.json({
             call: call
         })
     },
 
     async callConsult(req: Request, res: Response) {
-        const called: string | Triage = QueueServices.callNextConsult();
+        const called = PatientCaller.callNextConsult();
 
         if (typeof called == 'string') {
             res.status(200).json({
                 message: called
             });
 
-        } else {
-            const result: CallsConsult = QueueServices.callCalled(called.patient_id)
-            
+        } else {            
             res.status(201).json({
                 status: "sucess",
                 message: "Paciente chamado",
-                call: result
+                call: 'result'
             })
         }
     },
 
     async queue(req: Request, res: Response) {
         const queueType: typeQueue = req.params.name as typeQueue;
-        const queue = await QueueServices.showQueue(queueType);
+        const queue = await ShowQueue.showQueue(queueType);
         res.status(200).json({
             queue: queue
         })
     },
 
     async update(req: Request, res: Response) {
-        const result: string = QueueServices.verify();
+        const result: string = PriorityHandler.verify();
 
         res.status(200).json({
             message: result

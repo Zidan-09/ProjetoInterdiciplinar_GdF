@@ -1,5 +1,4 @@
 import { RecepQueue } from "../../models/queue";
-import { QueueManager } from "../managers/queueManager";
 import { NodeRecep } from "../../utils/createNode";
 
 export class CreateTicket {
@@ -8,16 +7,16 @@ export class CreateTicket {
 
         switch (priority) {
             case 1:
-                no.ticket = 'N' + (RecepQueue.qtyN + 1).toString().padStart(3, '0');
+                no.ticket = 'N' + (RecepQueue.getQtyN() + 1).toString().padStart(3, '0');
                 break;
             case 2:
-                no.ticket = 'P' + (RecepQueue.qtyP + 1).toString().padStart(3, '0');
+                no.ticket = 'P' + (RecepQueue.getQtyP() + 1).toString().padStart(3, '0');
                 break;
             case 3:
-                no.ticket = 'V' + (RecepQueue.qtyV + 1).toString().padStart(3, '0');
+                no.ticket = 'V' + (RecepQueue.getQtyV() + 1).toString().padStart(3, '0');
                 break;
         }
-        QueueManager.insertRecepQueue(no);
+        RecepQueue.insertQueue(no);
         return no.ticket!;
     };
 }

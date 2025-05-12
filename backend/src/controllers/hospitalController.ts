@@ -1,14 +1,26 @@
 import { Request, Response } from "express";
 import { HospitalManager } from "../services/hospitalManager";
 import { criteria, CriteriaData } from "../models/criteria";
-import { lastCalled, QueueServices } from "../services/queueService";
+import { QueueServices } from "../services/queueService";
 import { HospitalServices } from "../services/hospitalService";
 import { EndConsult, StartConsult, Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
+import { CreateTicket } from "../queue/services/ticketService";
 
 type TicketRequest = { priority: number };
 
 export const HospitalController = {
+    async createTicket(req: Request<{}, {}, TicketRequest>, res: Response) {
+        const data: TicketRequest = req.body;
+        const ticket: string = CreateTicket.createTicket(data.priority)
+
+        res.status(201).json({
+            status: "success",
+            message: "Senha criada",
+            data: ticket
+        })
+    },
+
     async register(req: Request<{}, {}, Patient>, res: Response) {
         const data: Patient = req.body;
 
@@ -23,18 +35,7 @@ export const HospitalController = {
     async list(req: Request, res: Response) {
         res.status(200).json({
             status: "sucess",
-            message: "Pacientes exibidos"
-        })
-    },
-
-    async createTicket(req: Request<{}, {}, TicketRequest>, res: Response) {
-        const data: TicketRequest = req.body;
-        const ticket: string = QueueServices.createTicket(data.priority)
-
-        res.status(201).json({
-            status: "success",
-            message: "Senha criada",
-            data: ticket
+            message: "Pacientes cadastrados exibidos"
         })
     },
 

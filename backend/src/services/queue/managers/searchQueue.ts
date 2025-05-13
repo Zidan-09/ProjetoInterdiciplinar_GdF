@@ -1,4 +1,3 @@
-import { db } from "../../../db";
 import { ConsultQueue } from "../../../models/queue";
 import { NodeConsult } from "../../../utils/createNode";
 

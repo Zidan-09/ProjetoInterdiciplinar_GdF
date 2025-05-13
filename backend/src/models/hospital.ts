@@ -6,7 +6,6 @@ class Consult {
     diagnosis: string | null;
     prescriptions: string[] | null;
     notes: string | null;
-    status: string;
   
     constructor(doctor_id: number, patient_id: number) {
         this.doctor_id = doctor_id;
@@ -16,7 +15,6 @@ class Consult {
         this.diagnosis = null;
         this.prescriptions = null;
         this.notes = null;
-        this.status = 'In Consult';
     }
 };
 

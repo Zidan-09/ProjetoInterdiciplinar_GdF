@@ -18,7 +18,6 @@ interface Employee{
 export interface Doctor extends Employee {
     crm: string;
     specialty: string;
-    professionalType: string;
     weeklyHours: number;
 };
 

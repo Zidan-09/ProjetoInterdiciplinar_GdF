@@ -26,11 +26,11 @@ export class HospitalServices {
         return result;
     };
 
-    static async changeSeverity(patient_id: number, newSeverity: TriageCategory) {
+    static async changeSeverity(patient_id: number, newSeverity: TriageCategory): Promise<[boolean, string]> {
         const search: string | NodeConsult = SearchQueue.search(patient_id);
 
         if (typeof search === 'string') {
-            return search
+            return [false, search]
         } else {
             switch (newSeverity) {
                 case 'Non-Urgent': 
@@ -70,6 +70,7 @@ export class HospitalServices {
                     search.maxPriority = true;
                     break;
             }
+            return [true, 'Classificação de risco alterada com sucesso']
         }
     };
 

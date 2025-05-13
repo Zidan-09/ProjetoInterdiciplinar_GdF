@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { HospitalManager } from "../services/hospitalManager";
 import { criteria, CriteriaData } from "../models/criteria";
 import { HospitalServices } from "../services/hospitalService";
-import { EndConsult, StartConsult, Triage } from "../models/careFlow";
+import { EndConsult, StartConsult, Triage, TriageCategory } from "../models/careFlow";
 import { Patient } from "../models/patient";
 import { CreateTicket } from "../services/queue/services/ticketService";
 
@@ -62,10 +62,22 @@ export const HospitalController = {
         })
     },
 
-    async changeTriageCategory(req: Request, res: Response) {
-        const newTriageCategory = req.body;
+    async changeTriageCategory(req: Request<{}, {}, TriageCategory>, res: Response) {
+        const newTriageCategory: TriageCategory = req.body;
 
-        const result = 'a'
+        const result = await HospitalServices.changeSeverity(1, newTriageCategory)
+
+        if (result[0]) {
+            res.status(200).json({
+                status: "success",
+                message: result[1]
+            })
+        } else {
+            res.json({
+                status: "error",
+                message: result[1]
+            })
+        }
     },
 
     async consultConfirm(req: Request<{}, {}, StartConsult>, res: Response) {

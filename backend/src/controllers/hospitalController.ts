@@ -62,6 +62,12 @@ export const HospitalController = {
         })
     },
 
+    async changeTriageCategory(req: Request, res: Response) {
+        const newTriageCategory = req.body;
+
+        const result = 'a'
+    },
+
     async consultConfirm(req: Request<{}, {}, StartConsult>, res: Response) {
         const confirmStartData: StartConsult = req.body;
         if (confirmStartData.confirm) {

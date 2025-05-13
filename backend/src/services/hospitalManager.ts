@@ -3,6 +3,8 @@ import { criteria, CriteriaData } from "../models/criteria";
 import { ValidateRegister } from "../utils/validators";
 import { db } from "../db";
 
+export type EmployeeType = 'Recepcionist' | 'Nurse' | 'Doctor' | 'Admin';
+
 export class HospitalManager {
     static async changeCriteria(newCriteria: CriteriaData): Promise<string> {
         criteria.immediate = newCriteria.immediate;
@@ -14,29 +16,36 @@ export class HospitalManager {
         return 'Alteração Feita com Sucesso!'
     }
 
-    static async showReports(period: Date) {
-
-    }
-
-    static async registerEmployee(userData: Recepcionist | Nurse | Doctor | Admin): Promise<[boolean, string]> {
-        const isValid: boolean = await ValidateRegister.verifyEmployee(userData);
+    static async registerEmployee<T extends Recepcionist | Nurse | Doctor | Admin>(userData: T): Promise<[boolean, string]> {
+        const isValid = await ValidateRegister.verifyEmployee(userData);
         if (isValid) {
-            db.execute('', [])
-            return [true, 'Empregado cadastrado com sucesso!']
+            await db.execute('INSERT INTO ...', []);
+            return [true, `${userData.name} cadastrado(a) com sucesso!`];
         } else {
-            return [false, 'Empregado já cadastrado']
+            return [false, `${userData.name} já cadastrado(a)`];
         }
     }
-
-    static async editEmployee(id: number, newUserData: Recepcionist | Nurse | Doctor | Admin) {
+    
+      static async editEmployee(id: number, newUserData: Recepcionist | Nurse | Doctor | Admin) {
         if ('crm' in newUserData) {
-            db.query('SELECT * FROM Doctor');
+            return await db.query('UPDATE Doctor SET ... WHERE id = ?', [id]);
         } else if ('coren' in newUserData) {
-            db.query('SELECT * FROM Nurse');
+            return await db.query('UPDATE Nurse SET ... WHERE id = ?', [id]);
         } else if ('accessLevel' in newUserData) {
-            db.query('SELECT * FROM Admin');
+            return await db.query('UPDATE Admin SET ... WHERE id = ?', [id]);
         } else {
-            db.query('SELECT * FROM Recepcionist')
+            return await db.query('UPDATE Recepcionist SET ... WHERE id = ?', [id]);
         }
+    }
+    
+    static async showEmployeers(employeeType: EmployeeType) {
+        const tableMap = {
+          Recepcionist: "Recepcionist",
+          Nurse: "Nurse",
+          Doctor: "Doctor",
+          Admin: "Admin"
+        };
+        const tableName = tableMap[employeeType];
+        return await db.query(`SELECT * FROM ${tableName}`);
     }
 }

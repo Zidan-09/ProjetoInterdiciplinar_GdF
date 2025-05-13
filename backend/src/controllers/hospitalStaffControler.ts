@@ -1,33 +1,82 @@
 import { Response, Request } from "express";
-import { HospitalManager } from "../services/hospitalManager";
+import { EmployeeType, HospitalManager } from "../services/hospitalManager";
 import { Recepcionist, Nurse, Doctor, Admin } from "../models/hospitalStaff";
 
-export const EmployeeController = {
-    async register(req: Request<{}, {}, Recepcionist|Nurse|Doctor|Admin>, res: Response) {
-        const data: Recepcionist = req.body;
-        let done: [boolean, string] = await HospitalManager.registerEmployee(data);
-        if (done[1]) {
-            res.status(201).json({
-                status: "sucess",
-                message: done[0]
-            });
-        } else {
-            res.status(400).json({
-                status: "erro",
-                message: done[0]
-            });
-        }
-    },
+const handleResponse = (done: [boolean, string], res: Response) => {
+  if (done[0]) {
+    res.status(201).json({ status: "success", message: done[1] });
+  } else {
+    res.status(400).json({ status: "error", message: done[1] });
+  }
+};
 
-    async list(req: Request, res: Response) {
-        const employee = req.params.employee;
+class RecepcionistController {
+  static async register(req: Request, res: Response) {
+    const data: Recepcionist = req.body;
+    const done = await HospitalManager.registerEmployee(data);
+    handleResponse(done, res);
+  }
 
+  static async edit(req: Request, res: Response) {
+    const newData: Recepcionist = req.body;
+    const done = await HospitalManager.editEmployee(1, newData); // Falta lógica do ID
+    res.status(200).json({ message: "Editado (mock)" });
+  }
+}
+
+class NurseController {
+  static async register(req: Request, res: Response) {
+    const data: Nurse = req.body;
+    const done = await HospitalManager.registerEmployee(data);
+    handleResponse(done, res);
+  }
+
+  static async edit(req: Request, res: Response) {
+    const newData: Nurse = req.body;
+    const done = await HospitalManager.editEmployee(2, newData);
+    res.status(200).json({ message: "Editado (mock)" });
+  }
+}
+
+class DoctorController {
+  static async register(req: Request, res: Response) {
+    const data: Doctor = req.body;
+    const done = await HospitalManager.registerEmployee(data);
+    handleResponse(done, res);
+  }
+
+  static async edit(req: Request, res: Response) {
+    const newData: Doctor = req.body;
+    const done = await HospitalManager.editEmployee(3, newData);
+    res.status(200).json({ message: "Editado (mock)" });
+  }
+}
+
+class AdminController {
+  static async register(req: Request, res: Response) {
+    const data: Admin = req.body;
+    const done = await HospitalManager.registerEmployee(data);
+    handleResponse(done, res);
+  }
+
+  static async edit(req: Request, res: Response) {
+    const newData: Admin = req.body;
+    const done = await HospitalManager.editEmployee(4, newData);
+    res.status(200).json({ message: "Editado (mock)" });
+  }
+}
+
+class Employeers {
+    static async showEmployeers(req: Request, res: Response) {
+        const employee: EmployeeType = req.params.employee as EmployeeType;
+
+        const employeers = await HospitalManager.showEmployeers(employee)
         res.status(200).json({
-            message: `${employee} exibidos!`
+            status: "sucess",
+            message: `${employee} cadastrados`,
+            result: employeers
         })
-    },
-
-    async edit(req: Request, res: Response) {
-
     }
 }
+
+export { RecepcionistController, NurseController, DoctorController, AdminController, Employeers };

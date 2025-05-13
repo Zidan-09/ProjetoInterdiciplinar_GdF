@@ -1,10 +1,11 @@
 import { NodeConsult, NodeTriage } from "../utils/createNode";
-import { criteria } from "../models/criteria";
 import { Triage, StartConsult, EndConsult, TriageCategory } from "../models/careFlow";
 import { Patient } from "../models/patient";
 import { Consult } from "../models/hospital";
 import { db } from "../db";
-import { InsertQueue } from "../queue/services/insertQueue";
+import { InsertQueue } from "./queue/services/insertQueue";
+import { SearchQueue } from "./queue/managers/searchQueue";
+import { criteria } from "../models/criteria";
 
 export class HospitalServices {
     static async register(data: Patient) {
@@ -25,55 +26,52 @@ export class HospitalServices {
         return result;
     };
 
-    // static async changeSeverity(patient_id: number, newSeverity: TriageCategory): Promise<string> {
-    //     const search = QueueServices.search(patient_id);
+    static async changeSeverity(patient_id: number, newSeverity: TriageCategory) {
+        const search: string | NodeConsult = SearchQueue.search(patient_id);
 
-    //     if (search == undefined) {
-    //         return 'Erro'
-    //     } else {
-    //         search!.triage.triageCategory = newSeverity;
-
-    //         switch (newSeverity) {
-    //             case 'Non-Urgent': 
-    //                 search.triageCategory = 1;
-    //                 search.limitDate = {
-    //                     limitHours: Math.round(criteria.nonUrgent / 60),
-    //                     limitMinuts: criteria.nonUrgent % 60
-    //                 };
-    //                 break;
-    //             case 'Standard':
-    //                 search.triageCategory = 2;
-    //                 search.limitDate = {
-    //                     limitHours: Math.round(criteria.standard / 60),
-    //                     limitMinuts: criteria.standard % 60
-    //                 };
-    //                 break;
-    //             case 'Urgent':
-    //                 search.triageCategory = 3;
-    //                 search.limitDate = {
-    //                     limitHours: Math.round(criteria.urgent / 60),
-    //                     limitMinuts: criteria.urgent % 60
-    //                 };
-    //                 break;
-    //             case 'VeryUrgent':
-    //                 search.triageCategory = 4;
-    //                 search.limitDate = {
-    //                     limitHours: Math.round(criteria.veryUrgent / 60),
-    //                     limitMinuts: criteria.veryUrgent % 60
-    //                 };
-    //                 break;
-    //             case 'Immediate':
-    //                 search.triageCategory = 5;
-    //                 search.limitDate = {
-    //                     limitHours: Math.round(criteria.immediate / 60),
-    //                     limitMinuts: criteria.immediate % 60
-    //                 };
-    //                 search.maxPriority = true;
-    //                 break;
-    //         }
-    //     }
-    //     return 'Severidade Alterada!'
-    // };
+        if (typeof search === 'string') {
+            return search
+        } else {
+            switch (newSeverity) {
+                case 'Non-Urgent': 
+                    search.triageCategory = 1;
+                    search.limitDate = {
+                        limitHours: Math.round(criteria.nonUrgent / 60),
+                        limitMinuts: criteria.nonUrgent % 60
+                    };
+                    break;
+                case 'Standard':
+                    search.triageCategory = 2;
+                    search.limitDate = {
+                        limitHours: Math.round(criteria.standard / 60),
+                        limitMinuts: criteria.standard % 60
+                    };
+                    break;
+                case 'Urgent':
+                    search.triageCategory = 3;
+                    search.limitDate = {
+                        limitHours: Math.round(criteria.urgent / 60),
+                        limitMinuts: criteria.urgent % 60
+                    };
+                    break;
+                case 'VeryUrgent':
+                    search.triageCategory = 4;
+                    search.limitDate = {
+                        limitHours: Math.round(criteria.veryUrgent / 60),
+                        limitMinuts: criteria.veryUrgent % 60
+                    };
+                    break;
+                case 'Immediate':
+                    search.triageCategory = 5;
+                    search.limitDate = {
+                        limitHours: Math.round(criteria.immediate / 60),
+                        limitMinuts: criteria.immediate % 60
+                    };
+                    search.maxPriority = true;
+                    break;
+            }
+        }
+    };
 
     static async startConsult(data: StartConsult): Promise<number> {
         const consult: Consult = new Consult(data.doctor_id, 1); // Tirar o 1 e botar patient_id

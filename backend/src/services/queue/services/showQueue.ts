@@ -1,5 +1,5 @@
-import { ConsultQueue, RecepQueue, TriageQueue } from "../../models/queue";
-import { typeQueue } from "../../models/queue";
+import { ConsultQueue, RecepQueue, TriageQueue } from "../../../models/queue";
+import { typeQueue } from "../../../models/queue";
 
 export class ShowQueue {
     static showQueue(queue: typeQueue) {

@@ -1,4 +1,4 @@
-import { RecepQueue, TriageQueue, ConsultQueue } from "../../models/queue";
+import { RecepQueue, TriageQueue, ConsultQueue } from "../../../models/queue";
 
 export class PatientCaller {
     static callNextRecep(): string {

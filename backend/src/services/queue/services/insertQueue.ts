@@ -1,5 +1,5 @@
-import { ConsultQueue, RecepQueue, TriageQueue } from "../../models/queue";
-import { NodeRecep, NodeTriage, NodeConsult } from "../../utils/createNode";
+import { ConsultQueue, RecepQueue, TriageQueue } from "../../../models/queue";
+import { NodeRecep, NodeTriage, NodeConsult } from "../../../utils/createNode";
 
 export class InsertQueue {
     static insertRecepQueue(node: NodeRecep) {

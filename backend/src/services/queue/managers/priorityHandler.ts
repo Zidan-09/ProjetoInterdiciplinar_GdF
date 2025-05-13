@@ -1,5 +1,5 @@
-import { ConsultQueue } from "../../models/queue";
-import { NodeConsult } from "../../utils/createNode";
+import { ConsultQueue } from "../../../models/queue";
+import { NodeConsult } from "../../../utils/createNode";
 
 export class PriorityHandler {
     static verify(): string {

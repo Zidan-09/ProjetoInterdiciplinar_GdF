@@ -1,7 +1,9 @@
-import { QueueServices } from "../services/queueService";
 import { NodeConsult } from "../utils/createNode";
 import { Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
+import { InsertQueue } from "../services/queue/services/insertQueue";
+import { ShowQueue } from "../services/queue/services/showQueue";
+import { PatientCaller } from "../services/queue/services/patientCaller";
 
 const patient1: Patient = {
     name: 'Samuel',
@@ -9,7 +11,7 @@ const patient1: Patient = {
     maritalStatus: 'Single',
     cpf: '123',
     rg: '321',
-    contacts: ['123654'],
+    contact: '123654',
     gender: 'Male',
     healthPlan: 'sus',
     address: 'Rua doidos'
@@ -20,7 +22,7 @@ const patient2: Patient = {
     maritalStatus: 'Single',
     cpf: '123',
     rg: '321',
-    contacts: ['123654'],
+    contact: '123654',
     gender: 'Male',
     healthPlan: 'sus',
     address: 'Rua doidos'
@@ -31,7 +33,7 @@ const patient3: Patient = {
     maritalStatus: 'Single',
     cpf: '123',
     rg: '321',
-    contacts: ['123654'],
+    contact: '123654',
     gender: 'Female',
     healthPlan: 'sus',
     address: 'Rua doidos'
@@ -42,7 +44,7 @@ const patient4: Patient = {
     maritalStatus: 'Single',
     cpf: '123',
     rg: '321',
-    contacts: ['123654'],
+    contact: '123654',
     gender: 'Male',
     healthPlan: 'sus',
     address: 'Rua doidos'
@@ -53,14 +55,14 @@ const patient5: Patient = {
     maritalStatus: 'Single',
     cpf: '123',
     rg: '321',
-    contacts: ['123654'],
+    contact: '123654',
     gender: 'Male',
     healthPlan: 'sus',
     address: 'Rua doidos'
 }
 
 const triage1: Triage = {
-    patient: patient1,
+    patient_id: 1,
     nurse_id: 1,
     vitalSigns: {
         bloodPreassure: {
@@ -77,7 +79,7 @@ const triage1: Triage = {
     painLevel: 5
 }
 const triage2: Triage = {
-    patient: patient2,
+    patient_id: 2,
     nurse_id: 1,
     vitalSigns: {
         bloodPreassure: {
@@ -94,7 +96,7 @@ const triage2: Triage = {
     painLevel: 1
 }
 const triage3: Triage = {
-    patient: patient3,
+    patient_id: 3,
     nurse_id: 1,
     vitalSigns: {
         bloodPreassure: {
@@ -111,7 +113,7 @@ const triage3: Triage = {
     painLevel: 1
 }
 const triage4: Triage = {
-    patient: patient4,
+    patient_id: 4,
     nurse_id: 1,
     vitalSigns: {
         bloodPreassure: {
@@ -128,7 +130,7 @@ const triage4: Triage = {
     painLevel: 1
 }
 const triage5: Triage = {
-    patient: patient5,
+    patient_id: 5,
     nurse_id: 1,
     vitalSigns: {
         bloodPreassure: {
@@ -151,25 +153,12 @@ const no3: NodeConsult = new NodeConsult(triage3);
 const no4: NodeConsult = new NodeConsult(triage4);
 const no5: NodeConsult = new NodeConsult(triage5);
 
-QueueServices.insertConsultQueue(no1);
-QueueServices.insertConsultQueue(no2);
-QueueServices.insertConsultQueue(no3);
-QueueServices.insertConsultQueue(no4);
-QueueServices.insertConsultQueue(no5);
+InsertQueue.insertConsultQueue(no1);
+InsertQueue.insertConsultQueue(no2);
+InsertQueue.insertConsultQueue(no3);
+InsertQueue.insertConsultQueue(no4);
+InsertQueue.insertConsultQueue(no5);
 
-async function time(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+ShowQueue.showQueue('consult');
 
-async function Teste() {
-    for (let i = 0; i < 5; i++) {
-        QueueServices.showQueue('consult')
-        QueueServices.verify();
-        await time(15000);
-    }
-    const chamada = QueueServices.callNextConsult();
-    console.log(chamada);
-    QueueServices.showQueue('consult');
-}
-
-Teste()
+console.log(PatientCaller.callNextConsult());

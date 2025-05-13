@@ -1,4 +1,3 @@
-import { Patient } from "../models/patient";
 import { Triage } from "../models/careFlow";
 import { criteria } from "../models/criteria";
 import { db } from "../db";

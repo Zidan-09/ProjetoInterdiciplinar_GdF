@@ -1,5 +1,5 @@
-import { RecepQueue } from "../../models/queue";
-import { NodeRecep } from "../../utils/createNode";
+import { RecepQueue } from "../../../models/queue";
+import { NodeRecep } from "../../../utils/createNode";
 
 export class CreateTicket {
     static createTicket(priority: number): string {

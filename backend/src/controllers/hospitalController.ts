@@ -4,7 +4,7 @@ import { criteria, CriteriaData } from "../models/criteria";
 import { HospitalServices } from "../services/hospitalService";
 import { EndConsult, StartConsult, Triage } from "../models/careFlow";
 import { Patient } from "../models/patient";
-import { CreateTicket } from "../queue/services/ticketService";
+import { CreateTicket } from "../services/queue/services/ticketService";
 
 type TicketRequest = { priority: number };
 

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { PatientCaller } from "../queue/services/patientCaller";
-import { PriorityHandler } from "../queue/managers/priorityHandler";
+import { PatientCaller } from "../services/queue/services/patientCaller";
+import { PriorityHandler } from "../services/queue/managers/priorityHandler";
 import { typeQueue } from "../models/queue";
-import { ShowQueue } from "../queue/services/showQueue";
+import { ShowQueue } from "../services/queue/services/showQueue";
 
 export const QueueController = {
     async callRecep(req: Request, res: Response) {

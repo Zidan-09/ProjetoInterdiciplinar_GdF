@@ -1,10 +1,10 @@
 import { Recepcionist, Nurse, Doctor, Admin } from "../models/hospitalStaff";
 import { criteria, CriteriaData } from "../models/criteria";
 import { ValidateRegister } from "../utils/validators";
-import { initDb } from "../db";
+import { initDb, openDb } from "../db";
 // import { db } from "../db";
 
-const db = initDb();
+const db = openDb();
 
 export type EmployeeType = 'Recepcionist' | 'Nurse' | 'Doctor' | 'Admin';
 
@@ -23,6 +23,7 @@ export class HospitalManager {
         const isValid = await ValidateRegister.verifyEmployee(userData);
         if (isValid) {
             // await db.execute('INSERT INTO ...', []); MySQL
+            await (await db).run('');
             return [true, `${userData.name} cadastrado(a) com sucesso!`];
         } else {
             return [false, `${userData.name} já cadastrado(a)`];

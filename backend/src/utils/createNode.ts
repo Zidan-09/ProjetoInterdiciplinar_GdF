@@ -1,6 +1,19 @@
+import { initDb, openDb } from "../db";
 import { Triage } from "../models/careFlow";
 import { criteria } from "../models/criteria";
-import { db } from "../db";
+// import { db } from "../db";
+
+const db = openDb();
+
+async function searchTriageDB(patient_id: number) {
+    const [rows]: any = (await db).get('SELECT name FROM Patients WHERE id = ?', [patient_id]);
+    return [rows];
+}
+
+async function searchConsultDB(patient_id: number) {
+    const [rows]: any = (await db).get('SELECT name FROM Patients WHERE id = ?', [patient_id]);;
+    return [rows];
+}
 
 class NodeRecep {
     ticket: string | null;
@@ -21,7 +34,8 @@ class NodeTriage {
 
     constructor(patient_id: number) {
         this.patient_id = patient_id;
-        const [rows]: any = db.query('SELECT name FROM Patients WHERE id = ?', [patient_id])
+        // const [rows]: any = db.query('SELECT name FROM Patients WHERE id = ?', [patient_id]) MySQL
+        const [rows]: any = searchTriageDB(patient_id);
         this.patient_name = rows[0].name;
         this.pointer = null;
     }
@@ -41,7 +55,8 @@ class NodeConsult {
 
     constructor(patientTriage: Triage) {
         this.triage = patientTriage;
-        const [rows]: any = db.query('SELECT name FROM Patients WHERE id = ?', [patientTriage.patient_id])
+        // const [rows]: any = db.query('SELECT name FROM Patients WHERE id = ?', [patientTriage.patient_id])
+        const [rows]: any = searchConsultDB(patientTriage.patient_id);
         this.patient_name = rows[0].name;
         this.pointer = null;
         this.time = new Date();

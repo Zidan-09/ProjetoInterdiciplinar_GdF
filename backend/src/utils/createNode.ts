@@ -1,18 +1,20 @@
-import { initDb, openDb } from "../db";
+import { openDb } from "../db";
 import { Triage } from "../models/careFlow";
 import { criteria } from "../models/criteria";
 // import { db } from "../db";
 
 const db = openDb();
 
-async function searchTriageDB(patient_id: number) {
-    const [rows]: any = (await db).get('SELECT name FROM Patients WHERE id = ?', [patient_id]);
-    return [rows];
+async function searchPatientDB(patient_id: number) {
+    const rows: any = (await db).get('SELECT name FROM Patient WHERE id = ?', [patient_id]);
+    // const [rows]: any = db.query('SELECT name FROM Patient WHERE id = ?', [patient_id]) MySQL
+    return rows;
 }
 
-async function searchConsultDB(patient_id: number) {
-    const [rows]: any = (await db).get('SELECT name FROM Patients WHERE id = ?', [patient_id]);;
-    return [rows];
+async function searchPriorityDB(patient_id: number) {
+    const rows: any = (await db).get('SELECT name FROM Patient WHERE id = ?', [patient_id]);
+    // const [rows]: any = db.query('SELECT name FROM Patient WHERE id = ?', [patientTriage.patient_id])
+    return rows;
 }
 
 class NodeRecep {
@@ -32,12 +34,15 @@ class NodeTriage {
     patient_name: string;
     pointer: null | NodeTriage;
 
-    constructor(patient_id: number) {
+    constructor(patient_id: number, patient_name: string) {
         this.patient_id = patient_id;
-        // const [rows]: any = db.query('SELECT name FROM Patients WHERE id = ?', [patient_id]) MySQL
-        const [rows]: any = searchTriageDB(patient_id);
-        this.patient_name = rows[0].name;
+        this.patient_name = patient_name;
         this.pointer = null;
+    }
+
+    static async create(patient_id: number): Promise<NodeTriage> {
+        const row: any = await searchPatientDB(patient_id);
+        return new NodeTriage(patient_id, row.name);
     }
 };
 
@@ -53,11 +58,9 @@ class NodeConsult {
     maxPriority: boolean;
     pointer: null | NodeConsult;
 
-    constructor(patientTriage: Triage) {
+    constructor(patientTriage: Triage, patient_name: string) {
         this.triage = patientTriage;
-        // const [rows]: any = db.query('SELECT name FROM Patients WHERE id = ?', [patientTriage.patient_id])
-        const [rows]: any = searchConsultDB(patientTriage.patient_id);
-        this.patient_name = rows[0].name;
+        this.patient_name = patient_name;
         this.pointer = null;
         this.time = new Date();
         this.maxPriority = false;
@@ -104,6 +107,11 @@ class NodeConsult {
                 this.maxPriority = true;
                 break;
         }
+    }
+
+    static async create(patientTriage: Triage) {
+        const row: any = await searchPriorityDB(patientTriage.patient_id);
+        return new NodeConsult(patientTriage, row.name)
     }
 };
 

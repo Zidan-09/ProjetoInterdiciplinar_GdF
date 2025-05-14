@@ -12,6 +12,6 @@
         "oxygenSaturation": 99
     },
     "severity": "NonUrgent",
-    "simptoms": ["tosse", "espirros"],
+    "symptoms": ["tosse", "espirros"],
     "painLevel": 2
 }

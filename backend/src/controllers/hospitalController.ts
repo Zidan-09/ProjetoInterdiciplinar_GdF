@@ -4,8 +4,7 @@ import { CriteriaManager } from "../services/staff/criteriaUpdate";
 import { PatientManager } from "../services/hospital/patientManager";
 import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";
-import { EndConsult, StartConsult, Triage, TriageCategory } from "../models/careFlow";
-import { Patient } from "../models/patient";
+import { EndConsult, Reception, StartConsult, Triage, TriageCategory } from "../models/careFlow";
 import { CreateTicket } from "../services/queue/services/ticketService";
 
 type TicketRequest = { priority: number };
@@ -22,20 +21,30 @@ export const HospitalController = {
         })
     },
 
-    async register(req: Request<{}, {}, Patient>, res: Response) {
-        const data: Patient = req.body;
+    async register(req: Request<{}, {}, Reception>, res: Response) {
+        const data: Reception = req.body;
 
-        const result = await PatientManager.register(data);
+        const result = await PatientManager.register(data.patient);
 
-        res.status(201).json({
-            status: "success",
-            message: result
-        })
+        if (result === 'Erro ao cadastrar o paciente') {
+            res.status(400).json({
+                status: "error",
+                message: result
+            })
+        } else {
+            res.status(201).json({
+                status: "success",
+                message: result
+            })
+        }
     },
 
     async list(req: Request, res: Response) {
+        const patients = await PatientManager.list();
+
         res.status(200).json({
             status: "sucess",
+            patients: patients,
             message: "Pacientes cadastrados exibidos"
         })
     },

@@ -14,7 +14,6 @@ export interface VitalSigns {
 export interface Reception {
     recepcionist_id: number;
     patient: Patient
-    checkIn: Date;
 };
 
 export interface Triage {
@@ -22,7 +21,7 @@ export interface Triage {
     nurse_id: number;
     vitalSigns: VitalSigns;
     triageCategory: TriageCategory;
-    simptoms:string[]
+    symptoms:string[]
     painLevel: number;
 };
 

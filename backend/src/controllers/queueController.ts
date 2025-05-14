@@ -3,6 +3,7 @@ import { PatientCaller } from "../services/queue/services/patientCaller";
 import { PriorityHandler } from "../services/queue/managers/priorityHandler";
 import { typeQueue } from "../models/queue";
 import { ShowQueue } from "../services/queue/services/showQueue";
+import { NodeConsult } from "../utils/createNode";
 
 export const QueueController = {
     async callRecep(req: Request, res: Response) {
@@ -14,24 +15,34 @@ export const QueueController = {
 
     async callTriage(req: Request, res: Response) {
         const call = PatientCaller.callNextTriage()
-        res.json({
-            call: call
-        })
-    },
-
-    async callConsult(req: Request, res: Response) {
-        const called = PatientCaller.callNextConsult();
-
-        if (typeof called == 'string') {
+        
+        if (call === 'Fila vazia') {
             res.status(200).json({
-                message: called
+                message: call
             });
 
         } else {            
-            res.status(201).json({
+            res.status(200).json({
                 status: "sucess",
                 message: "Paciente chamado",
-                call: 'result'
+                call: `${call.patient_name}, vá para a triagem`
+            })
+        }
+    },
+
+    async callConsult(req: Request, res: Response) {
+        const call: 'Fila vazia' | NodeConsult = PatientCaller.callNextConsult();
+
+        if (call === 'Fila vazia') {
+            res.status(200).json({
+                message: call
+            });
+
+        } else {            
+            res.status(200).json({
+                status: "sucess",
+                message: "Paciente chamado",
+                call: `${call.patient_name}, vá para o consultório`
             })
         }
     },

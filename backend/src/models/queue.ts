@@ -20,6 +20,7 @@ abstract class Queue<T extends { pointer: T | null }> {
         if (call) {
             const next = call.pointer
             this.firstPointer = next;
+            this.qtyPatients--;
             return call
         } else {
             return 'Fila vazia'

@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
-import { HospitalManager } from "../services/hospitalManager";
 import { criteria, CriteriaData } from "../models/criteria";
-import { HospitalServices } from "../services/hospitalService";
+import { CriteriaManager } from "../services/staff/criteriaUpdate";
+import { PatientManager } from "../services/hospital/patientManager";
+import { TriageService } from "../services/hospital/triage";
+import { ConsultService } from "../services/hospital/consult";
 import { EndConsult, StartConsult, Triage, TriageCategory } from "../models/careFlow";
 import { Patient } from "../models/patient";
 import { CreateTicket } from "../services/queue/services/ticketService";
@@ -23,7 +25,7 @@ export const HospitalController = {
     async register(req: Request<{}, {}, Patient>, res: Response) {
         const data: Patient = req.body;
 
-        const result = await HospitalServices.register(data);
+        const result = await PatientManager.register(data);
 
         res.status(201).json({
             status: "success",
@@ -41,7 +43,7 @@ export const HospitalController = {
     async changeCriteria(req: Request<{}, {}, CriteriaData>, res: Response) {
         const newCriteria: CriteriaData = req.body;
 
-        await HospitalManager.changeCriteria(newCriteria);
+        await CriteriaManager.changeCriteria(newCriteria);
 
         res.status(201).json({
             status: "success",
@@ -53,7 +55,7 @@ export const HospitalController = {
     async triage(req: Request<{}, {}, Triage>, res: Response) {
         const data: Triage = req.body;
 
-        const result = await HospitalServices.triage(data);
+        const result = await TriageService.triage(data);
 
         res.status(201).json({
             status: "success",
@@ -65,7 +67,7 @@ export const HospitalController = {
     async changeTriageCategory(req: Request<{}, {}, TriageCategory>, res: Response) {
         const newTriageCategory: TriageCategory = req.body;
 
-        const result = await HospitalServices.changeSeverity(1, newTriageCategory)
+        const result = await TriageService.changeSeverity(1, newTriageCategory)
 
         if (result[0]) {
             res.status(200).json({
@@ -83,7 +85,7 @@ export const HospitalController = {
     async consultConfirm(req: Request<{}, {}, StartConsult>, res: Response) {
         const confirmStartData: StartConsult = req.body;
         if (confirmStartData.confirm) {
-            const consult_id: number = await HospitalServices.startConsult(confirmStartData);
+            const consult_id: number = await ConsultService.startConsult(confirmStartData);
             
             res.status(201).json({
                 status: "sucess",
@@ -101,7 +103,7 @@ export const HospitalController = {
 
     async consultEnd(req: Request<{}, {}, EndConsult>, res: Response) {
         const endData: EndConsult = req.body;
-        const result = await HospitalServices.endConsult(endData);
+        const result = await ConsultService.endConsult(endData);
 
         res.status(200).json({
             status: "success",

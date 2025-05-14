@@ -1,24 +1,13 @@
-import { Recepcionist, Nurse, Doctor, Admin } from "../models/hospitalStaff";
-import { criteria, CriteriaData } from "../models/criteria";
-import { ValidateRegister } from "../utils/validators";
-import { initDb, openDb } from "../db";
+import { Recepcionist, Nurse, Doctor, Admin } from "../../models/hospitalStaff";
+import { ValidateRegister } from "../../utils/validators";
+import { openDb } from "../../db";
 // import { db } from "../db";
 
 const db = openDb();
 
 export type EmployeeType = 'Recepcionist' | 'Nurse' | 'Doctor' | 'Admin';
 
-export class HospitalManager {
-    static async changeCriteria(newCriteria: CriteriaData): Promise<string> {
-        criteria.immediate = newCriteria.immediate;
-        criteria.veryUrgent = newCriteria.veryUrgent;
-        criteria.urgent = newCriteria.urgent;
-        criteria.standard = newCriteria.standard;
-        criteria.nonUrgent = newCriteria.nonUrgent;
-
-        return 'Alteração Feita com Sucesso!'
-    }
-
+export class EmployeeManager {
     static async registerEmployee<T extends Recepcionist | Nurse | Doctor | Admin>(userData: T): Promise<[boolean, string]> {
         const isValid = await ValidateRegister.verifyEmployee(userData);
         if (isValid) {

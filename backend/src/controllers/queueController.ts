@@ -42,13 +42,5 @@ export const QueueController = {
         res.status(200).json({
             queue: queue
         })
-    },
-
-    async update(req: Request, res: Response) {
-        const result: string = PriorityHandler.verify();
-
-        res.status(200).json({
-            message: result
-        });
     }
 };

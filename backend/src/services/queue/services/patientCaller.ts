@@ -1,4 +1,5 @@
 import { RecepQueue, TriageQueue, ConsultQueue } from "../../../models/queue";
+import { calledsList } from "./called";
 
 export class PatientCaller {
     static callNextRecep(): string {
@@ -18,6 +19,12 @@ export class PatientCaller {
 
     static callNextConsult() {
         const call = ConsultQueue.callNext();
-        return call
+
+        if (call == 'Fila vazia') {
+            return call
+        } else {
+            calledsList.insert(call)
+            return call
+        }
     }
 }

@@ -1,6 +1,5 @@
 import { StartConsult, EndConsult } from "../../models/careFlow";
 import { Consult } from "../../models/hospital";
-// import { db } from "../db";
 import { openDb } from "../../db";
 
 const db = openDb();
@@ -9,7 +8,7 @@ export class ConsultService {
     static async startConsult(data: StartConsult): Promise<number> {
         const consult: Consult = new Consult(data.doctor_id, 1); // Tirar o 1 e botar patient_id
         // const [result]: any = await db.execute('INSERT INTO Consults (patient_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())', [consult.patient_id, consult.doctor_id]); MySQL
-        const [result]: any = (await db).run(`INSERT INTO Consult (patient_id, doctor_id, checkInConsult) VALUES (?, ?, datetime('now'))`, [consult.patient_id, consult.doctor_id]);
+        const result: any = (await db).run(`INSERT INTO Consult (patient_id, doctor_id, checkInConsult) VALUES (?, ?, datetime('now'))`, [consult.patient_id, consult.doctor_id]);
         const consult_id: number = result.lastID;
         return consult_id
     };

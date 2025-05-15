@@ -33,6 +33,7 @@ export interface CallsConsult {
 
 export interface StartConsult {
     doctor_id: number;
+    patient_id: number;
     confirm: boolean;
 };
 
@@ -41,4 +42,4 @@ export interface EndConsult {
     diagnosis: string | null;
     prescriptions: string[] | null;
     notes: string | null;
-};
+}; 

@@ -6,6 +6,8 @@ import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";
 import { EndConsult, Reception, StartConsult, Triage, TriageCategory } from "../models/careFlow";
 import { CreateTicket } from "../services/queue/services/ticketService";
+import { calledsList } from "../services/queue/services/called";
+import { PatientCaller } from "../services/queue/services/patientCaller";
 
 type TicketRequest = { priority: number };
 
@@ -103,10 +105,7 @@ export const HospitalController = {
             })
 
         } else {
-            // const result: string = QueueServices.testCalled();
-            // res.status(200).json({
-            //     message: result
-            // })
+            const result = calledsList.searchCalled(confirmStartData.patient_id);
         }
     },
 

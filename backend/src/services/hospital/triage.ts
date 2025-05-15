@@ -20,7 +20,7 @@ export class TriageService {
         
         const no: NodeConsult = await NodeConsult.create(data);
         InsertQueue.insertConsultQueue(no);
-        return triage;
+        return data;
     };
 
     static async changeSeverity(patient_id: number, newSeverity: TriageCategory): Promise<[boolean, string]> {

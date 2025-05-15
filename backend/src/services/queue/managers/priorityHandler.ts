@@ -1,6 +1,8 @@
 import { ConsultQueue } from "../../../models/queue";
 import { NodeConsult } from "../../../utils/createNode";
 
+const nodesToSort: NodeConsult[] = [];
+
 export class PriorityHandler {
     static verify(): string {
         let temp: NodeConsult | null = ConsultQueue.getFirst();
@@ -12,19 +14,22 @@ export class PriorityHandler {
             let dateNow: Date = new Date();
 
             for (let i = 0; i < ConsultQueue.getQty(); i++) {
-                let next: NodeConsult | null = temp!.pointer
+                if (temp) {
+                    let next: NodeConsult | null = temp.pointer;
 
-                const limit: Date = new Date()
-                limit.setUTCHours(temp!.limitDate.limitHours, temp!.limitDate.limitMinuts, 0, 0);
+                    const limit: Date = new Date();
+                    limit.setUTCHours(temp.limitDate.limitHours, temp.limitDate.limitMinuts, 0, 0);
 
-                if (dateNow >= limit) {
-                    temp!.maxPriority = true;
-                    this.toSort(temp!);
+                    if (dateNow >= limit) {
+                        temp.maxPriority = true;
+                        nodesToSort.push(temp);
+                    }
+                    temp = next;    
                 }
-
-                temp = next;
             }
-            return 'Fila atualizada'
+            nodesToSort.forEach(node => this.toSort(node));
+            
+            return 'Fila atualizada';
         }
     };
 

@@ -69,17 +69,40 @@ class AdminController {
   }
 
   static async listTriages(req: Request, res: Response) {
-    const triages: any = (await db).all('SELECT * FROM Triage')
-    res.status(200).json({
-      triages: triages
-    })
+    try {
+      const triages = await (await db).all('SELECT * FROM Triage');
+  
+      for (const triage of triages) {
+        const symptoms = await (await db).all(
+          'SELECT symptom FROM Symptom WHERE triage_id = ?',
+          [triage.id]
+        );
+        triage.symptoms = symptoms.map(s => s.symptom);
+      }
+  
+      res.status(200).json({ triages });
+    } catch (err) {
+      console.error("Erro ao listar triagens:", err);
+      res.status(500).json({ error: "Erro ao listar triagens" });
+    }
   }
 
   static async listConsults(req: Request, res: Response) {
-    const consults: any = (await db).all('SELECT * FROM Consult')
-    res.status(200).json({
-      consults: consults
-    })
+    try {
+      const consults = await (await db).all('SELECT * FROM Consult');
+
+      for (const consult of consults) {
+        try {
+          consult.prescriptions = JSON.parse(consult.prescriptions);
+        } catch {
+          consult.prescriptions = [];
+        }
+      }
+      res.status(200).json({ consults });
+    } catch (err) {
+      console.error("Erro ao listar consultas:", err);
+      res.status(500).json({ error: "Erro ao listar consultas" });
+    }
   }
 }
 

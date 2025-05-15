@@ -10,9 +10,8 @@ const db = openDb();
 
 export class TriageService {
     static async triage(data: Triage) {
-        // const [result]: any = await db.execute('INSERT INTO Triages (nurse_id, patient_id, vitalSigns, simptoms, painLevel, triageCategory) VALUES (?, ?, ?, ?, ?, ?)', [data.nurse_id, data.patient_id, data.vitalSigns, data.simptoms, data.painLevel, data.triageCategory]); MySQL
         const triage: any = (await db).run('INSERT INTO Triage (nurse_id, patient_id, systolicPreassure, diastolicPreassure, heartRate, respiratoryRate, bodyTemperature, oxygenSaturation, painLevel, triageCategory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.nurse_id, data.patient_id, data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, data.triageCategory]);
-        const triageId = (await triage).lastId;
+        const triageId = triage.lastId;
 
         for (let symptom of data.symptoms) {
             (await db).run('INSERT INTO Symptom (triage_id, symptom) VALUES (?, ?)', [triageId, symptom])

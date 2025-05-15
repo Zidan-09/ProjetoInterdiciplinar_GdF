@@ -14,11 +14,10 @@ export class ConsultService {
 
     static async endConsult(data: EndConsult) {
         const consult: any = (await db).get('SELECT * FROM Consult WHERE id = ?', [data.id]);
-        consult.checkOutConsult = new Date();
         consult.diagnosis = data.diagnosis;
         consult.prescriptions = data.prescriptions;
         consult.notes = data.notes;
-        (await db).run('UPDATE Consult SET checkOutConsult = ?, diagnosis = ?, prescriptions = ?, notes = ? WHERE id = ?', [consult.checkOutConsult, consult.diagnosis, consult.prescriptions, consult.notes, data.id])
+        (await db).run(`UPDATE Consult SET checkOutConsult = datetime('now'), diagnosis = ?, prescriptions = ?, notes = ? WHERE id = ?`, [consult.diagnosis, JSON.stringify(consult.prescriptions), consult.notes, data.id])
         return consult;
     };
 };

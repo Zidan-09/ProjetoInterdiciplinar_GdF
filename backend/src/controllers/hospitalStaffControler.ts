@@ -1,6 +1,9 @@
 import { Response, Request } from "express";
 import { Recepcionist, Nurse, Doctor, Admin } from "../models/hospitalStaff";
 import { EmployeeManager, EmployeeType } from "../services/staff/employeeManager";
+import { openDb } from "../db";
+
+const db = openDb();
 
 const handleResponse = (done: [boolean, string], res: Response) => {
   if (done[0]) {
@@ -61,8 +64,22 @@ class AdminController {
 
   static async edit(req: Request, res: Response) {
     const newData: Admin = req.body;
-    const done = await EmployeeManager.editEmployee(4, newData);
+    const done = await EmployeeManager.editEmployee(1, newData);
     res.status(200).json({ message: "Editado (mock)" });
+  }
+
+  static async listTriages(req: Request, res: Response) {
+    const triages: any = (await db).all('SELECT * FROM Triage')
+    res.status(200).json({
+      triages: triages
+    })
+  }
+
+  static async listConsults(req: Request, res: Response) {
+    const consults: any = (await db).all('SELECT * FROM Consult')
+    res.status(200).json({
+      consults: consults
+    })
   }
 }
 

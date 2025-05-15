@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { QueueController } from "../controllers/queueController";
+import { HospitalController } from "../controllers/hospitalController";
 
 const queueRouter: Router = Router();
 
-queueRouter.get('/call/recep', QueueController.callRecep);
-queueRouter.get('/call/triage', QueueController.callTriage);
-queueRouter.get('/call/consult', QueueController.callConsult);
+queueRouter.get('/call/recep', HospitalController.callNextRecep);
+queueRouter.get('/call/triage', HospitalController.callNextTriage);
+queueRouter.get('/call/consult', HospitalController.callNextConsult);
 queueRouter.get('/:name', QueueController.queue);
 
 export default queueRouter;

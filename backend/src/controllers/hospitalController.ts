@@ -4,10 +4,11 @@ import { CriteriaManager } from "../services/staff/criteriaUpdate";
 import { PatientManager } from "../services/hospital/patientManager";
 import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";
-import { EndConsult, Reception, StartConsult, Triage, TriageCategory } from "../models/careFlow";
+import { CallsConsult, EndConsult, Reception, StartConsult, Triage, TriageCategory } from "../models/careFlow";
 import { CreateTicket } from "../services/queue/services/ticketService";
 import { calledsList } from "../services/queue/services/called";
 import { PatientCaller } from "../services/queue/services/patientCaller";
+import { NodeTriage } from "../utils/createNode";
 
 type TicketRequest = { priority: number };
 
@@ -20,6 +21,14 @@ export const HospitalController = {
             status: "success",
             message: "Senha criada",
             data: ticket
+        })
+    },
+
+    async callNextRecep(req: Request, res: Response) {
+        const called: string = PatientCaller.callNextRecep();
+
+        res.status(200).json({
+            message: called
         })
     },
 
@@ -63,6 +72,22 @@ export const HospitalController = {
         })
     },
 
+    async callNextTriage(req: Request, res: Response) {
+        const called: NodeTriage | 'Fila vazia' = PatientCaller.callNextTriage()
+
+        if (called == 'Fila vazia') {
+            res.status(200).json({
+                message: called
+            })
+
+        } else {
+            res.status(200).json({
+                status: "sucess",
+                message: `${called.patient_name}, vá para a triagem`
+            })
+        }
+    },
+
     async triage(req: Request<{}, {}, Triage>, res: Response) {
         const data: Triage = req.body;
 
@@ -93,6 +118,21 @@ export const HospitalController = {
         }
     },
 
+    async callNextConsult(req: Request, res: Response) {
+        const called: CallsConsult | 'Fila vazia' = PatientCaller.callNextConsult();
+
+        if (called == 'Fila vazia') {
+            res.status(200).json({
+                message: called
+            });
+        } else {
+            res.status(200).json({
+                status: "success",
+                message: `${called.patient_name}, vá para o consultório`
+            })
+        }
+    },
+
     async consultConfirm(req: Request<{}, {}, StartConsult>, res: Response) {
         const confirmStartData: StartConsult = req.body;
         if (confirmStartData.confirm) {
@@ -106,6 +146,15 @@ export const HospitalController = {
 
         } else {
             const result = calledsList.searchCalled(confirmStartData.patient_id);
+
+            if (result == 'Paciente não encontrado') {
+                res.status(400).json({
+                    status: "error",
+                    message: result
+                });
+            } else {
+
+            }
         }
     },
 

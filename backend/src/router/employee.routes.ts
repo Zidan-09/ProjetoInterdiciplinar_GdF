@@ -15,6 +15,8 @@ employeeRouter.patch('/nurse/edit', NurseController.edit);
 employeeRouter.post('/doctor/register', DoctorController.register);
 employeeRouter.patch('/doctor/edit', DoctorController.edit);
 
-employeeRouter.get('list/:employee', Employeers.showEmployeers);
+employeeRouter.get('/triage/list', AdminController.listTriages);
+employeeRouter.get('/consult/list', AdminController.listConsults);
+employeeRouter.get('/list/:employee', Employeers.showEmployeers);
 
 export default employeeRouter;

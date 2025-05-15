@@ -8,13 +8,14 @@ class Calleds {
         this.calleds = [];
     }
 
-    public insert(node: NodeConsult) {
+    public insert(node: NodeConsult): CallsConsult {
         const calledType: CallsConsult = {
             patient_id: node.triage.patient_id,
             patient_name: node.patient_name,
             calls: 1
         };
         this.calleds.push(calledType);
+        return calledType;
     };
 
     public searchCalled(id: number): [CallsConsult, string] | string {
@@ -41,6 +42,17 @@ class Calleds {
         }
         return result;
     };
+
+    public callAgain(id: number) {
+        let result: CallsConsult;
+        for (let i of this.calleds) {
+            if (i.patient_id == id) {
+                result = i;
+                break
+            }
+        }
+        
+    }
 }
 
 export const calledsList: Calleds = new Calleds();

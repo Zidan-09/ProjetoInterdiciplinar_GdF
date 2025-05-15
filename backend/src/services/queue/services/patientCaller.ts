@@ -1,3 +1,4 @@
+import { CallsConsult } from "../../../models/careFlow";
 import { RecepQueue, TriageQueue, ConsultQueue } from "../../../models/queue";
 import { calledsList } from "./called";
 
@@ -23,8 +24,8 @@ export class PatientCaller {
         if (call == 'Fila vazia') {
             return call
         } else {
-            calledsList.insert(call)
-            return call
+            const called: CallsConsult = calledsList.insert(call)
+            return called;
         }
     }
 }

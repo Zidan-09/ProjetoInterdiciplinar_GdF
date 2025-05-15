@@ -34,7 +34,7 @@ export async function initDb() {
 
     await db.exec('CREATE TABLE IF NOT EXISTS Attend (id INTEGER PRIMARY KEY AUTOINCREMENT, status TEXT NOT NULL)');
     await db.exec('CREATE TABLE IF NOT EXISTS Triage (id INTEGER PRIMARY KEY, patient_id INTEGER NOT NULL, nurse_id INTEGER NOT NULL, systolicPreassure INTEGER NOT NULL, diastolicPreassure INTEGER NOT NULL, heartRate INTEGER NOT NULL, respiratoryRate INTEGER NOT NULL, bodyTemperature INTEGER NOT NULL, oxygenSaturation INTEGER NOT NULL, triageCategory TEXT NOT NULL, painLevel INTEGER, FOREIGN KEY (id) REFERENCES Attend(id), FOREIGN KEY (patient_id) REFERENCES Patient(id), FOREIGN KEY (nurse_id) REFERENCES Nurse(id))');
-    await db.exec('CREATE TABLE IF NOT EXISTS Consult (id INTEGER PRIMARY KEY, patient_id INTEGER NOT NULL, doctor_id INTEGER NOT NULL, checkInConsult TEXT NOT NULL, checkOutConsult TEXT NOT NULL, diagnosis TEXT, prescriptions TEXT, notes TEXT, FOREIGN KEY (id) REFERENCES Attend(id), FOREIGN KEY (patient_id) REFERENCES Patient(id), FOREIGN KEY (doctor_id) REFERENCES Doctor(id))');
+    await db.exec('CREATE TABLE IF NOT EXISTS Consult (id INTEGER PRIMARY KEY, patient_id INTEGER NOT NULL, doctor_id INTEGER NOT NULL, checkInConsult TEXT NOT NULL, checkOutConsult TEXT, diagnosis TEXT, prescriptions TEXT, notes TEXT, FOREIGN KEY (id) REFERENCES Attend(id), FOREIGN KEY (patient_id) REFERENCES Patient(id), FOREIGN KEY (doctor_id) REFERENCES Doctor(id))');
 
     await db.exec('CREATE TABLE IF NOT EXISTS Symptom (triage_id INTEGER PRIMARY KEY, symptom TEXT, FOREIGN KEY (triage_id) REFERENCES Triage(id))')
 }

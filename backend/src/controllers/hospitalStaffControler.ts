@@ -6,104 +6,101 @@ import { openDb } from "../db";
 const db = openDb();
 
 const handleResponse = (done: [boolean, string], res: Response) => {
-  if (done[0]) {
-    res.status(201).json({ status: "success", message: done[1] });
-  } else {
-    res.status(400).json({ status: "error", message: done[1] });
-  }
+    if (done[0]) {
+      res.status(201).json({ status: "success", message: done[1] });
+    } else {
+      res.status(400).json({ status: "error", message: done[1] });
+    }
 };
 
 class RecepcionistController {
-  static async register(req: Request, res: Response) {
-    const data: Recepcionist = req.body;
-    const done = await EmployeeManager.registerEmployee(data);
-    handleResponse(done, res);
-  }
+    static async register(req: Request, res: Response) {
+        const data: Recepcionist = req.body;
+        const done = await EmployeeManager.registerEmployee(data);
+        handleResponse(done, res);
+    }
 
-  static async edit(req: Request, res: Response) {
-    const newData: Recepcionist = req.body;
-    const done = await EmployeeManager.editEmployee(1, newData); // Falta lógica do ID
-    res.status(200).json({ message: "Editado (mock)" });
-  }
+    static async edit(req: Request, res: Response) {
+        const newData: Recepcionist = req.body;
+        const done = await EmployeeManager.editEmployee(1, newData); // Falta lógica do ID
+        res.status(200).json({ message: "Editado (mock)" });
+    }
 }
 
 class NurseController {
-  static async register(req: Request, res: Response) {
-    const data: Nurse = req.body;
-    const done = await EmployeeManager.registerEmployee(data);
-    handleResponse(done, res);
-  }
+    static async register(req: Request, res: Response) {
+        const data: Nurse = req.body;
+        const done = await EmployeeManager.registerEmployee(data);
+        handleResponse(done, res);
+    }
 
-  static async edit(req: Request, res: Response) {
-    const newData: Nurse = req.body;
-    const done = await EmployeeManager.editEmployee(2, newData);
-    res.status(200).json({ message: "Editado (mock)" });
-  }
+    static async edit(req: Request, res: Response) {
+        const newData: Nurse = req.body;
+        const done = await EmployeeManager.editEmployee(2, newData);
+        res.status(200).json({ message: "Editado (mock)" });
+    }
 }
 
 class DoctorController {
-  static async register(req: Request, res: Response) {
-    const data: Doctor = req.body;
-    const done = await EmployeeManager.registerEmployee(data);
-    handleResponse(done, res);
-  }
+    static async register(req: Request, res: Response) {
+        const data: Doctor = req.body;
+        const done = await EmployeeManager.registerEmployee(data);
+        handleResponse(done, res);
+    }
 
-  static async edit(req: Request, res: Response) {
-    const newData: Doctor = req.body;
-    const done = await EmployeeManager.editEmployee(3, newData);
-    res.status(200).json({ message: "Editado (mock)" });
-  }
+    static async edit(req: Request, res: Response) {
+        const newData: Doctor = req.body;
+        const done = await EmployeeManager.editEmployee(3, newData);
+        res.status(200).json({ message: "Editado (mock)" });
+    }
 }
 
 class AdminController {
-  static async register(req: Request, res: Response) {
-    const data: Admin = req.body;
-    const done = await EmployeeManager.registerEmployee(data);
-    handleResponse(done, res);
-  }
-
-  static async edit(req: Request, res: Response) {
-    const newData: Admin = req.body;
-    const done = await EmployeeManager.editEmployee(1, newData);
-    res.status(200).json({ message: "Editado (mock)" });
-  }
-
-  static async listTriages(req: Request, res: Response) {
-    try {
-      const triages = await (await db).all('SELECT * FROM Triage');
-  
-      for (const triage of triages) {
-        const symptoms = await (await db).all(
-          'SELECT symptom FROM Symptom WHERE triage_id = ?',
-          [triage.id]
-        );
-        triage.symptoms = symptoms.map(s => s.symptom);
-      }
-  
-      res.status(200).json({ triages });
-    } catch (err) {
-      console.error("Erro ao listar triagens:", err);
-      res.status(500).json({ error: "Erro ao listar triagens" });
+    static async register(req: Request, res: Response) {
+        const data: Admin = req.body;
+        const done = await EmployeeManager.registerEmployee(data);
+        handleResponse(done, res);
     }
-  }
 
-  static async listConsults(req: Request, res: Response) {
-    try {
-      const consults = await (await db).all('SELECT * FROM Consult');
+    static async edit(req: Request, res: Response) {
+        const newData: Admin = req.body;
+        const done = await EmployeeManager.editEmployee(1, newData);
+        res.status(200).json({ message: "Editado (mock)" });
+    }
 
-      for (const consult of consults) {
+    static async listTriages(req: Request, res: Response) {
         try {
-          consult.prescriptions = JSON.parse(consult.prescriptions);
-        } catch {
-          consult.prescriptions = [];
+            const triages = await (await db).all('SELECT * FROM Triage');
+  
+            for (const triage of triages) {
+                const symptoms = await (await db).all('SELECT symptom FROM Symptom WHERE triage_id = ?', [triage.id]);
+            triage.symptoms = symptoms.map((s: { symptom: any; }) => s.symptom);
         }
-      }
-      res.status(200).json({ consults });
-    } catch (err) {
-      console.error("Erro ao listar consultas:", err);
-      res.status(500).json({ error: "Erro ao listar consultas" });
+  
+        res.status(200).json({ triages });
+        } catch (err) {
+            console.error("Erro ao listar triagens:", err);
+            res.status(500).json({ error: "Erro ao listar triagens" });
+        }
     }
-  }
+
+    static async listConsults(req: Request, res: Response) {
+        try {
+            const consults = await (await db).all('SELECT * FROM Consult');
+
+            for (const consult of consults) {
+            try {
+                consult.prescriptions = JSON.parse(consult.prescriptions);
+            } catch {
+                consult.prescriptions = [];
+            }
+        }
+        res.status(200).json({ consults });
+        } catch (err) {
+            console.error("Erro ao listar consultas:", err);
+            res.status(500).json({ error: "Erro ao listar consultas" });
+        }
+    }
 }
 
 class Employeers {

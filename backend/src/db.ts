@@ -3,8 +3,8 @@
 // export const db = mysql.createPool({
 //     host: 'localhost',
 //     user: 'root',
-//     password: 'sua_senha',
-//     database: 'hospital_db',
+//     password: 'hospitalGdF',
+//     database: 'hospitalDBGdF',
 //     waitForConnections: true,
 //     connectionLimit: 10,
 // })

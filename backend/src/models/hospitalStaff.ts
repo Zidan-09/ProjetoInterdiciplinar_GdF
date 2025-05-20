@@ -28,7 +28,7 @@ export interface Nurse extends Employee {
     weeklyHours: number;
 };
 
-export interface Recepcionist extends Employee {
+export interface Receptionist extends Employee {
     weeklyHours: number;
 }
 

@@ -13,7 +13,7 @@ const handleResponse = (done: [boolean, string], res: Response) => {
     }
 };
 
-class RecepcionistController {
+class ReceptionistController {
     static async register(req: Request, res: Response) {
         const data: Receptionist = req.body;
         const done = await EmployeeManager.registerEmployee(data);
@@ -116,4 +116,4 @@ class Employeers {
     }
 }
 
-export { RecepcionistController, NurseController, DoctorController, AdminController, Employeers };
+export { ReceptionistController, NurseController, DoctorController, AdminController, Employeers };

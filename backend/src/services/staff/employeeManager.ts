@@ -5,7 +5,7 @@ import { openDb } from "../../db";
 
 const db = openDb();
 
-export type EmployeeType = 'Recepcionist' | 'Nurse' | 'Doctor' | 'Admin';
+export type EmployeeType = 'Receptionist' | 'Nurse' | 'Doctor' | 'Admin';
 
 export class EmployeeManager {
     static async registerEmployee<T extends Receptionist | Nurse | Doctor | Admin>(userData: T): Promise<[boolean, string]> {
@@ -36,13 +36,13 @@ export class EmployeeManager {
         } else if ('accessLevel' in newUserData) {
             // return await db.query('UPDATE Admin SET ... WHERE id = ?', [id]); MySQL
         } else {
-            // return await db.query('UPDATE Recepcionist SET ... WHERE id = ?', [id]); MySQL
+            // return await db.query('UPDATE Recetcionist SET ... WHERE id = ?', [id]); MySQL
         }
     }
     
     static async showEmployeers(employeeType: EmployeeType) {
         const tableMap = {
-          Recepcionist: "Recepcionist",
+          Receptionist: "Receptionist",
           Nurse: "Nurse",
           Doctor: "Doctor",
           Admin: "Admin"

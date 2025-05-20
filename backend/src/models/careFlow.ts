@@ -12,7 +12,7 @@ export interface VitalSigns {
 };
 
 export interface Reception {
-    recepcionist_id: number;
+    receptionist_id: number;
     patient: Patient
 };
 

@@ -15,33 +15,34 @@ interface Employee{
     cnesCode: string;
 };
 
-export interface Doctor extends Employee {
+interface Doctor extends Employee {
     crm: string;
     specialty: string;
     weeklyHours: number;
 };
 
-export interface Nurse extends Employee {
+interface Nurse extends Employee {
     coren: string;
     department: string;
     specialty: string;
     weeklyHours: number;
 };
 
-export interface Receptionist extends Employee {
+interface Receptionist extends Employee {
     weeklyHours: number;
 }
 
-export interface Admin extends Employee {
+interface Admin extends Employee {
     accessLevel: string;
     weeklyHours: number;
 };
 
-export interface User {
+interface User {
     user_id: number;
     username: string;
+    email: string;
     password: string;
-    lastLogin: Date;
-    isActive: boolean;
-    permitions: string;
+    role: string;
 }
+
+export { Doctor, Nurse, Receptionist, Admin, User }

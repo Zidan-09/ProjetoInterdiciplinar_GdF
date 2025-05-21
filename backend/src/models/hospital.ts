@@ -1,9 +1,9 @@
 class Consult {
-    doctor_id: number;
-    patient_id: number;
-    diagnosis: string | null;
-    prescriptions: string[] | null;
-    notes: string | null;
+    private doctor_id: number;
+    private patient_id: number;
+    private diagnosis: string | null;
+    private prescriptions: string[] | null;
+    private notes: string | null;
   
     constructor(doctor_id: number, patient_id: number) {
         this.doctor_id = doctor_id;
@@ -12,6 +12,10 @@ class Consult {
         this.prescriptions = null;
         this.notes = null;
     }
+
+    getIds(): number[] {
+        return [this.patient_id, this.doctor_id]
+    };
 };
 
 export { Consult }

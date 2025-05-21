@@ -1,6 +1,5 @@
 import { NodeConsult } from "../../utils/createNode";
 import { Triage, TriageCategory } from "../../models/careFlow";
-// import { db } from "../db";
 import { InsertQueue } from "./../queue/services/insertQueue";
 import { SearchQueue } from "./../queue/managers/searchQueue";
 import { criteria } from "../../models/criteria";

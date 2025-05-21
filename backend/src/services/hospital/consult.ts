@@ -7,7 +7,7 @@ const db = openDb();
 export class ConsultService {
     static async startConsult(data: StartConsult): Promise<number> {
         const consult: Consult = new Consult(data.doctor_id, data.patient_id);
-        const result: any = (await db).run(`INSERT INTO Consult (patient_id, doctor_id, checkInConsult) VALUES (?, ?, datetime('now'))`, [consult.patient_id, consult.doctor_id]);
+        const result: any = (await db).run(`INSERT INTO Consult (patient_id, doctor_id, checkInConsult) VALUES (?, ?, datetime('now'))`, [consult.getIds()[0], consult.getIds()[1]]);
         const consult_id: number = result.lastID;
         return consult_id
     };

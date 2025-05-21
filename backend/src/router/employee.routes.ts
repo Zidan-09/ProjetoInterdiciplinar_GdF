@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ReceptionistController, NurseController, DoctorController, AdminController, Employeers } from "../controllers/hospitalStaffControler";
+import { ReceptionistController, NurseController, DoctorController, AdminController, EmployeersConstroller } from "../controllers/hospitalStaffControler";
 
 const employeeRouter: Router = Router();
 
@@ -17,6 +17,8 @@ employeeRouter.patch('/doctor/edit', DoctorController.edit);
 
 employeeRouter.get('/triage/list', AdminController.listTriages);
 employeeRouter.get('/consult/list', AdminController.listConsults);
-employeeRouter.get('/list/:employee', Employeers.showEmployeers);
+employeeRouter.get('/list/:employee', EmployeersConstroller.showEmployeers);
+
+employeeRouter.post('/login', EmployeersConstroller.login);
 
 export default employeeRouter;

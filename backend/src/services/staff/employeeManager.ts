@@ -1,7 +1,6 @@
 import { Receptionist, Nurse, Doctor, Admin } from "../../models/hospitalStaff";
 import { ValidateRegister } from "../../utils/validators";
 import { openDb } from "../../db";
-// import { db } from "../db";
 
 const db = openDb();
 

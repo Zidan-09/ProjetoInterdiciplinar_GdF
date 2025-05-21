@@ -1,7 +1,8 @@
 import { Response, Request } from "express";
-import { Receptionist, Nurse, Doctor, Admin } from "../models/hospitalStaff";
+import { Receptionist, Nurse, Doctor, Admin, User } from "../models/hospitalStaff";
 import { EmployeeManager, EmployeeType } from "../services/staff/employeeManager";
 import { openDb } from "../db";
+import { Login } from "../services/staff/employeeLogin";
 
 const db = openDb();
 
@@ -22,7 +23,7 @@ class ReceptionistController {
 
     static async edit(req: Request, res: Response) {
         const newData: Receptionist = req.body;
-        const done = await EmployeeManager.editEmployee(newData); // Falta lógica do ID
+        const done = await EmployeeManager.editEmployee(newData);
         res.status(200).json({ message: "Editado (mock)" });
     }
 }
@@ -103,7 +104,7 @@ class AdminController {
     }
 }
 
-class Employeers {
+class EmployeersConstroller {
     static async showEmployeers(req: Request, res: Response) {
         const employee: EmployeeType = req.params.employee as EmployeeType;
 
@@ -113,7 +114,20 @@ class Employeers {
             message: `${employee} cadastrados`,
             result: employeers
         })
-    }
+    };
+
+
+    static async login(req: Request<{}, {}, User>, res: Response) {
+        const loginData: User = req.body;
+
+        Login.loginUser(loginData);
+    };
 }
 
-export { ReceptionistController, NurseController, DoctorController, AdminController, Employeers };
+export { ReceptionistController, NurseController, DoctorController, AdminController, EmployeersConstroller };
+
+class EmployeeTestController {
+    static async register<T = Receptionist | Nurse | Doctor | Admin>(data: T) {
+        
+    }
+}

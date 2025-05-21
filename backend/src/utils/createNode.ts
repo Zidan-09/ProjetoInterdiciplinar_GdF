@@ -7,13 +7,6 @@ const db = openDb();
 
 async function searchPatientDB(patient_id: number) {
     const rows: any = (await db).get('SELECT name FROM Patient WHERE id = ?', [patient_id]);
-    // const [rows]: any = db.query('SELECT name FROM Patient WHERE id = ?', [patient_id]) MySQL
-    return rows;
-}
-
-async function searchPriorityDB(patient_id: number) {
-    const rows: any = (await db).get('SELECT name FROM Patient WHERE id = ?', [patient_id]);
-    // const [rows]: any = db.query('SELECT name FROM Patient WHERE id = ?', [patientTriage.patient_id])
     return rows;
 }
 
@@ -110,7 +103,7 @@ class NodeConsult {
     }
 
     static async create(patientTriage: Triage) {
-        const row: any = await searchPriorityDB(patientTriage.patient_id);
+        const row: any = await searchPatientDB(patientTriage.patient_id);
         return new NodeConsult(patientTriage, row.name)
     }
 };

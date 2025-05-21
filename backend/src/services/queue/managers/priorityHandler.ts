@@ -1,10 +1,9 @@
 import { ConsultQueue } from "../../../models/queue";
 import { NodeConsult } from "../../../utils/createNode";
 
-const nodesToSort: NodeConsult[] = [];
-
 export class PriorityHandler {
     static verify(): string {
+        const nodesToSort: NodeConsult[] = [];
         let temp: NodeConsult | null = ConsultQueue.getFirst();
 
         if (!temp) {

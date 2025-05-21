@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { RecepcionistController, NurseController, DoctorController, AdminController, Employeers } from "../controllers/hospitalStaffControler";
+import { ReceptionistController, NurseController, DoctorController, AdminController, Employeers } from "../controllers/hospitalStaffControler";
 
 const employeeRouter: Router = Router();
 
 employeeRouter.post('/admin/register', AdminController.register);
 employeeRouter.patch('/admin/edit', AdminController.edit);
 
-employeeRouter.post('/recepcionist/register', RecepcionistController.register);
-employeeRouter.patch('/recepcionist/edit', RecepcionistController.edit);
+employeeRouter.post('/receptionist/register', ReceptionistController.register);
+employeeRouter.patch('/receptionist/edit', ReceptionistController.edit);
 
 employeeRouter.post('/nurse/register', NurseController.register);
 employeeRouter.patch('/nurse/edit', NurseController.edit);

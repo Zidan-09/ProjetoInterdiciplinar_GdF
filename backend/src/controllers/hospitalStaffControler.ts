@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { Recepcionist, Nurse, Doctor, Admin } from "../models/hospitalStaff";
+import { Receptionist, Nurse, Doctor, Admin } from "../models/hospitalStaff";
 import { EmployeeManager, EmployeeType } from "../services/staff/employeeManager";
 import { openDb } from "../db";
 
@@ -13,16 +13,16 @@ const handleResponse = (done: [boolean, string], res: Response) => {
     }
 };
 
-class RecepcionistController {
+class ReceptionistController {
     static async register(req: Request, res: Response) {
-        const data: Recepcionist = req.body;
+        const data: Receptionist = req.body;
         const done = await EmployeeManager.registerEmployee(data);
         handleResponse(done, res);
     }
 
     static async edit(req: Request, res: Response) {
-        const newData: Recepcionist = req.body;
-        const done = await EmployeeManager.editEmployee(1, newData); // Falta lógica do ID
+        const newData: Receptionist = req.body;
+        const done = await EmployeeManager.editEmployee(newData); // Falta lógica do ID
         res.status(200).json({ message: "Editado (mock)" });
     }
 }
@@ -36,7 +36,7 @@ class NurseController {
 
     static async edit(req: Request, res: Response) {
         const newData: Nurse = req.body;
-        const done = await EmployeeManager.editEmployee(2, newData);
+        const done = await EmployeeManager.editEmployee(newData);
         res.status(200).json({ message: "Editado (mock)" });
     }
 }
@@ -50,7 +50,7 @@ class DoctorController {
 
     static async edit(req: Request, res: Response) {
         const newData: Doctor = req.body;
-        const done = await EmployeeManager.editEmployee(3, newData);
+        const done = await EmployeeManager.editEmployee(newData);
         res.status(200).json({ message: "Editado (mock)" });
     }
 }
@@ -64,7 +64,7 @@ class AdminController {
 
     static async edit(req: Request, res: Response) {
         const newData: Admin = req.body;
-        const done = await EmployeeManager.editEmployee(1, newData);
+        const done = await EmployeeManager.editEmployee(newData);
         res.status(200).json({ message: "Editado (mock)" });
     }
 
@@ -116,4 +116,4 @@ class Employeers {
     }
 }
 
-export { RecepcionistController, NurseController, DoctorController, AdminController, Employeers };
+export { ReceptionistController, NurseController, DoctorController, AdminController, Employeers };

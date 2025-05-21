@@ -1,4 +1,4 @@
-class Consult {
+export class Consult {
     private doctor_id: number;
     private patient_id: number;
     private diagnosis: string | null;
@@ -17,5 +17,3 @@ class Consult {
         return [this.patient_id, this.doctor_id]
     };
 };
-
-export { Consult }

@@ -3,6 +3,7 @@ import { Receptionist, Nurse, Doctor, Admin, User } from "../models/hospitalStaf
 import { EmployeeManager, EmployeeType } from "../services/staff/employeeManager";
 import { openDb } from "../db";
 import { Login } from "../services/staff/employeeLogin";
+import { Jwt } from "../utils/security";
 
 const db = openDb();
 
@@ -116,6 +117,19 @@ class EmployeersConstroller {
         })
     };
 
+    static async activateAccount(req: Request, res: Response) {
+        const token = req.query.token as string;
+        const id = Jwt.verifyToken(token);
+
+        if (id) {
+            
+        } else {
+            res.status(400).json({
+                status: "error",
+                message: "Token inválido ou expirado"
+            })
+        }
+    }
 
     static async login(req: Request<{}, {}, User>, res: Response) {
         const loginData: User = req.body;

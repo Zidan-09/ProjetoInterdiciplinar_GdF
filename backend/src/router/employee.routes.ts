@@ -20,5 +20,6 @@ employeeRouter.get('/consult/list', AdminController.listConsults);
 employeeRouter.get('/list/:employee', EmployeersConstroller.showEmployeers);
 
 employeeRouter.post('/login', EmployeersConstroller.login);
+employeeRouter.post('/activateAccount', EmployeersConstroller.activateAccount);
 
 export default employeeRouter;

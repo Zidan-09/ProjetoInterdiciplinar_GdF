@@ -1,4 +1,5 @@
 type EmployeeStatus = 'active' | 'onLeave' | 'Resigned'
+type Role = 'Doctor' | 'Nurse' | 'Receptionist' | 'Admin'
 
 interface Employee{
     registrationNumber: number;
@@ -13,6 +14,7 @@ interface Employee{
     status: EmployeeStatus;
     salary: number;
     cnesCode: string;
+    role: Role;
 };
 
 interface Doctor extends Employee {

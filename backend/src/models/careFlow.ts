@@ -19,6 +19,7 @@ export interface CareFlow {
 };
 
 export interface Triage {
+    careFlow_id: number;
     patient_id: number;
     nurse_id: number;
     vitalSigns: VitalSigns;
@@ -34,6 +35,7 @@ export interface CallsConsult {
 };
 
 export interface StartConsult {
+    careFlow_id: number;
     doctor_id: number;
     patient_id: number;
     confirm: boolean;

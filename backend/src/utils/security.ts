@@ -4,7 +4,7 @@ import { openDb } from '../db';
 
 const db = openDb();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'cuscuzcomovo';
+const JWT_SECRET = process.env.JWT_SECRET;
 const EXPIRATION = '72h';
 
 export class Hash {
@@ -22,7 +22,7 @@ export class Hash {
 
 export class Jwt {
     static generateToken(payload: { id: number }): string {
-        const token: string = jwt.sign(payload, JWT_SECRET, {expiresIn: EXPIRATION});
+        const token: string = jwt.sign(payload, JWT_SECRET!, {expiresIn: EXPIRATION});
         return token;
     };
 

@@ -42,17 +42,6 @@ class Calleds {
         }
         return result;
     };
-
-    public callAgain(id: number) {
-        let result: CallsConsult;
-        for (let i of this.calleds) {
-            if (i.patient_id == id) {
-                result = i;
-                break
-            }
-        }
-        
-    }
 }
 
 export const calledsList: Calleds = new Calleds();

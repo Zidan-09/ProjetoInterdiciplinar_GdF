@@ -32,34 +32,34 @@ export class PriorityHandler {
         }
     };
 
-    static toSort(no: NodeConsult): void {
-        if (ConsultQueue.getFirst() != no) {
+    static toSort(node: NodeConsult): void {
+        if (ConsultQueue.getFirst() != node) {
 
             let temp: NodeConsult | null = ConsultQueue.getFirst();
 
-            while (temp?.pointer && temp.pointer !== no) {
+            while (temp?.pointer && temp.pointer !== node) {
                 temp = temp.pointer;
             }
             
-            if (temp?.pointer === no) {
-                temp.pointer = no.pointer
+            if (temp?.pointer === node) {
+                temp.pointer = node.pointer
             }
         }
         const first = ConsultQueue.getFirst();
-        if (!first || !first.maxPriority || first.triageCategory < no.triageCategory) {
-            no.pointer = first;
-            ConsultQueue.setFirst(no);
+        if (!first || !first.maxPriority || first.triageCategory < node.triageCategory) {
+            node.pointer = first;
+            ConsultQueue.setFirst(node);
             return;
         }
 
         let current: NodeConsult | null = ConsultQueue.getFirst();
-        while (current && current.pointer && current.pointer.maxPriority && current.pointer.triageCategory <= no.triageCategory) {
+        while (current && current.pointer && current.pointer.maxPriority && current.pointer.triageCategory <= node.triageCategory) {
             current = current.pointer
         }
 
         if (current) {
-            no.pointer = current.pointer;
-            current.pointer = no;
+            node.pointer = current.pointer;
+            current.pointer = node;
         }
     }
 }

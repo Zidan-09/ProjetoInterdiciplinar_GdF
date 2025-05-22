@@ -14,7 +14,6 @@ interface Employee{
     status: EmployeeStatus;
     salary: number;
     cnesCode: string;
-    role: Role;
 };
 
 interface Doctor extends Employee {

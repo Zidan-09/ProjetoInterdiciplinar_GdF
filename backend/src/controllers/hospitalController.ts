@@ -4,9 +4,10 @@ import { CriteriaManager } from "../services/staff/criteriaUpdate";
 import { PatientManager } from "../services/hospital/patientManager";
 import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";
-import { EndConsult, Reception, StartConsult, Triage, TriageCategory } from "../models/careFlow";
+import { EndConsult, CareFlow, StartConsult, Triage, TriageCategory } from "../models/careFlow";
 import { CreateTicket } from "../services/queue/services/ticketService";
 import { calledsList } from "../services/queue/services/called";
+import { CareFlowService } from "../services/hospital/startCareFlow";
 
 type TicketRequest = { priority: number };
 
@@ -22,20 +23,23 @@ export const HospitalController = {
         })
     },
 
-    async register(req: Request<{}, {}, Reception>, res: Response) {
-        const data: Reception = req.body;
+    async register(req: Request<{}, {}, CareFlow>, res: Response) {
+        const data: CareFlow = req.body;
 
         const result = await PatientManager.register(data.patient);
 
-        if (result === 'Erro ao cadastrar o paciente') {
+        if (result[2] === 'Erro ao cadastrar o paciente') {
             res.status(400).json({
                 status: "error",
                 message: result
             })
         } else {
+            const careFlowid: number = await CareFlowService.startCareFlow(result[1], data);
+
             res.status(201).json({
                 status: "success",
-                message: result
+                message: result,
+                careFlowId: careFlowid
             })
         }
     },

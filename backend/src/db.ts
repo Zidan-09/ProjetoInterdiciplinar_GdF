@@ -1,14 +1,3 @@
-// import mysql from 'mysql2/promise';
-
-// export const db = mysql.createPool({
-//     host: 'localhost',
-//     user: 'root',
-//     password: 'hospitalGdF',
-//     database: 'hospitalDBGdF',
-//     waitForConnections: true,
-//     connectionLimit: 10,
-// })
-
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 
@@ -38,5 +27,5 @@ export async function initDb() {
 
     await db.exec('CREATE TABLE IF NOT EXISTS Symptom (triage_id INTEGER PRIMARY KEY, symptom TEXT, FOREIGN KEY (triage_id) REFERENCES Triage(id))');
     
-    await db.exec('CREATE TABLE IF NOT EXISTS User (user_id INTEGER PRIMARY KEY, username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, role TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES Employee(id))');
+    await db.exec('CREATE TABLE IF NOT EXISTS User (user_id INTEGER PRIMARY KEY, username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, role TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES Employee(id))');      
 }   

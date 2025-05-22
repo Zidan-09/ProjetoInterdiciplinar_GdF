@@ -1,6 +1,5 @@
 import { NodeTriage } from "../../utils/createNode";
 import { Patient } from "../../models/patient";
-// import { db } from "../db";
 import { InsertQueue } from "../queue/services/insertQueue";
 import { openDb } from "../../db";
 import { ValidateRegister } from "../../utils/validators";
@@ -20,7 +19,7 @@ export class PatientManager {
         
                 return [true, patient_id, `Paciente ${data.name} cadastrado(a) com sucesso`]
             } else {
-                const patient_id: any = (await db).get('SELECT id FROM Patient WHERE name = ?, cpf = ?, rg = ?', [data.name, data.cpf, data.rg]);
+                const patient_id: any = (await db).get('SELECT id FROM Patient WHERE name = ? AND cpf = ? AND rg = ?', [data.name, data.cpf, data.rg]);
                 return [true, patient_id, `Paciente ${data.name} cadastrado(a) com sucesso`];
             }
 

@@ -7,22 +7,21 @@ const db = openDb();
 export class ValidateRegister {
 	static async verifyPatient(patient: CareFlow['patient']): Promise<boolean> {
 		try {
-			(await db).get('SELECT * FROM Patient WHERE name = ?, cpf = ?, rg = ?', [patient.name, patient.cpf, patient.rg], (err: any, row: any) => {
-				if (err) {
-					console.log('Erro na busca')
-				}
+			const row = await (await db).get(
+				'SELECT * FROM Patient WHERE name = ? AND cpf = ? AND rg = ?',
+				[patient.name, patient.cpf, patient.rg]
+			);
 
-				if (row) {
-					console.log('Paciente já cadastrado')
-					return false
-				} else {
-					return true
-				}
-			});
+			if (row) {
+				console.log('Paciente já cadastrado');
+				return false;
+			}
+
+			return true;
 		} catch (error) {
-			console.log('Sla, deu pau aki');
+			console.log('Erro na verificação de paciente:', error);
+			return false;
 		}
-		return false
 	};
 
 	static async verifyEmployee(user: Doctor | Nurse | Receptionist | Admin): Promise<boolean> {
@@ -40,7 +39,7 @@ export class ValidateRegister {
 				}
 			});
 		} catch (error) {
-			console.log('Sla, deu pau aki');
+			console.log('Error');
 		}
 		return false
 	};

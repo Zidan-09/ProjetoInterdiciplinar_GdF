@@ -1,7 +1,7 @@
 type EmployeeStatus = 'active' | 'onLeave' | 'Resigned'
 type Role = 'Doctor' | 'Nurse' | 'Receptionist' | 'Admin'
 
-interface Employee{
+interface Employee {
     registrationNumber: number;
     name: string;
     cpf: string;

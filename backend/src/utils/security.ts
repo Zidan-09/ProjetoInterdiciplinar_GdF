@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { openDb } from '../db';
+require('dotenv').config();
 
 const db = openDb();
 

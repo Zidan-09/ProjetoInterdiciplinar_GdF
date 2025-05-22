@@ -26,21 +26,20 @@ export class ValidateRegister {
 
 	static async verifyEmployee(user: Doctor | Nurse | Receptionist | Admin): Promise<boolean> {
 		try {
-			(await db).get('SELECT * FROM Employee WHERE name = ?, cpf = ?', [user.name, user.cpf], (err: any, row: any) => {
-				if (err) {
-					console.log('Erro na busca')
-				}
+			const row = await (await db).get(
+				'SELECT * FROM Employee WHERE name = ? AND cpf = ?',
+				[user.name, user.cpf]
+			);
 
-				if (row) {
-					console.log('Empregado já cadastrado')
-					return false
-				} else {
-					return true
-				}
-			});
+			if (row) {
+				console.log('Empregado já cadastrado');
+				return false;
+			}
+
+			return true;
 		} catch (error) {
-			console.log('Error');
+			console.log('Erro na verificação de empregado:', error);
+			return false;
 		}
-		return false
 	};
 }

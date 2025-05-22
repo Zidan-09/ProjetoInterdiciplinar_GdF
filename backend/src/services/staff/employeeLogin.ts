@@ -11,6 +11,12 @@ export class Login {
 
             if (userData) {
                 const valid: boolean = await bcrypt.compare(data.password, userData.password);
+
+                if (valid) {
+                    return "login feito TEMP"
+                } else {
+                    return "Senha incorreta"
+                }
             }
 
         } catch (error) {

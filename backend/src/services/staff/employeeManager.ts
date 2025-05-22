@@ -11,32 +11,19 @@ export class EmployeeManager {
     static async registerEmployee<T extends Receptionist | Nurse | Doctor | Admin>(userData: T): Promise<[boolean, string]> {
         const valid = await ValidateRegister.verifyEmployee(userData);
         if (valid) {
-            const employee: any = (await db).run('INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [userData.registrationNumber, userData.name, userData.cpf, userData.email, userData.phone, userData.dob, userData.address, userData.hireDate, userData.workShift, userData.status, userData.salary, userData.cnesCode, userData.role]);
+            const employee: any = (await db).run('INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [userData.registrationNumber, userData.name, userData.cpf, userData.email, userData.phone, userData.dob, userData.address, userData.hireDate, userData.workShift, userData.status, userData.salary, userData.cnesCode]);
             const employee_id = await employee.lastID;
 
-            switch (userData.role) {
-                case 'Receptionist':
-                    if ('weeklyHours' in userData) {
-                        (await db).run('INSERT INTO Receptionist (weeklyHours) VALUES (?)', [userData.weeklyHours]);
-                    }
-                    break;
-                case 'Nurse':
-                    if ('coren' in userData) {          
-                        (await db).run('INSERT INTO Nurse (coren, department, speciality, weeklyHours) VALUES (?, ?, ?, ?)', [userData.coren, userData.department, userData.specialty, userData.weeklyHours]);
-                    }
-                    break;
-                case 'Doctor':
-                    if ('crm' in userData) {
-                        (await db).run('INSERT INTO Doctor (crm, speciality, weeklyHours) VALUES (?, ?, ?)', [userData.crm, userData.specialty, userData.weeklyHours]);
-                    }
-                    break;
-                case 'Admin':
-                    if ('accessLevel' in userData) {
-                        (await db).run('INSERT INTO Admin (accessLevel, weeklyHours) VALUES (?, ?)', [userData.accessLevel, userData.weeklyHours]);
-                    }
-                    break;             
-            }
-            
+            if ('crm' in userData) {
+                (await db).run('INSERT INTO Doctor (crm, speciality, weeklyHours) VALUES (?, ?, ?)', [userData.crm, userData.specialty, userData.weeklyHours]);
+            } else if ('coren' in userData) {          
+                (await db).run('INSERT INTO Nurse (coren, department, speciality, weeklyHours) VALUES (?, ?, ?, ?)', [userData.coren, userData.department, userData.specialty, userData.weeklyHours]);
+            } else if ('accessLevel' in userData) {
+                (await db).run('INSERT INTO Admin (accessLevel, weeklyHours) VALUES (?, ?)', [userData.accessLevel, userData.weeklyHours]);
+            } else if ('accessLevel' in userData) {
+                (await db).run('INSERT INTO Receptionist (weeklyHours) VALUES (?)', [userData.weeklyHours]);
+            };             
+
             const token: string = Jwt.generateToken(employee_id);
 
             return [true, `${userData.name} cadastrado(a) com sucesso!`];
@@ -66,6 +53,5 @@ export class EmployeeManager {
         };
         const tableName = tableMap[employeeType];
         return (await db).all(`SELECT * FROM ${tableName}`);
-        // return await db.query(`SELECT * FROM ${tableName}`); MySQL
     }
 }

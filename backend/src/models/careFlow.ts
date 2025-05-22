@@ -11,9 +11,11 @@ export interface VitalSigns {
     oxygenSaturation: number;
 };
 
-export interface Reception {
+export interface CareFlow {
     receptionist_id: number;
     patient: Patient
+    time: Date;
+    status: Status;
 };
 
 export interface Triage {

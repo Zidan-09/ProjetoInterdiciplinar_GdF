@@ -1,4 +1,4 @@
-# Modelo Relacional (Sistema de Saúde)
+# Modelo Relacional 
 
 ## Tabela `Employee`
 | Campo               | Tipo         | Descrição               |

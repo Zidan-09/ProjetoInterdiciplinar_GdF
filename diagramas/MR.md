@@ -6,14 +6,14 @@
 | id                  | INT          | **PK**                  |
 | registrationNumber  | VARCHAR      | Número de registro      |
 | name                | VARCHAR(100) | Nome completo           |
-| cpf                 | VARCHAR(11)  | CPF                     |
+| cpf                 | CHAR(11)     | CPF                     |
 | email               | VARCHAR(100) | Email                   |
 | phone               | VARCHAR(20)  | Telefone                |
 | address             | TEXT         | Endereço                |
 | dob                 | DATE         | Data de nascimento      |
 | hireDate            | DATE         | Data de contratação     |
-| workShift           | VARCHAR(50)  | Turno de trabalho       |
-| status              | VARCHAR(20)  | Status (ativo/inativo)  |
+| workShift           | ENUM         | Turno de trabalho       |
+| status              | ENUM         | Status (ativo/inativo)  |
 | salary              | DECIMAL(10,2)| Salário                 |
 | cnesCode            | VARCHAR(20)  | Código CNES             |
 
@@ -24,7 +24,7 @@
 | username    | VARCHAR(50)  | Nome de usuário         |
 | email       | VARCHAR(100) | Email de login          |
 | password    | VARCHAR(255) | Senha hash              |
-| role        | VARCHAR(20)  | Perfil de acesso        |
+| role        | ENUM         | **FK → Employee(role)** |
 
 ## Tabela `Recep` (Herda de Employee)
 | Campo            | Tipo         | Descrição               |
@@ -64,11 +64,11 @@
 | id              | INT          | **PK**                  |
 | name            | VARCHAR(100) | Nome completo           |
 | dob             | DATE         | Data de nascimento      |
-| maritalStatus   | VARCHAR(20)  | Estado civil            |
-| cpf             | VARCHAR(11)  | CPF                     |
+| maritalStatus   | ENUM         | Estado civil            |
+| cpf             | CHAR(11)     | CPF                     |
 | rg              | VARCHAR(20)  | RG                      |
 | contact         | VARCHAR(20)  | Contato                 |
-| gender          | VARCHAR(10)  | Gênero                  |
+| gender          | ENUM         | Gênero                  |
 | healthPlan      | VARCHAR(50)  | Plano de saúde          |
 | address         | TEXT         | Endereço                |
 
@@ -93,7 +93,7 @@
 | bodyTemperature     | DECIMAL(3,1) | Temperatura corporal    |
 | oxygenSaturation    | INT          | Saturação de O₂         |
 | painLevel           | INT          | Nível de dor (0-10)     |
-| triageCategory      | VARCHAR(20)  | Prioridade (vermelho/amarelo/verde) |
+| triageCategory      | ENUM  | Prioridade (emergência/muito urgente/urgente/pouco urgente/não urgente) |
 
 ## Tabela `Symptom`
 | Campo            | Tipo         | Descrição               |
@@ -116,7 +116,7 @@
 ---
 
 ## Relacionamentos
-1. `Employee` (1) → `User`, `Recep`, `Nurse`, `Doctor`, `Admin` (1:1 - Herança)  
+1. `Employee` (1) → `User`, `Recep`, `Nurse`, `Doctor`, `Admin` (1:1 - Herança)
 2. `Recep` (1) → `Attend` (1:N)  
 3. `Patient` (1) → `Attend` (1:N)  
 4. `Attend` (1) → `Triage` (1:1)  

@@ -26,7 +26,7 @@
 | password    | VARCHAR(255) | Senha hash              |
 | role        | ENUM         | **FK → Employee(role)** |
 
-## Tabela `Recep` (Herda de Employee)
+## Tabela `Receptionist` (Herda de Employee)
 | Campo            | Tipo         | Descrição               |
 |------------------|--------------|-------------------------|
 | receptionist_id  | INT          | **PK FK → Employee(id)**|

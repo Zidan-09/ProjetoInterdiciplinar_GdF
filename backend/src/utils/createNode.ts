@@ -7,6 +7,7 @@ const db = openDb();
 
 async function searchPatientDB(patient_id: number) {
     const rows: any = (await db).get('SELECT name FROM Patient WHERE id = ?', [patient_id]);
+    console.log(rows.name)
     return rows;
 }
 

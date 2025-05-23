@@ -1,7 +1,6 @@
 {
-    "attend": {
-        "receptionist_id": 1
-    },
+    
+    "receptionist_id": 1,
     "patient": {
         "name": "Ronaldo",
         "dob": "1990-04-12T00:00:00.000Z",

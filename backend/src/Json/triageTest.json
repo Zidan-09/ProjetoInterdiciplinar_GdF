@@ -1,6 +1,6 @@
 {
+    "careFlowId": 1,
     "nurse_id": 1,
-    "patient_id": 1,
     "vitalSigns": {
         "bloodPreassure": {
             "systolicPreassure": 120,
@@ -11,7 +11,7 @@
         "bodyTemperature": 36,
         "oxygenSaturation": 99
     },
-    "severity": "NonUrgent",
+    "triageCategory": "Non-Urgent",
     "symptoms": ["tosse", "espirros"],
     "painLevel": 2
 }

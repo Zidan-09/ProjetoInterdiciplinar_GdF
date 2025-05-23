@@ -26,7 +26,7 @@
 | password    | VARCHAR(255) | Senha hash              |
 | role        | ENUM         | **FK → Employee(role)** |
 
-## Tabela `Recep` (Herda de Employee)
+## Tabela `Receptionist` (Herda de Employee)
 | Campo            | Tipo         | Descrição               |
 |------------------|--------------|-------------------------|
 | receptionist_id  | INT          | **PK FK → Employee(id)**|
@@ -38,7 +38,7 @@
 | nurse_id         | INT          | **PK FK → Employee(id)**|
 | coren            | VARCHAR(20)  | Registro COREN          |
 | department       | VARCHAR(50)  | Departamento            |
-| speciality       | VARCHAR(50)  | Especialidade           |
+| specialty        | VARCHAR(50)  | Especialidade           |
 | weeklyHours      | INT          | Horas semanais         |
 | onDuty           | BOOLEAN      | Plantão atual           |
 
@@ -72,14 +72,14 @@
 | healthPlan      | VARCHAR(50)  | Plano de saúde          |
 | address         | TEXT         | Endereço                |
 
-## Tabela `Attend`
+## Tabela `CareFlow`
 | Campo            | Tipo         | Descrição               |
 |------------------|--------------|-------------------------|
 | id               | INT          | **PK**                  |
 | receptionist_id  | INT          | **FK → Recep(id)**      |
 | patient_id       | INT          | **FK → Patient(id)**    |
 | time             | DATETIME     | Horário do atendimento  |
-| ticket           | VARCHAR(20)  | Número do ticket        |
+| status           | ENUM         | Estado atual do atendimento |
 
 ## Tabela `Triage`
 | Campo               | Tipo         | Descrição               |

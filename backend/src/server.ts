@@ -16,7 +16,7 @@ async function start() {
     await initDb();
 
     app.listen(PORT, () => {
-        console.log(`Server rodando em: http://localhost:${process.env.PORT}`);
+        console.log(`Server rodando em: http://localhost:${PORT}`);
     });
 }
 

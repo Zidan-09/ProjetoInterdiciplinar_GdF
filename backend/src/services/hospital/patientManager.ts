@@ -20,6 +20,8 @@ export class PatientManager {
                 return [true, patient_id, `Paciente ${data.name} cadastrado(a) com sucesso`]
             } else {
                 const patient_id: any = (await db).get('SELECT id FROM Patient WHERE name = ? AND cpf = ? AND rg = ?', [data.name, data.cpf, data.rg]);
+                const nodeTriage: NodeTriage = await NodeTriage.create(patient_id!)
+                InsertQueue.insertTriageQueue(nodeTriage)
                 return [true, patient_id, `Paciente ${data.name} cadastrado(a) com sucesso`];
             }
 

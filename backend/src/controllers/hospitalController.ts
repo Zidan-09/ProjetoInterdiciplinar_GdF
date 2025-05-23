@@ -31,14 +31,14 @@ export const HospitalController = {
         if (result[2] === 'Erro ao cadastrar o paciente') {
             res.status(400).json({
                 status: "error",
-                message: result
+                message: result[2]
             })
         } else {
             const careFlowid: number = await CareFlowService.startCareFlow(result[1], data);
 
             res.status(201).json({
                 status: "success",
-                message: result,
+                message: result[1],
                 careFlowId: careFlowid
             })
         }

@@ -5,16 +5,14 @@ import { SearchQueue } from "./../queue/managers/searchQueue";
 import { criteria } from "../../models/criteria";
 import { openDb } from "../../db";
 
-const db = openDb();
 
 export class TriageService {
     static async triage(data: Triage) {
-        const triage: any = (await db).run('INSERT INTO Triage (id, nurse_id, systolicPreassure, diastolicPreassure, heartRate, respiratoryRate, bodyTemperature, oxygenSaturation, painLevel, triageCategory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.careFlow_id, data.nurse_id, data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, data.triageCategory]);
+        const db = await openDb();
+        const triage: any = await db.run('INSERT INTO Triage (id, nurse_id, systolicPreassure, diastolicPreassure, heartRate, respiratoryRate, bodyTemperature, oxygenSaturation, painLevel, symptoms, triageCategory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.careFlow_id, data.nurse_id, data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, data.symptoms, data.triageCategory]);
         const triageId = triage.lastId;
 
-        for (let symptom of data.symptoms) {
-            (await db).run('INSERT INTO Symptom (triage_id, symptom) VALUES (?, ?)', [triageId, symptom])
-        };
+        console.log(triage.triageCategory)
         
         const no: NodeConsult = await NodeConsult.create(data);
         InsertQueue.insertConsultQueue(no);

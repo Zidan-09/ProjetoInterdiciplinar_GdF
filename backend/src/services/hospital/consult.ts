@@ -1,23 +1,19 @@
 import { StartConsult, EndConsult } from "../../models/careFlow";
-import { Consult } from "../../models/hospital";
 import { openDb } from "../../db";
 
-const db = openDb();
 
 export class ConsultService {
     static async startConsult(data: StartConsult): Promise<number> {
-        const consult: Consult = new Consult(data.doctor_id, data.careFlow_id);
-        const result: any = (await db).run(`INSERT INTO Consult (id, patient_id, doctor_id, checkInConsult) VALUES (?, ?, ?, datetime('now'))`, [data.careFlow_id, consult.getIds()[0], consult.getIds()[1]]);
-        const consult_id: number = result.lastID;
-        return consult_id
+        const db = await openDb();
+        const row: any = await db.run(`INSERT INTO Consult (id, doctor_id, checkInConsult) VALUES (?, ?, datetime('now'))`, [data.careFlow_id, data.doctor_id]);
+        const consult_id = await row.lastId
+        return consult_id;
     };
 
     static async endConsult(data: EndConsult) {
-        const consult: any = (await db).get('SELECT * FROM Consult WHERE id = ?', [data.careFlow_id]);
-        consult.diagnosis = data.diagnosis;
-        consult.prescriptions = data.prescriptions;
-        consult.notes = data.notes;
-        (await db).run(`UPDATE Consult SET checkOutConsult = datetime('now'), diagnosis = ?, prescriptions = ?, notes = ? WHERE id = ?`, [consult.diagnosis, JSON.stringify(consult.prescriptions), consult.notes, data.careFlow_id])
-        return consult;
+        const db = await openDb();
+        console.log(data)
+        const consult = await db.run(`UPDATE Consult SET checkOutConsult = datetime('now'), diagnosis = ?, prescriptions = ?, notes = ? WHERE id = ?`, [data.diagnosis, JSON.stringify(data.prescriptions), data.notes, data.careFlow_id])
+        return consult.changes;
     };
 };

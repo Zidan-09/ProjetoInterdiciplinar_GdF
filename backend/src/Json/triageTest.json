@@ -11,7 +11,7 @@
         "bodyTemperature": 36,
         "oxygenSaturation": 99
     },
-    "triageCategory": "Non-Urgent",
-    "symptoms": ["tosse", "espirros"],
-    "painLevel": 2
+    "painLevel": 2,
+    "symptoms": "tosse, espirros",
+    "triageCategory": "Non-Urgent"
 }

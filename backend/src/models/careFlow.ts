@@ -23,7 +23,7 @@ export interface Triage {
     nurse_id: number;
     vitalSigns: VitalSigns;
     triageCategory: TriageCategory;
-    symptoms:string[]
+    symptoms:string;
     painLevel: number;
 };
 
@@ -42,6 +42,6 @@ export interface StartConsult {
 export interface EndConsult {
     careFlow_id: number;
     diagnosis: string | null;
-    prescriptions: string[] | null;
+    prescriptions: string | null;
     notes: string | null;
 }; 

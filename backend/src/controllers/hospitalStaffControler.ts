@@ -4,10 +4,11 @@ import { EmployeeManager, EmployeeType } from "../services/staff/employeeManager
 import { openDb } from "../db";
 import { Login } from "../services/staff/employeeLogin";
 import { Jwt } from "../utils/security";
+import { showCareFlows } from "../services/staff/showCareFlows";
 
-const db = openDb();
+type Params = { employee: EmployeeType }
 
-const handleResponse = (done: [boolean, string], res: Response) => {
+const handleResponse = (done: [boolean, any], res: Response) => {
     if (done[0]) {
       res.status(201).json({ status: "success", message: done[1] });
     } else {
@@ -15,105 +16,35 @@ const handleResponse = (done: [boolean, string], res: Response) => {
     }
 };
 
-class ReceptionistController {
-    static async register(req: Request, res: Response) {
-        const data: Receptionist = req.body;
-        const done = await EmployeeManager.registerEmployee(data);
-        handleResponse(done, res);
-    }
-
-    static async edit(req: Request, res: Response) {
-        const newData: Receptionist = req.body;
-        const done = await EmployeeManager.editEmployee(newData);
-        res.status(200).json({ message: "Editado (mock)" });
-    }
-}
-
-class NurseController {
-    static async register(req: Request, res: Response) {
-        const data: Nurse = req.body;
-        const done = await EmployeeManager.registerEmployee(data);
-        handleResponse(done, res);
-    }
-
-    static async edit(req: Request, res: Response) {
-        const newData: Nurse = req.body;
-        const done = await EmployeeManager.editEmployee(newData);
-        res.status(200).json({ message: "Editado (mock)" });
-    }
-}
-
-class DoctorController {
-    static async register(req: Request, res: Response) {
-        const data: Doctor = req.body;
-        const done = await EmployeeManager.registerEmployee(data);
-        handleResponse(done, res);
-    }
-
-    static async edit(req: Request, res: Response) {
-        const newData: Doctor = req.body;
-        const done = await EmployeeManager.editEmployee(newData);
-        res.status(200).json({ message: "Editado (mock)" });
-    }
-}
-
 class AdminController {
-    static async register(req: Request, res: Response) {
-        const data: Admin = req.body;
-        const done = await EmployeeManager.registerEmployee(data);
-        handleResponse(done, res);
-    }
+    static async listCareFlows(req: Request, res: Response) {
+        const careFlows = await showCareFlows();
 
-    static async edit(req: Request, res: Response) {
-        const newData: Admin = req.body;
-        const done = await EmployeeManager.editEmployee(newData);
-        res.status(200).json({ message: "Editado (mock)" });
-    }
-
-    static async listTriages(req: Request, res: Response) {
-        try {
-            const triages = await (await db).all('SELECT * FROM Triage');
-  
-            for (const triage of triages) {
-                const symptoms = await (await db).all('SELECT symptom FROM Symptom WHERE triage_id = ?', [triage.id]);
-            triage.symptoms = symptoms.map((s: { symptom: any; }) => s.symptom);
-        }
-  
-        res.status(200).json({ triages });
-        } catch (err) {
-            console.error("Erro ao listar triagens:", err);
-            res.status(500).json({ error: "Erro ao listar triagens" });
-        }
-    }
-
-    static async listConsults(req: Request, res: Response) {
-        try {
-            const consults = await (await db).all('SELECT * FROM Consult');
-
-            for (const consult of consults) {
-            try {
-                consult.prescriptions = JSON.parse(consult.prescriptions);
-            } catch {
-                consult.prescriptions = [];
-            }
-        }
-        res.status(200).json({ consults });
-        } catch (err) {
-            console.error("Erro ao listar consultas:", err);
-            res.status(500).json({ error: "Erro ao listar consultas" });
-        }
-    }
+        handleResponse(careFlows, res);
+    };
 }
 
 class EmployeersConstroller {
-    static async showEmployeers(req: Request, res: Response) {
-        const employee: EmployeeType = req.params.employee as EmployeeType;
+    static async register<T extends Receptionist | Nurse | Doctor | Admin>(req: Request<{}, {}, T>, res: Response) {
+        const data: T = req.body;
+        const done: [boolean, string] = await EmployeeManager.registerEmployee(data);
+
+        handleResponse(done, res)
+    };
+
+    static async edit<T extends Receptionist | Nurse | Doctor | Admin>(req: Request<{}, {}, T>, res: Response) {
+        const newData: T = req.body;
+        const done = await EmployeeManager.editEmployee(newData);
+    };
+
+    static async showEmployeers(req: Request<Params>, res: Response) {
+        const { employee } = req.params;
 
         const employeers = await EmployeeManager.showEmployeers(employee)
         res.status(200).json({
             status: "sucess",
-            message: `${employee} cadastrados`,
-            result: employeers
+            result: employeers,
+            message: `${employee} cadastrados exibidos`
         })
     };
 
@@ -138,10 +69,4 @@ class EmployeersConstroller {
     };
 }
 
-export { ReceptionistController, NurseController, DoctorController, AdminController, EmployeersConstroller };
-
-class EmployeeTestController {
-    static async register<T = Receptionist | Nurse | Doctor | Admin>(data: T) {
-        
-    }
-}
+export { AdminController, EmployeersConstroller };

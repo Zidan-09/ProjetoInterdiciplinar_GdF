@@ -1,15 +1,15 @@
 {
     "registrationNumber": 1234,
-    "name": "Rosângela",
-    "cpf": "232.653.745-29",
-    "email": "sasukeuchiha@example.com",
-    "phone": "(83) 93254-6523",
+    "name": "Rosilene",
+    "cpf": "123.532.124-23",
+    "email": "rosa@gmail.com",
+    "phone": "(86) 99453-3524",
     "dob": "1990-04-12T00:00:00.000Z",
-    "address": "Vila da folha",
+    "address": "av. Paulista, 12",
     "hireDate": "1990-04-12T00:00:00.000Z",
-    "workShift": "tarde",
+    "workShift": "manhã",
     "status": "active",
-    "salary": 2000,
-    "cnesCode": "12j43",
+    "salary": 40000,
+    "cnesCode": "12-32",
     "weeklyHours": 40
 }

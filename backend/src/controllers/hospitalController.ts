@@ -108,7 +108,7 @@ export const HospitalController = {
             })
 
         } else {
-            const result = calledsList.searchCalled(confirmStartData.patient_id);
+            const result = calledsList.searchCalled(confirmStartData.careFlow_id);
 
             if (result == 'Paciente não encontrado') {
                 res.status(400).json({

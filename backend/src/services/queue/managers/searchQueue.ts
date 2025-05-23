@@ -7,7 +7,7 @@ export class SearchQueue {
 
         if (temp) {
             while(temp) {
-                if (temp.triage.patient_id === id) {
+                if (temp.triage.careFlow_id === id) {
                     return temp
                 } else {
                     temp = temp.pointer

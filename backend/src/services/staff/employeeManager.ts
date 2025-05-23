@@ -24,7 +24,7 @@ export class EmployeeManager {
                 (await db).run('INSERT INTO Receptionist (weeklyHours) VALUES (?)', [userData.weeklyHours]);
             };             
 
-            const token: string = Jwt.generateToken(employee_id);
+            //const token: string = Jwt.generateToken(employee_id);
 
             return [true, `${userData.name} cadastrado(a) com sucesso!`];
         } else {

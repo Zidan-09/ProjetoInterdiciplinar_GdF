@@ -3,11 +3,19 @@ import { Triage } from "../models/careFlow";
 import { criteria } from "../models/criteria";
 // import { db } from "../db";
 
-const db = openDb();
+
+
+async function searchCareFlow(careFlowId: number) {
+    const db = await openDb()
+    const row: any = await db.get('SELECT * FROM CareFlow WHERE id = ?', [careFlowId])
+    console.log(row)
+    const name = await searchPatientDB(row.patient_id)
+    return [row.patient_id, name]
+}
 
 async function searchPatientDB(patient_id: number) {
-    const rows: any = (await db).get('SELECT name FROM Patient WHERE id = ?', [patient_id]);
-    console.log(rows.name)
+    const db = await openDb()
+    const rows: any = await db.get('SELECT * FROM Patient WHERE id = ?', [patient_id]);
     return rows;
 }
 
@@ -104,8 +112,8 @@ class NodeConsult {
     }
 
     static async create(patientTriage: Triage) {
-        const row: any = await searchPatientDB(patientTriage.patient_id);
-        return new NodeConsult(patientTriage, row.name)
+        const row: any = await searchCareFlow(patientTriage.careFlow_id);
+        return new NodeConsult(patientTriage, row[1].name)
     }
 };
 

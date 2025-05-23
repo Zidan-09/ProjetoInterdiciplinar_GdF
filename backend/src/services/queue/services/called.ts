@@ -10,7 +10,7 @@ class Calleds {
 
     public insert(node: NodeConsult): CallsConsult {
         const calledType: CallsConsult = {
-            patient_id: node.triage.patient_id,
+            careFlow_id: node.triage.careFlow_id,
             patient_name: node.patient_name,
             calls: 1
         };
@@ -21,7 +21,7 @@ class Calleds {
     public searchCalled(id: number): [CallsConsult, string] | string {
         let result: string | CallsConsult = 'Paciente não encontrado';
         for (let i of this.calleds) {
-            if (i.patient_id == id) {
+            if (i.careFlow_id == id) {
                 result = i;
                 break
             }

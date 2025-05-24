@@ -2,6 +2,7 @@ import { Receptionist, Nurse, Doctor, Admin } from "../../models/hospitalStaff";
 import { ValidateRegister } from "../../utils/validators";
 import { openDb } from "../../db";
 import { Jwt } from "../../utils/security";
+import { sendEmail } from "../../utils/email";
 
 
 export type EmployeeType = 'Receptionist' | 'Nurse' | 'Doctor' | 'Admin';
@@ -24,9 +25,10 @@ export class EmployeeManager {
                 await db.run('INSERT INTO Receptionist (id, weeklyHours) VALUES (?, ?)', [employee_id, userData.weeklyHours]);
             };             
 
-            //const token: string = Jwt.generateToken(employee_id);
+            const token: string = Jwt.generateToken({id: employee_id});
+            sendEmail(userData.email, token);
 
-            return [true, `${userData.name} cadastrado(a) com sucesso!`];
+            return [true, `${userData.name} cadastrado(a) com sucesso! Aguardando confirmação`];
         } else {
             return [false, `${userData.name} já cadastrado(a)`];
         }

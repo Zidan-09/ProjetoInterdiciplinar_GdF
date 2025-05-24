@@ -26,9 +26,14 @@ export async function sendEmail(email: string, token: string) {
     <p> Este link expira em 72 horas! <p>
     `;
 
-    await transporter.sendMail({
-        from: `"Sistema Hospitalar" <${EMAIL_USER}>`,
-        to: email,
-        subject: 'Ativação de conta - Sistema Hospitalar GdF'
-    });
+    try {
+        await transporter.sendMail({
+            from: `"Sistema Hospitalar" <${EMAIL_USER}>`,
+            to: email,
+            subject: 'Ativação de conta - Sistema Hospitalar GdF',
+            html: html
+        });
+    } catch (error) {
+        console.error(error)
+    }
 };

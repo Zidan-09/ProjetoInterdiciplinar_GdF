@@ -1,9 +1,16 @@
 {
-    "registrationNumber": 123421,
-    "name": "Ratata",
-    "cpf": "423.754.123-38",
-    "contacts": ["(11) 91384-1740"],
-    "shift": "noite",
-    "salary": 10000,
-    "cnesCode": "12j43"
+    "registrationNumber": 1234,
+    "name": "Rogério",
+    "cpf": "143.246.035-65",
+    "email": "samuelzindc@gmail.com",
+    "phone": "(86) 99453-3524",
+    "dob": "1990-04-12T00:00:00.000Z",
+    "address": "av. Paulista, 12",
+    "hireDate": "1990-04-12T00:00:00.000Z",
+    "workShift": "manhã",
+    "status": "active",
+    "salary": 40000,
+    "cnesCode": "12-32",
+    "accessLevel": "all",
+    "weeklyHours": 40
 }

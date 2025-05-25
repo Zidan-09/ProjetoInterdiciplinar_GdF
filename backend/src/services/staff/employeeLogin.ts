@@ -1,11 +1,11 @@
-import { User } from "../../entities/hospitalStaff";
+import { LoginData } from "../../entities/hospitalStaff";
 import { openDb } from "../../db";
 import bcrypt from 'bcryptjs';
 
 const db = openDb();
 
 export class Login {
-    static async loginUser(data: User) {
+    static async loginUser(data: LoginData) {
         try {
             const userData: any = (await db).get('SELECT * FROM User WHERE email = ?', [data.email]);
 

@@ -28,10 +28,10 @@ export class Jwt {
         return token;
     };
 
-    static verifyToken(token: string): number | null {
+    static verifyToken<T extends Receptionist | Nurse | Doctor | Admin>(token: string) {
         try {
-            const id = jwt.verify(token, process.env.JWT_SECRET!) as { id: number };
-            return id.id;
+            const data = jwt.verify(token, process.env.JWT_SECRET!) as T;
+            return data
         } catch (error) {
             console.error(error);
             return null

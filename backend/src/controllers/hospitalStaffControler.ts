@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, User } from "../entities/hospitalStaff";
+import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, User, LoginData } from "../entities/hospitalStaff";
 import { EmployeeManager, EmployeeType } from "../services/staff/employeeManager";
 import { Login } from "../services/staff/employeeLogin";
 import { Jwt } from "../utils/security";
@@ -51,24 +51,38 @@ class EmployeersConstroller {
         const token = req.query.token as string;
         const data = Jwt.verifyToken(token);
 
-        if (data) {
-            
-        } else {
-            res.status(400).json({
-                status: "error",
-                message: "Token inválido ou expirado"
-            })
+        try {
+            if (data) {
+                res.status(200).json({
+                    status: "success",
+                    message: "TESTE FUNCIONOU",
+                    data: data
+                })
+            } else {
+                handleResponse([false, 'Token inválido ou expirado!'], res);
+            }
+        } catch (error) {
+            console.error(error)
         }
     }
 
-    static async confirmAccount(req: Request<{}, {}, ConfirmUser<Receptionist | Nurse | Doctor | Admin>>, res: Response) {
+    static async authAccount(req: Request<{}, {}, ConfirmUser<Receptionist | Nurse | Doctor | Admin>>, res: Response) {
+        const { data, user } = req.body;
 
-    };
+        await EmployeeManager.authAccount(data, user);
 
-    static async login(req: Request<{}, {}, User>, res: Response) {
-        const loginData: User = req.body;
+        res.status(200).json({
+            status: "success",
+            message: "Sucesso na autenticação",
+            data: data,
+            user: user
+        })
+    }
 
-        Login.loginUser(loginData);
+    static async login(req: Request<{}, {}, LoginData>, res: Response) {
+        const loginDataReq: LoginData = req.body;
+
+        Login.loginUser(loginDataReq);
     };
 }
 

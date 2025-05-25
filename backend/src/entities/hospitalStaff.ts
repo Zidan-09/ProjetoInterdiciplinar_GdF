@@ -39,16 +39,17 @@ interface Admin extends Employee {
 };
 
 interface User {
-    user_id: number;
     username: string;
-    email: string;
     password: string;
-    role: string;
-}
+}       
 
 interface ConfirmUser<T extends Receptionist | Nurse | Doctor | Admin> {
-    user: User;
     data: T
+    user: User;
 }
 
-export { Doctor, Nurse, Receptionist, Admin, ConfirmUser, User }
+interface LoginData {
+    email: string;
+    password: string
+}
+export { Doctor, Nurse, Receptionist, Admin, ConfirmUser, User, LoginData }

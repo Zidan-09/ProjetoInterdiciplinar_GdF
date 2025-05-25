@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { Receptionist, Nurse, Doctor, Admin } from '../models/hospitalStaff';
 import jwt from 'jsonwebtoken';
 import { openDb } from '../db';
 require('dotenv').config();
@@ -22,7 +23,7 @@ export class Hash {
 };
 
 export class Jwt {
-    static generateToken(payload: { id: number }): string {
+    static generateToken<T extends Receptionist | Nurse | Doctor | Admin>(payload: T): string {
         const token: string = jwt.sign(payload, JWT_SECRET!, {expiresIn: EXPIRATION});
         return token;
     };

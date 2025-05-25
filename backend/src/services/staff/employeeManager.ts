@@ -1,38 +1,45 @@
-import { Receptionist, Nurse, Doctor, Admin } from "../../models/hospitalStaff";
+import { Receptionist, Nurse, Doctor, Admin, User } from "../../models/hospitalStaff";
 import { ValidateRegister } from "../../utils/validators";
 import { openDb } from "../../db";
-import { Jwt } from "../../utils/security";
+import { Hash, Jwt } from "../../utils/security";
 import { sendEmail } from "../../utils/email";
-
 
 export type EmployeeType = 'Receptionist' | 'Nurse' | 'Doctor' | 'Admin';
 
 export class EmployeeManager {
-    static async registerEmployee<T extends Receptionist | Nurse | Doctor | Admin>(userData: T): Promise<[boolean, string]> {
-        const db = await openDb();
-        const valid = await ValidateRegister.verifyEmployee(userData);
-        if (valid) {
-            const employee: any = await db.run('INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [userData.registrationNumber, userData.name, userData.cpf, userData.email, userData.phone, userData.dob, userData.address, userData.hireDate, userData.workShift, userData.status, userData.salary, userData.cnesCode]);
-            const employee_id = await employee.lastID;
+    static async registerEmployee<T extends Receptionist | Nurse | Doctor | Admin>(employeeData: T): Promise<[boolean, string]> {
+        const valid = await ValidateRegister.verifyEmployee(employeeData);
+        if (valid) {     
 
-            if ('crm' in userData) {
-                await db.run('INSERT INTO Doctor (id, crm, specialty, weeklyHours, onDuty) VALUES (?, ?, ?, ?, ?)', [employee_id, userData.crm, userData.specialty, userData.weeklyHours, 0]);
-            } else if ('coren' in userData) {          
-                await db.run('INSERT INTO Nurse (id, coren, department, speciality, weeklyHours, onDuty) VALUES (?, ?, ?, ?, ?, ?)', [employee_id, userData.coren, userData.department, userData.specialty, userData.weeklyHours, 0]);
-            } else if ('accessLevel' in userData) {
-                await db.run('INSERT INTO Admin (id, accessLevel, weeklyHours) VALUES (?, ?, ?)', [employee_id, userData.accessLevel, userData.weeklyHours]);
-            } else {
-                await db.run('INSERT INTO Receptionist (id, weeklyHours) VALUES (?, ?)', [employee_id, userData.weeklyHours]);
-            };             
+            const token: string = Jwt.generateToken(employeeData);
+            sendEmail(employeeData.email, token);
 
-            const token: string = Jwt.generateToken({id: employee_id});
-            sendEmail(userData.email, token);
-
-            return [true, `${userData.name} cadastrado(a) com sucesso! Aguardando confirmação`];
+            return [true, `Aguardando confirmação de cadastro de ${employeeData}`];
         } else {
-            return [false, `${userData.name} já cadastrado(a)`];
+            return [false, `${employeeData.name} já cadastrado(a) no sistema`];
         }
     }
+
+    static async activateAccount<T extends Receptionist | Nurse | Doctor | Admin>(employeeData: T, userData: User) {
+        const db = await openDb();
+        try {
+            const employee: any = await db.run('INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.hireDate, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode]);
+            await db.run('INSERT INTO User (username, email, password, role) VALUES (?, ?, ?, ?)', [userData.username, userData.email, await Hash.hash(userData.password), userData.role])
+            const employee_id = await employee.lastID;
+
+            if ('crm' in employeeData) {
+                await db.run('INSERT INTO Doctor (id, crm, specialty, weeklyHours, onDuty) VALUES (?, ?, ?, ?, ?)', [employee_id, employeeData.crm, employeeData.specialty, employeeData.weeklyHours, 0]);
+            } else if ('coren' in employeeData) {          
+                await db.run('INSERT INTO Nurse (id, coren, department, speciality, weeklyHours, onDuty) VALUES (?, ?, ?, ?, ?, ?)', [employee_id, employeeData.coren, employeeData.department, employeeData.specialty, employeeData.weeklyHours, 0]);
+            } else if ('accessLevel' in employeeData) {
+                await db.run('INSERT INTO Admin (id, accessLevel, weeklyHours) VALUES (?, ?, ?)', [employee_id, employeeData.accessLevel, employeeData.weeklyHours]);
+            } else {
+                await db.run('INSERT INTO Receptionist (id, weeklyHours) VALUES (?, ?)', [employee_id, employeeData.weeklyHours]);
+            };
+        } catch (error) {
+            console.error(error)
+        }  
+    };
     
     static async editEmployee<T extends Receptionist | Nurse | Doctor | Admin>(newUserData: T) {
         const db = await openDb();

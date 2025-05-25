@@ -10,6 +10,7 @@ employeeRouter.get('/careFlow/list', AdminController.listCareFlows);
 employeeRouter.get('/list/:employee', EmployeersConstroller.showEmployeers);
 
 employeeRouter.post('/login', EmployeersConstroller.login);
-employeeRouter.post('/activateAccount', EmployeersConstroller.activateAccount);
+employeeRouter.get('/activateAccount', EmployeersConstroller.activateAccount);
+employeeRouter.post('/confirmAccountRegister', EmployeersConstroller.confirmAccount);
 
 export default employeeRouter;

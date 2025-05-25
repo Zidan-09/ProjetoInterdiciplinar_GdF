@@ -46,4 +46,9 @@ interface User {
     role: string;
 }
 
-export { Doctor, Nurse, Receptionist, Admin, User }
+interface ConfirmUser<T extends Receptionist | Nurse | Doctor | Admin> {
+    user: User;
+    data: T
+}
+
+export { Doctor, Nurse, Receptionist, Admin, ConfirmUser, User }

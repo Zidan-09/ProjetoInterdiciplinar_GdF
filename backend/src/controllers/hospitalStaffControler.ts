@@ -1,7 +1,6 @@
 import { Response, Request } from "express";
-import { Receptionist, Nurse, Doctor, Admin, User } from "../models/hospitalStaff";
+import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, User } from "../models/hospitalStaff";
 import { EmployeeManager, EmployeeType } from "../services/staff/employeeManager";
-import { openDb } from "../db";
 import { Login } from "../services/staff/employeeLogin";
 import { Jwt } from "../utils/security";
 import { showCareFlows } from "../services/staff/showCareFlows";
@@ -50,9 +49,9 @@ class EmployeersConstroller {
 
     static async activateAccount(req: Request, res: Response) {
         const token = req.query.token as string;
-        const id = Jwt.verifyToken(token);
+        const data = Jwt.verifyToken(token);
 
-        if (id) {
+        if (data) {
             
         } else {
             res.status(400).json({
@@ -61,6 +60,10 @@ class EmployeersConstroller {
             })
         }
     }
+
+    static async confirmAccount(req: Request<{}, {}, ConfirmUser<Receptionist | Nurse | Doctor | Admin>>, res: Response) {
+
+    };
 
     static async login(req: Request<{}, {}, User>, res: Response) {
         const loginData: User = req.body;

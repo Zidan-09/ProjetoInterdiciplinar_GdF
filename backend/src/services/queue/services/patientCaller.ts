@@ -1,5 +1,5 @@
-import { CallsConsult } from "../../../models/careFlow";
-import { RecepQueue, TriageQueue, ConsultQueue } from "../../../models/queue";
+import { CallsConsult } from "../../../entities/careFlow";
+import { RecepQueue, TriageQueue, ConsultQueue } from "../../../entities/queue";
 import { calledsList } from "./called";
 
 export class PatientCaller {

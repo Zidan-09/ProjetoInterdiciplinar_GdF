@@ -1,4 +1,4 @@
-import { ConsultQueue } from "../../../models/queue";
+import { ConsultQueue } from "../../../entities/queue";
 import { NodeConsult } from "../../../utils/createNode";
 
 export class PriorityHandler {

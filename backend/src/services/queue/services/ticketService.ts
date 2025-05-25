@@ -1,4 +1,4 @@
-import { RecepQueue } from "../../../models/queue";
+import { RecepQueue } from "../../../entities/queue";
 import { NodeRecep } from "../../../utils/createNode";
 import { InsertQueue } from "./insertQueue";
 

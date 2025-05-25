@@ -1,4 +1,4 @@
-import { User } from "../../models/hospitalStaff";
+import { User } from "../../entities/hospitalStaff";
 import { openDb } from "../../db";
 import bcrypt from 'bcryptjs';
 

@@ -1,4 +1,4 @@
-import { CareFlow } from "../../models/careFlow";
+import { CareFlow } from "../../entities/careFlow";
 import { openDb } from "../../db";
 
 const db = openDb();

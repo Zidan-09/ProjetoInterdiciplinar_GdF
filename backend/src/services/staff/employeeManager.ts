@@ -1,4 +1,4 @@
-import { Receptionist, Nurse, Doctor, Admin, User } from "../../models/hospitalStaff";
+import { Receptionist, Nurse, Doctor, Admin, User } from "../../entities/hospitalStaff";
 import { ValidateRegister } from "../../utils/validators";
 import { openDb } from "../../db";
 import { Hash, Jwt } from "../../utils/security";

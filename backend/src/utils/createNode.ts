@@ -1,6 +1,6 @@
 import { openDb } from "../db";
-import { Triage } from "../models/careFlow";
-import { criteria } from "../models/criteria";
+import { Triage } from "../entities/careFlow";
+import { criteria } from "../entities/criteria";
 // import { db } from "../db";
 
 

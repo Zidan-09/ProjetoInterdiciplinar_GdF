@@ -1,4 +1,4 @@
-import { StartConsult, EndConsult } from "../../models/careFlow";
+import { StartConsult, EndConsult } from "../../entities/careFlow";
 import { openDb } from "../../db";
 
 

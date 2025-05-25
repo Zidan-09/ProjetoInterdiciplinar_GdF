@@ -1,4 +1,4 @@
-import { CallsConsult } from "../../../models/careFlow";
+import { CallsConsult } from "../../../entities/careFlow";
 import { NodeConsult } from "../../../utils/createNode";
 
 class Calleds {

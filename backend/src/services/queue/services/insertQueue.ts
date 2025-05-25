@@ -1,4 +1,4 @@
-import { ConsultQueue, RecepQueue, TriageQueue } from "../../../models/queue";
+import { ConsultQueue, RecepQueue, TriageQueue } from "../../../entities/queue";
 import { NodeRecep, NodeTriage, NodeConsult } from "../../../utils/createNode";
 
 export class InsertQueue {

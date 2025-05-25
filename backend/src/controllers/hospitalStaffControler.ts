@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, User } from "../models/hospitalStaff";
+import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, User } from "../entities/hospitalStaff";
 import { EmployeeManager, EmployeeType } from "../services/staff/employeeManager";
 import { Login } from "../services/staff/employeeLogin";
 import { Jwt } from "../utils/security";

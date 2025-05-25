@@ -1,6 +1,6 @@
 import { NodeConsult } from "../utils/createNode";
-import { Triage } from "../models/careFlow";
-import { Patient } from "../models/patient";
+import { Triage } from "../entities/careFlow";
+import { Patient } from "../entities/patient";
 import { InsertQueue } from "../services/queue/services/insertQueue";
 import { ShowQueue } from "../services/queue/services/showQueue";
 import { PatientCaller } from "../services/queue/services/patientCaller";

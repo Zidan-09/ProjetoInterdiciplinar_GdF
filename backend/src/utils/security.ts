@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { Receptionist, Nurse, Doctor, Admin } from '../models/hospitalStaff';
+import { Receptionist, Nurse, Doctor, Admin } from '../entities/hospitalStaff';
 import jwt from 'jsonwebtoken';
 import { openDb } from '../db';
 require('dotenv').config();

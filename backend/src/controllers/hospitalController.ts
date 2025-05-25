@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { criteria, CriteriaData } from "../models/criteria";
+import { criteria, CriteriaData } from "../entities/criteria";
 import { CriteriaManager } from "../services/staff/criteriaUpdate";
 import { PatientManager } from "../services/hospital/patientManager";
 import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";
-import { EndConsult, CareFlow, StartConsult, Triage, TriageCategory } from "../models/careFlow";
+import { EndConsult, CareFlow, StartConsult, Triage, TriageCategory } from "../entities/careFlow";
 import { CreateTicket } from "../services/queue/services/ticketService";
 import { calledsList } from "../services/queue/services/called";
 import { CareFlowService } from "../services/hospital/startCareFlow";

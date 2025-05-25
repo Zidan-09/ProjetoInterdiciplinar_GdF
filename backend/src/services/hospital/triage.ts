@@ -1,8 +1,8 @@
 import { NodeConsult } from "../../utils/createNode";
-import { Triage, TriageCategory } from "../../models/careFlow";
+import { Triage, TriageCategory } from "../../entities/careFlow";
 import { InsertQueue } from "./../queue/services/insertQueue";
 import { SearchQueue } from "./../queue/managers/searchQueue";
-import { criteria } from "../../models/criteria";
+import { criteria } from "../../entities/criteria";
 import { openDb } from "../../db";
 
 

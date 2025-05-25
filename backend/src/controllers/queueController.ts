@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { typeQueue } from "../models/queue";
+import { typeQueue } from "../entities/queue";
 import { ShowQueue } from "../services/queue/services/showQueue";
 import { NodeTriage } from "../utils/createNode";
 import { PatientCaller } from "../services/queue/services/patientCaller";
-import { CallsConsult } from "../models/careFlow";
+import { CallsConsult } from "../entities/careFlow";
 
 export const QueueController = {
     async queue(req: Request, res: Response) {

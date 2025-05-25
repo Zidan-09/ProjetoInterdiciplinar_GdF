@@ -1,4 +1,4 @@
-import { criteria, CriteriaData } from "../../models/criteria";
+import { criteria, CriteriaData } from "../../entities/criteria";
 import { openDb } from "../../db";
 // import { db } from "../db";
 

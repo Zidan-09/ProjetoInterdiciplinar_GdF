@@ -1,5 +1,5 @@
 import { NodeTriage } from "../../utils/createNode";
-import { Patient } from "../../models/patient";
+import { Patient } from "../../entities/patient";
 import { InsertQueue } from "../queue/services/insertQueue";
 import { openDb } from "../../db";
 import { ValidateRegister } from "../../utils/validators";

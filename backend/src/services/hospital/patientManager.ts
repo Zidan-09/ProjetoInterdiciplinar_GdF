@@ -1,7 +1,7 @@
 import { NodeTriage } from "../../utils/createNode";
 import { Patient } from "../../entities/patient";
 import { openDb } from "../../db";
-import { ValidateRegister } from "../../utils/validators";
+import { ValidateRegister } from "../../utils/personsUtils/validators";
 import { TriageQueue } from "../../entities/queue";
 
 export class PatientManager {

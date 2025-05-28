@@ -1,39 +1,57 @@
 import { Response, Request } from "express";
 import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, User, LoginData } from "../entities/hospitalStaff";
-import { EmployeeManager, EmployeeType } from "../services/staff/employeeManager";
+import { EmployeeManager } from "../services/staff/employeeManager";
+import { EmployeeType } from "../utils/personsUtils/generalEnuns";
 import { Login } from "../services/staff/employeeLogin";
 import { Jwt } from "../utils/security";
 import { showCareFlows } from "../services/staff/showCareFlows";
+import { HandleResponse } from "../utils/handleResponse";
+import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
 
 type Params = { employee: EmployeeType }
 
-const handleResponse = (done: [boolean, any], res: Response) => {
-    if (done[0]) {
-      res.status(201).json({ status: "success", message: done[1] });
-    } else {
-      res.status(400).json({ status: "error", message: done[1] });
-    }
-};
-
 class AdminController {
     static async listCareFlows(req: Request, res: Response) {
-        const careFlows = await showCareFlows();
+        try {
+            const careFlows = await showCareFlows();
+            HandleResponse(true, 200, "Careflows showed", careFlows, res);
 
-        handleResponse(careFlows, res);
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
+        }
     };
 }
 
-class EmployeersConstroller {
+class EmployersConstroller {
     static async register<T extends Receptionist | Nurse | Doctor | Admin>(req: Request<{}, {}, T>, res: Response) {
         const data: T = req.body;
-        const done: [boolean, string] = await EmployeeManager.registerEmployee(data);
 
-        handleResponse(done, res)
+        try {
+            const done: EmployeeResponseMessage = await EmployeeManager.registerEmployee(data);
+
+            if (done === EmployeeResponseMessage.AwaitingConfirmation) {
+                HandleResponse(true, 200, done, data, res);
+            } else {
+                HandleResponse(false, 400, done, data, res);
+            }
+
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
+        }
     };
 
     static async edit<T extends Receptionist | Nurse | Doctor | Admin>(req: Request<{}, {}, T>, res: Response) {
         const newData: T = req.body;
-        const done = await EmployeeManager.editEmployee(newData);
+
+        try {
+            const done = await EmployeeManager.editEmployee(newData);
+            HandleResponse
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
+        }
     };
 
     static async showEmployeers(req: Request<Params>, res: Response) {
@@ -52,15 +70,6 @@ class EmployeersConstroller {
         const data = Jwt.verifyToken(token);
 
         try {
-            if (data) {
-                res.status(200).json({
-                    status: "success",
-                    message: "TESTE FUNCIONOU",
-                    data: data
-                })
-            } else {
-                handleResponse([false, 'Token inválido ou expirado!'], res);
-            }
         } catch (error) {
             console.error(error)
         }
@@ -69,21 +78,33 @@ class EmployeersConstroller {
     static async authAccount(req: Request<{}, {}, ConfirmUser<Receptionist | Nurse | Doctor | Admin>>, res: Response) {
         const { data, user } = req.body;
 
-        await EmployeeManager.authAccount(data, user);
+        try {
+            const done: EmployeeResponseMessage = await EmployeeManager.authAccount(data, user);
 
-        res.status(200).json({
-            status: "success",
-            message: "Sucesso na autenticação",
-            data: data,
-            user: user
-        })
+            if (done === EmployeeResponseMessage.Error || done === EmployeeResponseMessage.RegistrationInProgress) {
+                HandleResponse(false, 400, done, null, res);
+            } else {
+                HandleResponse(true, 200, done, data && user, res);
+            }
+            
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
+        }
     }
 
     static async login(req: Request<{}, {}, LoginData>, res: Response) {
         const loginDataReq: LoginData = req.body;
 
-        Login.loginUser(loginDataReq);
+        try {
+            await Login.loginUser(loginDataReq);
+            HandleResponse(true, 200, EmployeeResponseMessage.EmployeeLoggedIn, loginDataReq, res);
+
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
+        }
     };
 }
 
-export { AdminController, EmployeersConstroller };
+export { AdminController, EmployersConstroller };

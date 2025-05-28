@@ -1,6 +1,6 @@
-import { CareFlow } from "../entities/careFlow";
-import { Doctor, Nurse, Receptionist, Admin } from "../entities/hospitalStaff";
-import { openDb } from "../db";
+import { CareFlow } from "../../entities/careFlow";
+import { Doctor, Nurse, Receptionist, Admin } from "../../entities/hospitalStaff";
+import { openDb } from "../../db";
 
 const db = openDb();
 

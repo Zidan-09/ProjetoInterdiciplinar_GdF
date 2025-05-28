@@ -1,6 +1,6 @@
-import { openDb } from "../db";
-import { Triage, TriageCategory } from "../entities/careFlow";
-import { criteria } from "../entities/criteria";
+import { openDb } from "../../db";
+import { Triage, TriageCategory } from "../../entities/careFlow";
+import { criteria } from "../../entities/criteria";
 
 async function searchCareFlow(careFlowId: number) {
     const db = await openDb()

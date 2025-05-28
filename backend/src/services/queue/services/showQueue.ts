@@ -1,11 +1,11 @@
 import { ConsultQueue, RecepQueue, TriageQueue } from "../../../entities/queue";
-import { typeQueue } from "../../../entities/queue";
+import { TypeQueue } from "../../../entities/queue";
 
 export class ShowQueue {
-    static showQueue(queue: typeQueue) {
+    static showQueue(queue: TypeQueue) {
         let queueList = [];
         switch (queue) {
-            case 'recep':
+            case TypeQueue.Recep:
                 let tempR = RecepQueue.getFirst();
 
                 for (let i = 0; i < RecepQueue.getQty(); i++) {
@@ -16,7 +16,7 @@ export class ShowQueue {
                 }
                 break;
 
-            case 'triage':
+            case TypeQueue.Triage:
                 let tempT = TriageQueue.getFirst();
 
                 for (let i = 0; i < TriageQueue.getQty(); i++) {
@@ -26,7 +26,7 @@ export class ShowQueue {
                     }
                 }
                 break;
-            case 'consult':
+            case TypeQueue.Consult:
                 let tempC = ConsultQueue.getFirst();
 
                 for (let i = 0; i < ConsultQueue.getQty(); i++) {

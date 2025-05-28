@@ -1,5 +1,4 @@
-export type Gender = 'Male' | 'Female' | 'Other';
-export type MaritalStatus = 'Single' | 'Married' | 'Divorcied' | 'Separated' | 'Widowed';
+import { Gender, MaritalStatus } from "../utils/personsUtils/generalEnuns";
 
 export interface Patient {
     name: string;

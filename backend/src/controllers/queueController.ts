@@ -1,53 +1,40 @@
 import { Request, Response } from "express";
-import { typeQueue } from "../entities/queue";
+import { HandleResponse } from "../utils/handleResponse";
+import { QueueReturns, TypeQueue } from "../utils/queueUtils/queueEnuns";
 import { ShowQueue } from "../services/queue/services/showQueue";
 import { PatientCaller } from "../services/queue/services/patientCaller";
 
+type Params = { typeQueue: TypeQueue }
+
 export const QueueController = {
-    async queue(req: Request, res: Response) {
-        const queueType: typeQueue = req.params.name as typeQueue;
-        const queue = ShowQueue.showQueue(queueType);
-        res.status(200).json({
-            queue: queue
-        })
-    },
+    async queue(req: Request<Params>, res: Response) {
+        const queueType: TypeQueue = req.params.typeQueue;
 
-    async callNextRecep(req: Request, res: Response) {
-        const called: string = PatientCaller.callNextRecep();
+        try {
+            const queue = ShowQueue.showQueue(queueType);
+            HandleResponse(true, 200, queueType, queue, res);
 
-        res.status(200).json({
-            message: called
-        })
-    },
-
-    async callNextTriage(req: Request, res: Response) {
-        const called: string = PatientCaller.callNextTriage()
-
-        if (called == 'Fila vazia') {
-            res.status(200).json({
-                message: called
-            })
-
-        } else {
-            res.status(200).json({
-                status: "sucess",
-                message: `${called}, vá para a triagem`
-            })
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
         }
     },
 
-    async callNextConsult(req: Request, res: Response) {
-        const called: string = PatientCaller.callNextConsult();
+    async callNext(req: Request<Params>, res: Response) {
+        const queue: TypeQueue = req.params.typeQueue;
 
-        if (called == 'Fila vazia') {
-            res.status(200).json({
-                message: called
-            });
-        } else {
-            res.status(200).json({
-                status: "success",
-                message: `${called}, vá para o consultório`
-            })
+        try {
+            const called: string = PatientCaller.callNext(queue);
+
+            if (called === QueueReturns.EmptyQueue) {
+                HandleResponse(false, 200, called, null, res);
+            } else {
+                HandleResponse(true, 200, QueueReturns.Called, called, res);
+            }
+
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
         }
     },
 };

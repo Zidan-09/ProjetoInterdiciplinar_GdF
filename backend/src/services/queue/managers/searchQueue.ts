@@ -1,15 +1,9 @@
-import { CallsConsult } from "../../../entities/careFlow";
 import { ConsultQueue } from "../../../entities/queue";
-import { NodeConsult } from "../../../utils/createNode";
-
-enum SearchResultType {
-    EmptyQueue = 'empty_queue',
-    NotFound = 'not_found',
-    Found = 'found'
-}
+import { NodeConsult } from "../../../utils/queueUtils/createNode";
+import { QueueReturns } from "../../../utils/queueUtils/queueEnuns";
 
 type SearchResult = {
-    status: SearchResultType;
+    status: QueueReturns;
     node?: NodeConsult;
 }
 class SearchQueue {
@@ -17,17 +11,17 @@ class SearchQueue {
         let temp: null | NodeConsult = ConsultQueue.getFirst();
 
         if (!temp) {
-            return { status: SearchResultType.EmptyQueue }
+            return { status: QueueReturns.EmptyQueue }
         } else {
             while (temp) {
                 if (temp.triage.careFlow_id == id) {
-                    return { status: SearchResultType.Found, node: temp }
+                    return { status: QueueReturns.Found, node: temp }
                 }
             }
 
-            return { status: SearchResultType.NotFound }
+            return { status: QueueReturns.NotFound }
         }
     }
 }
 
-export { SearchResultType, SearchResult, SearchQueue }
+export { SearchResult, SearchQueue }

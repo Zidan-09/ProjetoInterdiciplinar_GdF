@@ -1,8 +1,4 @@
-enum EmployeeStatus {
-    active = 'active',
-    onLeave = 'onLeave',
-    resigned = 'resigned'
-}
+import { EmployeeStatus } from "../utils/personsUtils/generalEnuns";
 
 interface Employee{
     registrationNumber: number;

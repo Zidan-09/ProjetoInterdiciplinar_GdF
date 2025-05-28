@@ -9,7 +9,7 @@ import { CreateTicket } from "../services/queue/services/ticketService";
 import { calledsList, Result } from "../services/queue/services/called";
 import { CareFlowService } from "../services/hospital/startCareFlow";
 import { HandleResponse } from "../utils/handleResponse";
-import { SearchResultType } from "../services/queue/managers/searchQueue";
+import { QueueReturns } from "../utils/queueUtils/queueEnuns";
 import { CareFlowResponses } from "../utils/CareFlowResponses";
 
 type TicketRequest = { priority: number };
@@ -91,7 +91,7 @@ export const HospitalController = {
         try {
             const result = await TriageService.changeSeverity(newTriageCategory.careFlow_id, newTriageCategory.newTriageCategory);
 
-            if (result.status === SearchResultType.EmptyQueue || result.status === SearchResultType.NotFound) {
+            if (result.status === QueueReturns.EmptyQueue || result.status === QueueReturns.NotFound) {
                 HandleResponse(false, 400, result.status, null, res);
             } else {
                 HandleResponse(true, 200, result.status, result.node, res);
@@ -114,7 +114,7 @@ export const HospitalController = {
             } else {
                 const result = calledsList.searchCalled(confirmStartData.careFlow_id);
 
-                if (result.status === SearchResultType.EmptyQueue || result.status === SearchResultType.NotFound) {
+                if (result.status === QueueReturns.EmptyQueue || result.status === QueueReturns.NotFound) {
                     HandleResponse(false, 400, result.status, null, res);
                 } else {
                     if (result.message === Result.PatientCalled) {

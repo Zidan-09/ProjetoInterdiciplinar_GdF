@@ -1,7 +1,5 @@
-import { NodeConsult, NodeRecep, NodeTriage } from "../utils/createNode";
-
-export type Priority = 'VeryPriority' | 'Priority' | 'Non-Priority'
-export type typeQueue = 'recep' | 'triage' | 'consult'
+import { NodeConsult, NodeRecep, NodeTriage } from "../utils/queueUtils/createNode";
+import { QueueReturns } from "../utils/queueUtils/queueEnuns";
 
 abstract class Queue<T extends { pointer: T | null }> {
     protected firstPointer: T | null;
@@ -14,7 +12,7 @@ abstract class Queue<T extends { pointer: T | null }> {
         this.qtyPatients = 0;
     }
 
-    public callNext(): T | 'Fila vazia' {
+    public callNext(): T | QueueReturns.EmptyQueue {
         const call = this.firstPointer;
 
         if (call) {
@@ -23,7 +21,7 @@ abstract class Queue<T extends { pointer: T | null }> {
             this.qtyPatients--;
             return call
         } else {
-            return 'Fila vazia'
+            return QueueReturns.EmptyQueue
         }
     }
 
@@ -156,6 +154,8 @@ class ConsultQueueClass extends Queue<NodeConsult> {
     };
 };
 
-export const RecepQueue: RecepQueueClass = new RecepQueueClass()
-export const TriageQueue: TriageQueueClass = new TriageQueueClass()
-export const ConsultQueue: ConsultQueueClass = new ConsultQueueClass()
+const RecepQueue: RecepQueueClass = new RecepQueueClass()
+const TriageQueue: TriageQueueClass = new TriageQueueClass()
+const ConsultQueue: ConsultQueueClass = new ConsultQueueClass()
+
+export { RecepQueue, TriageQueue, ConsultQueue }

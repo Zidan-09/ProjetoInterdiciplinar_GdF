@@ -1,36 +1,30 @@
-import { CallsConsult } from "../../../entities/careFlow";
 import { RecepQueue, TriageQueue, ConsultQueue } from "../../../entities/queue";
-import { calledsList } from "./called";
+import { QueueReturns, TypeQueue } from "../../../utils/queueUtils/queueEnuns";
 
 export class PatientCaller {
-    static callNextRecep(): string {
-        const call = RecepQueue.callNext();
+    static callNext(typeQueue: TypeQueue): string {
+        let call: any;
 
-        if (call === 'Fila vazia') {
+        switch (typeQueue) {
+            case TypeQueue.Recep:
+                call = RecepQueue.callNext();
+                break;
+            case TypeQueue.Triage:
+                call = TriageQueue.callNext();
+                break;
+            case TypeQueue.Consult:
+                call = ConsultQueue.callNext();
+                break;
+        }
+
+        if (call === QueueReturns.EmptyQueue) {
             return call
         } else {
-            return call.ticket!
+            if (typeQueue === TypeQueue.Recep) {
+                return call.ticket
+            } else {
+                return call.patient_name
+            }
         }
     };
-
-    static callNextTriage() {
-        const call = TriageQueue.callNext();
-
-        if (call == 'Fila vazia') {
-            return call;
-        } else {
-            return call.patient_name;
-        }
-    };
-
-    static callNextConsult() {
-        const call = ConsultQueue.callNext();
-
-        if (call == 'Fila vazia') {
-            return call
-        } else {
-            const called: CallsConsult = calledsList.insert(call)
-            return called.patient_name;
-        }
-    }
-}
+};

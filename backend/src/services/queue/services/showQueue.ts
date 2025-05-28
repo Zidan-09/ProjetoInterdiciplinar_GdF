@@ -1,5 +1,5 @@
 import { ConsultQueue, RecepQueue, TriageQueue } from "../../../entities/queue";
-import { TypeQueue } from "../../../entities/queue";
+import { TypeQueue } from "../../../utils/queueUtils/queueEnuns";
 
 export class ShowQueue {
     static showQueue(queue: TypeQueue) {

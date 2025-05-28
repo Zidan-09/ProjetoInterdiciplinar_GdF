@@ -1,9 +1,10 @@
-import { NodeConsult } from "../../utils/createNode";
+import { NodeConsult } from "../../utils/queueUtils/createNode";
 import { Triage, TriageCategory } from "../../entities/careFlow";
-import { InsertQueue } from "./../queue/services/insertQueue";
-import { SearchQueue, SearchResult, SearchResultType } from "./../queue/managers/searchQueue";
+import { SearchQueue, SearchResult } from "./../queue/managers/searchQueue";
 import { criteria } from "../../entities/criteria";
 import { openDb } from "../../db";
+import { QueueReturns } from "../../utils/queueUtils/queueEnuns";
+import { ConsultQueue } from "../../entities/queue";
 
 
 export class TriageService {
@@ -14,15 +15,15 @@ export class TriageService {
 
         console.log(triage.triageCategory)
         
-        const no: NodeConsult = await NodeConsult.create(data);
-        InsertQueue.insertConsultQueue(no);
+        const node: NodeConsult = await NodeConsult.create(data);
+        ConsultQueue.insertQueue(node);
         return data;
     };
 
     static async changeSeverity(careFlow_id: number, newSeverity: TriageCategory): Promise<SearchResult> {
         const search = SearchQueue.search(careFlow_id);
 
-        if (search.status === SearchResultType.EmptyQueue || search.status === SearchResultType.NotFound) {
+        if (search.status === QueueReturns.EmptyQueue || search.status === QueueReturns.NotFound) {
             return search
         } else {
             switch (newSeverity) {

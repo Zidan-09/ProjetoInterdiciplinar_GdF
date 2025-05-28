@@ -1,6 +1,5 @@
 import { RecepQueue } from "../../../entities/queue";
-import { NodeRecep } from "../../../utils/createNode";
-import { InsertQueue } from "./insertQueue";
+import { NodeRecep } from "../../../utils/queueUtils/createNode";
 
 export class CreateTicket {
     static createTicket(priority: number): string {
@@ -17,7 +16,7 @@ export class CreateTicket {
                 node.ticket = 'V' + (RecepQueue.getQtyV() + 1).toString().padStart(3, '0');
                 break;
         }
-        InsertQueue.insertRecepQueue(node)
+        RecepQueue.insertQueue(node);
         return node.ticket!;
     };
 }

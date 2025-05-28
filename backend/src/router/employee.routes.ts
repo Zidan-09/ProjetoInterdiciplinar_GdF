@@ -1,16 +1,16 @@
 import { Router } from "express";
-import { AdminController, EmployeersConstroller } from "../controllers/hospitalStaffControler";
+import { AdminController, EmployersConstroller } from "../controllers/hospitalStaffControler";
 
 const employeeRouter: Router = Router();
 
-employeeRouter.post('/register', EmployeersConstroller.register);
-employeeRouter.get('/activateAccount', EmployeersConstroller.activateAccount);
-employeeRouter.post('/authAccount', EmployeersConstroller.authAccount);
-employeeRouter.put('/edit', EmployeersConstroller.edit)
+employeeRouter.post('/register', EmployersConstroller.register);
+employeeRouter.get('/activateAccount', EmployersConstroller.activateAccount);
+employeeRouter.post('/authAccount', EmployersConstroller.authAccount);
+employeeRouter.put('/edit', EmployersConstroller.edit)
 
 employeeRouter.get('/careFlow/list', AdminController.listCareFlows);
-employeeRouter.get('/list/:employee', EmployeersConstroller.showEmployeers);
+employeeRouter.get('/list/:employee', EmployersConstroller.showEmployeers);
 
-employeeRouter.post('/login', EmployeersConstroller.login);
+employeeRouter.post('/login', EmployersConstroller.login);
 
 export default employeeRouter;

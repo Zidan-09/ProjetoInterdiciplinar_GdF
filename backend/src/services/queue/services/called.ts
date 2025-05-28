@@ -1,9 +1,9 @@
 import { CallsConsult } from "../../../entities/careFlow";
-import { NodeConsult } from "../../../utils/createNode";
-import { SearchResultType } from "../managers/searchQueue";
+import { NodeConsult } from "../../../utils/queueUtils/createNode";
+import { QueueReturns } from "../../../utils/queueUtils/queueEnuns";
 
 export type SearchCalled = {
-    status: SearchResultType;
+    status: QueueReturns;
     message?: Result;
     called?: CallsConsult;
 }
@@ -34,22 +34,22 @@ class Calleds {
         let result: SearchCalled;
 
         if (this.calleds.length === 0) {
-            result = { status: SearchResultType.EmptyQueue };
+            result = { status: QueueReturns.EmptyQueue };
             return result;
         }
 
         let temp: SearchCalled;
         for (let i of this.calleds) {
             if (i.careFlow_id === id) {
-                temp = { status: SearchResultType.Found, called: i };
+                temp = { status: QueueReturns.Found, called: i };
                 break
             } else {
-                temp = { status: SearchResultType.NotFound }
+                temp = { status: QueueReturns.NotFound }
             }
         }
 
         result = temp!
-        if (result.status !== SearchResultType.NotFound) {
+        if (result.status !== QueueReturns.NotFound) {
             result.called!.calls++;
 
             if (result.called!.calls > 3) {

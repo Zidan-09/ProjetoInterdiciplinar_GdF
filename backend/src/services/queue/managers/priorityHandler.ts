@@ -1,5 +1,5 @@
 import { ConsultQueue } from "../../../entities/queue";
-import { NodeConsult } from "../../../utils/createNode";
+import { NodeConsult } from "../../../utils/queueUtils/createNode";
 
 enum VerifyResponse {
     EmptyQueue = 'Fila vazia',

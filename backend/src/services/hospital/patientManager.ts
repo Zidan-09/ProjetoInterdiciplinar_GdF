@@ -1,4 +1,4 @@
-import { NodeTriage } from "../../utils/createNode";
+import { NodeTriage } from "../../utils/queueUtils/createNode";
 import { Patient } from "../../entities/patient";
 import { openDb } from "../../db";
 import { ValidateRegister } from "../../utils/personsUtils/validators";

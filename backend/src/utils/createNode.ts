@@ -1,9 +1,6 @@
 import { openDb } from "../db";
-import { Triage } from "../entities/careFlow";
+import { Triage, TriageCategory } from "../entities/careFlow";
 import { criteria } from "../entities/criteria";
-// import { db } from "../db";
-
-
 
 async function searchCareFlow(careFlowId: number) {
     const db = await openDb()
@@ -53,10 +50,7 @@ class NodeConsult {
     patient_name: string;
     triageCategory: number;
     time: Date;
-    limitDate: {
-        limitHours: number;
-        limitMinuts: number;
-    };
+    limitDate: number;
     maxPriority: boolean;
     pointer: null | NodeConsult;
 
@@ -72,40 +66,25 @@ class NodeConsult {
         };
 
         switch (patientTriage.triageCategory!) {
-            case 'Non-Urgent': 
+            case TriageCategory.NonUrgent: 
                 this.triageCategory = 1;
-                this.limitDate = {
-                    limitHours: Math.round(this.time.getUTCHours() + (criteria.nonUrgent / 60)),
-                    limitMinuts: this.time.getUTCMinutes() + (criteria.nonUrgent % 60)
-                };
+                this.limitDate = criteria.nonUrgent
                 break;
-            case 'Standard':
+            case TriageCategory.Standard:
                 this.triageCategory = 2;
-                this.limitDate = {
-                    limitHours: Math.round(this.time.getUTCHours() + criteria.standard / 60),
-                    limitMinuts: this.time.getUTCMinutes() + (criteria.standard % 60)
-                };
+                this.limitDate = criteria.standard
                 break;
-            case 'Urgent':
+            case TriageCategory.Urgent:
                 this.triageCategory = 3;
-                this.limitDate = {
-                    limitHours: Math.round(this.time.getUTCHours() + criteria.urgent / 60),
-                    limitMinuts: this.time.getUTCMinutes() + (criteria.urgent % 60)
-                };
+                this.limitDate = criteria.urgent
                 break;
-            case 'VeryUrgent':
+            case TriageCategory.VeryUrgent:
                 this.triageCategory = 4;
-                this.limitDate = {
-                    limitHours: Math.round(this.time.getUTCHours() + criteria.veryUrgent / 60),
-                    limitMinuts: this.time.getUTCMinutes() + (criteria.veryUrgent % 60)
-                };
+                this.limitDate = criteria.veryUrgent
                 break;
-            case 'Immediate':
+            case TriageCategory.Immediate:
                 this.triageCategory = 5;
-                this.limitDate = {
-                    limitHours: Math.round(this.time.getUTCHours() + criteria.immediate / 60),
-                    limitMinuts: this.time.getUTCMinutes() + (criteria.immediate % 60)
-                };
+                this.limitDate = criteria.immediate
                 this.maxPriority = true;
                 break;
         }

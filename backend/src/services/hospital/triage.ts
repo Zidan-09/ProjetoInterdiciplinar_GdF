@@ -1,7 +1,7 @@
 import { NodeConsult } from "../../utils/createNode";
 import { Triage, TriageCategory } from "../../entities/careFlow";
 import { InsertQueue } from "./../queue/services/insertQueue";
-import { SearchQueue } from "./../queue/managers/searchQueue";
+import { SearchQueue, SearchResult, SearchResultType } from "./../queue/managers/searchQueue";
 import { criteria } from "../../entities/criteria";
 import { openDb } from "../../db";
 
@@ -19,51 +19,36 @@ export class TriageService {
         return data;
     };
 
-    static async changeSeverity(patient_id: number, newSeverity: TriageCategory): Promise<[boolean, string]> {
-        const search: string | NodeConsult = SearchQueue.search(patient_id);
+    static async changeSeverity(careFlow_id: number, newSeverity: TriageCategory): Promise<SearchResult> {
+        const search = SearchQueue.search(careFlow_id);
 
-        if (typeof search === 'string') {
-            return [false, search]
+        if (search.status === SearchResultType.EmptyQueue || search.status === SearchResultType.NotFound) {
+            return search
         } else {
             switch (newSeverity) {
-                case 'Non-Urgent': 
-                    search.triageCategory = 1;
-                    search.limitDate = {
-                        limitHours: Math.round(criteria.nonUrgent / 60),
-                        limitMinuts: criteria.nonUrgent % 60
-                    };
+                case TriageCategory.NonUrgent: 
+                    search.node!.triageCategory = 1;
+                    search.node!.limitDate = criteria.nonUrgent;
                     break;
-                case 'Standard':
-                    search.triageCategory = 2;
-                    search.limitDate = {
-                        limitHours: Math.round(criteria.standard / 60),
-                        limitMinuts: criteria.standard % 60
-                    };
+                case TriageCategory.Standard:
+                    search.node!.triageCategory = 2;
+                    search.node!.limitDate = criteria.standard;
                     break;
-                case 'Urgent':
-                    search.triageCategory = 3;
-                    search.limitDate = {
-                        limitHours: Math.round(criteria.urgent / 60),
-                        limitMinuts: criteria.urgent % 60
-                    };
+                case TriageCategory.Urgent:
+                    search.node!.triageCategory = 3;
+                    search.node!.limitDate = criteria.urgent;
                     break;
-                case 'VeryUrgent':
-                    search.triageCategory = 4;
-                    search.limitDate = {
-                        limitHours: Math.round(criteria.veryUrgent / 60),
-                        limitMinuts: criteria.veryUrgent % 60
-                    };
+                case TriageCategory.VeryUrgent:
+                    search.node!.triageCategory = 4;
+                    search.node!.limitDate = criteria.veryUrgent;
                     break;
-                case 'Immediate':
-                    search.triageCategory = 5;
-                    search.limitDate = {
-                        limitHours: Math.round(criteria.immediate / 60),
-                        limitMinuts: criteria.immediate % 60
-                    };
-                    search.maxPriority = true;
+                case TriageCategory.Immediate:
+                    search.node!.triageCategory = 5;
+                    search.node!.limitDate = criteria.immediate
+                    search.node!.maxPriority = true;
                     break;
             }
-            return [true, 'Classificação de risco alterada com sucesso']
+            return search
         }
     };
 };

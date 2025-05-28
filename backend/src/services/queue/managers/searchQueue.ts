@@ -1,21 +1,33 @@
+import { CallsConsult } from "../../../entities/careFlow";
 import { ConsultQueue } from "../../../entities/queue";
 import { NodeConsult } from "../../../utils/createNode";
 
-export class SearchQueue {
-    static search(id: number): string | NodeConsult {
+enum SearchResultType {
+    EmptyQueue = 'empty_queue',
+    NotFound = 'not_found',
+    Found = 'found'
+}
+
+type SearchResult = {
+    status: SearchResultType;
+    node?: NodeConsult;
+}
+class SearchQueue {
+    static search(id: number): SearchResult {
         let temp: null | NodeConsult = ConsultQueue.getFirst();
 
-        if (temp) {
-            while(temp) {
-                if (temp.triage.careFlow_id === id) {
-                    return temp
-                } else {
-                    temp = temp.pointer
+        if (!temp) {
+            return { status: SearchResultType.EmptyQueue }
+        } else {
+            while (temp) {
+                if (temp.triage.careFlow_id == id) {
+                    return { status: SearchResultType.Found, node: temp }
                 }
             }
-            return 'Paciente não encontrado na fila'
-        } else {
-            return 'Fila vazia'
+
+            return { status: SearchResultType.NotFound }
         }
     }
 }
+
+export { SearchResultType, SearchResult, SearchQueue }

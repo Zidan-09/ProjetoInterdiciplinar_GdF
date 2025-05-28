@@ -15,7 +15,12 @@ export class PatientCaller {
 
     static callNextTriage() {
         const call = TriageQueue.callNext();
-        return call;
+
+        if (call == 'Fila vazia') {
+            return call;
+        } else {
+            return call.patient_name;
+        }
     };
 
     static callNextConsult() {
@@ -25,7 +30,7 @@ export class PatientCaller {
             return call
         } else {
             const called: CallsConsult = calledsList.insert(call)
-            return called;
+            return called.patient_name;
         }
     }
 }

@@ -1,9 +1,23 @@
 import { Patient } from "./patient";
 
-export type Status = 'In triage queue'| 'In consult queue' | 'In consult' | 'Was treated' | 'Left before consult'
-export type TriageCategory = 'Non-Urgent' | 'Standard' | 'Urgent' | 'VeryUrgent' | 'Immediate'
+enum Status {
+    WaitingTriage = 'waiting_triage',
+    WaitingConsultation = 'waiting_consultation',
+    InConsultation = 'In consult',
+    Attended  = 'attended',
+    Canceled = 'canceled',
+    NoShow = 'no_show'
+}
 
-export interface VitalSigns {
+enum TriageCategory {
+    Immediate = 'immediate',
+    VeryUrgent = 'very_urgent',
+    Urgent = 'urgent',
+    Standard = 'standard',
+    NonUrgent = 'non_urgent'
+}
+
+interface VitalSigns {
     bloodPreassure: { systolicPreassure: number; diastolicPreassure: number };
     heartRate: number;
     respiratoryRate: number;
@@ -11,14 +25,14 @@ export interface VitalSigns {
     oxygenSaturation: number;
 };
 
-export interface CareFlow {
+interface CareFlow {
     receptionist_id: number;
     patient: Patient
     time: Date;
     status: Status;
 };
 
-export interface Triage {
+interface Triage {
     careFlow_id: number;
     nurse_id: number;
     vitalSigns: VitalSigns;
@@ -27,21 +41,28 @@ export interface Triage {
     painLevel: number;
 };
 
-export interface CallsConsult {
+interface ChangeTriageCategory {
+    careFlow_id: number;
+    newTriageCategory: TriageCategory;
+}
+
+interface CallsConsult {
     careFlow_id: number
     patient_name: string;
     calls: number
 };
 
-export interface StartConsult {
+interface StartConsult {
     careFlow_id: number;
     doctor_id: number;
     confirm: boolean;
 };
 
-export interface EndConsult {
+interface EndConsult {
     careFlow_id: number;
     diagnosis: string | null;
     prescriptions: string | null;
     notes: string | null;
-}; 
+};
+
+export { Status, TriageCategory, VitalSigns, CareFlow, Triage, ChangeTriageCategory, CallsConsult, StartConsult, EndConsult }

@@ -1,5 +1,17 @@
 import { CallsConsult } from "../../../entities/careFlow";
 import { NodeConsult } from "../../../utils/createNode";
+import { SearchResultType } from "../managers/searchQueue";
+
+export type SearchCalled = {
+    status: SearchResultType;
+    message?: Result;
+    called?: CallsConsult;
+}
+
+export enum Result {
+    PatientRemoved = 'patient_removed',
+    PatientCalled = 'patient_called'
+}
 
 class Calleds {
     private calleds: CallsConsult[];
@@ -9,35 +21,45 @@ class Calleds {
     }
 
     public insert(node: NodeConsult): CallsConsult {
-        const calledType: CallsConsult = {
+        const called: CallsConsult = {
             careFlow_id: node.triage.careFlow_id,
             patient_name: node.patient_name,
             calls: 1
         };
-        this.calleds.push(calledType);
-        return calledType;
+        this.calleds.push(called);
+        return called;
     };
 
-    public searchCalled(id: number): [CallsConsult, string] | string {
-        let result: string | CallsConsult = 'Paciente não encontrado';
+    public searchCalled(id: number) {
+        let result: SearchCalled;
+
+        if (this.calleds.length === 0) {
+            result = { status: SearchResultType.EmptyQueue };
+            return result;
+        }
+
+        let temp: SearchCalled;
         for (let i of this.calleds) {
-            if (i.careFlow_id == id) {
-                result = i;
+            if (i.careFlow_id === id) {
+                temp = { status: SearchResultType.Found, called: i };
                 break
+            } else {
+                temp = { status: SearchResultType.NotFound }
             }
         }
-        if (typeof result != 'string') {
-            result.calls++;
 
-            const temp: CallsConsult = result;
+        result = temp!
+        if (result.status !== SearchResultType.NotFound) {
+            result.called!.calls++;
 
-            if (result.calls > 3) {
-                const index: number = this.calleds.indexOf(result);
+            if (result.called!.calls > 3) {
+                const index: number = this.calleds.indexOf(result.called!);
                 this.calleds.splice(index, 1);
-                result = 'Chame o próximo'
+                result.message = Result.PatientRemoved
+                return result
             } else {
-                result = 'Paciente chamado novamente'
-                return [temp, result];
+                result.message = Result.PatientCalled
+                return result
             }
         }
         return result;

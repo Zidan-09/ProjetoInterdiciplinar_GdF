@@ -1,34 +1,39 @@
 import { ConsultQueue } from "../../../entities/queue";
 import { NodeConsult } from "../../../utils/createNode";
 
+enum VerifyResponse {
+    EmptyQueue = 'Fila vazia',
+    UpdatedQueue = 'Fila atualizada'
+}
+
 export class PriorityHandler {
-    static verify(): string {
+    static verify(): VerifyResponse {
         const nodesToSort: NodeConsult[] = [];
+
         let temp: NodeConsult | null = ConsultQueue.getFirst();
 
         if (!temp) {
-            return 'Fila vazia'
-
+            return VerifyResponse.EmptyQueue;
         } else {
-            let dateNow: Date = new Date();
+            const dateNow = new Date();
 
             for (let i = 0; i < ConsultQueue.getQty(); i++) {
-                if (temp) {
-                    let next: NodeConsult | null = temp.pointer;
+                if (temp && !temp.maxPriority) {
+                    const timeElapsedMs = dateNow.getTime() - temp.time.getTime();
+                    const timeLimitMs = temp.limitDate * 60 * 1000 * 0.8;
 
-                    const limit: Date = new Date();
-                    limit.setUTCHours(temp.limitDate.limitHours, temp.limitDate.limitMinuts, 0, 0);
-
-                    if (dateNow >= limit) {
+                    if (timeElapsedMs >= timeLimitMs) {
                         temp.maxPriority = true;
                         nodesToSort.push(temp);
                     }
-                    temp = next;    
+
+                    temp = temp.pointer;
                 }
             }
+
             nodesToSort.forEach(node => this.toSort(node));
-            
-            return 'Fila atualizada';
+
+            return VerifyResponse.UpdatedQueue;
         }
     };
 
@@ -61,5 +66,5 @@ export class PriorityHandler {
             node.pointer = current.pointer;
             current.pointer = node;
         }
-    }
+    };
 }

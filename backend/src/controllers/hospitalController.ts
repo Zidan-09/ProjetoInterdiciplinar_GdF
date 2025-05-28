@@ -1,134 +1,150 @@
 import { Request, Response } from "express";
-import { criteria, CriteriaData } from "../entities/criteria";
+import { CriteriaData } from "../entities/criteria";
 import { CriteriaManager } from "../services/staff/criteriaUpdate";
 import { PatientManager } from "../services/hospital/patientManager";
 import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";
-import { EndConsult, CareFlow, StartConsult, Triage, TriageCategory } from "../entities/careFlow";
+import { EndConsult, CareFlow, StartConsult, Triage, ChangeTriageCategory } from "../entities/careFlow";
 import { CreateTicket } from "../services/queue/services/ticketService";
-import { calledsList } from "../services/queue/services/called";
+import { calledsList, Result } from "../services/queue/services/called";
 import { CareFlowService } from "../services/hospital/startCareFlow";
+import { HandleResponse } from "../utils/handleResponse";
+import { SearchResultType } from "../services/queue/managers/searchQueue";
+import { CareFlowResponses } from "../utils/CareFlowResponses";
 
 type TicketRequest = { priority: number };
 
 export const HospitalController = {
     async createTicket(req: Request<{}, {}, TicketRequest>, res: Response) {
-        const data: TicketRequest = req.body;
-        const ticket: string = CreateTicket.createTicket(data.priority)
+        try {
+            const data: TicketRequest = req.body;
+            const ticket: string = CreateTicket.createTicket(data.priority)
 
-        res.status(201).json({
-            status: "success",
-            message: "Senha criada",
-            data: ticket
-        })
+            HandleResponse(true, 201, CareFlowResponses.TicketCreationSucess, ticket, res)
+    
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 400, CareFlowResponses.TicketCreationFailed, error as string, res)
+        }
     },
 
     async register(req: Request<{}, {}, CareFlow>, res: Response) {
-        const data: CareFlow = req.body;
+        try {
+            const data: CareFlow = req.body;
+    
+            const result = await PatientManager.register(data.patient);
+    
+            if (result) {
+                const careFlow: number | void = await CareFlowService.startCareFlow(result, data);
 
-        const result = await PatientManager.register(data.patient);
+                if (careFlow) {
+                    HandleResponse(true, 201, `${data.patient.name} foi cadastrado(a) com sucesso`, careFlow && data, res);
+                }
 
-        if (result[2] === 'Erro ao cadastrar o paciente') {
-            res.status(400).json({
-                status: "error",
-                message: result[2]
-            })
-        } else {
-            const careFlowid: number = await CareFlowService.startCareFlow(result[1], data);
-
-            res.status(201).json({
-                status: "success",
-                message: result[1],
-                careFlowId: careFlowid
-            })
+            } else {
+                HandleResponse(false, 400, "Erro ao cadastrar paciente", data, res);
+            }
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res)
         }
     },
 
     async list(req: Request, res: Response) {
-        const patients = await PatientManager.list();
-
-        res.status(200).json({
-            status: "sucess",
-            patients: patients,
-            message: "Pacientes cadastrados exibidos"
-        })
+        try {
+            const patients = await PatientManager.list();
+            HandleResponse(true, 200, "pacientes cadastrados exibidos", patients, res);
+    
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 400, error as string, null, res)
+        }
     },
 
     async changeCriteria(req: Request<{}, {}, CriteriaData>, res: Response) {
         const newCriteria: CriteriaData = req.body;
 
-        await CriteriaManager.changeCriteria(newCriteria);
-
-        res.status(201).json({
-            status: "success",
-            message: "Critérios atualizados!",
-            newCriteria: criteria
-        })
+        try {
+            await CriteriaManager.changeCriteria(newCriteria);
+            HandleResponse(true, 200, CareFlowResponses.CriteriaUpdateSucess, newCriteria, res);
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 400, CareFlowResponses.CriteriaUptadeFailed, newCriteria, res);
+        }
     },
 
     async triage(req: Request<{}, {}, Triage>, res: Response) {
         const data: Triage = req.body;
+        try {
+            const result = await TriageService.triage(data);
 
-        const result = await TriageService.triage(data);
-
-        res.status(201).json({
-            status: "success",
-            message: "Triagem realizada com sucesso",
-            result: result
-        })
+            HandleResponse(true, 200, CareFlowResponses.TriageSucess, result, res);
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 400, CareFlowResponses.TriageFailed, null, res);
+        }
     },
 
-    async changeTriageCategory(req: Request<{}, {}, TriageCategory>, res: Response) {
-        const newTriageCategory: TriageCategory = req.body;
+    async changeTriageCategory(req: Request<{}, {}, ChangeTriageCategory>, res: Response) {
+        const newTriageCategory: ChangeTriageCategory = req.body;
 
-        const result = await TriageService.changeSeverity(1, newTriageCategory)
+        try {
+            const result = await TriageService.changeSeverity(newTriageCategory.careFlow_id, newTriageCategory.newTriageCategory);
 
-        if (result[0]) {
-            res.status(200).json({
-                status: "success",
-                message: result[1]
-            })
-        } else {
-            res.json({
-                status: "error",
-                message: result[1]
-            })
+            if (result.status === SearchResultType.EmptyQueue || result.status === SearchResultType.NotFound) {
+                HandleResponse(false, 400, result.status, null, res);
+            } else {
+                HandleResponse(true, 200, result.status, result.node, res);
+            }
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
         }
     },
 
     async consultConfirm(req: Request<{}, {}, StartConsult>, res: Response) {
         const confirmStartData: StartConsult = req.body;
-        if (confirmStartData.confirm) {
-            const consult_id: number = await ConsultService.startConsult(confirmStartData);
-            
-            res.status(201).json({
-                status: "sucess",
-                message: "Consulta confirmada e iniciada",
-                consult: consult_id
-            })
 
-        } else {
-            const result = calledsList.searchCalled(confirmStartData.careFlow_id);
+        try {
+            if (confirmStartData.confirm) {
+                const careFlow_id: number | void = await ConsultService.startConsult(confirmStartData);
+                
+                HandleResponse(true, 200, CareFlowResponses.ConsultStarted, careFlow_id, res);
 
-            if (result == 'Paciente não encontrado') {
-                res.status(400).json({
-                    status: "error",
-                    message: result
-                });
             } else {
+                const result = calledsList.searchCalled(confirmStartData.careFlow_id);
 
+                if (result.status === SearchResultType.EmptyQueue || result.status === SearchResultType.NotFound) {
+                    HandleResponse(false, 400, result.status, null, res);
+                } else {
+                    if (result.message === Result.PatientCalled) {
+                        HandleResponse(true, 200, result.status, result.message, res);
+                    } else {
+                        HandleResponse(false, 400, result.status, result.message, res);
+                    }
+                }
             }
+
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
         }
     },
 
     async consultEnd(req: Request<{}, {}, EndConsult>, res: Response) {
         const endData: EndConsult = req.body;
-        const result = await ConsultService.endConsult(endData);
 
-        res.status(200).json({
-            status: "success",
-            message: "Consulta finalizada",
-            consult: result
-        })
+        try {
+            const result = await ConsultService.endConsult(endData);
+    
+            if (result) {
+                HandleResponse(true, 201, CareFlowResponses.ConsultEnded, result, res);
+            } else {
+                HandleResponse(false, 400, CareFlowResponses.ConsultFailed, null, res);
+            }
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
+        }
     }
 }

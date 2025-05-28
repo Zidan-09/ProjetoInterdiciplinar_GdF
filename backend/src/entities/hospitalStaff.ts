@@ -1,5 +1,8 @@
-type EmployeeStatus = 'active' | 'onLeave' | 'Resigned'
-type Role = 'Doctor' | 'Nurse' | 'Receptionist' | 'Admin'
+enum EmployeeStatus {
+    active = 'active',
+    onLeave = 'onLeave',
+    resigned = 'resigned'
+}
 
 interface Employee{
     registrationNumber: number;

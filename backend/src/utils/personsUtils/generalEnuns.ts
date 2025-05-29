@@ -19,10 +19,10 @@ enum EmployeeStatus {
 }
 
 enum EmployeeType {
-    Receptionist = 'receptionist',
-    Nurse = 'nurse',
-    Doctor = 'doctor',
-    Admin = 'admin'
+    Receptionist,
+    Nurse,
+    Doctor,
+    Admin
 }
 
 enum EmployeeResponseMessage {

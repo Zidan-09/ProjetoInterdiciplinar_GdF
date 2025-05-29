@@ -24,7 +24,7 @@ export class EmployeeManager {
         const employeeData: T = data.data;
         const db = await openDb();
 
-        const valid: boolean = await ValidateRegister.verifyEmployee(data.data);
+        const valid: boolean = await ValidateRegister.verifyEmployee(employeeData);
 
         if (valid) {
             try {
@@ -80,7 +80,7 @@ export class EmployeeManager {
     
     static async showEmployeers(employeeType: EmployeeType) {
         const db = await openDb();
-    
+
         try {
             const extraFields = {
               Receptionist: "weeklyHours",
@@ -89,10 +89,9 @@ export class EmployeeManager {
               Admin: "accessLevel, weeklyHours"
             };
 
-            return await db.all(`SELECT Employee.*, ${employeeType}.${extraFields} FROM ${employeeType} JOIN Employee ON ${employeeType}.id = Employee.id`);
+            return await db.all(`SELECT Employee.*, ${employeeType}.* FROM ${employeeType} JOIN Employee ON ${employeeType}.id = Employee.id`);
         } catch (error) {
             console.error(error);
         }
-
     }
 }

@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { QueueController } from "../controllers/queueController";
-import { HospitalController } from "../controllers/hospitalController";
 
 const queueRouter: Router = Router();
 

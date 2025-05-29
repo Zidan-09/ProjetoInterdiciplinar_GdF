@@ -67,9 +67,14 @@ class EmployersConstroller {
 
     static async activateAccount(req: Request, res: Response) {
         const token = req.query.token as string;
-        const data = Jwt.verifyToken(token);
-
+        
         try {
+            const data = Jwt.verifyToken(token);
+
+            if (data) {
+                HandleResponse(true, 200, "TESTE", data, res);
+            }
+
         } catch (error) {
             console.error(error)
         }

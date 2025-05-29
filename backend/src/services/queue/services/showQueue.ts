@@ -2,9 +2,10 @@ import { ConsultQueue, RecepQueue, TriageQueue } from "../../../entities/queue";
 import { TypeQueue } from "../../../utils/queueUtils/queueEnuns";
 
 export class ShowQueue {
-    static showQueue(queue: TypeQueue) {
+    static showQueue(queue: { typeQueue: TypeQueue }) {
         let queueList = [];
-        switch (queue) {
+
+        switch (queue.typeQueue) {
             case TypeQueue.Recep:
                 let tempR = RecepQueue.getFirst();
 

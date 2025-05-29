@@ -1,5 +1,5 @@
 import { NodeConsult } from "../../utils/queueUtils/createNode";
-import { Triage, TriageCategory } from "../../entities/careFlow";
+import { Status, Triage, TriageCategory } from "../../entities/careFlow";
 import { SearchQueue, SearchResult } from "./../queue/managers/searchQueue";
 import { criteria } from "../../entities/criteria";
 import { openDb } from "../../db";
@@ -10,11 +10,8 @@ import { ConsultQueue } from "../../entities/queue";
 export class TriageService {
     static async triage(data: Triage) {
         const db = await openDb();
-        const triage: any = await db.run('INSERT INTO Triage (id, nurse_id, systolicPreassure, diastolicPreassure, heartRate, respiratoryRate, bodyTemperature, oxygenSaturation, painLevel, symptoms, triageCategory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.careFlow_id, data.nurse_id, data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, data.symptoms, data.triageCategory]);
-        const triageId = triage.lastId;
-
-        console.log(triage.triageCategory)
-        
+        await db.run('INSERT INTO Triage (triage_id, nurse_id, systolicPreassure, diastolicPreassure, heartRate, respiratoryRate, bodyTemperature, oxygenSaturation, painLevel, symptoms, triageCategory) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.careFlow_id, data.nurse_id, data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, data.symptoms, data.triageCategory]);
+        await db.run('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.WaitingConsultation, data.careFlow_id])
         const node: NodeConsult = await NodeConsult.create(data);
         ConsultQueue.insertQueue(node);
         return data;

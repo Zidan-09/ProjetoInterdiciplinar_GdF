@@ -38,7 +38,7 @@ export const HospitalController = {
                 const careFlow: number | void = await CareFlowService.startCareFlow(result, data);
 
                 if (careFlow) {
-                    HandleResponse(true, 201, `${data.patient.name} foi cadastrado(a) com sucesso`, careFlow && data, res);
+                    HandleResponse(true, 201, `${data.patient.name} foi cadastrado(a) com sucesso`, { careFlow, data }, res);
                 }
 
             } else {
@@ -112,7 +112,7 @@ export const HospitalController = {
                 HandleResponse(true, 200, CareFlowResponses.ConsultStarted, careFlow_id, res);
 
             } else {
-                const result = calledsList.searchCalled(confirmStartData.careFlow_id);
+                const result = await calledsList.searchCalled(confirmStartData.careFlow_id);
 
                 if (result.status === QueueReturns.EmptyQueue || result.status === QueueReturns.NotFound) {
                     HandleResponse(false, 400, result.status, null, res);

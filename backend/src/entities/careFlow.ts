@@ -1,13 +1,5 @@
 import { Patient } from "./patient";
-
-enum Status {
-    WaitingTriage = 'waiting_triage',
-    WaitingConsultation = 'waiting_consultation',
-    InConsultation = 'In consult',
-    Attended  = 'attended',
-    Canceled = 'canceled',
-    NoShow = 'no_show'
-}
+import { Status } from "../utils/personsUtils/generalEnuns";
 
 enum TriageCategory {
     Immediate = 'immediate',

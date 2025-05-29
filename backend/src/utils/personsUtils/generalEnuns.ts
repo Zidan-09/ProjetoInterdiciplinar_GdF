@@ -35,4 +35,12 @@ enum EmployeeResponseMessage {
     Error = 'unexpected_error'
 }
 
-export { Gender, MaritalStatus, EmployeeStatus, EmployeeType, EmployeeResponseMessage }
+enum Status {
+    WaitingTriage = 'waiting_triage',
+    WaitingConsultation = 'waiting_consultation',
+    InConsultation = 'In consult',
+    Attended  = 'attended',
+    NoShow = 'no_show'
+}
+
+export { Gender, MaritalStatus, EmployeeStatus, EmployeeType, EmployeeResponseMessage, Status }

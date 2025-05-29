@@ -8,11 +8,11 @@ type Params = { typeQueue: TypeQueue }
 
 export const QueueController = {
     async queue(req: Request<Params>, res: Response) {
-        const queueType: Params = req.params;
+        const queue: Params = req.params;
 
         try {
-            const queue = ShowQueue.showQueue(queueType.typeQueue);
-            HandleResponse(true, 200, queueType.typeQueue, queue, res);
+            const queueT = ShowQueue.showQueue(queue);
+            HandleResponse(true, 200, queue.typeQueue, queueT, res);
 
         } catch (error) {
             console.error(error);

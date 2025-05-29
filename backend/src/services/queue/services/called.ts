@@ -1,6 +1,8 @@
 import { CallsConsult } from "../../../entities/careFlow";
+import { openDb } from "../../../db";
 import { NodeConsult } from "../../../utils/queueUtils/createNode";
 import { QueueReturns } from "../../../utils/queueUtils/queueEnuns";
+import { Status } from "../../../utils/personsUtils/generalEnuns"
 
 export type SearchCalled = {
     status: QueueReturns;
@@ -30,7 +32,7 @@ class Calleds {
         return called;
     };
 
-    public searchCalled(id: number) {
+    public async searchCalled(id: number) {
         let result: SearchCalled;
 
         if (this.calleds.length === 0) {
@@ -53,9 +55,13 @@ class Calleds {
             result.called!.calls++;
 
             if (result.called!.calls > 3) {
+                const db = await openDb();
+                await db.run('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.NoShow, result.called!.careFlow_id]);
+
                 const index: number = this.calleds.indexOf(result.called!);
                 this.calleds.splice(index, 1);
                 result.message = Result.PatientRemoved
+                
                 return result
             } else {
                 result.message = Result.PatientCalled

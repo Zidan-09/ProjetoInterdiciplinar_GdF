@@ -8,7 +8,7 @@ employeeRouter.get('/activateAccount', EmployersConstroller.activateAccount);
 employeeRouter.post('/authAccount', EmployersConstroller.authAccount);
 employeeRouter.put('/edit', EmployersConstroller.edit)
 
-employeeRouter.get('/careFlow/list', AdminController.listCareFlows);
+employeeRouter.get('/list/careFlow', AdminController.listCareFlows);
 employeeRouter.get('/list/:employee', EmployersConstroller.showEmployeers);
 
 employeeRouter.post('/login', EmployersConstroller.login);

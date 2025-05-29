@@ -1,4 +1,4 @@
-Projeto Integrador - Gerenciamento de Filas em Pronto-Socorro
+# Projeto Integrador - Gerenciamento de Filas em Pronto-Socorro
 
 Este projeto tem como objetivo desenvolver um sistema completo para gerenciamento de filas em unidades de pronto atendimento (UPAs e hospitais), com foco na triagem eficiente, atendimento ordenado e controle administrativo de pacientes.
 🛠 Tecnologias Utilizadas

@@ -12,6 +12,12 @@ enum MaritalStatus {
     Widowed = 'widowed'
 }
 
+enum PatientResponses {
+    PatientRegistered = 'patient_registered',
+    PatientListed = 'patient_listed',
+    Error = 'unexpected_error'
+}
+
 enum EmployeeStatus {
     active = 'active',
     onLeave = 'onLeave',
@@ -43,4 +49,4 @@ enum Status {
     NoShow = 'no_show'
 }
 
-export { Gender, MaritalStatus, EmployeeStatus, EmployeeType, EmployeeResponseMessage, Status }
+export { Gender, MaritalStatus, PatientResponses, EmployeeStatus, EmployeeType, EmployeeResponseMessage, Status }

@@ -8,7 +8,6 @@ interface Employee{
     phone: string;
     dob: Date;
     address: string;
-    hireDate: Date;
     workShift: string;
     status: EmployeeStatus;
     salary: number;

@@ -1,11 +1,11 @@
 import { Response, Request } from "express";
-import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, User, LoginData } from "../entities/hospitalStaff";
+import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, LoginData } from "../entities/hospitalStaff";
 import { EmployeeManager } from "../services/staff/employeeManager";
 import { EmployeeType } from "../utils/personsUtils/generalEnuns";
 import { Login } from "../services/staff/employeeLogin";
-import { Jwt } from "../utils/security";
+import { Jwt } from "../utils/systemUtils/security";
 import { showCareFlows } from "../services/staff/showCareFlows";
-import { HandleResponse } from "../utils/handleResponse";
+import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
 
 type Params = { employee: EmployeeType }
@@ -47,7 +47,7 @@ class EmployersConstroller {
 
         try {
             const done = await EmployeeManager.editEmployee(newData);
-            HandleResponse
+            HandleResponse(true, 200, "Editado", newData, res);
         } catch (error) {
             console.error(error);
             HandleResponse(false, 500, error as string, null, res);

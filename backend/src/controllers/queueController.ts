@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HandleResponse } from "../utils/handleResponse";
+import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { QueueReturns, TypeQueue } from "../utils/queueUtils/queueEnuns";
 import { ShowQueue } from "../services/queue/services/showQueue";
 import { PatientCaller } from "../services/queue/services/patientCaller";
@@ -36,5 +36,5 @@ export const QueueController = {
             console.error(error);
             HandleResponse(false, 500, error as string, null, res);
         }
-    },
+    }
 };

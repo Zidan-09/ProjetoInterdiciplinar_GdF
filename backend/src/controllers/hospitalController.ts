@@ -8,9 +8,10 @@ import { EndConsult, CareFlow, StartConsult, Triage, ChangeTriageCategory } from
 import { CreateTicket } from "../services/queue/services/ticketService";
 import { calledsList, Result } from "../services/queue/services/called";
 import { CareFlowService } from "../services/hospital/startCareFlow";
-import { HandleResponse } from "../utils/handleResponse";
+import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { QueueReturns } from "../utils/queueUtils/queueEnuns";
-import { CareFlowResponses } from "../utils/CareFlowResponses";
+import { CareFlowResponses } from "../utils/systemUtils/CareFlowResponses";
+import { PatientResponses } from "../utils/personsUtils/generalEnuns";
 
 type TicketRequest = { priority: number };
 
@@ -31,18 +32,17 @@ export const HospitalController = {
     async register(req: Request<{}, {}, CareFlow>, res: Response) {
         try {
             const data: CareFlow = req.body;
-    
             const result = await PatientManager.register(data.patient);
     
             if (result) {
                 const careFlow: number | void = await CareFlowService.startCareFlow(result, data);
 
                 if (careFlow) {
-                    HandleResponse(true, 201, `${data.patient.name} foi cadastrado(a) com sucesso`, { careFlow, data }, res);
+                    HandleResponse(true, 201, PatientResponses.PatientRegistered, { careFlow, data }, res);
                 }
 
             } else {
-                HandleResponse(false, 400, "Erro ao cadastrar paciente", data, res);
+                HandleResponse(false, 400, PatientResponses.Error, data, res);
             }
         } catch (error) {
             console.error(error);
@@ -53,11 +53,16 @@ export const HospitalController = {
     async list(req: Request, res: Response) {
         try {
             const patients = await PatientManager.list();
-            HandleResponse(true, 200, "pacientes cadastrados exibidos", patients, res);
+
+            if (patients != 'Erro ao listar pacientes cadastrados') {
+                HandleResponse(true, 200, PatientResponses.PatientListed, patients, res);
+            } else {
+                HandleResponse(false, 400, PatientResponses.Error, null, res);
+            }
     
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 400, error as string, null, res)
+            HandleResponse(false, 500, error as string, null, res)
         }
     },
 
@@ -69,7 +74,7 @@ export const HospitalController = {
             HandleResponse(true, 200, CareFlowResponses.CriteriaUpdateSucess, newCriteria, res);
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 400, CareFlowResponses.CriteriaUptadeFailed, newCriteria, res);
+            HandleResponse(false, 500, CareFlowResponses.CriteriaUptadeFailed, newCriteria, res);
         }
     },
 

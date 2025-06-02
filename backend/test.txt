@@ -1,0 +1,31 @@
+Receptionist = {
+    name = Chichi
+    dob = 5/5/86
+    gender = Female
+    email = chichi.receptionist@gmail.com
+    pass = Samuel200@
+}
+
+Nurse = {
+    name = Bulma
+    dob = 1/7/86
+    gender = Female
+    email = bulma.enfermeira@gmail.com
+    pass = Samuel200@
+}
+
+Doctor = {
+    name = Goku
+    dob = 8/10/86
+    gender = Male
+    email = goku.medicogdf@gmail.com
+    pass = Samuel200@
+}
+
+Admin = {
+    name = Whis
+    dob = 28/2/2007
+    gender = Other
+    email = whis.adm@gmail.com
+    pass = Samuel200@
+}

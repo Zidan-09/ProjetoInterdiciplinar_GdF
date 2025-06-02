@@ -1,7 +1,7 @@
 import { Receptionist, Nurse, Doctor, Admin, User } from "../../entities/hospitalStaff";
 import { ValidateRegister } from "../../utils/personsUtils/validators";
 import { openDb } from "../../db";
-import { Hash, Jwt } from "../../utils/security";
+import { Hash, Jwt } from "../../utils/systemUtils/security"
 import { sendEmail } from "../../utils/personsUtils/email";
 import { EmployeeType, EmployeeResponseMessage } from "../../utils/personsUtils/generalEnuns";
 
@@ -28,7 +28,7 @@ export class EmployeeManager {
 
         if (valid) {
             try {
-                const employee: any = await db.run('INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.hireDate, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode]);
+                const employee: any = await db.run("INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?)", [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode]);
                 const employee_id = await employee.lastID;
                 await db.run('INSERT INTO User (user_id, username, email, password) VALUES (?, ?, ?, ?)', [employee_id, userData.username, employeeData.email, await Hash.hash(userData.password)])
     

@@ -54,10 +54,10 @@ export const HospitalController = {
         try {
             const patients = await PatientManager.list();
 
-            if (patients != 'Erro ao listar pacientes cadastrados') {
+            if (patients != PatientResponses.Error) {
                 HandleResponse(true, 200, PatientResponses.PatientListed, patients, res);
             } else {
-                HandleResponse(false, 400, PatientResponses.Error, null, res);
+                HandleResponse(false, 400, patients, null, res);
             }
     
         } catch (error) {

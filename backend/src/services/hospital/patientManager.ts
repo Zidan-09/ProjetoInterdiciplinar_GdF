@@ -3,6 +3,7 @@ import { Patient } from "../../entities/patient";
 import { openDb } from "../../db";
 import { ValidateRegister } from "../../utils/personsUtils/validators";
 import { TriageQueue } from "../../entities/queue";
+import { PatientResponses } from "../../utils/personsUtils/generalEnuns";
 
 export class PatientManager {
     static async register(data: Patient): Promise<number|void> {
@@ -39,7 +40,7 @@ export class PatientManager {
             return patients
         } catch (error) {
             console.error(error);
-            return 'Erro ao listar pacientes cadastrados'
+            return PatientResponses.Error
         }
     }
 }

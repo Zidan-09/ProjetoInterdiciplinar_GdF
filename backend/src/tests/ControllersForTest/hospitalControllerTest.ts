@@ -37,7 +37,8 @@ export const HospitalControllerTest = {
                 const careFlow: number | void = await CareFlowService.startCareFlow(result, data);
 
                 if (careFlow) {
-                    HandleResponseTest(true, 201, PatientResponses.PatientRegistered, { careFlow, data })
+                    const dataParsed = JSON.stringify(data);
+                    HandleResponseTest(true, 201, PatientResponses.PatientRegistered, { careFlow, dataParsed })
                 }
             } else {
                 HandleResponseTest(false, 400, PatientResponses.Error, null);
@@ -80,7 +81,8 @@ export const HospitalControllerTest = {
 
         try {
             const result = await TriageService.triage(data);
-            HandleResponseTest(true, 200, CareFlowResponses.TriageSucess, result);
+            const resultParsed = JSON.stringify(result)
+            HandleResponseTest(true, 200, CareFlowResponses.TriageSucess, resultParsed);
 
         } catch (error) {
             console.error(error);

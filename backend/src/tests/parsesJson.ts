@@ -10,7 +10,12 @@ import whisActivateJson from '../Json/Auth/authAccountA.json';
 import whisJson from '../Json/Register/adminRegister.json';
 
 import patientJson from '../Json/patientRecepRegister.json';
-import { CareFlow } from '../entities/careFlow';
+import { CareFlow, EndConsult, StartConsult, Triage, TriageCategory } from '../entities/careFlow';
+
+import triageJson from '../Json/triageTest.json';
+
+import consultInitJson from '../Json/startConsult.json';
+import consultEndJson from '../Json/endConsult.json';
 
 const chichi: Receptionist = {
     registrationNumber: chichiJson.registrationNumber,
@@ -182,4 +187,35 @@ const patientRegister: CareFlow = {
         address: patientJson.patient.address
     }
 }
-export { chichi, bulma, goku, whis, chichiActivate, bulmaActivate, gokuActivate, whisActivate, patientRegister }
+
+const triageData: Triage = {
+    careFlow_id: triageJson.careFlowId,
+    nurse_id: triageJson.nurse_id,
+    vitalSigns: {
+        bloodPreassure: {
+            systolicPreassure: triageJson.vitalSigns.bloodPreassure.systolicPreassure,
+            diastolicPreassure: triageJson.vitalSigns.bloodPreassure.diastolicPreassure
+        },
+        heartRate: triageJson.vitalSigns.heartRate,
+        respiratoryRate: triageJson.vitalSigns.respiratoryRate,
+        bodyTemperature: triageJson.vitalSigns.bodyTemperature,
+        oxygenSaturation: triageJson.vitalSigns.oxygenSaturation
+    },
+    painLevel: triageJson.painLevel,
+    symptoms: triageJson.symptoms,
+    triageCategory: triageJson.triageCategory as TriageCategory
+}
+
+const consultInitData: StartConsult = {
+    careFlow_id: consultInitJson.careFlow_id,
+    confirm: consultInitJson.confirm,
+    doctor_id: consultInitJson.doctor_id
+}
+
+const consultEndData: EndConsult = {
+    careFlow_id: consultEndJson.careFlow_id,
+    diagnosis: consultEndJson.diagnosis,
+    prescriptions: JSON.stringify(consultEndJson.prescriptions),
+    notes: consultEndJson.notes
+}
+export { chichi, bulma, goku, whis, chichiActivate, bulmaActivate, gokuActivate, whisActivate, patientRegister, triageData, consultInitData, consultEndData }

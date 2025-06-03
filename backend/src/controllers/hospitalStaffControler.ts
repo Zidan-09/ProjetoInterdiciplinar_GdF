@@ -7,6 +7,7 @@ import { Jwt } from "../utils/systemUtils/security";
 import { showCareFlows } from "../services/staff/showCareFlows";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
+import { ValidateRegister } from "../utils/personsUtils/validators";
 
 type Params = { employee: EmployeeType }
 
@@ -28,12 +29,18 @@ class EmployersConstroller {
         const data: T = req.body;
 
         try {
-            const done: EmployeeResponseMessage = await EmployeeManager.registerEmployee(data);
+            const valid = await ValidateRegister.verifyEmployee(data);
 
-            if (done === EmployeeResponseMessage.AwaitingConfirmation) {
-                HandleResponse(true, 200, done, data, res);
+            if (valid) {
+                const done: EmployeeResponseMessage = await EmployeeManager.registerEmployee(data);
+    
+                if (done === EmployeeResponseMessage.AwaitingConfirmation) {
+                    HandleResponse(true, 200, done, data, res);
+                } else {
+                    HandleResponse(false, 400, done, data, res);
+                }
             } else {
-                HandleResponse(false, 400, done, data, res);
+                HandleResponse(false, 400, EmployeeResponseMessage.AlreadyRegistered, null, res);
             }
 
         } catch (error) {
@@ -46,7 +53,7 @@ class EmployersConstroller {
         const newData: T = req.body;
 
         try {
-            const done = await EmployeeManager.editEmployee(newData);
+            await EmployeeManager.editEmployee(newData);
             HandleResponse(true, 200, "Editado", newData, res);
         } catch (error) {
             console.error(error);

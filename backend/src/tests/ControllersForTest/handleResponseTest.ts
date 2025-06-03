@@ -1,16 +1,16 @@
 export function HandleResponseTest(status: boolean, statusNumber: number, message: string, data: any | null) {
     if (status) {
-        return {
+        console.log( {
             status: status,
             statusNumber: statusNumber,
             message: message,
             data: data
-        }
+        } )
     } else {
-        return {
+        console.log( {
             status: status,
             statusNumber: statusNumber,
             message: message
-        }
+        } )
     }
 }

@@ -20,8 +20,6 @@ interface VitalSigns {
 interface CareFlow {
     receptionist_id: number;
     patient: Patient
-    time: Date;
-    status: Status;
 };
 
 interface Triage {

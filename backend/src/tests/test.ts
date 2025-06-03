@@ -1,47 +1,49 @@
-import { AdminControllerTest, EmployersConstrollerTest } from "./ControllersForTest/hospitalStaffController";
+import { AdminControllerTest, EmployersConstrollerTest } from "./ControllersForTest/hospitalStaffControllerTest";
 import { HospitalControllerTest } from "./ControllersForTest/hospitalControllerTest";
-import { queueControllerTest } from "./ControllersForTest/queueControllerTest";
+import { QueueControllerTest } from "./ControllersForTest/queueControllerTest";
 import { Receptionist, Nurse, Doctor, Admin } from "../entities/hospitalStaff";
-import { EmployeeStatus } from "../utils/personsUtils/generalEnuns";
-
-import chichiJson from '../Json/recepcionistRegister.json';
-import bulmaJson from '../Json/nurseRegister.json';
-import gokuJson from '../Json/doctorRegister.json';
-import whisJson from '../Json/adminRegister.json';
-
-const chichi: Receptionist = {
-    registrationNumber: chichiJson.registrationNumber,
-    name: chichiJson.name,
-    cpf: chichiJson.cpf,
-    email: chichiJson.email,
-    phone: chichiJson.phone,
-    dob: new Date(chichiJson.dob),
-    address: chichiJson.address,
-    workShift: chichiJson.workShift,
-    status: chichiJson.status as EmployeeStatus,
-    salary: chichiJson.salary,
-    cnesCode: chichiJson.cnesCode,
-    weeklyHours: chichiJson.weeklyHours
-};
-
-const bulma: Nurse = {
-    registrationNumber: bulmaJson.registrationNumber,
-    name: bulmaJson.name,
-    cpf: bulmaJson.cpf,
-    email: bulmaJson.email,
-    phone: bulmaJson.phone,
-    dob: new Date(bulmaJson.dob),
-    address: bulmaJson.address,
-    workShift: bulmaJson.workShift,
-    status: bulmaJson.status as EmployeeStatus,
-    salary: bulmaJson.salary,
-    cnesCode: bulmaJson.cnesCode,
-    
-}
+import { EmployeeStatus, EmployeeType } from "../utils/personsUtils/generalEnuns";
+import { chichi, bulma, goku, whis, chichiActivate, bulmaActivate, gokuActivate, whisActivate, patientRegister } from "./parsesJson";
+import { initDb } from "../db";
+import { TypeQueue } from "../utils/queueUtils/queueEnuns";
 
 async function start() {
+    await initDb();
+
     await EmployersConstrollerTest.register(chichi);
     await EmployersConstrollerTest.register(bulma);
     await EmployersConstrollerTest.register(goku);
     await EmployersConstrollerTest.register(whis);
+
+    await EmployersConstrollerTest.authAccount(chichiActivate);
+    await EmployersConstrollerTest.authAccount(bulmaActivate);
+    await EmployersConstrollerTest.authAccount(gokuActivate);
+    await EmployersConstrollerTest.authAccount(whisActivate);
+
+    await HospitalControllerTest.createTicket({priority: 1});
+    await HospitalControllerTest.createTicket({priority: 1});
+    await HospitalControllerTest.createTicket({priority: 2});
+    await HospitalControllerTest.createTicket({priority: 1});
+    await HospitalControllerTest.createTicket({priority: 3});
+    await HospitalControllerTest.createTicket({priority: 3});
+    await HospitalControllerTest.createTicket({priority: 2});
+    await HospitalControllerTest.createTicket({priority: 1});
+    await HospitalControllerTest.createTicket({priority: 2});
+    await HospitalControllerTest.createTicket({priority: 3});
+
+    await QueueControllerTest.queue({typeQueue: TypeQueue.Recep});
+
+    await QueueControllerTest.callNext({typeQueue: TypeQueue.Recep});
+
+    await HospitalControllerTest.register(patientRegister);
+
+    await HospitalControllerTest.list();
+
+    await QueueControllerTest.queue({typeQueue: TypeQueue.Triage});
+
+    await QueueControllerTest.callNext({typeQueue: TypeQueue.Triage})´
+
+    await HospitalControllerTest.triage()
 }
+
+start();

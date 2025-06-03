@@ -5,13 +5,19 @@ import { HandleResponseTest } from "./handleResponseTest";
 
 type Params = { typeQueue: TypeQueue };
 
-export const queueControllerTest = {
+export const QueueControllerTest = {
     async queue(request: Params) {
         const queue: Params = request;
+        console.log(queue);
 
         try {
             const queueT = ShowQueue.showQueue(queue);
-            HandleResponseTest(true, 200, queue.typeQueue, queueT);
+
+            if (queueT) {
+                HandleResponseTest(true, 200, queue.typeQueue, queueT);
+            } else {
+                HandleResponseTest(false, 400, 'Sla, deu pau aki', null);
+            }
 
         } catch (error) {
             console.error(error);

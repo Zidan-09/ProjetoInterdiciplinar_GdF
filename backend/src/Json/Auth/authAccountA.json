@@ -1,0 +1,21 @@
+{
+    "data": {
+        "registrationNumber": 1111,
+        "name": "Whis",
+        "cpf": "001.000.101-10",
+        "email": "whis.adm@gmail.com",
+        "phone": "(11) 91234-5678",
+        "dob": "2007-02-28T00:00:00.000Z",
+        "address": "Planeta Bills, Universo 7",
+        "workShift": "manhã",
+        "status": "active",
+        "salary": 2.50,
+        "cnesCode": "12-32",
+        "accessLevel": "all",
+        "weeklyHours": 40
+    },
+    "user": {
+        "username": "WhisTchola",
+        "password": "BillFiDumÉgua"
+    }
+}

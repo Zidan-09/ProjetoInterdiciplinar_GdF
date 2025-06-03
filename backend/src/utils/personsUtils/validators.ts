@@ -2,12 +2,13 @@ import { CareFlow } from "../../entities/careFlow";
 import { Doctor, Nurse, Receptionist, Admin } from "../../entities/hospitalStaff";
 import { openDb } from "../../db";
 
-const db = openDb();
 
 export class ValidateRegister {
 	static async verifyPatient(patient: CareFlow['patient']): Promise<boolean> {
+		const db = await openDb();
+
 		try {
-			const row = await (await db).get(
+			const row = await db.get(
 				'SELECT * FROM Patient WHERE name = ? AND cpf = ? AND rg = ?',
 				[patient.name, patient.cpf, patient.rg]
 			);
@@ -25,14 +26,15 @@ export class ValidateRegister {
 	};
 
 	static async verifyEmployee(user: Doctor | Nurse | Receptionist | Admin): Promise<boolean> {
+		const db = await openDb();
+
 		try {
-			const row = await (await db).get(
+			const row = await db.get(
 				'SELECT * FROM Employee WHERE name = ? AND cpf = ?',
 				[user.name, user.cpf]
 			);
 			
 			if (row) {
-				console.log('Empregado já cadastrado');
 				return false;
 			} else {
 				return true;

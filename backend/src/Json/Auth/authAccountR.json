@@ -1,0 +1,20 @@
+{
+    "data": {
+        "registrationNumber": 1112,
+        "name": "Chichi",
+        "cpf": "123.532.124-23",
+        "email": "chichi.receptionist@gmail.com",
+        "phone": "(86) 99453-3524",
+        "dob": "1986-05-05T00:00:00.000Z",
+        "address": "av. Paulista, 12",
+        "workShift": "manhã",
+        "status": "active",
+        "salary": 40000,
+        "cnesCode": "12-32",
+        "weeklyHours": 40
+    },
+    "user": {
+        "username": "Chichi",
+        "password": "Chichi10"
+    }
+}

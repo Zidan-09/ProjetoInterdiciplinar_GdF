@@ -21,7 +21,7 @@ export class EmployeeManager {
     }
 
     static async authAccount<T extends Receptionist | Nurse | Doctor | Admin>(data: any, userData: User): Promise<EmployeeResponseMessage> {
-        const employeeData: T = data.data;
+        const employeeData: T = data;
         const db = await openDb();
 
         const valid: boolean = await ValidateRegister.verifyEmployee(employeeData);

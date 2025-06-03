@@ -1,0 +1,22 @@
+{
+    "data": {
+        "registrationNumber": 1114,
+        "name": "Goku",
+        "cpf": "777.777.777-77",
+        "email": "goku.medicogdf@gmail.com",
+        "phone": "(86) 99453-3524",
+        "dob": "1986-10-08T00:00:00.000Z",
+        "address": "Planeta Terra, Japão",
+        "workShift": "manhã",
+        "status": "active",
+        "salary": 40000,
+        "cnesCode": "12-32",
+        "crm": "123/PI",
+        "specialty": "cirurgião",
+        "weeklyHours": 40
+    },
+    "user": {
+        "username": "GokuBala",
+        "password": "gokutop1global"
+    }
+}

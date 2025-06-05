@@ -1,6 +1,5 @@
 import { criteria, CriteriaData } from "../../entities/criteria";
 import { openDb } from "../../db";
-// import { db } from "../db";
 
 const db = openDb();
 

@@ -1,10 +1,10 @@
 import { Response, Request } from "express";
 import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, LoginData } from "../entities/hospitalStaff";
-import { EmployeeManager } from "../services/staff/employeeManager";
+import { EmployeeManager } from "../services/adm/employeeManager";
 import { EmployeeType } from "../utils/personsUtils/generalEnuns";
-import { Login } from "../services/staff/employeeLogin";
+import { Login } from "../services/adm/employeeLogin";
 import { Jwt } from "../utils/systemUtils/security";
-import { showCareFlows } from "../services/staff/showCareFlows";
+import { showCareFlows } from "../services/adm/showCareFlows";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
 import { ValidateRegister } from "../utils/personsUtils/validators";
@@ -22,6 +22,16 @@ class AdminController {
             HandleResponse(false, 500, error as string, null, res);
         }
     };
+
+    static async showRelatories(req: Request, res: Response) {
+        try {
+            
+
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res);
+        }
+    }
 }
 
 class EmployersConstroller {

@@ -1,9 +1,9 @@
 import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, LoginData } from "../../entities/hospitalStaff";
-import { EmployeeManager } from "../../services/staff/employeeManager";
+import { EmployeeManager } from "../../services/adm/employeeManager";
 import { EmployeeType } from "../../utils/personsUtils/generalEnuns";
-import { Login } from "../../services/staff/employeeLogin";
+import { Login } from "../../services/adm/employeeLogin";
 import { Jwt } from "../../utils/systemUtils/security";
-import { showCareFlows } from "../../services/staff/showCareFlows";
+import { showCareFlows } from "../../services/adm/showCareFlows";
 import { HandleResponseTest } from "./handleResponseTest";
 import { EmployeeResponseMessage } from "../../utils/personsUtils/generalEnuns";
 

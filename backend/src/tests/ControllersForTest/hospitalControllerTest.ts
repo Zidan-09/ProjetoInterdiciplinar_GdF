@@ -1,5 +1,5 @@
 import { CriteriaData } from "../../entities/criteria";
-import { CriteriaManager } from "../../services/staff/criteriaUpdate";
+import { CriteriaManager } from "../../services/adm/criteriaUpdate";
 import { PatientManager } from "../../services/hospital/patientManager";
 import { TriageService } from "../../services/hospital/triage";
 import { ConsultService } from "../../services/hospital/consult";
@@ -53,7 +53,7 @@ export const HospitalControllerTest = {
         try {
             const patients = await PatientManager.list();
 
-            if (patients != 'Erro ao listar pacientes cadastrados') {
+            if (patients != PatientResponses.Error) {
                 HandleResponseTest(true, 200, PatientResponses.PatientListed, patients);
             } else {
                 HandleResponseTest(false, 400, PatientResponses.Error, null);

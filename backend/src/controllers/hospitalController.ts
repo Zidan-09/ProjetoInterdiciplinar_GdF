@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CriteriaData } from "../entities/criteria";
-import { CriteriaManager } from "../services/staff/criteriaUpdate";
+import { CriteriaManager } from "../services/adm/criteriaUpdate";
 import { PatientManager } from "../services/hospital/patientManager";
 import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";

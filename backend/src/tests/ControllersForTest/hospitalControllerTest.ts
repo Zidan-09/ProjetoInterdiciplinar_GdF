@@ -56,7 +56,7 @@ export const HospitalControllerTest = {
             if (patients != PatientResponses.Error) {
                 HandleResponseTest(true, 200, PatientResponses.PatientListed, patients);
             } else {
-                HandleResponseTest(false, 400, PatientResponses.Error, null);
+                HandleResponseTest(false, 400, patients, null);
             }
         } catch (error) {
             console.error(error);

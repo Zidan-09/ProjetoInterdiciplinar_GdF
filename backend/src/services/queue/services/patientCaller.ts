@@ -1,8 +1,12 @@
 import { RecepQueue, TriageQueue, ConsultQueue } from "../../../entities/queue";
+import { getSocketInstance } from "../../../socket";
 import { QueueReturns, TypeQueue } from "../../../utils/queueUtils/queueEnuns";
 
 export class PatientCaller {
+    
     static callNext(typeQueue: TypeQueue): string {
+        const io = getSocketInstance();
+
         let call: any;
 
         switch (typeQueue) {
@@ -20,6 +24,10 @@ export class PatientCaller {
         if (call === QueueReturns.EmptyQueue) {
             return call
         } else {
+            io.emit("teste", {
+                send: call
+            })
+
             if (typeQueue === TypeQueue.Recep) {
                 return call.ticket
             } else {

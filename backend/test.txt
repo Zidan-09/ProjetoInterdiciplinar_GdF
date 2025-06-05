@@ -29,3 +29,6 @@ Admin = {
     email = whis.adm@gmail.com
     pass = Samuel200@
 }
+
+certo, agora pode tirar algumas dúvidas minhas? Por exemplo:
+1 - Tenho 3 filas e um chamado pode ocorrer ao mesmo tempo nas 3 filas, como diferencio elas para cada resposta ir para sua tela corretamente?

@@ -1,8 +1,7 @@
 import { openDb } from "../../db";
-import { QueueTime } from "../../models/queueRelatorie";
 
 export class ShowRelatories {
-    static async queueTime(period: Date): Promise<QueueTime> {
+    static async queueTime(period: Date): Promise<{ triageQueueTime: number, consultQueueTime: number }> {
         const db = await openDb();
         
         const checkInTriage = await db.all('SELECT checkInTriage FROM Triage WHERE checkInTriage >= ? AND checkInTriage <= ?', [period.setHours(0, 0, 0, 0), period.setHours(23, 59, 59, 999)]);

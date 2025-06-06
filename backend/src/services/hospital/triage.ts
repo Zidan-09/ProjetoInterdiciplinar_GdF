@@ -21,7 +21,7 @@ export class TriageService {
 
         console.log('DEBUG:\n', data, '\n');
 
-        await db.run("UPDATE Triage SET checkOutTriage = datetime('now'), systolicPreassure = ?, diastolicPreassure = ?, heartRate = ?, respiratoryRate = ?, bodyTemperature = ?, oxygenSaturation = ?, painLevel = ?, symptoms = ?, triageCategory = ? WHERE triage_id = ?", [data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, data.symptoms, data.triageCategory, data.careFlow_id]);
+        await db.run("UPDATE Triage SET checkOutTriage = datetime('now'), systolicPreassure = ?, diastolicPreassure = ?, heartRate = ?, respiratoryRate = ?, bodyTemperature = ?, oxygenSaturation = ?, painLevel = ?, symptoms = ?, triageCategory = ? WHERE triage_id = ?", [data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, JSON.stringify(data.symptoms), data.triageCategory, data.careFlow_id]);
         await db.run('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.WaitingConsultation, data.careFlow_id])
         const node: NodeConsult = await NodeConsult.create(data);
         ConsultQueue.insertQueue(node);

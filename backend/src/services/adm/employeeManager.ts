@@ -4,6 +4,7 @@ import { openDb } from "../../db";
 import { Hash, Jwt } from "../../utils/systemUtils/security"
 import { sendEmail } from "../../utils/personsUtils/email";
 import { EmployeeType, EmployeeResponseMessage } from "../../utils/personsUtils/generalEnuns";
+import { AdminResponses } from "../../utils/systemUtils/AdminResponses";
 
 export class EmployeeManager {
     static async registerEmployee<T extends Employee | Nurse | Doctor>(employeeData: T): Promise<EmployeeResponseMessage> {
@@ -61,25 +62,42 @@ export class EmployeeManager {
         const employee = await db.get('SELECT * FROM Employee WHERE registrationNumber = ? AND name = ? AND cpf = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf]);
         try {
             const employee_id = employee.id;
+            await db.run('UPDATE Employee SET registrationNumber = ?, name = ?, cpf = ?, email = ?, phone = ?, dob = ?, address = ?, hireDate = ?, workShift = ?, status = ?, salary = ?, cnesCode = ?, weeklyHours = ?, accessLevel = ?, role = ? WHERE id = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf, newUserData.email, newUserData.phone, newUserData.dob, newUserData.address, newUserData.workShift, newUserData.status, newUserData.salary, newUserData.cnesCode, newUserData.weeklyHours, newUserData.accessLevel, newUserData.role, employee_id]);
 
-            
+            switch (newUserData.role) {
+                case EmployeeType.Doctor:
+                    const doctorData = newUserData as Doctor;
+                    await db.run('UPDATE Doctor SET crm = ?, specialty = ? WHERE id = ?', [doctorData.crm, doctorData.specialty, employee_id]);
+                    break;
+                case EmployeeType.Nurse:
+                    const nurseData = newUserData as Nurse;
+                    await db.run('UPDATE Nurse SET coren = ?, department = ?, specialty = ? WHERE id = ?', [nurseData.coren, nurseData.department, nurseData.specialty, employee_id]);
+                    break;
+            }
+            return AdminResponses.EmployeeEdited;
+
         } catch (error) {
             console.error(error)
+            return AdminResponses.Error
         } 
     }
     
     static async showEmployeers(employeeType: EmployeeType) {
         const db = await openDb();
+        const employee: string = employeeType[0].toLowerCase() + employeeType.slice(1);
 
         try {
-            const extraFields = {
-              Receptionist: "weeklyHours",
-              Nurse: "coren, department, speciality, weeklyHours, onDuty",
-              Doctor: "crm, specialty, weeklyHours, onDuty",
-              Admin: "accessLevel, weeklyHours"
-            };
+            if (employee === EmployeeType.Receptionist || employee === EmployeeType.Admin) {
+                const employers = await db.all('SELECT * FROM Employee WHERE role = ?', [employee]);
+                console.log(employers)
+                return employers;
+                
+            } else {
+                const employee: string = employeeType[0].toUpperCase() + employeeType.slice(1);
+                const employers = await db.all(`SELECT Employee.*, ${employee}.* FROM ${employee} JOIN Employee ON Employee.id = ${employee}.id`);
+                return employers;
+            }
 
-            return await db.all(`SELECT Employee.*, ${employeeType}.* FROM ${employeeType} JOIN Employee ON ${employeeType}.id = Employee.id`);
         } catch (error) {
             console.error(error);
         }

@@ -1,4 +1,4 @@
-import { Employee, Nurse, Doctor, ConfirmUser, LoginData } from "../../entities/hospitalStaff";
+import { Employee, Nurse, Doctor, ConfirmUser, User } from "../../entities/hospitalStaff";
 import { EmployeeManager } from "../../services/adm/employeeManager";
 import { EmployeeType } from "../../utils/personsUtils/generalEnuns";
 import { Login } from "../../services/adm/employeeLogin";
@@ -99,8 +99,8 @@ class EmployersConstrollerTest {
         }
     }
 
-    static async login(request: LoginData) {
-        const loginDataReq: LoginData = request;
+    static async login(request: User) {
+        const loginDataReq: User = request;
 
         try {
             await Login.loginUser(loginDataReq);

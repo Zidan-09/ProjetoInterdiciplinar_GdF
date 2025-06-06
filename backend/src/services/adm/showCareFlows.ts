@@ -8,8 +8,10 @@ export async function showCareFlows(): Promise<[boolean, any]> {
 
         for (let careFlow of careFlows) {
             try {
+                careFlow.symptoms = JSON.parse(careFlow.symptoms);
                 careFlow.prescriptions = JSON.parse(careFlow.prescriptions);
             } catch {
+                careFlow.symptoms = []
                 careFlow.prescriptions = []
             }
         }

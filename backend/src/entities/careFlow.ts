@@ -30,7 +30,7 @@ interface EndTriage {
     careFlow_id: number;
     vitalSigns: VitalSigns;
     triageCategory: TriageCategory;
-    symptoms:string;
+    symptoms: string[];
     painLevel: number;
 };
 
@@ -54,7 +54,7 @@ interface StartConsult {
 interface EndConsult {
     careFlow_id: number;
     diagnosis: string | null;
-    prescriptions: string | null;
+    prescriptions: string[] | null;
     notes: string | null;
 };
 

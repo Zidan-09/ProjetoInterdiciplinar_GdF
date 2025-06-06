@@ -13,7 +13,7 @@ export class PatientCaller {
             case TypeQueue.Recep:
                 call = RecepQueue.callNext();
                 io.emit(TypeQueue.Recep, {
-                    called: call,
+                    called: call.ticket,
                     queue: TypeQueue.Recep
                 })
                 break;
@@ -21,7 +21,7 @@ export class PatientCaller {
             case TypeQueue.Triage:
                 call = TriageQueue.callNext();
                 io.emit(TypeQueue.Triage, {
-                    called: call,
+                    called: call.patient_name,
                     queue: TypeQueue.Triage
                 })
                 break;
@@ -29,7 +29,7 @@ export class PatientCaller {
             case TypeQueue.Consult:
                 call = ConsultQueue.callNext();
                 io.emit(TypeQueue.Consult, {
-                    called: call,
+                    called: call.patient_id,
                     queue: TypeQueue.Consult
                 })
                 break;

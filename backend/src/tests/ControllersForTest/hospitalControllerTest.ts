@@ -82,7 +82,7 @@ export const HospitalControllerTest = {
         try {
             const result = await TriageService.startTriage(data);
             const resultParsed = JSON.stringify(result)
-            HandleResponseTest(true, 200, CareFlowResponses.TriageSucess, resultParsed);
+            HandleResponseTest(true, 200, CareFlowResponses.TriageStarted, resultParsed);
 
         } catch (error) {
             console.error(error);
@@ -96,7 +96,7 @@ export const HospitalControllerTest = {
         try {
             const result = await TriageService.endTriage(data);
             const resultParsed = JSON.stringify(result);
-            HandleResponseTest(true, 200, CareFlowResponses.TriageSucess, resultParsed);
+            HandleResponseTest(true, 200, CareFlowResponses.TriageEnded, resultParsed);
             
         } catch (error) {
             console.error(error);

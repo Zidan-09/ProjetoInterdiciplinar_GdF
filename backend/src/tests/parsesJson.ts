@@ -135,8 +135,8 @@ const bulmaActivate: ConfirmUser<Nurse> = {
         specialty: bulmaActivateJson.data.specialty
     },
     user: {
-        username: chichiActivateJson.user.username,
-        password: chichiActivateJson.user.password
+        username: bulmaActivateJson.user.username,
+        password: bulmaActivateJson.user.password
     }
 }
 
@@ -234,7 +234,7 @@ const consultInitData: StartConsult = {
 const consultEndData: EndConsult = {
     careFlow_id: consultEndJson.careFlow_id,
     diagnosis: consultEndJson.diagnosis,
-    prescriptions: JSON.stringify(consultEndJson.prescriptions),
+    prescriptions: consultEndJson.prescriptions,
     notes: consultEndJson.notes
 }
 export { chichi, bulma, goku, whis, chichiActivate, bulmaActivate, gokuActivate, whisActivate, patientRegister, triageInitData, triageEndData, consultInitData, consultEndData }

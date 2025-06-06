@@ -1,13 +1,13 @@
-import { LoginData } from "../../entities/hospitalStaff";
+import { User } from "../../entities/hospitalStaff";
 import { openDb } from "../../db";
 import bcrypt from 'bcryptjs';
 
 const db = openDb();
 
 export class Login {
-    static async loginUser(data: LoginData) {
+    static async loginUser(data: User) {
         try {
-            const userData: any = (await db).get('SELECT * FROM User WHERE email = ?', [data.email]);
+            const userData: any = (await db).get('SELECT * FROM User WHERE username = ?', [data.username]);
 
             if (userData) {
                 const valid: boolean = await bcrypt.compare(data.password, userData.password);

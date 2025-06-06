@@ -1,4 +1,4 @@
-import { openDb } from "../../db";
+import { openDb } from "../../../db";
 
 export class ShowReports {
     static async queueTime(period: Date): Promise<{ triageQueueTime: number, consultQueueTime: number }> {

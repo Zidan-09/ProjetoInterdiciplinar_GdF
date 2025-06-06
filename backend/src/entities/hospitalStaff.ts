@@ -20,14 +20,12 @@ interface Employee{
 interface Doctor extends Employee {
     crm: string;
     specialty: string;
-    weeklyHours: number;
 };
 
 interface Nurse extends Employee {
     coren: string;
     department: string;
     specialty: string;
-    weeklyHours: number;
 };
 
 interface User {
@@ -40,8 +38,4 @@ interface ConfirmUser<T extends Employee | Nurse | Doctor> {
     user: User;
 }
 
-interface LoginData {
-    email: string;
-    password: string
-}
-export { Employee, Doctor, Nurse, ConfirmUser, User, LoginData }
+export { Employee, Doctor, Nurse, ConfirmUser, User }

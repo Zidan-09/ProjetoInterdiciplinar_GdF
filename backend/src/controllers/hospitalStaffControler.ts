@@ -8,7 +8,7 @@ import { showCareFlows } from "../services/adm/showCareFlows";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
 import { ValidateRegister } from "../utils/personsUtils/validators";
-import { ShowReports } from "../services/adm/showReports";
+import { ShowReports } from "../services/adm/reports/showReports";
 
 type Params = { employee: EmployeeType }
 

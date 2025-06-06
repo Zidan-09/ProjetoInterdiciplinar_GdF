@@ -12,12 +12,26 @@ export class PatientCaller {
         switch (typeQueue) {
             case TypeQueue.Recep:
                 call = RecepQueue.callNext();
+                io.emit(TypeQueue.Recep, {
+                    called: call,
+                    queue: TypeQueue.Recep
+                })
                 break;
+
             case TypeQueue.Triage:
                 call = TriageQueue.callNext();
+                io.emit(TypeQueue.Triage, {
+                    called: call,
+                    queue: TypeQueue.Triage
+                })
                 break;
+
             case TypeQueue.Consult:
                 call = ConsultQueue.callNext();
+                io.emit(TypeQueue.Consult, {
+                    called: call,
+                    queue: TypeQueue.Consult
+                })
                 break;
         }
 

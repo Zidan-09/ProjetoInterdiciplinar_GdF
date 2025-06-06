@@ -3,8 +3,7 @@ import { getSocketInstance } from "../../../socket";
 import { QueueReturns, TypeQueue } from "../../../utils/queueUtils/queueEnuns";
 
 export class PatientCaller {
-    
-    static callNext(typeQueue: TypeQueue): string {
+    static callNext(typeQueue: TypeQueue) {
         const io = getSocketInstance();
 
         let call: any;
@@ -12,37 +11,38 @@ export class PatientCaller {
         switch (typeQueue) {
             case TypeQueue.Recep:
                 call = RecepQueue.callNext();
-                io.emit(TypeQueue.Recep, {
-                    called: call.ticket,
-                    queue: TypeQueue.Recep
-                })
+                if (call != QueueReturns.EmptyQueue) {
+                    io.emit(TypeQueue.Recep, {
+                        called: call.ticket,
+                        queue: TypeQueue.Recep
+                    })
+                    return call.ticket
+                }
                 break;
 
             case TypeQueue.Triage:
                 call = TriageQueue.callNext();
-                io.emit(TypeQueue.Triage, {
-                    called: call.patient_name,
-                    queue: TypeQueue.Triage
-                })
+                if (call != QueueReturns.EmptyQueue) {
+                    io.emit(TypeQueue.Triage, {
+                        called: call.patient_name,
+                        queue: TypeQueue.Triage
+                    })
+                    return call.patient_name
+                }
                 break;
 
             case TypeQueue.Consult:
                 call = ConsultQueue.callNext();
-                io.emit(TypeQueue.Consult, {
-                    called: call.patient_id,
-                    queue: TypeQueue.Consult
-                })
+                if (call != QueueReturns.EmptyQueue) {
+                    io.emit(TypeQueue.Consult, {
+                        called: call.patient_id,
+                        queue: TypeQueue.Consult
+                    })
+                    return call
+                }
                 break;
         }
 
-        if (call === QueueReturns.EmptyQueue) {
-            return call
-        } else {
-            if (typeQueue === TypeQueue.Recep) {
-                return call.ticket
-            } else {
-                return call.patient_name
-            }
-        }
+        return call
     };
 };

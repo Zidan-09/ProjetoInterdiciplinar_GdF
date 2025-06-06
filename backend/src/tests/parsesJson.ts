@@ -2,22 +2,23 @@ import bulmaActivateJson from '../Json/Auth/authAccountN.json';
 import bulmaJson from '../Json/Register/nurseRegister.json';
 import chichiActivateJson from '../Json/Auth/authAccountR.json';
 import chichiJson from '../Json/Register/recepcionistRegister.json';
-import { EmployeeStatus, Gender, MaritalStatus } from '../utils/personsUtils/generalEnuns';
+import { EmployeeStatus, EmployeeType, Gender, MaritalStatus } from '../utils/personsUtils/generalEnuns';
 import gokuActivateJson from '../Json/Auth/authAccountD.json';
 import gokuJson from '../Json/Register/doctorRegister.json';
-import { Receptionist, Nurse, Doctor, Admin, ConfirmUser } from '../entities/hospitalStaff';
+import { Employee, Nurse, Doctor, ConfirmUser } from '../entities/hospitalStaff';
 import whisActivateJson from '../Json/Auth/authAccountA.json';
 import whisJson from '../Json/Register/adminRegister.json';
 
-import patientJson from '../Json/patientRecepRegister.json';
-import { CareFlow, EndConsult, StartConsult, Triage, TriageCategory } from '../entities/careFlow';
+import patientJson from '../Json/careFlow/patientRegister.json';
+import { CareFlow, EndConsult, StartConsult, StartTriage, EndTriage, TriageCategory } from '../entities/careFlow';
 
-import triageJson from '../Json/triageTest.json';
+import triageInitJson from '../Json/careFlow/startTriage.json';
+import triageEndJson from '../Json/careFlow/endTriage.json';
 
-import consultInitJson from '../Json/startConsult.json';
-import consultEndJson from '../Json/endConsult.json';
+import consultInitJson from '../Json/careFlow/startConsult.json';
+import consultEndJson from '../Json/careFlow/endConsult.json';
 
-const chichi: Receptionist = {
+const chichi: Employee = {
     registrationNumber: chichiJson.registrationNumber,
     name: chichiJson.name,
     cpf: chichiJson.cpf,
@@ -29,7 +30,9 @@ const chichi: Receptionist = {
     status: chichiJson.status as EmployeeStatus,
     salary: chichiJson.salary,
     cnesCode: chichiJson.cnesCode,
-    weeklyHours: chichiJson.weeklyHours
+    accessLevel: chichiJson.accessLevel,
+    weeklyHours: chichiJson.weeklyHours,
+    role: chichiJson.role as EmployeeType
 };
 
 const bulma: Nurse = {
@@ -44,10 +47,12 @@ const bulma: Nurse = {
     status: bulmaJson.status as EmployeeStatus,
     salary: bulmaJson.salary,
     cnesCode: bulmaJson.cnesCode,
+    accessLevel: bulmaJson.accessLevel,
+    weeklyHours: bulmaJson.weeklyHours,
+    role: bulmaJson.role as EmployeeType,
     coren: bulmaJson.coren,
     department: bulmaJson.department,
-    specialty: bulmaJson.specialty,
-    weeklyHours: bulmaJson.weeklyHours
+    specialty: bulmaJson.specialty
 }
 
 const goku: Doctor = {
@@ -62,12 +67,14 @@ const goku: Doctor = {
     status: gokuJson.status as EmployeeStatus,
     salary: gokuJson.salary,
     cnesCode: gokuJson.cnesCode,
+    accessLevel: gokuJson.accessLevel,
+    weeklyHours: gokuJson.weeklyHours,
+    role: gokuJson.role as EmployeeType,
     crm: gokuJson.crm,
-    specialty: gokuJson.specialty,
-    weeklyHours: gokuJson.weeklyHours
+    specialty: gokuJson.specialty
 }
 
-const whis: Admin = {
+const whis: Employee = {
     registrationNumber: whisJson.registrationNumber,
     name: whisJson.name,
     cpf: whisJson.cpf,
@@ -80,10 +87,11 @@ const whis: Admin = {
     salary: whisJson.salary,
     cnesCode: whisJson.cnesCode,
     accessLevel: whisJson.accessLevel,
-    weeklyHours: whisJson.weeklyHours
+    weeklyHours: whisJson.weeklyHours,
+    role: whisJson.role as EmployeeType
 }
 
-const chichiActivate: ConfirmUser<Receptionist> = {
+const chichiActivate: ConfirmUser<Employee> = {
     data: {
         registrationNumber: chichiActivateJson.data.registrationNumber,
         name: chichiActivateJson.data.name,
@@ -96,7 +104,9 @@ const chichiActivate: ConfirmUser<Receptionist> = {
         status: chichiActivateJson.data.status as EmployeeStatus,
         salary: chichiActivateJson.data.salary,
         cnesCode: chichiActivateJson.data.cnesCode,
-        weeklyHours: chichiActivateJson.data.weeklyHours
+        accessLevel: chichiActivateJson.data.accessLevel,
+        weeklyHours: chichiActivateJson.data.weeklyHours,
+        role: chichiActivateJson.data.role as EmployeeType
     },
     user: {
         username: chichiActivateJson.user.username,
@@ -117,10 +127,12 @@ const bulmaActivate: ConfirmUser<Nurse> = {
         status: bulmaActivateJson.data.status as EmployeeStatus,
         salary: bulmaActivateJson.data.salary,
         cnesCode: bulmaActivateJson.data.cnesCode,
+        accessLevel: bulmaActivateJson.data.accessLevel,
+        weeklyHours: bulmaActivateJson.data.weeklyHours,
+        role: bulmaActivateJson.data.role as EmployeeType,
         coren: bulmaActivateJson.data.coren,
         department: bulmaActivateJson.data.department,
-        specialty: bulmaActivateJson.data.specialty,
-        weeklyHours: bulmaActivateJson.data.weeklyHours
+        specialty: bulmaActivateJson.data.specialty
     },
     user: {
         username: chichiActivateJson.user.username,
@@ -141,9 +153,11 @@ const gokuActivate: ConfirmUser<Doctor> = {
         status: gokuActivateJson.data.status as EmployeeStatus,
         salary: gokuActivateJson.data.salary,
         cnesCode: gokuActivateJson.data.cnesCode,
+        accessLevel: gokuActivateJson.data.accessLevel,
+        weeklyHours: gokuActivateJson.data.weeklyHours,
+        role: gokuActivateJson.data.role as EmployeeType,
         crm: gokuActivateJson.data.crm,
         specialty: gokuActivateJson.data.specialty,
-        weeklyHours: gokuActivateJson.data.weeklyHours
     },
     user: {
         username: gokuActivateJson.user.username,
@@ -151,7 +165,7 @@ const gokuActivate: ConfirmUser<Doctor> = {
     }
 }
 
-const whisActivate: ConfirmUser<Admin> = {
+const whisActivate: ConfirmUser<Employee> = {
     data: {
         registrationNumber: whisActivateJson.data.registrationNumber,
         name: whisActivateJson.data.name,
@@ -165,7 +179,8 @@ const whisActivate: ConfirmUser<Admin> = {
         salary: whisActivateJson.data.salary,
         cnesCode: whisActivateJson.data.cnesCode,
         accessLevel: whisActivateJson.data.accessLevel,
-        weeklyHours: whisActivateJson.data.weeklyHours
+        weeklyHours: whisActivateJson.data.weeklyHours,
+        role: whisActivateJson.data.role as EmployeeType
     },
     user: {
         username: whisActivateJson.user.username,
@@ -188,22 +203,26 @@ const patientRegister: CareFlow = {
     }
 }
 
-const triageData: Triage = {
-    careFlow_id: triageJson.careFlowId,
-    nurse_id: triageJson.nurse_id,
+const triageInitData: StartTriage = {
+    careFlow_id: triageInitJson.careFlow_id,
+    nurse_id: triageInitJson.nurse_id,
+}
+
+const triageEndData: EndTriage = {
+    careFlow_id: triageEndJson.careFlowId,
     vitalSigns: {
         bloodPreassure: {
-            systolicPreassure: triageJson.vitalSigns.bloodPreassure.systolicPreassure,
-            diastolicPreassure: triageJson.vitalSigns.bloodPreassure.diastolicPreassure
+            systolicPreassure: triageEndJson.vitalSigns.bloodPreassure.systolicPreassure,
+            diastolicPreassure: triageEndJson.vitalSigns.bloodPreassure.diastolicPreassure
         },
-        heartRate: triageJson.vitalSigns.heartRate,
-        respiratoryRate: triageJson.vitalSigns.respiratoryRate,
-        bodyTemperature: triageJson.vitalSigns.bodyTemperature,
-        oxygenSaturation: triageJson.vitalSigns.oxygenSaturation
+        heartRate: triageEndJson.vitalSigns.heartRate,
+        respiratoryRate: triageEndJson.vitalSigns.respiratoryRate,
+        bodyTemperature: triageEndJson.vitalSigns.bodyTemperature,
+        oxygenSaturation: triageEndJson.vitalSigns.oxygenSaturation
     },
-    painLevel: triageJson.painLevel,
-    symptoms: triageJson.symptoms,
-    triageCategory: triageJson.triageCategory as TriageCategory
+    painLevel: triageEndJson.painLevel,
+    symptoms: triageEndJson.symptoms,
+    triageCategory: triageEndJson.triageCategory as TriageCategory
 }
 
 const consultInitData: StartConsult = {
@@ -218,4 +237,4 @@ const consultEndData: EndConsult = {
     prescriptions: JSON.stringify(consultEndJson.prescriptions),
     notes: consultEndJson.notes
 }
-export { chichi, bulma, goku, whis, chichiActivate, bulmaActivate, gokuActivate, whisActivate, patientRegister, triageData, consultInitData, consultEndData }
+export { chichi, bulma, goku, whis, chichiActivate, bulmaActivate, gokuActivate, whisActivate, patientRegister, triageInitData, triageEndData, consultInitData, consultEndData }

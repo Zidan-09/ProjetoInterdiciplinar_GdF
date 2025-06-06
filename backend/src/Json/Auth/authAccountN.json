@@ -11,10 +11,12 @@
         "status": "active",
         "salary": 40000,
         "cnesCode": "12-32",
+        "accessLevel": 2,
+        "weeklyHours": 40,
+        "role": "nurse",
         "coren": "2313/54",
         "department": "sus",
-        "specialty": "obstetra",
-        "weeklyHours": 40
+        "specialty": "obstetra"
     },
     "user": {
         "username": "BulmaCaraDeJaca",

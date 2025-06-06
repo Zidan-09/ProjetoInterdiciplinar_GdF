@@ -11,8 +11,9 @@
         "status": "active",
         "salary": 2.50,
         "cnesCode": "12-32",
-        "accessLevel": "all",
-        "weeklyHours": 40
+        "accessLevel": 4,
+        "weeklyHours": 40,
+        "role": "admin"
     },
     "user": {
         "username": "WhisTchola",

@@ -1,5 +1,5 @@
 import { CareFlow } from "../../entities/careFlow";
-import { Doctor, Nurse, Receptionist, Admin } from "../../entities/hospitalStaff";
+import { Doctor, Employee, Nurse } from "../../entities/hospitalStaff";
 import { openDb } from "../../db";
 
 export class ValidateRegister {
@@ -24,7 +24,7 @@ export class ValidateRegister {
 		}
 	};
 
-	static async verifyEmployee(user: Doctor | Nurse | Receptionist | Admin): Promise<boolean> {
+	static async verifyEmployee(user: Employee | Doctor | Nurse): Promise<boolean> {
 		const db = await openDb();
 
 		try {

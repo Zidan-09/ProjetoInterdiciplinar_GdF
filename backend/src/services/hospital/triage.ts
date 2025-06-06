@@ -13,15 +13,15 @@ export class TriageService {
         const db = await openDb();
         await db.run("INSERT INTO Triage (triage_id, nurse_id, checkInTriage) VALUES (?, ?, datetime('now')", [data.careFlow_id, data.nurse_id]);
         await db.run('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InTriage, data.careFlow_id])
-        const node: NodeConsult = await NodeConsult.create(data);
-        ConsultQueue.insertQueue(node);
         return data;
     };
-
+    
     static async endTriage(data: EndTriage) {
         const db = await openDb();
         await db.run("UPDATE Triage SET checkOutTriage = datetime('now'), systolicPreassure = ?, diastolicPreassure = ?, heartRate = ?, respiratoryRate = ?, bodyTemperature = ?, oxygenSaturation = ?, painLevel = ?, symptoms = ?, triageCategory = ? WHERE triage_id = ?", [data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, data.symptoms, data.triageCategory]);
         await db.run('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.WaitingConsultation, data.careFlow_id])
+        const node: NodeConsult = await NodeConsult.create(data);
+        ConsultQueue.insertQueue(node);
     }
 
     static async changeSeverity(careFlow_id: number, newSeverity: TriageCategory): Promise<SearchResult> {

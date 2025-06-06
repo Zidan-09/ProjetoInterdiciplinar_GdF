@@ -11,9 +11,11 @@
         "status": "active",
         "salary": 40000,
         "cnesCode": "12-32",
+        "accessLevel": 3,
+        "weeklyHours": 40,
+        "role": "doctor",
         "crm": "123/PI",
-        "specialty": "cirurgião",
-        "weeklyHours": 40
+        "specialty": "cirurgião"
     },
     "user": {
         "username": "GokuBala",

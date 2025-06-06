@@ -1,5 +1,4 @@
 import { Patient } from "./patient";
-import { Status } from "../utils/personsUtils/generalEnuns";
 
 enum TriageCategory {
     Immediate = 'immediate',
@@ -29,7 +28,6 @@ interface StartTriage {
 
 interface EndTriage {
     careFlow_id: number;
-    nurse_id: number;
     vitalSigns: VitalSigns;
     triageCategory: TriageCategory;
     symptoms:string;

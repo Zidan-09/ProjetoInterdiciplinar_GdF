@@ -1,4 +1,5 @@
-import { CareFlow, Status } from "../../entities/careFlow";
+import { CareFlow } from "../../entities/careFlow";
+import { Status } from "../../utils/personsUtils/generalEnuns";
 import { openDb } from "../../db";
 
 

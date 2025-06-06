@@ -1,5 +1,5 @@
 import { openDb } from "../../db";
-import { Triage, TriageCategory } from "../../entities/careFlow";
+import { TriageCategory, EndTriage } from "../../entities/careFlow";
 import { criteria } from "../../entities/criteria";
 
 async function searchCareFlow(careFlowId: number) {
@@ -46,7 +46,7 @@ class NodeTriage {
 };
 
 class NodeConsult {
-    triage: Triage;
+    triage: EndTriage;
     patient_name: string;
     triageCategory: number;
     time: Date;
@@ -54,7 +54,7 @@ class NodeConsult {
     maxPriority: boolean;
     pointer: null | NodeConsult;
 
-    constructor(patientTriage: Triage, patient_name: string) {
+    constructor(patientTriage: EndTriage, patient_name: string) {
         this.triage = patientTriage;
         this.patient_name = patient_name;
         this.pointer = null;
@@ -90,7 +90,7 @@ class NodeConsult {
         }
     }
 
-    static async create(patientTriage: Triage) {
+    static async create(patientTriage: EndTriage) {
         const row: any = await searchCareFlow(patientTriage.careFlow_id);
         return new NodeConsult(patientTriage, row[1].name)
     }

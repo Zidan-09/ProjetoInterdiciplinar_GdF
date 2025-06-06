@@ -5,7 +5,7 @@ import { StartSchedule } from "./utils/queueUtils/updateQueue";
 import { initSocket } from "./socket";
 require('dotenv').config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 async function start() {
     const httpServer = createServer(app);

@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, LoginData } from "../entities/hospitalStaff";
+import { Nurse, Doctor, ConfirmUser, LoginData, Employee } from "../entities/hospitalStaff";
 import { EmployeeManager } from "../services/adm/employeeManager";
 import { EmployeeType } from "../utils/personsUtils/generalEnuns";
 import { Login } from "../services/adm/employeeLogin";
@@ -8,7 +8,7 @@ import { showCareFlows } from "../services/adm/showCareFlows";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
 import { ValidateRegister } from "../utils/personsUtils/validators";
-import { ShowReports } from "../services/adm/showRelatories";
+import { ShowReports } from "../services/adm/showReports";
 
 type Params = { employee: EmployeeType }
 
@@ -38,7 +38,7 @@ class AdminController {
 }
 
 class EmployersConstroller {
-    static async register<T extends Receptionist | Nurse | Doctor | Admin>(req: Request<{}, {}, T>, res: Response) {
+    static async register<T extends Employee | Nurse | Doctor>(req: Request<{}, {}, T>, res: Response) {
         const data: T = req.body;
 
         try {
@@ -62,7 +62,7 @@ class EmployersConstroller {
         }
     };
 
-    static async edit<T extends Receptionist | Nurse | Doctor | Admin>(req: Request<{}, {}, T>, res: Response) {
+    static async edit<T extends Employee | Nurse | Doctor>(req: Request<{}, {}, T>, res: Response) {
         const newData: T = req.body;
 
         try {
@@ -100,7 +100,7 @@ class EmployersConstroller {
         }
     }
 
-    static async authAccount(req: Request<{}, {}, ConfirmUser<Receptionist | Nurse | Doctor | Admin>>, res: Response) {
+    static async authAccount(req: Request<{}, {}, ConfirmUser<Employee | Nurse | Doctor>>, res: Response) {
         const { data, user } = req.body;
 
         try {

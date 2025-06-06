@@ -1,6 +1,5 @@
 {
     "careFlowId": 1,
-    "nurse_id": 1,
     "vitalSigns": {
         "bloodPreassure": {
             "systolicPreassure": 120,
@@ -12,6 +11,6 @@
         "oxygenSaturation": 99
     },
     "painLevel": 2,
-    "symptoms": "tosse, espirros",
+    "symptoms": "tosse, espirros, dor abdominal",
     "triageCategory": "Non-Urgent"
 }

@@ -1,4 +1,4 @@
-import { Receptionist, Nurse, Doctor, Admin, ConfirmUser, LoginData } from "../../entities/hospitalStaff";
+import { Employee, Nurse, Doctor, ConfirmUser, LoginData } from "../../entities/hospitalStaff";
 import { EmployeeManager } from "../../services/adm/employeeManager";
 import { EmployeeType } from "../../utils/personsUtils/generalEnuns";
 import { Login } from "../../services/adm/employeeLogin";
@@ -23,7 +23,7 @@ class AdminControllerTest {
 }
 
 class EmployersConstrollerTest {
-    static async register<T extends Receptionist | Nurse | Doctor | Admin>(request: T) {
+    static async register<T extends Employee | Nurse | Doctor>(request: T) {
         const data: T = request;
 
         try {
@@ -41,7 +41,7 @@ class EmployersConstrollerTest {
         }
     };
 
-    static async edit<T extends Receptionist | Nurse | Doctor | Admin>(request: T) {
+    static async edit<T extends Employee | Nurse | Doctor>(request: T) {
         const newData: T = request;
 
         try {
@@ -81,7 +81,7 @@ class EmployersConstrollerTest {
         }
     }
 
-    static async authAccount(request: ConfirmUser<Receptionist | Nurse | Doctor | Admin>) {
+    static async authAccount(request: ConfirmUser<Employee | Nurse | Doctor>) {
         const { data, user } = request;
 
         try {

@@ -30,17 +30,17 @@ export class EmployeeManager {
             try {
                 const employee: any = await db.run("INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode, weeklyHours, accessLevel, role) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?)", [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode, employeeData.weeklyHours, employeeData.accessLevel, employeeData.role]);
                 const employee_id = await employee.lastID;
-                await db.run('INSERT INTO User (user_id, username, email, password) VALUES (?, ?, ?, ?)', [employee_id, userData.username, employeeData.email, await Hash.hash(userData.password)])
+                await db.run('INSERT INTO User (user_id, username, password) VALUES (?, ?, ?)', [employee_id, userData.username, await Hash.hash(userData.password)])
                 
                 switch (employeeData.role) {
                     case EmployeeType.Doctor:
                         const doctorData = employeeData as Doctor;
-                        await db.run('INSERT INTO Doctor (id, crm, specialty, onDuty) VALUES (?, ?, ?, ?, ?)', [employee_id, doctorData.crm, doctorData.specialty, 0]);
+                        await db.run('INSERT INTO Doctor (id, crm, specialty, onDuty) VALUES (?, ?, ?, ?)', [employee_id, doctorData.crm, doctorData.specialty, 0]);
                         break;
 
                     case EmployeeType.Nurse:
                         const nurseData = employeeData as Nurse;
-                        await db.run('INSERT INTO Nurse (id, coren, department, speciality, onDuty) VALUES (?, ?, ?, ?, ?, ?)', [employee_id, nurseData.coren, nurseData.department, nurseData.specialty, 0]);
+                        await db.run('INSERT INTO Nurse (id, coren, department, speciality, onDuty) VALUES (?, ?, ?, ?, ?)', [employee_id, nurseData.coren, nurseData.department, nurseData.specialty, 0]);
                         break;
                 }
 

@@ -27,5 +27,5 @@ export async function initDb() {
 
     await db.exec('CREATE TABLE IF NOT EXISTS TriageCategory (id INTEGER PRIMARY KEY AUTOINCREMENT, color TEXT NOT NULL, limitTime INTEGER NOT NULL, priority INTEGER NOT NULL)')
     
-    await db.exec('CREATE TABLE IF NOT EXISTS User (user_id INTEGER PRIMARY KEY, username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL, role TEXT, FOREIGN KEY (user_id) REFERENCES Employee(id))');      
+    await db.exec('CREATE TABLE IF NOT EXISTS User (user_id INTEGER PRIMARY KEY, username TEXT NOT NULL, password TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES Employee(id))');      
 }   

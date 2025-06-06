@@ -11,7 +11,9 @@ export class ConsultService {
             const row: any = await db.run(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, datetime('now'))`, [data.careFlow_id, data.doctor_id]);
             await db.run('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InConsultation, data.careFlow_id])
             const consult_id: number = await row.lastId
+            console.log('\nDEBUG:\n\n', consult_id, '\n\n');
             return consult_id;
+
         } catch (error) {
             console.error(error);
             return;

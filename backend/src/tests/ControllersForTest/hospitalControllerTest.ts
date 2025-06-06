@@ -3,7 +3,7 @@ import { CriteriaManager } from "../../services/adm/criteriaUpdate";
 import { PatientManager } from "../../services/hospital/patientManager";
 import { TriageService } from "../../services/hospital/triage";
 import { ConsultService } from "../../services/hospital/consult";
-import { EndConsult, CareFlow, StartConsult, Triage, ChangeTriageCategory } from "../../entities/careFlow";
+import { EndConsult, CareFlow, StartConsult, StartTriage, EndTriage, ChangeTriageCategory } from "../../entities/careFlow";
 import { CreateTicket } from "../../services/queue/services/ticketService";
 import { calledsList, Result } from "../../services/queue/services/called";
 import { CareFlowService } from "../../services/hospital/startCareFlow";
@@ -76,17 +76,31 @@ export const HospitalControllerTest = {
         }
     },
 
-    async triage(request: Triage) {
+    async startTriage(request: StartTriage) {
         const data = request;
 
         try {
-            const result = await TriageService.triage(data);
+            const result = await TriageService.startTriage(data);
             const resultParsed = JSON.stringify(result)
             HandleResponseTest(true, 200, CareFlowResponses.TriageSucess, resultParsed);
 
         } catch (error) {
             console.error(error);
             HandleResponseTest(false, 400, CareFlowResponses.TriageFailed, null);
+        }
+    },
+
+    async endTriage(request: EndTriage) {
+        const data = request;
+
+        try {
+            const result = await TriageService.endTriage(data);
+            const resultParsed = JSON.stringify(result);
+            HandleResponseTest(true, 200, CareFlowResponses.TriageSucess, resultParsed);
+            
+        } catch (error) {
+            console.error(error);
+            HandleResponseTest(false, 500, CareFlowResponses.TriageFailed, null)
         }
     },
 

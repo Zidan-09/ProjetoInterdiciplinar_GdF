@@ -24,10 +24,6 @@ export class PatientCaller {
         if (call === QueueReturns.EmptyQueue) {
             return call
         } else {
-            io.emit("teste", {
-                send: call
-            })
-
             if (typeQueue === TypeQueue.Recep) {
                 return call.ticket
             } else {

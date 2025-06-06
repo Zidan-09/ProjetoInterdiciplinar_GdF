@@ -83,7 +83,7 @@ export const HospitalController = {
         try {
             const result = await TriageService.startTriage(data);
 
-            HandleResponse(true, 200, CareFlowResponses.TriageSucess, result, res);
+            HandleResponse(true, 200, CareFlowResponses.TriageStarted, result, res);
         } catch (error) {
             console.error(error);
             HandleResponse(false, 400, CareFlowResponses.TriageFailed, null, res);
@@ -96,7 +96,7 @@ export const HospitalController = {
         try {
             const result = await TriageService.endTriage(data);
 
-            HandleResponse(true, 200, CareFlowResponses.TriageSucess, result, res);
+            HandleResponse(true, 200, CareFlowResponses.TriageEnded, result, res);
         } catch (error) {
             console.error(error);
             HandleResponse(false, 500, error as string, null, res);

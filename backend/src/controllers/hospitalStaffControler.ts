@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { Nurse, Doctor, ConfirmUser, LoginData, Employee } from "../entities/hospitalStaff";
+import { Nurse, Doctor, ConfirmUser, User, Employee } from "../entities/hospitalStaff";
 import { EmployeeManager } from "../services/adm/employeeManager";
 import { EmployeeType } from "../utils/personsUtils/generalEnuns";
 import { Login } from "../services/adm/employeeLogin";
@@ -9,26 +9,28 @@ import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
 import { ValidateRegister } from "../utils/personsUtils/validators";
 import { ShowReports } from "../services/adm/reports/showReports";
+import { AdminResponses } from "../utils/systemUtils/AdminResponses";
 
 type Params = { employee: EmployeeType }
 
-class AdminController {
-    static async listCareFlows(req: Request, res: Response) {
+const AdminController = {
+    async listCareFlows(req: Request, res: Response) {
         try {
             const careFlows = await showCareFlows();
-            HandleResponse(true, 200, "Careflows showed", careFlows, res);
+            HandleResponse(true, 200, AdminResponses.ShowedCareFlows, careFlows, res);
 
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            HandleResponse(false, 500, AdminResponses.Error, null, res);
         }
-    };
+    },
 
-    static async queueReport(req: Request, res: Response) {
+    async queueReport(req: Request, res: Response) {
         const period = req.body;
 
         try {
-            ShowReports.queueTime(period);
+            const queueTimes = await ShowReports.queueTime(period);
+            HandleResponse(true, 200, AdminResponses.ShowedQueueReport, queueTimes, res);
 
         } catch (error) {
             console.error(error);
@@ -37,8 +39,8 @@ class AdminController {
     }
 }
 
-class EmployersConstroller {
-    static async register<T extends Employee | Nurse | Doctor>(req: Request<{}, {}, T>, res: Response) {
+const EmployersConstroller = {
+    async register<T extends Employee | Nurse | Doctor>(req: Request<{}, {}, T>, res: Response) {
         const data: T = req.body;
 
         try {
@@ -60,32 +62,34 @@ class EmployersConstroller {
             console.error(error);
             HandleResponse(false, 500, error as string, null, res);
         }
-    };
+    },
 
-    static async edit<T extends Employee | Nurse | Doctor>(req: Request<{}, {}, T>, res: Response) {
+    async edit<T extends Employee | Nurse | Doctor>(req: Request<{}, {}, T>, res: Response) {
         const newData: T = req.body;
 
         try {
             await EmployeeManager.editEmployee(newData);
-            HandleResponse(true, 200, "Editado", newData, res);
+            HandleResponse(true, 200, AdminResponses.EmployeeEdited, newData, res);
         } catch (error) {
             console.error(error);
             HandleResponse(false, 500, error as string, null, res);
         }
-    };
+    },
 
-    static async showEmployeers(req: Request<Params>, res: Response) {
+    async showEmployeers(req: Request<Params>, res: Response) {
         const { employee } = req.params;
 
-        const employeers = await EmployeeManager.showEmployeers(employee)
-        res.status(200).json({
-            status: "sucess",
-            result: employeers,
-            message: `${employee} cadastrados exibidos`
-        })
-    };
+        try {
+            const employers = await EmployeeManager.showEmployeers(employee)
+            HandleResponse(true, 200, AdminResponses.ShowedEmployers, employers, res);
 
-    static async activateAccount(req: Request, res: Response) {
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, AdminResponses.Error, null, res);
+        }
+    },
+
+    async activateAccount(req: Request, res: Response) {
         const token = req.query.token as string;
         
         try {
@@ -98,9 +102,9 @@ class EmployersConstroller {
         } catch (error) {
             console.error(error)
         }
-    }
+    },
 
-    static async authAccount(req: Request<{}, {}, ConfirmUser<Employee | Nurse | Doctor>>, res: Response) {
+    async authAccount(req: Request<{}, {}, ConfirmUser<Employee | Nurse | Doctor>>, res: Response) {
         const { data, user } = req.body;
 
         try {
@@ -116,10 +120,10 @@ class EmployersConstroller {
             console.error(error);
             HandleResponse(false, 500, error as string, null, res);
         }
-    }
+    },
 
-    static async login(req: Request<{}, {}, LoginData>, res: Response) {
-        const loginDataReq: LoginData = req.body;
+    async login(req: Request<{}, {}, User>, res: Response) {
+        const loginDataReq: User = req.body;
 
         try {
             await Login.loginUser(loginDataReq);
@@ -129,7 +133,7 @@ class EmployersConstroller {
             console.error(error);
             HandleResponse(false, 500, error as string, null, res);
         }
-    };
+    }
 }
 
 export { AdminController, EmployersConstroller };

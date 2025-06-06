@@ -44,7 +44,8 @@ enum EmployeeResponseMessage {
 enum Status {
     WaitingTriage = 'waiting_triage',
     WaitingConsultation = 'waiting_consultation',
-    InConsultation = 'In consult',
+    InConsultation = 'in_consult',
+    InTriage = 'in_triage',
     Attended  = 'attended',
     NoShow = 'no_show'
 }

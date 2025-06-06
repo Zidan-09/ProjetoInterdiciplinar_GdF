@@ -1,4 +1,4 @@
-import { EmployeeStatus } from "../utils/personsUtils/generalEnuns";
+import { EmployeeStatus, EmployeeType } from "../utils/personsUtils/generalEnuns";
 
 interface Employee{
     registrationNumber: number;
@@ -12,6 +12,9 @@ interface Employee{
     status: EmployeeStatus;
     salary: number;
     cnesCode: string;
+    weeklyHours: number;
+    accessLevel: number;
+    role: EmployeeType;
 };
 
 interface Doctor extends Employee {
@@ -27,21 +30,12 @@ interface Nurse extends Employee {
     weeklyHours: number;
 };
 
-interface Receptionist extends Employee {
-    weeklyHours: number;
-}
-
-interface Admin extends Employee {
-    accessLevel: string;
-    weeklyHours: number;
-};
-
 interface User {
     username: string;
     password: string;
 }       
 
-interface ConfirmUser<T extends Receptionist | Nurse | Doctor | Admin> {
+interface ConfirmUser<T extends Employee | Nurse | Doctor> {
     data: T
     user: User;
 }
@@ -50,4 +44,4 @@ interface LoginData {
     email: string;
     password: string
 }
-export { Doctor, Nurse, Receptionist, Admin, ConfirmUser, User, LoginData }
+export { Employee, Doctor, Nurse, ConfirmUser, User, LoginData }

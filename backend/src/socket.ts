@@ -8,10 +8,10 @@ export const initSocket = (server: any) => {
     });
 
     io.on("connection", (socket) => {
-        console.log(`Socket conectado: ${socket.id}`);
+        console.log(`Connected socket: ${socket.id}`);
 
         socket.on("disconnect", () => {
-            console.log(`Socket desconectado: ${socket.id}`);
+            console.log(`Disconnected socket: ${socket.id}`);
         });
     });
 

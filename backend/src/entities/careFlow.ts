@@ -22,7 +22,12 @@ interface CareFlow {
     patient: Patient
 };
 
-interface Triage {
+interface StartTriage {
+    careFlow_id: number;
+    nurse_id: number;
+};
+
+interface EndTriage {
     careFlow_id: number;
     nurse_id: number;
     vitalSigns: VitalSigns;
@@ -55,4 +60,4 @@ interface EndConsult {
     notes: string | null;
 };
 
-export { Status, TriageCategory, VitalSigns, CareFlow, Triage, ChangeTriageCategory, CallsConsult, StartConsult, EndConsult }
+export { TriageCategory, VitalSigns, CareFlow, StartTriage, EndTriage, ChangeTriageCategory, CallsConsult, StartConsult, EndConsult }

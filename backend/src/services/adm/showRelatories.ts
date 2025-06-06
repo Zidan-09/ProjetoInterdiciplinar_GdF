@@ -1,6 +1,6 @@
 import { openDb } from "../../db";
 
-export class ShowRelatories {
+export class ShowReports {
     static async queueTime(period: Date): Promise<{ triageQueueTime: number, consultQueueTime: number }> {
         const db = await openDb();
         
@@ -32,6 +32,7 @@ export class ShowRelatories {
     
     static async careFlow() {
         const db = await openDb();
+        
         
     };
     

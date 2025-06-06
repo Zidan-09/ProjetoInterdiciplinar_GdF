@@ -8,6 +8,7 @@ import { showCareFlows } from "../services/adm/showCareFlows";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
 import { ValidateRegister } from "../utils/personsUtils/validators";
+import { ShowReports } from "../services/adm/showRelatories";
 
 type Params = { employee: EmployeeType }
 
@@ -23,9 +24,11 @@ class AdminController {
         }
     };
 
-    static async showRelatories(req: Request, res: Response) {
+    static async queueReport(req: Request, res: Response) {
+        const period = req.body;
+
         try {
-            
+            ShowReports.queueTime(period);
 
         } catch (error) {
             console.error(error);

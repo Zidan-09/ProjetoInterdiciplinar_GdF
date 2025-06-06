@@ -1,4 +1,5 @@
-import { StartConsult, EndConsult, Status } from "../../entities/careFlow";
+import { StartConsult, EndConsult } from "../../entities/careFlow";
+import { Status } from "../../utils/personsUtils/generalEnuns";
 import { openDb } from "../../db";
 
 

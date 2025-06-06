@@ -10,6 +10,7 @@ employeeRouter.put('/edit', EmployersConstroller.edit)
 
 employeeRouter.get('/list/careFlow', AdminController.listCareFlows);
 employeeRouter.get('/list/:employee', EmployersConstroller.showEmployeers);
+employeeRouter.get('/queueReport', AdminController.queueReport);
 
 employeeRouter.post('/login', EmployersConstroller.login);
 

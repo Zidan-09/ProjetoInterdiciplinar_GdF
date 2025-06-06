@@ -2,7 +2,6 @@ import { CareFlow } from "../../entities/careFlow";
 import { Doctor, Nurse, Receptionist, Admin } from "../../entities/hospitalStaff";
 import { openDb } from "../../db";
 
-
 export class ValidateRegister {
 	static async verifyPatient(patient: CareFlow['patient']): Promise<boolean> {
 		const db = await openDb();

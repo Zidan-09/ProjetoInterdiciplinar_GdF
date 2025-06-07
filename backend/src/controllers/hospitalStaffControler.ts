@@ -10,13 +10,15 @@ import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
 import { ValidateRegister } from "../utils/personsUtils/validators";
 import { ShowReports } from "../services/adm/reports/showReports";
 import { AdminResponses } from "../utils/systemUtils/AdminResponses";
+import { CareFlowReports } from "../services/adm/reports/careFlowReports";
+import { QueueReports } from "../services/adm/reports/queueReports";
 
 type Params = { employee: EmployeeType }
 
 const AdminController = {
     async listCareFlows(req: Request, res: Response) {
         try {
-            const careFlows = await showCareFlows();
+            const careFlows = await CareFlowReports.showAllCareFlows();
             HandleResponse(true, 200, AdminResponses.ShowedCareFlows, careFlows, res);
 
         } catch (error) {
@@ -29,7 +31,7 @@ const AdminController = {
         const period = req.body;
 
         try {
-            const queueTimes = await ShowReports.queueTime(period);
+            const queueTimes = await QueueReports.getAverageQueueTimes(period);
             HandleResponse(true, 200, AdminResponses.ShowedQueueReport, queueTimes, res);
 
         } catch (error) {

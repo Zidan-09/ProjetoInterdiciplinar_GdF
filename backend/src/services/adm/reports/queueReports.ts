@@ -1,14 +1,17 @@
 import { openDb } from "../../../db";
+import { getPeriodRange } from "../../../utils/systemUtils/getPeriod";
+import { Periods } from "../../../utils/systemUtils/AdminResponses";
 
-export class QueueReports {
-    static async timeQueue(period: Date) {
+export const QueueReports = {
+    async getAverageQueueTimes(period: Periods) {
         const db = await openDb();
 
-        const checkInTriage = await db.all('SELECT checkInTriage FROM Triage WHERE checkInTriage >= ? AND checkInTriage <= ?', [period.setHours(0, 0, 0, 0), period.setHours(23, 59, 59, 999)]);
-        const checkInHospital = await db.all('SELECT checkInHospital FROM CareFlow WHERE checkInHospital >= ? AND checkInHospital <= ?', [period.setHours(0, 0, 0, 0), period.setHours(23, 59, 59, 999)]);
+        const { startDate, endDate } = getPeriodRange(period);
+        const checkInTriage = await db.all('SELECT checkInTriage FROM Triage WHERE checkInTriage >= ? AND checkInTriage <= ?', [startDate, endDate]);
+        const checkInHospital = await db.all('SELECT checkInHospital FROM CareFlow WHERE checkInHospital >= ? AND checkInHospital <= ?', [startDate, endDate]);
 
-        const checkInConsult = await db.all('SELECT checkInConsult FROM Consult WHERE checkInConsult >= ? AND checkInConsult <= ?', [period.setHours(0, 0, 0, 0), period.setHours(23, 59, 59, 999)]);
-        const checkOutTriage = await db.all('SELECT checkOutTriage FROM Triage WHERE checkOutTriage >= ? AND checkOutTriage <= ?', [period.setHours(0, 0, 0, 0), period.setHours(23, 59, 59, 999)])
+        const checkInConsult = await db.all('SELECT checkInConsult FROM Consult WHERE checkInConsult >= ? AND checkInConsult <= ?', [startDate, endDate]);
+        const checkOutTriage = await db.all('SELECT checkOutTriage FROM Triage WHERE checkOutTriage >= ? AND checkOutTriage <= ?', [startDate, endDate])
 
         let triageQueueTime: number = 0;
         let consultQueueTime: number = 0;
@@ -28,5 +31,5 @@ export class QueueReports {
             triageQueueTime: triageResult,
             consultQueueTime: consultResult
         }
-    };
+    }
 }

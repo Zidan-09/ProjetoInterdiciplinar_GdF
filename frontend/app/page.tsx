@@ -1,9 +1,28 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import api from '@/services/api';
+
 export default function Home() {
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.get('/sua-rota-aqui');
+        setData(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
-    <main className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold text-blue-600">
-        Gerenciamento de Filas em Pronto-Socorro
-      </h1>
-    </main>
-  )
+    <div>
+      <h1>Dados da API</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
 }

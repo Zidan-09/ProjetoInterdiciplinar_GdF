@@ -1,38 +1,36 @@
 import { openDb } from "../../../db";
 import { Periods } from "../../../utils/systemUtils/AdminResponses";
+import { getPeriodRange } from "../../../utils/systemUtils/getPeriod";
 
 export const CareFlowReports = {
-    async timeConsult(period: Periods) {
+    async getAverageConsultTime(period: Periods) {
         const db = await openDb();
 
-        const date: Date = new Date();
-        let initDate: number;
-        let endDate: number;
+        const { startDate, endDate } = getPeriodRange(period);
+        let consultTime: number = 0;
 
-        switch (period) {
-            case Periods.Day:
-                initDate = date.setHours(0, 0, 0, 0);
-                endDate = date.setHours(23, 59, 59, 999);
-                break;
-            case Periods.Week:
-                initDate = date.setDate(1)
-                endDate = date.setHours(23, 59, 59, 999);
-                break;
-            case Periods.Month:
-                initDate = date.setMonth(1, 1)
-                endDate = date.setHours(23, 59, 59, 999);
-                break;
-            case Periods.Year:
-                initDate = date.setFullYear(2025, 1, 1)
-                endDate = date.setHours(23, 59, 59, 999);
-                break;
+        const [rows] = await db.all('SELECT checkInConsult, checkOutConsult FROM Consult WHERE checkInConsult >= ? AND checkOutConsult <= ?', [startDate, endDate]);
+        
+        for (let i = 0; i < rows.length; i++) {
+            consultTime += rows[i].CheckOutConsult - rows[i].CheckInConsult;
         }
 
-        console.log(initDate, endDate)
+        return consultTime;
     },
 
-    async timeTriage() {
+    async getAverageTriageTime(period: Periods) {
         const db = await openDb();
+
+        const { startDate, endDate } = getPeriodRange(period);
+        let triageTime: number = 0;
+
+        const [rows] = await db.all('SELECT checkInTriage, checkOutTriageonsult WHERE checkInTriage >= ? AND checkOutTriage <= ?', [startDate, endDate]);
+        
+        for (let i = 0; i < rows.length; i++) {
+            triageTime += rows[i].checkOutTriage - rows[i].checkInTriage;
+        }
+
+        return triageTime;
     },
 
     async showAllCareFlows() {
@@ -57,4 +55,14 @@ export const CareFlowReports = {
             console.error(error);
         }
     },
+
+    async getPeriodCareFlow(period: Periods) {
+        const db = await openDb();
+
+        const { startDate, endDate } = getPeriodRange(period);
+
+        const careFlows = await db.all('SELECT CareFlow.*, Triage.*, Consult.* FROM CareFlow LEFT JOIN Triage ON CareFlow.id = Triage.id LEFT JOIN Consult ON CareFlow.id = Consult.id WHERE CareFlow.checkInHospital BETWEEN ? AND ?', [startDate, endDate]);
+
+        return careFlows
+    }
 }

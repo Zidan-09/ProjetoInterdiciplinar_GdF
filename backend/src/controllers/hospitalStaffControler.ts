@@ -4,16 +4,15 @@ import { EmployeeManager } from "../services/adm/employeeManager";
 import { EmployeeType } from "../utils/personsUtils/generalEnuns";
 import { Login } from "../services/adm/employeeLogin";
 import { Jwt } from "../utils/systemUtils/security";
-import { showCareFlows } from "../services/adm/showCareFlows";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
 import { ValidateRegister } from "../utils/personsUtils/validators";
-import { ShowReports } from "../services/adm/reports/showReports";
-import { AdminResponses } from "../utils/systemUtils/AdminResponses";
+import { AdminResponses, Periods } from "../utils/systemUtils/AdminResponses";
 import { CareFlowReports } from "../services/adm/reports/careFlowReports";
 import { QueueReports } from "../services/adm/reports/queueReports";
 
 type Params = { employee: EmployeeType }
+type AdminParams = { period: Periods }
 
 const AdminController = {
     async listCareFlows(req: Request, res: Response) {
@@ -27,17 +26,34 @@ const AdminController = {
         }
     },
 
-    async queueReport(req: Request, res: Response) {
-        const period = req.body;
+    async queueReport(req: Request<AdminParams>, res: Response) {
+        const period = req.params;
 
         try {
-            const queueTimes = await QueueReports.getAverageQueueTimes(period);
+            const queueTimes = await QueueReports.getAverageQueueTimes(period.period);
             HandleResponse(true, 200, AdminResponses.ShowedQueueReport, queueTimes, res);
 
         } catch (error) {
             console.error(error);
             HandleResponse(false, 500, error as string, null, res);
         }
+    },
+
+    async consultTimeReport(req: Request<AdminParams>, res: Response) {
+        const period = req.params;
+
+        try {
+            const consultTime = await CareFlowReports.getAverageConsultTime(period.period);
+            HandleResponse(true, 200, AdminResponses.ShowedCareFlows, consultTime, res);
+
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, AdminResponses.Error, null, res);
+        }
+    },
+
+    async triageTimeReport(req: Request, res: Response) {
+        
     }
 }
 
@@ -95,7 +111,7 @@ const EmployersConstroller = {
         const token = req.query.token as string;
         
         try {
-            const data = Jwt.verifyToken(token);
+            const data = Jwt.verifyRegisterToken(token);
 
             if (data) {
                 HandleResponse(true, 200, "TESTE", data, res);

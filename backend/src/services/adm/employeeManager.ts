@@ -11,7 +11,7 @@ export class EmployeeManager {
         const valid = await ValidateRegister.verifyEmployee(employeeData);
 
         if (valid) {     
-            const token: string = Jwt.generateToken(employeeData);
+            const token: string = Jwt.generateRegisterToken(employeeData);
             sendEmail(employeeData.email, token);
 
             return EmployeeResponseMessage.AwaitingConfirmation;

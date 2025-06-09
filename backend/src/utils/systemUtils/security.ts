@@ -23,18 +23,32 @@ export class Hash {
 };
 
 export class Jwt {
-    static generateToken<T extends Employee | Nurse | Doctor>(payload: T): string {
+    static generateRegisterToken<T extends Employee | Nurse | Doctor>(payload: T): string {
         const token: string = jwt.sign(payload, JWT_SECRET!, {expiresIn: EXPIRATION});
         return token;
     };
 
-    static verifyToken<T extends Employee | Nurse | Doctor>(token: string) {
+    static verifyRegisterToken<T extends Employee | Nurse | Doctor>(data: string) {
         try {
-            const data = jwt.verify(token, process.env.JWT_SECRET!) as T;
-            return data
+            const token = jwt.verify(data, process.env.JWT_SECRET!) as T;
+            return token
         } catch (error) {
             console.error(error);
-            return null
+        }
+    };
+
+    static generateLoginToken(id: number) {
+        const token: string = jwt.sign({ id: id }, process.env.JWT_SECRET!, { expiresIn: '24h' });
+        return token
+    };
+
+    static verifyLoginToken(data: string) {
+        try {
+            const token = jwt.verify(data, process.env.JWT_SECRET!);
+            return token;
+            
+        } catch (error) {
+            console.error(error);
         }
     }
 };

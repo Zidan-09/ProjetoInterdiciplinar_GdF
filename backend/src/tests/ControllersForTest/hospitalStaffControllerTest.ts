@@ -70,7 +70,7 @@ class EmployersConstrollerTest {
         const token = query;
         
         try {
-            const data = Jwt.verifyToken(token);
+            const data = Jwt.verifyRegisterToken(token);
 
             if (data) {
                 HandleResponseTest(true, 200, "TESTE", data);

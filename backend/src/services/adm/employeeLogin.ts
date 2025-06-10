@@ -14,15 +14,12 @@ export class Login {
                 const valid: boolean = await bcrypt.compare(data.password, userData.password);
 
                 if (valid) {
-                    
-                } else {
                     const token = Jwt.generateLoginToken(userData.user_id);
 
                     return {
                         user: userData.username,
                         token: token
                     }
-                    
                 }
             }
 

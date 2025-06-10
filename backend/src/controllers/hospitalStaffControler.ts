@@ -144,8 +144,13 @@ const EmployersConstroller = {
         const loginDataReq: User = req.body;
 
         try {
-            await Login.loginUser(loginDataReq);
-            HandleResponse(true, 200, EmployeeResponseMessage.EmployeeLoggedIn, loginDataReq, res);
+            const logged = await Login.loginUser(loginDataReq);
+
+            if (logged) {
+                HandleResponse(true, 200, EmployeeResponseMessage.EmployeeLoggedIn, logged, res);
+            } else {
+                HandleResponse(false, 400, 'Username or password invalid', null, res);
+            }
 
         } catch (error) {
             console.error(error);

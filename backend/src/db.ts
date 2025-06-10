@@ -15,7 +15,7 @@ export async function initDb() {
 
     await db.exec('CREATE TABLE IF NOT EXISTS Patient (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, dob TEXT NOT NULL, maritalStatus TEXT NOT NULL, cpf TEXT NOT NULL, rg TEXT NOT NULL, contact TEXT NOT NULL, gender TEXT NOT NULL, healthPlan TEXT NOT NULL, address TEXT NOT NULL)');
     
-    await db.exec('CREATE TABLE IF NOT EXISTS Employee (id INTEGER PRIMARY KEY AUTOINCREMENT, registrationNumber INTEGER NOT NULL, name TEXT NOT NULL, cpf TEXT NOT NULL, email TEXT NOT NULL, phone TEXT NOT NULL, dob TEXT NOT NULL, address TEXT NOT NULL, hireDate TEXT NOT NULL, workShift TEXT NOT NULL, status TEXT NOT NULL, salary REAL NOT NULL, cnesCode TEXT NOT NULL, weeklyHours INTEGER NOT NULL, accessLevel INTEGER NOT NULL, role TEXT NOT NULL)');
+    await db.exec('CREATE TABLE IF NOT EXISTS Employee (id INTEGER PRIMARY KEY AUTOINCREMENT, registrationNumber INTEGER NOT NULL, name TEXT NOT NULL, cpf TEXT NOT NULL, email TEXT NOT NULL, phone TEXT NOT NULL, dob TEXT NOT NULL, address TEXT NOT NULL, hireDate TEXT NOT NULL, workShift TEXT NOT NULL, status TEXT NOT NULL, salary REAL NOT NULL, cnesCode TEXT NOT NULL, weeklyHours INTEGER NOT NULL, accessLevel TEXT NOT NULL)');
     await db.exec('CREATE TABLE IF NOT EXISTS Receptionist (id INTEGER PRIMARY KEY,  FOREIGN KEY (id) REFERENCES Employee(id))');
     await db.exec('CREATE TABLE IF NOT EXISTS Nurse (id INTEGER PRIMARY KEY, coren TEXT NOT NULL, department TEXT NOT NULL, speciality TEXT NOT NULL, onDuty INTEGER NOT NULL, FOREIGN KEY (id) REFERENCES Employee(id))');
     await db.exec('CREATE TABLE IF NOT EXISTS Doctor (id INTEGER PRIMARY KEY, crm TEXT NOT NULL, specialty TEXT NOT NULL, onDuty INTEGER NOT NULL, FOREIGN KEY (id) REFERENCES Employee(id))');

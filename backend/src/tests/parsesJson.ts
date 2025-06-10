@@ -30,9 +30,8 @@ const chichi: Employee = {
     status: chichiJson.status as EmployeeStatus,
     salary: chichiJson.salary,
     cnesCode: chichiJson.cnesCode,
-    accessLevel: chichiJson.accessLevel,
+    accessLevel: chichiJson.accessLevel as EmployeeType,
     weeklyHours: chichiJson.weeklyHours,
-    role: chichiJson.role as EmployeeType
 };
 
 const bulma: Nurse = {
@@ -47,9 +46,8 @@ const bulma: Nurse = {
     status: bulmaJson.status as EmployeeStatus,
     salary: bulmaJson.salary,
     cnesCode: bulmaJson.cnesCode,
-    accessLevel: bulmaJson.accessLevel,
+    accessLevel: bulmaJson.accessLevel as EmployeeType,
     weeklyHours: bulmaJson.weeklyHours,
-    role: bulmaJson.role as EmployeeType,
     coren: bulmaJson.coren,
     department: bulmaJson.department,
     specialty: bulmaJson.specialty
@@ -67,9 +65,8 @@ const goku: Doctor = {
     status: gokuJson.status as EmployeeStatus,
     salary: gokuJson.salary,
     cnesCode: gokuJson.cnesCode,
-    accessLevel: gokuJson.accessLevel,
+    accessLevel: gokuJson.accessLevel as EmployeeType,
     weeklyHours: gokuJson.weeklyHours,
-    role: gokuJson.role as EmployeeType,
     crm: gokuJson.crm,
     specialty: gokuJson.specialty
 }
@@ -86,9 +83,8 @@ const whis: Employee = {
     status: whisJson.status as EmployeeStatus,
     salary: whisJson.salary,
     cnesCode: whisJson.cnesCode,
-    accessLevel: whisJson.accessLevel,
-    weeklyHours: whisJson.weeklyHours,
-    role: whisJson.role as EmployeeType
+    accessLevel: whisJson.accessLevel as EmployeeType,
+    weeklyHours: whisJson.weeklyHours
 }
 
 const chichiActivate: ConfirmUser<Employee> = {
@@ -104,9 +100,8 @@ const chichiActivate: ConfirmUser<Employee> = {
         status: chichiActivateJson.data.status as EmployeeStatus,
         salary: chichiActivateJson.data.salary,
         cnesCode: chichiActivateJson.data.cnesCode,
-        accessLevel: chichiActivateJson.data.accessLevel,
+        accessLevel: chichiActivateJson.data.accessLevel as EmployeeType,
         weeklyHours: chichiActivateJson.data.weeklyHours,
-        role: chichiActivateJson.data.role as EmployeeType
     },
     user: {
         username: chichiActivateJson.user.username,
@@ -127,9 +122,8 @@ const bulmaActivate: ConfirmUser<Nurse> = {
         status: bulmaActivateJson.data.status as EmployeeStatus,
         salary: bulmaActivateJson.data.salary,
         cnesCode: bulmaActivateJson.data.cnesCode,
-        accessLevel: bulmaActivateJson.data.accessLevel,
+        accessLevel: bulmaActivateJson.data.accessLevel as EmployeeType,
         weeklyHours: bulmaActivateJson.data.weeklyHours,
-        role: bulmaActivateJson.data.role as EmployeeType,
         coren: bulmaActivateJson.data.coren,
         department: bulmaActivateJson.data.department,
         specialty: bulmaActivateJson.data.specialty
@@ -153,9 +147,8 @@ const gokuActivate: ConfirmUser<Doctor> = {
         status: gokuActivateJson.data.status as EmployeeStatus,
         salary: gokuActivateJson.data.salary,
         cnesCode: gokuActivateJson.data.cnesCode,
-        accessLevel: gokuActivateJson.data.accessLevel,
+        accessLevel: gokuActivateJson.data.accessLevel as EmployeeType,
         weeklyHours: gokuActivateJson.data.weeklyHours,
-        role: gokuActivateJson.data.role as EmployeeType,
         crm: gokuActivateJson.data.crm,
         specialty: gokuActivateJson.data.specialty,
     },
@@ -178,9 +171,8 @@ const whisActivate: ConfirmUser<Employee> = {
         status: whisActivateJson.data.status as EmployeeStatus,
         salary: whisActivateJson.data.salary,
         cnesCode: whisActivateJson.data.cnesCode,
-        accessLevel: whisActivateJson.data.accessLevel,
+        accessLevel: whisActivateJson.data.accessLevel as EmployeeType,
         weeklyHours: whisActivateJson.data.weeklyHours,
-        role: whisActivateJson.data.role as EmployeeType
     },
     user: {
         username: whisActivateJson.user.username,

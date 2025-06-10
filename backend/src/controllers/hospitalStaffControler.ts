@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
 import { Nurse, Doctor, ConfirmUser, User, Employee } from "../entities/hospitalStaff";
 import { EmployeeManager } from "../services/adm/employeeManager";
-import { EmployeeType } from "../utils/personsUtils/generalEnuns";
+import { EmployeeType, PatientResponses } from "../utils/personsUtils/generalEnuns";
 import { Login } from "../services/adm/employeeLogin";
 import { Jwt } from "../utils/systemUtils/security";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
@@ -10,6 +10,7 @@ import { ValidateRegister } from "../utils/personsUtils/validators";
 import { AdminResponses, Periods } from "../utils/systemUtils/AdminResponses";
 import { CareFlowReports } from "../services/adm/reports/careFlowReports";
 import { QueueReports } from "../services/adm/reports/queueReports";
+import { PatientManager } from "../services/hospital/patientManager";
 
 type Params = { employee: EmployeeType }
 type AdminParams = { period: Periods }
@@ -54,6 +55,22 @@ const AdminController = {
 
     async triageTimeReport(req: Request, res: Response) {
         
+    },
+
+    async listPatients(req: Request, res: Response) {
+        try {
+            const patients = await PatientManager.list();
+
+            if (patients != PatientResponses.Error) {
+                HandleResponse(true, 200, PatientResponses.PatientListed, patients, res);
+            } else {
+                HandleResponse(false, 400, patients, null, res);
+            }
+    
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, error as string, null, res)
+        }
     }
 }
 

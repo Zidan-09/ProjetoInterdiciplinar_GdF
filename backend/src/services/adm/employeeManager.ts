@@ -29,11 +29,11 @@ export class EmployeeManager {
 
         if (valid) {
             try {
-                const employee: any = await db.run("INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode, weeklyHours, accessLevel, role) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?, ?)", [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode, employeeData.weeklyHours, employeeData.accessLevel, employeeData.role]);
+                const employee: any = await db.run("INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode, weeklyHours, accessLevel) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?)", [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode, employeeData.weeklyHours, employeeData.accessLevel]);
                 const employee_id = await employee.lastID;
                 await db.run('INSERT INTO User (user_id, username, password) VALUES (?, ?, ?)', [employee_id, userData.username, await Hash.hash(userData.password)])
                 
-                switch (employeeData.role) {
+                switch (employeeData.accessLevel) {
                     case EmployeeType.Doctor:
                         const doctorData = employeeData as Doctor;
                         await db.run('INSERT INTO Doctor (id, crm, specialty, onDuty) VALUES (?, ?, ?, ?)', [employee_id, doctorData.crm, doctorData.specialty, 0]);
@@ -62,9 +62,9 @@ export class EmployeeManager {
         const employee = await db.get('SELECT * FROM Employee WHERE registrationNumber = ? AND name = ? AND cpf = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf]);
         try {
             const employee_id = employee.id;
-            await db.run('UPDATE Employee SET registrationNumber = ?, name = ?, cpf = ?, email = ?, phone = ?, dob = ?, address = ?, hireDate = ?, workShift = ?, status = ?, salary = ?, cnesCode = ?, weeklyHours = ?, accessLevel = ?, role = ? WHERE id = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf, newUserData.email, newUserData.phone, newUserData.dob, newUserData.address, newUserData.workShift, newUserData.status, newUserData.salary, newUserData.cnesCode, newUserData.weeklyHours, newUserData.accessLevel, newUserData.role, employee_id]);
+            await db.run('UPDATE Employee SET registrationNumber = ?, name = ?, cpf = ?, email = ?, phone = ?, dob = ?, address = ?, hireDate = ?, workShift = ?, status = ?, salary = ?, cnesCode = ?, weeklyHours = ?, accessLevel = ? WHERE id = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf, newUserData.email, newUserData.phone, newUserData.dob, newUserData.address, newUserData.workShift, newUserData.status, newUserData.salary, newUserData.cnesCode, newUserData.weeklyHours, newUserData.accessLevel, employee_id]);
 
-            switch (newUserData.role) {
+            switch (newUserData.accessLevel) {
                 case EmployeeType.Doctor:
                     const doctorData = newUserData as Doctor;
                     await db.run('UPDATE Doctor SET crm = ?, specialty = ? WHERE id = ?', [doctorData.crm, doctorData.specialty, employee_id]);

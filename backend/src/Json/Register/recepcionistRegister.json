@@ -10,7 +10,6 @@
     "status": "active",
     "salary": 40000,
     "cnesCode": "12-32",
-    "accessLevel": 1,
-    "weeklyHours": 40,
-    "role": "receptionist"
+    "accessLevel": "receptionist",
+    "weeklyHours": 40
 }

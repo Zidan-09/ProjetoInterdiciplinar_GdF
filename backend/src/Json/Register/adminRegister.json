@@ -10,7 +10,6 @@
     "status": "active",
     "salary": 2.50,
     "cnesCode": "12-32",
-    "accessLevel": 4,
-    "weeklyHours": 40,
-    "role": "admin"
+    "accessLevel": "admin",
+    "weeklyHours": 40
 }

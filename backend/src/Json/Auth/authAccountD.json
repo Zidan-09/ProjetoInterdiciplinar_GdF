@@ -11,9 +11,8 @@
         "status": "active",
         "salary": 40000,
         "cnesCode": "12-32",
-        "accessLevel": 3,
+        "accessLevel": "doctor",
         "weeklyHours": 40,
-        "role": "doctor",
         "crm": "123/PI",
         "specialty": "cirurgião"
     },

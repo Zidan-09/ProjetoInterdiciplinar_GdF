@@ -11,9 +11,8 @@
         "status": "active",
         "salary": 40000,
         "cnesCode": "12-32",
-        "accessLevel": 2,
+        "accessLevel": "nurse",
         "weeklyHours": 40,
-        "role": "nurse",
         "coren": "2313/54",
         "department": "sus",
         "specialty": "obstetra"

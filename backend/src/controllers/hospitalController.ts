@@ -50,22 +50,6 @@ export const HospitalController = {
         }
     },
 
-    async list(req: Request, res: Response) {
-        try {
-            const patients = await PatientManager.list();
-
-            if (patients != PatientResponses.Error) {
-                HandleResponse(true, 200, PatientResponses.PatientListed, patients, res);
-            } else {
-                HandleResponse(false, 400, patients, null, res);
-            }
-    
-        } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, error as string, null, res)
-        }
-    },
-
     async changeCriteria(req: Request<{}, {}, CriteriaData>, res: Response) {
         const newCriteria: CriteriaData = req.body;
 

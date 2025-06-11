@@ -14,10 +14,11 @@ import { PatientManager } from "../services/hospital/patientManager";
 import { TriageCategoryManager } from "../services/adm/triageCategoryManager";
 import { ServerResponses } from "../utils/systemUtils/serverResponses";
 import { Patient } from "../entities/patient";
-import { TriageCategory, UpdateTriageCategory } from "../entities/criteria";
+import { TriageCategory, UpdateTriageCategory } from "../entities/triageCategory";
 
 type Params = { employee: EmployeeType }
 type AdminParams = { period: Periods }
+type Category = { triageCategory: string }
 
 const AdminController = {
     async listCareFlows(req: Request, res: Response) {
@@ -150,6 +151,22 @@ const AdminController = {
             console.error(error);
             HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
+    },
+
+    async deleteTriageCategory(req: Request<Category>, res: Response) {
+        const data = req.params;
+        try {
+            const result = await TriageCategoryManager.delete(data.triageCategory);
+
+            if (result) {
+                HandleResponse(true, 200, AdminResponses.DeletedCategory, result, res);
+            } else {
+                HandleResponse(false, 400, AdminResponses.DeleteCategoryFailed, null, res);
+            }
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+        }
     }
 }
 
@@ -188,6 +205,10 @@ const EmployersConstroller = {
             console.error(error);
             HandleResponse(false, 500, error as string, null, res);
         }
+    },
+    
+    async delete<T extends Employee | Nurse | Doctor>(req: Request, res: Response) {
+        const employee: T = req.body;
     },
 
     async showEmployeers(req: Request<Params>, res: Response) {

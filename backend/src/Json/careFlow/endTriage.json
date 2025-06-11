@@ -12,5 +12,5 @@
     },
     "painLevel": 2,
     "symptoms": ["tosse", "espirros", "dor abdominal"],
-    "triageCategory": "Non-Urgent"
+    "triageCategory": "non_urgent"
 }

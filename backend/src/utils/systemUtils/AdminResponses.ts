@@ -29,6 +29,9 @@ enum AdminResponses {
 
     TriageCategoryCreated = 'triage_category_created',
     TriageCategoryCreateFailed = 'triage_category_create_failed',
+
+    DeletedCategory = 'deleted_category',
+    DeleteCategoryFailed = 'delete_category_failed'
 }
 
 enum Periods {

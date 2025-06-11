@@ -3,23 +3,37 @@ import { EmployeeManager } from "../../services/adm/employeeManager";
 import { EmployeeType } from "../../utils/personsUtils/generalEnuns";
 import { Login } from "../../services/adm/employeeLogin";
 import { Jwt } from "../../utils/systemUtils/security";
-import { showCareFlows } from "../../services/adm/showCareFlows";
 import { HandleResponseTest } from "./handleResponseTest";
 import { EmployeeResponseMessage } from "../../utils/personsUtils/generalEnuns";
+import { CareFlowReports } from "../../services/adm/reports/careFlowReports";
+import { AdminResponses } from "../../utils/systemUtils/AdminResponses";
+import { ServerResponses } from "../../utils/systemUtils/serverResponses";
+import { PatientManager } from "../../services/hospital/patientManager";
 
 type Params = { employee: EmployeeType }
 
 class AdminControllerTest {
     static async listCareFlows() {
         try {
-            const careFlows = await showCareFlows();
-            HandleResponseTest(true, 200, 'CareFlows showed', careFlows);
+            const careFlows = await CareFlowReports.showAllCareFlows();
+            HandleResponseTest(true, 200, AdminResponses.ShowedCareFlows, careFlows);
 
         } catch (error) {
             console.error(error);
-            HandleResponseTest(false, 500, error as string, null);
+            HandleResponseTest(false, 500, ServerResponses.ServerError, null);
         }
     };
+
+    static async listPatients() {
+        try {
+            const patients = await PatientManager.list();
+            HandleResponseTest(true, 200, AdminResponses.ShowedPatients, patients);
+
+        } catch (error) {
+            console.error(error);
+            HandleResponseTest(false, 500, ServerResponses.ServerError, null);
+        }
+    }
 }
 
 class EmployersConstrollerTest {
@@ -37,7 +51,7 @@ class EmployersConstrollerTest {
 
         } catch (error) {
             console.error(error);
-            HandleResponseTest(false, 500, error as string, null);
+            HandleResponseTest(false, 500, ServerResponses.ServerError, null);
         }
     };
 

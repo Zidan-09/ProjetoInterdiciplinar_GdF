@@ -7,25 +7,34 @@ export const QueueReports = {
         const db = await openDb();
 
         const { startDate, endDate } = getPeriodRange(period);
-        const checkInTriage = await db.all('SELECT checkInTriage FROM Triage WHERE checkInTriage >= ? AND checkInTriage <= ?', [startDate, endDate]);
-        const checkInHospital = await db.all('SELECT checkInHospital FROM CareFlow WHERE checkInHospital >= ? AND checkInHospital <= ?', [startDate, endDate]);
+        const triageTime = await db.all('SELECT CareFlow.checkInHospital, Triage.checkInTriage FROM CareFlow JOIN Triage ON CareFlow.id = Triage.triage_id WHERE checkInHospital >= ? AND checkInHospital <= ?', [startDate, endDate]);
 
-        const checkInConsult = await db.all('SELECT checkInConsult FROM Consult WHERE checkInConsult >= ? AND checkInConsult <= ?', [startDate, endDate]);
-        const checkOutTriage = await db.all('SELECT checkOutTriage FROM Triage WHERE checkOutTriage >= ? AND checkOutTriage <= ?', [startDate, endDate])
-
+        const consultTime = await db.all('SELECT Triage.checkOutTriage, Consult.checkInConsult FROM Triage JOIN Consult ON Triage.triage_id = Consult.consult_id WHERE checkOutTriage >= ? AND checkInConsult <= ?', [startDate, endDate]);
+        console.log(triageTime)
         let triageQueueTime: number = 0;
         let consultQueueTime: number = 0;
 
-        for (let i = 0; i < Math.min(checkInHospital.length, checkInTriage.length); i++) {
-            triageQueueTime += checkInTriage[i] - checkInHospital[i];
+        let checkInHospital: Date;
+        let checkInTriage: Date;
+
+        for (let i = 0; i < triageTime.length; i++) {
+            checkInHospital = new Date(triageTime[i].checkInHospital);
+            checkInTriage = new Date(triageTime[i].checkInTriage);
+
+            triageQueueTime += checkInTriage.getTime() - checkInHospital.getTime();
         }
 
-        for (let i = 0; i < Math.min(checkInConsult.length, checkOutTriage.length); i++) {
-            consultQueueTime += checkInConsult[i] - checkOutTriage[i];
+        let checkOutTriage: Date;
+        let checkInConsult: Date;
+        for (let i = 0; i < consultTime.length; i++) {
+            checkOutTriage = new Date(consultTime[i].checkOutTriage);
+            checkInConsult = new Date(consultTime[i].checkInConsult);
+
+            consultQueueTime += checkInConsult.getTime() - checkOutTriage.getTime();
         }
 
-        const triageResult: number = triageQueueTime / Math.min(checkInHospital.length, checkInTriage.length);
-        const consultResult: number = consultQueueTime / Math.max(checkInConsult.length, checkOutTriage.length);
+        const triageResult: number = triageQueueTime / triageTime.length;
+        const consultResult: number = consultQueueTime / consultTime.length;
 
         return {
             triageQueueTime: triageResult,

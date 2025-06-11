@@ -5,7 +5,7 @@ import { SearchQueue, SearchResult } from "./../queue/managers/searchQueue";
 import { openDb } from "../../db";
 import { QueueResponses } from "../../utils/queueUtils/queueEnuns";
 import { ConsultQueue } from "../../entities/queue";
-import { TriageCategory } from "../../entities/criteria";
+import { TriageCategory } from "../../entities/triageCategory";
 import { TriageCategoryManager } from "../adm/triageCategoryManager";
 
 
@@ -19,6 +19,8 @@ export class TriageService {
     
     static async endTriage(data: EndTriage) {
         const db = await openDb();
+
+        console.log(data);
 
         const triageCategory = await db.get('SELECT * FROM TriageCategory WHERE name = ?', [data.triageCategory]);
 

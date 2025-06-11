@@ -5,6 +5,7 @@ import { TypeQueue } from "../../../utils/queueUtils/queueEnuns";
 import { waitTime } from "../../ControllersForTest/utilTest";
 import { TriageTest } from "./triageTest";
 import { ConsultTest } from "./consultTest";
+import { AdminControllerTest } from "../../ControllersForTest/hospitalStaffControllerTest";
 
 export async function CareFlowTest() {
     console.log('\n###################################################################################\nIniciando fluxo de atendimento...\n###################################################################################\n')
@@ -36,7 +37,7 @@ export async function CareFlowTest() {
     console.log('Exibindo pacientes cadastrados no banco de dados...')
     await waitTime(2000)
 
-    await HospitalControllerTest.list();
+    await AdminControllerTest.listPatients();
     console.log('Pacientes cadastrados exibidos com sucesso!\n');
     await waitTime(3000)
 

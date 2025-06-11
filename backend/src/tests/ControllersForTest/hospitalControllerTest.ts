@@ -6,7 +6,7 @@ import { EndConsult, CareFlow, StartConsult, StartTriage, EndTriage, ChangeTriag
 import { CreateTicket } from "../../services/queue/services/ticketService";
 import { calledsList, Result } from "../../services/queue/services/called";
 import { CareFlowService } from "../../services/hospital/startCareFlow";
-import { QueueReturns } from "../../utils/queueUtils/queueEnuns";
+import { QueueResponses } from "../../utils/queueUtils/queueEnuns";
 import { CareFlowResponses } from "../../utils/systemUtils/CareFlowResponses";
 import { HandleResponseTest } from "./handleResponseTest";
 import { PatientResponses } from "../../utils/personsUtils/generalEnuns";
@@ -80,9 +80,9 @@ export const HospitalControllerTest = {
         const data: ChangeTriageCategory = request;
 
         try {
-            const result = await TriageService.changeSeverity(data.careFlow_id, data.newTriageCategory);
+            const result = await TriageService.changeTriageCategory(data.careFlow_id, data.newTriageCategory);
 
-            if (result.status == QueueReturns.EmptyQueue || result.status == QueueReturns.NotFound) {
+            if (result.status == QueueResponses.EmptyQueue || result.status == QueueResponses.NotFound) {
                 HandleResponseTest(false, 400, result.status, null);
             } else {
                 HandleResponseTest(true, 200, result.status, result.node);
@@ -104,7 +104,7 @@ export const HospitalControllerTest = {
             } else {
                 const result = await calledsList.searchCalled(data.careFlow_id);
 
-                if (result.status === QueueReturns.EmptyQueue || result.status === QueueReturns.NotFound) {
+                if (result.status === QueueResponses.EmptyQueue || result.status === QueueResponses.NotFound) {
                     HandleResponseTest(false, 400, result.status, null);
                 } else {
                     if (result.message === Result.PatientCalled) {

@@ -1,5 +1,5 @@
 import { openDb } from "../../db";
-import { TriageCategory } from "../../entities/criteria";
+import { TriageCategory } from "../../entities/triageCategory";
 
 export const TriageCategoryManager = {
     async createCategory(newTriageCategory: TriageCategory) {
@@ -30,7 +30,7 @@ export const TriageCategoryManager = {
         const db = await openDb();
 
         try {
-            const categories = await db.all('SELECT * FROM TriageCategoty');
+            const categories = await db.all('SELECT * FROM TriageCategory');
             return categories;
         } catch (error) {
             console.error(error);
@@ -46,6 +46,20 @@ export const TriageCategoryManager = {
             
         } catch (error) {
             console.error(error);
+        }
+    },
+
+    async delete(name: string) {
+        const db = await openDb();
+
+        try {
+            const result = await db.run('DELETE * FROM TriageCategory WHERE name = ?', [name]);
+
+            if (result) {
+                return result
+            }
+        } catch (error) {
+            console.error(error)
         }
     }
 }

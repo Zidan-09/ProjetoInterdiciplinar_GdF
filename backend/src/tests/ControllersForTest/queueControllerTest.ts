@@ -1,4 +1,4 @@
-import { QueueReturns, TypeQueue } from "../../utils/queueUtils/queueEnuns";
+import { QueueResponses, TypeQueue } from "../../utils/queueUtils/queueEnuns";
 import { ShowQueue } from "../../services/queue/services/showQueue";
 import { PatientCaller } from "../../services/queue/services/patientCaller";
 import { HandleResponseTest } from "./handleResponseTest";
@@ -31,10 +31,10 @@ export const QueueControllerTest = {
         try {
             const called: string = PatientCaller.callNext(queue.typeQueue);
 
-            if (called == QueueReturns.EmptyQueue) {
+            if (called == QueueResponses.EmptyQueue) {
                 HandleResponseTest(false, 400, called, null);
             } else {
-                HandleResponseTest(true, 200, QueueReturns.Called, called);
+                HandleResponseTest(true, 200, QueueResponses.Called, called);
             }
         } catch (error) {
             console.error(error);

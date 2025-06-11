@@ -10,7 +10,7 @@ import whisActivateJson from '../Json/Auth/authAccountA.json';
 import whisJson from '../Json/Register/adminRegister.json';
 
 import patientJson from '../Json/careFlow/patientRegister.json';
-import { CareFlow, EndConsult, StartConsult, StartTriage, EndTriage, TriageCategory } from '../entities/careFlow';
+import { CareFlow, EndConsult, StartConsult, StartTriage, EndTriage } from '../entities/careFlow';
 
 import triageInitJson from '../Json/careFlow/startTriage.json';
 import triageEndJson from '../Json/careFlow/endTriage.json';
@@ -214,7 +214,7 @@ const triageEndData: EndTriage = {
     },
     painLevel: triageEndJson.painLevel,
     symptoms: triageEndJson.symptoms,
-    triageCategory: triageEndJson.triageCategory as TriageCategory
+    triageCategory: triageEndJson.triageCategory
 }
 
 const consultInitData: StartConsult = {

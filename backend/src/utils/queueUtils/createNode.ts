@@ -1,6 +1,5 @@
 import { openDb } from "../../db";
 import { EndTriage } from "../../entities/careFlow";
-import { Patient } from "../../entities/patient";
 import { TriageCategoryManager } from "../../services/adm/triageCategoryManager";
 import { PatientManager } from "../../services/hospital/patientManager";
 import { findById } from "../systemUtils/searchCareFlow";

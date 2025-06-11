@@ -10,6 +10,7 @@ export const Login = {
         const db = await openDb();
         try {
             const userData: any = await db.get('SELECT * FROM User WHERE username = ?', [data.username]);
+            const role: any = await db.get('SELECT accessLevel FROM Employee WHERE id = ?', [userData.user_id])
 
             if (userData) {
                 const valid: boolean = await bcrypt.compare(data.password, userData.password);
@@ -19,7 +20,8 @@ export const Login = {
 
                     return {
                         user: userData.username,
-                        token: token
+                        token: token,
+                        role: role
                     }
                 }
             }

@@ -166,6 +166,15 @@ const AdminController = {
             console.error(error);
             HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
+    },
+
+    async recorver(req: Request, res: Response) {
+        try {
+
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+        }
     }
 }
 

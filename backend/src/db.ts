@@ -22,10 +22,10 @@ export async function initDb() {
     await db.exec('CREATE TABLE IF NOT EXISTS Admin (id INTEGER PRIMARY KEY, FOREIGN KEY (id) REFERENCES Employee(id))');
 
     await db.exec('CREATE TABLE IF NOT EXISTS CareFlow (id INTEGER PRIMARY KEY AUTOINCREMENT, patient_id INTEGER NOT NULL, receptionist_id INTEGER NOT NULL, checkInHospital TEXT NOT NULL, status TEXT NOT NULL, FOREIGN KEY (patient_id) REFERENCES Patient(id), FOREIGN KEY (receptionist_id) REFERENCES Receptionist(id))');
-    await db.exec('CREATE TABLE IF NOT EXISTS Triage (triage_id INTEGER PRIMARY KEY, nurse_id INTEGER NOT NULL, checkInTriage TEXT NOT NULL, checkOutTriage TEXT, systolicPreassure INTEGER, diastolicPreassure INTEGER, heartRate INTEGER, respiratoryRate INTEGER, bodyTemperature INTEGER, oxygenSaturation INTEGER, painLevel INTEGER, symptoms TEXT, triageCategory TEXT, FOREIGN KEY (triage_id) REFERENCES CareFlow(id), FOREIGN KEY (nurse_id) REFERENCES Nurse(id), FOREIGN KEY (triageCategory) REFERENCES TriageCategory(id))');
+    await db.exec('CREATE TABLE IF NOT EXISTS Triage (triage_id INTEGER PRIMARY KEY, nurse_id INTEGER NOT NULL, checkInTriage TEXT NOT NULL, checkOutTriage TEXT, systolicPreassure INTEGER, diastolicPreassure INTEGER, heartRate INTEGER, respiratoryRate INTEGER, bodyTemperature INTEGER, oxygenSaturation INTEGER, painLevel INTEGER, symptoms TEXT, triageCategory_id INTEGER NOT NULL, FOREIGN KEY (triage_id) REFERENCES CareFlow(id), FOREIGN KEY (nurse_id) REFERENCES Nurse(id), FOREIGN KEY (triageCategory_id) REFERENCES TriageCategory(id))');
     await db.exec('CREATE TABLE IF NOT EXISTS Consult (consult_id INTEGER PRIMARY KEY, doctor_id INTEGER NOT NULL, checkInConsult TEXT NOT NULL, checkOutConsult TEXT, diagnosis TEXT, prescriptions TEXT, notes TEXT, FOREIGN KEY (consult_id) REFERENCES CareFlow(id), FOREIGN KEY (doctor_id) REFERENCES Doctor(id))');
 
-    await db.exec('CREATE TABLE IF NOT EXISTS TriageCategory (id INTEGER PRIMARY KEY AUTOINCREMENT, color TEXT NOT NULL, limitTime INTEGER NOT NULL, priority INTEGER NOT NULL)')
+    await db.exec('CREATE TABLE IF NOT EXISTS TriageCategory (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, color TEXT NOT NULL, limitMinutes INTEGER NOT NULL, priority INTEGER NOT NULL)')
     
     await db.exec('CREATE TABLE IF NOT EXISTS User (user_id INTEGER PRIMARY KEY, username TEXT NOT NULL, password TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES Employee(id))');      
 }   

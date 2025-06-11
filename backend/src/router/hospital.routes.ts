@@ -5,12 +5,12 @@ import { AccessLevelMiddleware } from "../middlewares/accessLevelMiddleware";
 
 const hospitalRouter = Router();
 
-hospitalRouter.put('/settings/criteria', loginVerify, AccessLevelMiddleware.adminAccessLevel, HospitalController.changeCriteria);
-hospitalRouter.post('/ticket', loginVerify, AccessLevelMiddleware.receptionistAccessLevel, HospitalController.createTicket);
-hospitalRouter.post('/patient/register', loginVerify, AccessLevelMiddleware.receptionistAccessLevel, HospitalController.register);
-hospitalRouter.post('/triageInit', loginVerify, AccessLevelMiddleware.nurseAccessLevel, HospitalController.triageInit);
-hospitalRouter.post('/triageEnd', loginVerify, AccessLevelMiddleware.nurseAccessLevel, HospitalController.triageEnd);
-hospitalRouter.post('/consultInit', loginVerify, AccessLevelMiddleware.doctorAccessLevel, HospitalController.consultConfirm);
-hospitalRouter.post('/consultEnd', loginVerify, AccessLevelMiddleware.doctorAccessLevel, HospitalController.consultEnd);
+hospitalRouter.put('/settings/criteria', loginVerify, AccessLevelMiddleware.admin, HospitalController.changeCriteria);
+hospitalRouter.post('/ticket', loginVerify, AccessLevelMiddleware.receptionist, HospitalController.createTicket);
+hospitalRouter.post('/patient/register', loginVerify, AccessLevelMiddleware.receptionist, HospitalController.register);
+hospitalRouter.post('/triageInit', loginVerify, AccessLevelMiddleware.nurse, HospitalController.triageInit);
+hospitalRouter.post('/triageEnd', loginVerify, AccessLevelMiddleware.nurse, HospitalController.triageEnd);
+hospitalRouter.post('/consultInit', loginVerify, AccessLevelMiddleware.doctor, HospitalController.consultConfirm);
+hospitalRouter.post('/consultEnd', loginVerify, AccessLevelMiddleware.doctor, HospitalController.consultEnd);
 
 export default hospitalRouter;

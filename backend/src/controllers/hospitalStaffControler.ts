@@ -11,6 +11,8 @@ import { AdminResponses, Periods } from "../utils/systemUtils/AdminResponses";
 import { CareFlowReports } from "../services/adm/reports/careFlowReports";
 import { QueueReports } from "../services/adm/reports/queueReports";
 import { PatientManager } from "../services/hospital/patientManager";
+import { TriageCategoryManager } from "../services/adm/triageCategoryManager";
+import { ServerResponses } from "../utils/systemUtils/serverResponses";
 
 type Params = { employee: EmployeeType }
 type AdminParams = { period: Periods }
@@ -23,7 +25,7 @@ const AdminController = {
 
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, AdminResponses.Error, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     },
 
@@ -40,36 +42,106 @@ const AdminController = {
         }
     },
 
-    async consultTimeReport(req: Request<AdminParams>, res: Response) {
+    async careFlowTimeReport(req: Request<AdminParams>, res: Response) {
         const period = req.params;
 
         try {
             const consultTime = await CareFlowReports.getAverageConsultTime(period.period);
-            HandleResponse(true, 200, AdminResponses.ShowedCareFlows, consultTime, res);
+            const triageTime = await CareFlowReports.getAverageTriageTime(period.period);
+            const totalTime = await CareFlowReports.getAverageCareFlowTime(period.period);
+
+            HandleResponse(true, 200, AdminResponses.ShowedQueueReport, { consultTime, triageTime, totalTime }, res);
 
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, AdminResponses.Error, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
-    },
-
-    async triageTimeReport(req: Request, res: Response) {
-        
     },
 
     async listPatients(req: Request, res: Response) {
         try {
             const patients = await PatientManager.list();
 
-            if (patients != PatientResponses.Error) {
-                HandleResponse(true, 200, PatientResponses.PatientListed, patients, res);
+            if (patients) {
+                HandleResponse(true, 200, AdminResponses.ShowedPatients, patients, res);
+
             } else {
-                HandleResponse(false, 400, patients, null, res);
+                HandleResponse(false, 400, AdminResponses.ShowPatientsFailed, null, res);
             }
     
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, error as string, null, res)
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res)
+        }
+    },
+
+    async searchPatient(req: Request, res: Response) {
+        const patientData = req.body;
+
+        try {
+            const patient = await PatientManager.search(patientData);
+
+            if (patient) {
+                HandleResponse(true, 200, AdminResponses.PatientFounded, patient, res);
+            } else {
+                HandleResponse(false, 404, AdminResponses.PatientNotFound, null, res);
+            }
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+        }
+    },
+
+    async createTriageCategory(req: Request, res: Response) {
+        const newTriageCategory = req.body;
+
+        try {
+            const result = await TriageCategoryManager.createCategory(newTriageCategory);
+
+            if (result) {
+                HandleResponse(true, 201, AdminResponses.TriageCategoryCreated, newTriageCategory, res);
+
+            } else {
+                HandleResponse(false, 400, AdminResponses.TriageCategoryCreateFailed, null, res);
+            }
+
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+        }
+    },
+
+    async updateTriageCategory(req: Request, res: Response) {
+        const triageCategoryData = req.body;
+
+        try {
+            const result = await TriageCategoryManager.updateCategory(triageCategoryData.name, triageCategoryData.limitMinutes);
+
+            if (result) {
+                HandleResponse(true, 200, AdminResponses.TriageCategoryUpdated, triageCategoryData, res);
+
+            } else {
+                HandleResponse(false, 400, AdminResponses.TriageCategoryUpdateFailed, null, res);
+            }
+
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+        }
+    },
+
+    async listTriageCategories(req: Request, res: Response) {
+        try {
+            const result = await TriageCategoryManager.listCategories();
+
+            if (result) {
+                HandleResponse(true, 200, AdminResponses.ShowedTriageCategories, result, res);
+            } else {
+                HandleResponse(false, 400, AdminResponses.TriageCateoriesFetchFailed, null, res);
+            }
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     }
 }
@@ -115,12 +187,17 @@ const EmployersConstroller = {
         const { employee } = req.params;
 
         try {
-            const employers = await EmployeeManager.showEmployeers(employee)
-            HandleResponse(true, 200, AdminResponses.ShowedEmployers, employers, res);
+            const employers = await EmployeeManager.showEmployeers(employee);
+
+            if (employers) {
+                HandleResponse(true, 200, AdminResponses.ShowedEmployers, employers, res);
+            } else {
+                HandleResponse(false, 400, AdminResponses.ShowEmployersFailed, null, res);
+            }
 
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, AdminResponses.Error, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     },
 

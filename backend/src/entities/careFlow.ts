@@ -1,13 +1,5 @@
 import { Patient } from "./patient";
 
-enum TriageCategory {
-    Immediate = 'immediate',
-    VeryUrgent = 'very_urgent',
-    Urgent = 'urgent',
-    Standard = 'standard',
-    NonUrgent = 'non_urgent'
-}
-
 interface VitalSigns {
     bloodPreassure: { systolicPreassure: number; diastolicPreassure: number };
     heartRate: number;
@@ -29,14 +21,14 @@ interface StartTriage {
 interface EndTriage {
     careFlow_id: number;
     vitalSigns: VitalSigns;
-    triageCategory: TriageCategory;
+    triageCategory: string;
     symptoms: string[];
     painLevel: number;
 };
 
 interface ChangeTriageCategory {
     careFlow_id: number;
-    newTriageCategory: TriageCategory;
+    newTriageCategory: string;
 }
 
 interface CallsConsult {
@@ -58,4 +50,4 @@ interface EndConsult {
     notes: string | null;
 };
 
-export { TriageCategory, VitalSigns, CareFlow, StartTriage, EndTriage, ChangeTriageCategory, CallsConsult, StartConsult, EndConsult }
+export { VitalSigns, CareFlow, StartTriage, EndTriage, ChangeTriageCategory, CallsConsult, StartConsult, EndConsult }

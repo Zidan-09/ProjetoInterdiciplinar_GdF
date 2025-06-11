@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { CriteriaData } from "../entities/criteria";
-import { CriteriaManager } from "../services/adm/criteriaUpdate";
 import { PatientManager } from "../services/hospital/patientManager";
 import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";
@@ -12,6 +10,7 @@ import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { QueueReturns } from "../utils/queueUtils/queueEnuns";
 import { CareFlowResponses } from "../utils/systemUtils/CareFlowResponses";
 import { PatientResponses } from "../utils/personsUtils/generalEnuns";
+import { ServerResponses } from "../utils/systemUtils/serverResponses";
 
 type TicketRequest = { priority: number };
 
@@ -21,11 +20,11 @@ export const HospitalController = {
             const data: TicketRequest = req.body;
             const ticket: string = CreateTicket.createTicket(data.priority)
 
-            HandleResponse(true, 201, CareFlowResponses.TicketCreationSucess, ticket, res)
+            HandleResponse(true, 201, CareFlowResponses.TicketCreationSucess, ticket, res);
     
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 400, CareFlowResponses.TicketCreationFailed, error as string, res)
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     },
 
@@ -46,19 +45,7 @@ export const HospitalController = {
             }
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, error as string, null, res)
-        }
-    },
-
-    async changeCriteria(req: Request<{}, {}, CriteriaData>, res: Response) {
-        const newCriteria: CriteriaData = req.body;
-
-        try {
-            await CriteriaManager.changeCriteria(newCriteria);
-            HandleResponse(true, 200, CareFlowResponses.CriteriaUpdateSucess, newCriteria, res);
-        } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, CareFlowResponses.CriteriaUptadeFailed, newCriteria, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res)
         }
     },
 
@@ -67,10 +54,15 @@ export const HospitalController = {
         try {
             const result = await TriageService.startTriage(data);
 
-            HandleResponse(true, 200, CareFlowResponses.TriageStarted, result, res);
+            if (result) {
+                HandleResponse(true, 200, CareFlowResponses.TriageStarted, result, res);
+            } else {
+                HandleResponse(false, 400, CareFlowResponses.ConsultFailed, null, res);
+            }
+            
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 400, CareFlowResponses.TriageFailed, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     },
 
@@ -83,7 +75,7 @@ export const HospitalController = {
             HandleResponse(true, 200, CareFlowResponses.TriageEnded, result, res);
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     },
 
@@ -100,7 +92,7 @@ export const HospitalController = {
             }
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     },
 
@@ -129,7 +121,7 @@ export const HospitalController = {
 
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     },
 
@@ -146,7 +138,7 @@ export const HospitalController = {
             }
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     }
 }

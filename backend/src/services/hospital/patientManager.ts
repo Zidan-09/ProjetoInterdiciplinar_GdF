@@ -33,14 +33,31 @@ export class PatientManager {
         }
     };
 
-    static async list() {
+    static async list(): Promise<Patient[]|void> {
         const db = await openDb();
         try {
-            const patients = await db.all('SELECT * FROM Patient');
-            return patients
+            const patients: Patient[] | undefined = await db.all('SELECT * FROM Patient');
+
+            if (patients) {
+                return patients
+            }
+
         } catch (error) {
             console.error(error);
-            return PatientResponses.Error
+        }
+    };
+
+    static async search(cpf: string): Promise<Patient|void> {
+        const db = await openDb();
+        try {
+            const patient: Patient | undefined = await db.get('SELECT * FROM Patient WHERE cpf = ?', [cpf]);
+
+            if (patient) {
+                return patient
+            }
+
+        } catch (error) {
+            console.error(error);
         }
     }
 }

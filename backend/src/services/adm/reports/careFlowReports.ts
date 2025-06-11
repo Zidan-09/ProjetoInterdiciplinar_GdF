@@ -33,6 +33,21 @@ export const CareFlowReports = {
         return triageTime;
     },
 
+    async getAverageCareFlowTime(period: Periods) {
+        const db = await openDb();
+
+        const { startDate, endDate } = getPeriodRange(period);
+        let careFlowTime: number = 0;
+
+        const [rows] = await db.all('SELECT checkInHospital WHERE checkInHospital >= ? AND checkInHospital <= ?', [startDate, endDate]);
+
+        for (let i = 0; i < rows.length; i++) {
+            careFlowTime += rows[i].checkInHospital;
+        }
+
+        return careFlowTime;
+    },
+
     async showAllCareFlows() {
         const db = await openDb();
 

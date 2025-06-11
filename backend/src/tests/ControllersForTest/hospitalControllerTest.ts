@@ -1,5 +1,4 @@
-import { CriteriaData } from "../../entities/criteria";
-import { CriteriaManager } from "../../services/adm/criteriaUpdate";
+import { TriageCategoryManager } from "../../services/adm/triageCategoryManager";
 import { PatientManager } from "../../services/hospital/patientManager";
 import { TriageService } from "../../services/hospital/triage";
 import { ConsultService } from "../../services/hospital/consult";
@@ -46,33 +45,6 @@ export const HospitalControllerTest = {
 
         } catch (error) {
             console.error(error);
-        }
-    },
-
-    async list() {
-        try {
-            const patients = await PatientManager.list();
-
-            if (patients != PatientResponses.Error) {
-                HandleResponseTest(true, 200, PatientResponses.PatientListed, patients);
-            } else {
-                HandleResponseTest(false, 400, patients, null);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
-    async changeCriteria(request: CriteriaData) {
-        const newCriteria: CriteriaData = request;
-
-        try {
-            await CriteriaManager.changeCriteria(newCriteria);
-            HandleResponseTest(true, 200, CareFlowResponses.CriteriaUpdateSucess, newCriteria);
-
-        } catch (error) {
-            console.error(error);
-            HandleResponseTest(false, 500, CareFlowResponses.CriteriaUptadeFailed, null);
         }
     },
 

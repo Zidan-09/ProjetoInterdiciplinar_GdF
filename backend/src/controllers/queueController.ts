@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
-import { QueueResponses, TypeQueue } from "../utils/queueUtils/queueEnuns";
+import { TypeQueue } from "../utils/queueUtils/queueEnuns";
 import { ShowQueue } from "../services/queue/services/showQueue";
 import { PatientCaller } from "../services/queue/services/patientCaller";
-import { ServerResponses } from "../utils/systemUtils/serverResponses";
+import { QueueResponses, ServerResponses } from "../utils/enuns/allResponses";
 
 type Params = { typeQueue: TypeQueue }
 

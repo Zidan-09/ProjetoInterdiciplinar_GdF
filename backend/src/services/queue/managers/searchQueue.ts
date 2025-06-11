@@ -1,6 +1,6 @@
 import { ConsultQueue } from "../../../entities/queue";
 import { NodeConsult } from "../../../utils/queueUtils/createNode";
-import { QueueResponses } from "../../../utils/queueUtils/queueEnuns";
+import { QueueResponses } from "../../../utils/enuns/allResponses";
 
 type SearchResult = {
     status: QueueResponses;

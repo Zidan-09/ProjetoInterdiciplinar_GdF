@@ -31,12 +31,6 @@ interface ChangeTriageCategory {
     newTriageCategory: string;
 }
 
-interface CallsConsult {
-    careFlow_id: number
-    patient_name: string;
-    calls: number
-};
-
 interface StartConsult {
     careFlow_id: number;
     doctor_id: number;
@@ -50,4 +44,4 @@ interface EndConsult {
     notes: string | null;
 };
 
-export { VitalSigns, CareFlow, StartTriage, EndTriage, ChangeTriageCategory, CallsConsult, StartConsult, EndConsult }
+export { VitalSigns, CareFlow, StartTriage, EndTriage, ChangeTriageCategory, StartConsult, EndConsult }

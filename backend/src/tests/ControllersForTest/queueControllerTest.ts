@@ -1,7 +1,8 @@
-import { QueueResponses, TypeQueue } from "../../utils/queueUtils/queueEnuns";
+import { TypeQueue } from "../../utils/queueUtils/queueEnuns";
 import { ShowQueue } from "../../services/queue/services/showQueue";
 import { PatientCaller } from "../../services/queue/services/patientCaller";
 import { HandleResponseTest } from "./handleResponseTest";
+import { QueueResponses } from "../../utils/enuns/allResponses";
 
 type Params = { typeQueue: TypeQueue };
 

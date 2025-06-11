@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { Hash, Jwt } from "../utils/systemUtils/security";
-import { openDb } from "../db";
 import { JwtPayload } from "jsonwebtoken";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
-import { ServerResponses } from "../utils/systemUtils/serverResponses";
+import { ServerResponses } from "../utils/enuns/allResponses";
 
 export async function passwordVerify(req: Request, res: Response, next: NextFunction) {
     const { password } = req.body;

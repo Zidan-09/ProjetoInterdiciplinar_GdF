@@ -4,13 +4,9 @@ import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";
 import { EndConsult, CareFlow, StartConsult, StartTriage, EndTriage, ChangeTriageCategory } from "../entities/careFlow";
 import { CreateTicket } from "../services/queue/services/ticketService";
-import { calledsList, Result } from "../services/queue/services/called";
 import { CareFlowService } from "../services/hospital/startCareFlow";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
-import { QueueResponses } from "../utils/queueUtils/queueEnuns";
-import { CareFlowResponses } from "../utils/systemUtils/CareFlowResponses";
-import { PatientResponses } from "../utils/personsUtils/generalEnuns";
-import { ServerResponses } from "../utils/systemUtils/serverResponses";
+import { ServerResponses, CareFlowResponses, PatientResponses, QueueResponses } from "../utils/enuns/allResponses";
 
 type TicketRequest = { priority: number };
 
@@ -106,17 +102,8 @@ export const HospitalController = {
                 HandleResponse(true, 200, CareFlowResponses.ConsultStarted, careFlow_id, res);
 
             } else {
-                const result = await calledsList.searchCalled(confirmStartData.careFlow_id);
-
-                if (result.status === QueueResponses.EmptyQueue || result.status === QueueResponses.NotFound) {
-                    HandleResponse(false, 400, result.status, null, res);
-                } else {
-                    if (result.message === Result.PatientCalled) {
-                        HandleResponse(true, 200, result.status, result.message, res);
-                    } else {
-                        HandleResponse(false, 400, result.status, result.message, res);
-                    }
-                }
+                CareFlowService.noShow(confirmStartData.careFlow_id);
+                HandleResponse(false, 200, CareFlowResponses.PatientNoShow, null, res);
             }
 
         } catch (error) {

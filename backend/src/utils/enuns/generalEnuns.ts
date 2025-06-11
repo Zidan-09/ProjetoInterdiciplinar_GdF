@@ -12,12 +12,6 @@ enum MaritalStatus {
     Widowed = 'widowed'
 }
 
-enum PatientResponses {
-    PatientRegistered = 'patient_registered',
-    PatientListed = 'patient_listed',
-    Error = 'unexpected_error'
-}
-
 enum EmployeeStatus {
     active = 'active',
     onLeave = 'onLeave',
@@ -31,16 +25,6 @@ enum EmployeeType {
     Admin = 'admin'
 }
 
-enum EmployeeResponseMessage {
-    AwaitingConfirmation = 'awaiting_employee_confirmation',
-    RegistrationInProgress = 'registration_in_progress',
-    AlreadyRegistered = 'already_registered',
-    InvalidOrExpiredToken = 'invalid_or_expired_token',
-    EmployeeRegistered = 'employee_registered',
-    EmployeeLoggedIn = 'employee_logged_in',
-    Error = 'unexpected_error'
-}
-
 enum Status {
     WaitingTriage = 'waiting_triage',
     WaitingConsultation = 'waiting_consultation',
@@ -50,4 +34,4 @@ enum Status {
     NoShow = 'no_show'
 }
 
-export { Gender, MaritalStatus, PatientResponses, EmployeeStatus, EmployeeType, EmployeeResponseMessage, Status }
+export { Gender, MaritalStatus, EmployeeStatus, EmployeeType, Status }

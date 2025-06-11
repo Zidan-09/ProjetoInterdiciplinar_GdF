@@ -1,5 +1,5 @@
 import { NodeConsult, NodeRecep, NodeTriage } from "../utils/queueUtils/createNode";
-import { QueueResponses } from "../utils/queueUtils/queueEnuns";
+import { QueueResponses } from "../utils/enuns/allResponses";
 
 abstract class Queue<T extends { pointer: T | null }> {
     protected firstPointer: T | null;

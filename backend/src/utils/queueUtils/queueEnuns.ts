@@ -1,10 +1,3 @@
-enum QueueResponses {
-    EmptyQueue = 'empty_queue',
-    Found = 'found',
-    NotFound = 'not_found',
-    Called = 'called'
-}
-
 enum Priority {
     VeryPriority = 'very_priority',
     Priority = 'priority',
@@ -17,4 +10,4 @@ enum TypeQueue {
     Consult = 'consult'
 }
 
-export { QueueResponses, Priority, TypeQueue }
+export { Priority, TypeQueue }

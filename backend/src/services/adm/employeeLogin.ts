@@ -1,11 +1,12 @@
 import { User } from "../../entities/hospitalStaff";
 import { openDb } from "../../db";
 import bcrypt from 'bcryptjs';
-import { Jwt } from "../../utils/systemUtils/security";
+import { Hash, Jwt } from "../../utils/systemUtils/security";
+import { sendEmail } from "../../utils/personsUtils/email";
 
 
-export class Login {
-    static async loginUser(data: User) {
+export const Login = {
+    async loginUser(data: User) {
         const db = await openDb();
         try {
             const userData: any = await db.get('SELECT * FROM User WHERE username = ?', [data.username]);
@@ -22,6 +23,22 @@ export class Login {
                     }
                 }
             }
+
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    async forgotPassword() {
+        // FAZER ENVIO DE EMAIL
+    },
+
+    async newPassword(data: string) {
+        const db = await openDb();
+
+        try {
+            const password = Hash.hash(data);
+            await db.run('UPDATE User SET password = ?', [password]);
 
         } catch (error) {
             console.error(error);

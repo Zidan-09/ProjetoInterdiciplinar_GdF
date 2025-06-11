@@ -1,9 +1,9 @@
 import { NodeConsult } from "../../utils/queueUtils/createNode";
 import { EndTriage, StartTriage } from "../../entities/careFlow";
-import { Status } from "../../utils/personsUtils/generalEnuns";
+import { Status } from "../../utils/enuns/generalEnuns";
 import { SearchQueue, SearchResult } from "./../queue/managers/searchQueue";
 import { openDb } from "../../db";
-import { QueueResponses } from "../../utils/queueUtils/queueEnuns";
+import { QueueResponses } from "../../utils/enuns/allResponses";
 import { ConsultQueue } from "../../entities/queue";
 import { TriageCategory } from "../../entities/triageCategory";
 import { TriageCategoryManager } from "../adm/triageCategoryManager";

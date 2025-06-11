@@ -1,4 +1,4 @@
-import { Periods } from "./AdminResponses";
+import { Periods } from "../enuns/periods";
 
 export function getPeriodRange(period: Periods) {
     const date: Date = new Date();

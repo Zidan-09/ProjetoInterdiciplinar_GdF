@@ -1,6 +1,6 @@
 import { openDb } from "../../../db";
 import { getPeriodRange } from "../../../utils/systemUtils/getPeriod";
-import { Periods } from "../../../utils/systemUtils/AdminResponses";
+import { Periods } from "../../../utils/enuns/periods";
 
 export const QueueReports = {
     async getAverageQueueTimes(period: Periods) {

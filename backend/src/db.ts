@@ -28,4 +28,17 @@ export async function initDb() {
     await db.exec('CREATE TABLE IF NOT EXISTS TriageCategory (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, color TEXT NOT NULL, limitMinutes INTEGER NOT NULL, priority INTEGER NOT NULL)')
     
     await db.exec('CREATE TABLE IF NOT EXISTS User (user_id INTEGER PRIMARY KEY, username TEXT NOT NULL, password TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES Employee(id))');      
-}   
+}
+
+// import mysql2 from 'mysql2/promise';
+
+// export async function openDb() {
+//     const db = mysql2.createPool({
+//         host: 'a',
+//         user: '',
+//         password: 'a',
+//         database: ''
+//     })
+
+//     return db
+// }

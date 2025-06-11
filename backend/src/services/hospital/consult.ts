@@ -1,5 +1,5 @@
 import { StartConsult, EndConsult } from "../../entities/careFlow";
-import { Status } from "../../utils/personsUtils/generalEnuns";
+import { Status } from "../../utils/enuns/generalEnuns";
 import { openDb } from "../../db";
 
 

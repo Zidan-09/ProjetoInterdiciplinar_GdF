@@ -1,6 +1,8 @@
 import { RecepQueue, TriageQueue, ConsultQueue } from "../../../entities/queue";
 import { getSocketInstance } from "../../../socket";
-import { QueueResponses, TypeQueue } from "../../../utils/queueUtils/queueEnuns";
+import { TypeQueue } from "../../../utils/queueUtils/queueEnuns";
+import { calls } from "./called";
+import { QueueResponses } from "../../../utils/enuns/allResponses";
 
 export class PatientCaller {
     static callNext(typeQueue: TypeQueue) {
@@ -38,6 +40,8 @@ export class PatientCaller {
                         called: call.patient_id,
                         queue: TypeQueue.Consult
                     })
+                    calls(call);
+
                     return call
                 }
                 break;

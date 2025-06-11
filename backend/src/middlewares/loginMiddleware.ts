@@ -3,7 +3,7 @@ import { Jwt } from "../utils/systemUtils/security";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { openDb } from "../db";
 import { JwtPayload } from "jsonwebtoken";
-import { ServerResponses } from "../utils/systemUtils/serverResponses";
+import { ServerResponses } from "../utils/enuns/allResponses";
 
 export async function loginVerify(req: Request, res: Response, next: NextFunction) {
     const { authorization } = req.headers;
@@ -11,7 +11,7 @@ export async function loginVerify(req: Request, res: Response, next: NextFunctio
 
 
     if (!authorization) {
-        HandleResponse(false, 400, ServerResponses.MissingToken, null, res);
+        return HandleResponse(false, 400, ServerResponses.MissingToken, null, res);
     }
 
     try {

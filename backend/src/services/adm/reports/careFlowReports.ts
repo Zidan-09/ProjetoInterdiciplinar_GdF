@@ -1,5 +1,5 @@
 import { openDb } from "../../../db";
-import { Periods } from "../../../utils/systemUtils/AdminResponses";
+import { Periods } from "../../../utils/enuns/periods";
 import { getPeriodRange } from "../../../utils/systemUtils/getPeriod";
 
 export const CareFlowReports = {

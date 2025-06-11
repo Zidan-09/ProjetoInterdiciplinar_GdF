@@ -1,4 +1,4 @@
-import { EmployeeStatus, EmployeeType } from "../utils/personsUtils/generalEnuns";
+import { EmployeeStatus, EmployeeType } from "../utils/enuns/generalEnuns";
 
 interface Employee{
     registrationNumber: number;

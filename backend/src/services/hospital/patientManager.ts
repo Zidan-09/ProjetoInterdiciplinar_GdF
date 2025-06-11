@@ -3,7 +3,7 @@ import { Patient } from "../../entities/patient";
 import { openDb } from "../../db";
 import { ValidateRegister } from "../../utils/personsUtils/validators";
 import { TriageQueue } from "../../entities/queue";
-import { PatientResponses } from "../../utils/personsUtils/generalEnuns";
+import { PatientResponses } from "../../utils/enuns/allResponses";
 
 export class PatientManager {
     static async register(data: Patient): Promise<number|void> {

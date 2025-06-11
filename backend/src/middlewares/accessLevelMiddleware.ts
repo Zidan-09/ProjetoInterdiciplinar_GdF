@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { openDb } from "../db";
 import { Jwt } from "../utils/systemUtils/security";
 import { JwtPayload } from "jsonwebtoken";
-import { EmployeeType } from "../utils/personsUtils/generalEnuns";
+import { EmployeeType } from "../utils/enuns/generalEnuns";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
-import { ServerResponses } from "../utils/systemUtils/serverResponses";
+import { ServerResponses } from "../utils/enuns/allResponses";
 
 function accessMiddleware(requiredAccess: EmployeeType) {
     return async (req: Request, res: Response, next: NextFunction) => {

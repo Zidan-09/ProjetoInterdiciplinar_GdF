@@ -1,75 +1,22 @@
-import { CallsConsult } from "../../../entities/careFlow";
-import { openDb } from "../../../db";
 import { NodeConsult } from "../../../utils/queueUtils/createNode";
-import { QueueResponses } from "../../../utils/queueUtils/queueEnuns";
-import { Status } from "../../../utils/personsUtils/generalEnuns"
+import { getSocketInstance } from "../../../socket";
+import { TypeQueue } from "../../../utils/queueUtils/queueEnuns";
+import { wait } from "../../../utils/systemUtils/wait";
 
-export type SearchCalled = {
-    status: QueueResponses;
-    message?: Result;
-    called?: CallsConsult;
-}
-
-export enum Result {
-    PatientRemoved = 'patient_removed',
-    PatientCalled = 'patient_called'
-}
-
-class Calleds {
-    private calleds: CallsConsult[];
-
-    constructor() {
-        this.calleds = [];
+export async function calls(node: NodeConsult) {
+    const io = getSocketInstance();
+    const call = {
+        node: node,
+        calledTimes: 1
     }
+    await wait(10000)
 
-    public insert(node: NodeConsult): CallsConsult {
-        const called: CallsConsult = {
-            careFlow_id: node.triage.careFlow_id,
-            patient_name: node.patient_name,
-            calls: 1
-        };
-        this.calleds.push(called);
-        return called;
-    };
-
-    public async searchCalled(id: number) {
-        let result: SearchCalled;
-
-        if (this.calleds.length === 0) {
-            result = { status: QueueResponses.EmptyQueue };
-            return result;
-        }
-
-        let temp: SearchCalled;
-        for (let i of this.calleds) {
-            if (i.careFlow_id === id) {
-                temp = { status: QueueResponses.Found, called: i };
-                break
-            } else {
-                temp = { status: QueueResponses.NotFound }
-            }
-        }
-
-        result = temp!
-        if (result.status !== QueueResponses.NotFound) {
-            result.called!.calls++;
-
-            if (result.called!.calls > 3) {
-                const db = await openDb();
-                await db.run('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.NoShow, result.called!.careFlow_id]);
-
-                const index: number = this.calleds.indexOf(result.called!);
-                this.calleds.splice(index, 1);
-                result.message = Result.PatientRemoved
-                
-                return result
-            } else {
-                result.message = Result.PatientCalled
-                return result
-            }
-        }
-        return result;
-    };
+    while (call.calledTimes <= 3) {
+        io.emit(TypeQueue.Consult, {
+            called: call.node.patient_name,
+            queue: TypeQueue.Consult
+        })
+        await wait(10000);
+        call.calledTimes++;
+    }
 }
-
-export const calledsList: Calleds = new Calleds();

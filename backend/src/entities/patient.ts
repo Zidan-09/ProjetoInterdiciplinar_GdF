@@ -1,4 +1,4 @@
-import { Gender, MaritalStatus } from "../utils/personsUtils/generalEnuns";
+import { Gender, MaritalStatus } from "../utils/enuns/generalEnuns";
 
 export interface Patient {
     name: string;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AdminController, EmployersConstroller } from "../controllers/hospitalStaffControler";
+import { EmployersConstroller } from "../controllers/hospitalStaffControler";
 import { loginVerify } from "../middlewares/loginMiddleware";
 import { AccessLevelMiddleware } from "../middlewares/accessLevelMiddleware";
 

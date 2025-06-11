@@ -2,7 +2,7 @@ import bulmaActivateJson from '../Json/Auth/authAccountN.json';
 import bulmaJson from '../Json/Register/nurseRegister.json';
 import chichiActivateJson from '../Json/Auth/authAccountR.json';
 import chichiJson from '../Json/Register/recepcionistRegister.json';
-import { EmployeeStatus, EmployeeType, Gender, MaritalStatus } from '../utils/personsUtils/generalEnuns';
+import { EmployeeStatus, EmployeeType, Gender, MaritalStatus } from '../utils/enuns/generalEnuns';
 import gokuActivateJson from '../Json/Auth/authAccountD.json';
 import gokuJson from '../Json/Register/doctorRegister.json';
 import { Employee, Nurse, Doctor, ConfirmUser } from '../entities/hospitalStaff';

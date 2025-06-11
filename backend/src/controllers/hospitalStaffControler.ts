@@ -1,20 +1,19 @@
 import { Response, Request } from "express";
 import { Nurse, Doctor, ConfirmUser, User, Employee } from "../entities/hospitalStaff";
 import { EmployeeManager } from "../services/adm/employeeManager";
-import { EmployeeType } from "../utils/personsUtils/generalEnuns";
+import { EmployeeType } from "../utils/enuns/generalEnuns";
 import { Login } from "../services/adm/employeeLogin";
 import { Jwt } from "../utils/systemUtils/security";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
-import { EmployeeResponseMessage } from "../utils/personsUtils/generalEnuns";
 import { ValidateRegister } from "../utils/personsUtils/validators";
-import { AdminResponses, Periods } from "../utils/systemUtils/AdminResponses";
+import { Periods } from "../utils/enuns/periods";
 import { CareFlowReports } from "../services/adm/reports/careFlowReports";
 import { QueueReports } from "../services/adm/reports/queueReports";
 import { PatientManager } from "../services/hospital/patientManager";
 import { TriageCategoryManager } from "../services/adm/triageCategoryManager";
-import { ServerResponses } from "../utils/systemUtils/serverResponses";
 import { Patient } from "../entities/patient";
 import { TriageCategory, UpdateTriageCategory } from "../entities/triageCategory";
+import { EmployeeResponses, ServerResponses, AdminResponses } from "../utils/enuns/allResponses";
 
 type Params = { employee: EmployeeType }
 type AdminParams = { period: Periods }
@@ -178,15 +177,15 @@ const EmployersConstroller = {
             const valid = await ValidateRegister.verifyEmployee(data);
 
             if (valid) {
-                const done: EmployeeResponseMessage = await EmployeeManager.registerEmployee(data);
+                const done: EmployeeResponses = await EmployeeManager.registerEmployee(data);
     
-                if (done === EmployeeResponseMessage.AwaitingConfirmation) {
+                if (done === EmployeeResponses.AwaitingConfirmation) {
                     HandleResponse(true, 200, done, data, res);
                 } else {
                     HandleResponse(false, 400, done, data, res);
                 }
             } else {
-                HandleResponse(false, 400, EmployeeResponseMessage.AlreadyRegistered, null, res);
+                HandleResponse(false, 400, EmployeeResponses.AlreadyRegistered, null, res);
             }
 
         } catch (error) {
@@ -248,9 +247,9 @@ const EmployersConstroller = {
         const { data, user } = req.body;
 
         try {
-            const done: EmployeeResponseMessage = await EmployeeManager.authAccount(data, user);
+            const done: EmployeeResponses = await EmployeeManager.authAccount(data, user);
 
-            if (done === EmployeeResponseMessage.Error || done === EmployeeResponseMessage.RegistrationInProgress) {
+            if (done === EmployeeResponses.Error || done === EmployeeResponses.RegistrationInProgress) {
                 HandleResponse(false, 400, done, null, res);
             } else {
                 HandleResponse(true, 200, done, data && user, res);
@@ -269,7 +268,7 @@ const EmployersConstroller = {
             const logged = await Login.loginUser(loginDataReq);
 
             if (logged) {
-                HandleResponse(true, 200, EmployeeResponseMessage.EmployeeLoggedIn, logged, res);
+                HandleResponse(true, 200, EmployeeResponses.EmployeeLoggedIn, logged, res);
             } else {
                 HandleResponse(false, 400, 'Username or password invalid', null, res);
             }

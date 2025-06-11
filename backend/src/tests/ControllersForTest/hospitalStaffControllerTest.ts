@@ -1,14 +1,12 @@
 import { Employee, Nurse, Doctor, ConfirmUser, User } from "../../entities/hospitalStaff";
 import { EmployeeManager } from "../../services/adm/employeeManager";
-import { EmployeeType } from "../../utils/personsUtils/generalEnuns";
+import { EmployeeType } from "../../utils/enuns/generalEnuns";
 import { Login } from "../../services/adm/employeeLogin";
 import { Jwt } from "../../utils/systemUtils/security";
 import { HandleResponseTest } from "./handleResponseTest";
-import { EmployeeResponseMessage } from "../../utils/personsUtils/generalEnuns";
 import { CareFlowReports } from "../../services/adm/reports/careFlowReports";
-import { AdminResponses } from "../../utils/systemUtils/AdminResponses";
-import { ServerResponses } from "../../utils/systemUtils/serverResponses";
 import { PatientManager } from "../../services/hospital/patientManager";
+import { EmployeeResponses, AdminResponses, ServerResponses } from "../../utils/enuns/allResponses";
 
 type Params = { employee: EmployeeType }
 
@@ -41,9 +39,9 @@ class EmployersConstrollerTest {
         const data: T = request;
 
         try {
-            const done: EmployeeResponseMessage = await EmployeeManager.registerEmployee(data);
+            const done: EmployeeResponses = await EmployeeManager.registerEmployee(data);
 
-            if (done === EmployeeResponseMessage.AwaitingConfirmation) {
+            if (done === EmployeeResponses.AwaitingConfirmation) {
                 HandleResponseTest(true, 200, done, data);
             } else {
                 HandleResponseTest(false, 400, done, data);
@@ -76,7 +74,7 @@ class EmployersConstrollerTest {
 
         } catch (error) {
             console.error(error);
-            HandleResponseTest(false, 500, EmployeeResponseMessage.Error, null);
+            HandleResponseTest(false, 500, EmployeeResponses.Error, null);
         }
     };
 
@@ -99,9 +97,9 @@ class EmployersConstrollerTest {
         const { data, user } = request;
 
         try {
-            const done: EmployeeResponseMessage = await EmployeeManager.authAccount(data, user);
+            const done: EmployeeResponses = await EmployeeManager.authAccount(data, user);
 
-            if (done === EmployeeResponseMessage.Error || done === EmployeeResponseMessage.RegistrationInProgress) {
+            if (done === EmployeeResponses.Error || done === EmployeeResponses.RegistrationInProgress) {
                 HandleResponseTest(false, 400, done, null);
             } else {
                 HandleResponseTest(true, 200, done, { data, user });
@@ -118,7 +116,7 @@ class EmployersConstrollerTest {
 
         try {
             await Login.loginUser(loginDataReq);
-            HandleResponseTest(true, 200, EmployeeResponseMessage.EmployeeLoggedIn, loginDataReq);
+            HandleResponseTest(true, 200, EmployeeResponses.EmployeeLoggedIn, loginDataReq);
 
         } catch (error) {
             console.error(error);

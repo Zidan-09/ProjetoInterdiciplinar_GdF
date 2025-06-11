@@ -3,25 +3,25 @@ import { ValidateRegister } from "../../utils/personsUtils/validators";
 import { openDb } from "../../db";
 import { Hash, Jwt } from "../../utils/systemUtils/security"
 import { sendEmail } from "../../utils/personsUtils/email";
-import { EmployeeType, EmployeeResponseMessage } from "../../utils/personsUtils/generalEnuns";
-import { AdminResponses } from "../../utils/systemUtils/AdminResponses";
+import { EmployeeType } from "../../utils/enuns/generalEnuns";
+import { AdminResponses, EmployeeResponses } from "../../utils/enuns/allResponses";
 
 export class EmployeeManager {
-    static async registerEmployee<T extends Employee | Nurse | Doctor>(employeeData: T): Promise<EmployeeResponseMessage> {
+    static async registerEmployee<T extends Employee | Nurse | Doctor>(employeeData: T): Promise<EmployeeResponses> {
         const valid = await ValidateRegister.verifyEmployee(employeeData);
 
         if (valid) {     
             const token: string = Jwt.generateRegisterToken(employeeData);
             sendEmail(employeeData.email, token);
 
-            return EmployeeResponseMessage.AwaitingConfirmation;
+            return EmployeeResponses.AwaitingConfirmation;
 
         } else {
-            return EmployeeResponseMessage.AlreadyRegistered;
+            return EmployeeResponses.AlreadyRegistered;
         }
     }
 
-    static async authAccount<T extends Employee | Nurse | Doctor>(data: any, userData: User): Promise<EmployeeResponseMessage> {
+    static async authAccount<T extends Employee | Nurse | Doctor>(data: any, userData: User): Promise<EmployeeResponses> {
         const employeeData: T = data;
         const db = await openDb();
 
@@ -45,14 +45,14 @@ export class EmployeeManager {
                         break;
                 }
 
-                return EmployeeResponseMessage.EmployeeRegistered;
+                return EmployeeResponses.EmployeeRegistered;
 
             } catch (error) {
                 console.error(error)
-                return EmployeeResponseMessage.Error
+                return EmployeeResponses.Error
             }  
         } else {
-            return EmployeeResponseMessage.RegistrationInProgress
+            return EmployeeResponses.RegistrationInProgress
         }
     };
     

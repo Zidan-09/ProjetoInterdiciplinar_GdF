@@ -13,13 +13,12 @@ export class ValidateRegister {
 			);
 
 			if (row) {
-				console.log('Paciente já cadastrado');
 				return false;
 			}
 
 			return true;
 		} catch (error) {
-			console.log('Erro na verificação de paciente:', error);
+			console.error(error);
 			return false;
 		}
 	};

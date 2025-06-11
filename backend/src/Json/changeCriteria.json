@@ -1,7 +1,0 @@
-{
-    "immediate": 0,
-    "veryUrgent": 10,
-    "urgent": 60,
-    "standard": 120,
-    "nonUrgent": 240
-}

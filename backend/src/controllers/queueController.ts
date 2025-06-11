@@ -1,22 +1,28 @@
 import { Request, Response } from "express";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
-import { QueueReturns, TypeQueue } from "../utils/queueUtils/queueEnuns";
+import { QueueResponses, TypeQueue } from "../utils/queueUtils/queueEnuns";
 import { ShowQueue } from "../services/queue/services/showQueue";
 import { PatientCaller } from "../services/queue/services/patientCaller";
+import { ServerResponses } from "../utils/systemUtils/serverResponses";
 
 type Params = { typeQueue: TypeQueue }
 
 export const QueueController = {
     async queue(req: Request<Params>, res: Response) {
-        const queue: Params = req.params;
+        const queueType: Params = req.params;
 
         try {
-            const queueT = ShowQueue.showQueue(queue);
-            HandleResponse(true, 200, queue.typeQueue, queueT, res);
+            const queue = ShowQueue.showQueue(queueType);
+
+            if (queue) {
+                HandleResponse(true, 200, queueType.typeQueue, queue, res);
+            } else {
+                HandleResponse(false, 400, QueueResponses.EmptyQueue, null, res);
+            }
 
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     },
 
@@ -26,15 +32,15 @@ export const QueueController = {
         try {
             const called: string = PatientCaller.callNext(queue);
 
-            if (called === QueueReturns.EmptyQueue) {
-                HandleResponse(false, 200, called, null, res);
+            if (called !== QueueResponses.EmptyQueue) {
+                HandleResponse(true, 200, QueueResponses.Called, called, res);
             } else {
-                HandleResponse(true, 200, QueueReturns.Called, called, res);
+                HandleResponse(false, 400, called, null, res);
             }
 
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     }
 };

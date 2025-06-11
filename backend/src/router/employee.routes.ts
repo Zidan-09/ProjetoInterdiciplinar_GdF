@@ -8,7 +8,9 @@ const employeeRouter: Router = Router();
 employeeRouter.post('/register', loginVerify, AccessLevelMiddleware.admin, EmployersConstroller.register);
 employeeRouter.get('/activateAccount', EmployersConstroller.activateAccount);
 employeeRouter.post('/authAccount', EmployersConstroller.authAccount);
-employeeRouter.put('/edit', loginVerify, AccessLevelMiddleware.admin, EmployersConstroller.edit)
+employeeRouter.put('/edit', loginVerify, AccessLevelMiddleware.admin, EmployersConstroller.edit);
+
+employeeRouter.put('/settings/criteria', loginVerify, AccessLevelMiddleware.admin, AdminController.updateTriageCategory);
 
 employeeRouter.get('/list/careFlow', loginVerify, AccessLevelMiddleware.admin, AdminController.listCareFlows);
 employeeRouter.get('/list/:employee', loginVerify, AccessLevelMiddleware.admin, EmployersConstroller.showEmployeers);

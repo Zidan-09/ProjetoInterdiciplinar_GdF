@@ -43,6 +43,7 @@ export const TriageCategoryManager = {
         try {
             const triageCategory = await db.get('SELECT * FROM TriageCategory WHERE name = ?', [name]);
             return triageCategory;
+            
         } catch (error) {
             console.error(error);
         }

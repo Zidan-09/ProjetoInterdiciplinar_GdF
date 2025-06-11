@@ -39,7 +39,7 @@ export const CareFlowReports = {
         const { startDate, endDate } = getPeriodRange(period);
         let careFlowTime: number = 0;
 
-        const [rows] = await db.all('SELECT checkInHospital WHERE checkInHospital >= ? AND checkInHospital <= ?', [startDate, endDate]);
+        const [rows] = await db.all('SELECT CareFlow.checkInHospital, Consult.checkOutConsult JOIN Careflow ON Consult.id = CareFlow.id WHERE checkInHospital >= ? AND checkOutConsult <= ?', [startDate, endDate]);
 
         for (let i = 0; i < rows.length; i++) {
             careFlowTime += rows[i].checkInHospital;

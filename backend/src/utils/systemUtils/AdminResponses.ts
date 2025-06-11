@@ -3,7 +3,8 @@ enum AdminResponses {
     ShowCareFlowsFailed = 'show_care_flows_failed',
 
     ShowedQueueReport = 'showed_queue_report',
-    ShowQueueReportFailed = 'show_queue_report_failed',
+
+    ShowedCareFlowReport = 'showed_care_flow_report',
 
     EmployeeEdited = 'employee_edited',
     EmployeeEditFailed = 'employee_edit_failed',

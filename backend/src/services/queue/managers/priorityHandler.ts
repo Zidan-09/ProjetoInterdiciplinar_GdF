@@ -19,10 +19,10 @@ export class PriorityHandler {
 
             for (let i = 0; i < ConsultQueue.getQty(); i++) {
                 if (temp && !temp.maxPriority) {
-                    const timeElapsedMs = dateNow.getTime() - temp.time.getTime();
-                    const timeLimitMs = temp.limitDate * 60 * 1000 * 0.8;
+                    const totalWaitMs = temp.limitDate.getTime() - temp.time.getTime();
+                    const elapsedMs = dateNow.getTime() - temp.time.getTime();
 
-                    if (timeElapsedMs >= timeLimitMs) {
+                    if (elapsedMs >= totalWaitMs * 0.8) {
                         temp.maxPriority = true;
                         nodesToSort.push(temp);
                     }
@@ -35,7 +35,8 @@ export class PriorityHandler {
 
             return VerifyResponse.UpdatedQueue;
         }
-    };
+    }
+
 
     static toSort(node: NodeConsult): void {
         if (ConsultQueue.getFirst() != node) {

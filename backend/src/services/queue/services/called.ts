@@ -1,11 +1,11 @@
 import { CallsConsult } from "../../../entities/careFlow";
 import { openDb } from "../../../db";
 import { NodeConsult } from "../../../utils/queueUtils/createNode";
-import { QueueReturns } from "../../../utils/queueUtils/queueEnuns";
+import { QueueResponses } from "../../../utils/queueUtils/queueEnuns";
 import { Status } from "../../../utils/personsUtils/generalEnuns"
 
 export type SearchCalled = {
-    status: QueueReturns;
+    status: QueueResponses;
     message?: Result;
     called?: CallsConsult;
 }
@@ -36,22 +36,22 @@ class Calleds {
         let result: SearchCalled;
 
         if (this.calleds.length === 0) {
-            result = { status: QueueReturns.EmptyQueue };
+            result = { status: QueueResponses.EmptyQueue };
             return result;
         }
 
         let temp: SearchCalled;
         for (let i of this.calleds) {
             if (i.careFlow_id === id) {
-                temp = { status: QueueReturns.Found, called: i };
+                temp = { status: QueueResponses.Found, called: i };
                 break
             } else {
-                temp = { status: QueueReturns.NotFound }
+                temp = { status: QueueResponses.NotFound }
             }
         }
 
         result = temp!
-        if (result.status !== QueueReturns.NotFound) {
+        if (result.status !== QueueResponses.NotFound) {
             result.called!.calls++;
 
             if (result.called!.calls > 3) {

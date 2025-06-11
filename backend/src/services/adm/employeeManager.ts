@@ -56,7 +56,7 @@ export class EmployeeManager {
         }
     };
     
-    static async editEmployee<T extends Employee | Nurse | Doctor>(newUserData: T) {
+    static async editEmployee<T extends Employee | Nurse | Doctor>(newUserData: T): Promise<AdminResponses|void> {
         const db = await openDb();
 
         const employee = await db.get('SELECT * FROM Employee WHERE registrationNumber = ? AND name = ? AND cpf = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf]);
@@ -78,17 +78,16 @@ export class EmployeeManager {
 
         } catch (error) {
             console.error(error)
-            return AdminResponses.Error
         } 
     }
     
-    static async showEmployeers(employeeType: EmployeeType) {
+    static async showEmployeers(employeeType: EmployeeType): Promise<any[]|void> {
         const db = await openDb();
         const employee: string = employeeType[0].toLowerCase() + employeeType.slice(1);
 
         try {
             if (employee === EmployeeType.Receptionist || employee === EmployeeType.Admin) {
-                const employers = await db.all('SELECT * FROM Employee WHERE role = ?', [employee]);
+                const employers = await db.all('SELECT * FROM Employee WHERE accessLevel = ?', [employee]);
                 console.log(employers)
                 return employers;
                 

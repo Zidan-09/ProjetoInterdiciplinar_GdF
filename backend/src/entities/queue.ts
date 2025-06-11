@@ -1,5 +1,5 @@
 import { NodeConsult, NodeRecep, NodeTriage } from "../utils/queueUtils/createNode";
-import { QueueReturns } from "../utils/queueUtils/queueEnuns";
+import { QueueResponses } from "../utils/queueUtils/queueEnuns";
 
 abstract class Queue<T extends { pointer: T | null }> {
     protected firstPointer: T | null;
@@ -12,7 +12,7 @@ abstract class Queue<T extends { pointer: T | null }> {
         this.qtyPatients = 0;
     }
 
-    public callNext(): T | QueueReturns.EmptyQueue {
+    public callNext(): T | QueueResponses.EmptyQueue {
         const call = this.firstPointer;
 
         if (call) {
@@ -21,7 +21,7 @@ abstract class Queue<T extends { pointer: T | null }> {
             this.qtyPatients--;
             return call
         } else {
-            return QueueReturns.EmptyQueue
+            return QueueResponses.EmptyQueue
         }
     }
 

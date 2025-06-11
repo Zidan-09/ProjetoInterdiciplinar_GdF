@@ -1,4 +1,4 @@
-enum QueueReturns {
+enum QueueResponses {
     EmptyQueue = 'empty_queue',
     Found = 'found',
     NotFound = 'not_found',
@@ -17,4 +17,4 @@ enum TypeQueue {
     Consult = 'consult'
 }
 
-export { QueueReturns, Priority, TypeQueue }
+export { QueueResponses, Priority, TypeQueue }

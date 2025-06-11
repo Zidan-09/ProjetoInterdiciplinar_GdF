@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
 import { Nurse, Doctor, ConfirmUser, User, Employee } from "../entities/hospitalStaff";
 import { EmployeeManager } from "../services/adm/employeeManager";
-import { EmployeeType, PatientResponses } from "../utils/personsUtils/generalEnuns";
+import { EmployeeType } from "../utils/personsUtils/generalEnuns";
 import { Login } from "../services/adm/employeeLogin";
 import { Jwt } from "../utils/systemUtils/security";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
@@ -13,6 +13,8 @@ import { QueueReports } from "../services/adm/reports/queueReports";
 import { PatientManager } from "../services/hospital/patientManager";
 import { TriageCategoryManager } from "../services/adm/triageCategoryManager";
 import { ServerResponses } from "../utils/systemUtils/serverResponses";
+import { Patient } from "../entities/patient";
+import { TriageCategory, UpdateTriageCategory } from "../entities/criteria";
 
 type Params = { employee: EmployeeType }
 type AdminParams = { period: Periods }
@@ -21,7 +23,12 @@ const AdminController = {
     async listCareFlows(req: Request, res: Response) {
         try {
             const careFlows = await CareFlowReports.showAllCareFlows();
-            HandleResponse(true, 200, AdminResponses.ShowedCareFlows, careFlows, res);
+
+            if (careFlows) {
+                HandleResponse(true, 200, AdminResponses.ShowedCareFlows, careFlows, res);
+            } else {
+                HandleResponse(false, 400, AdminResponses.ShowCareFlowsFailed, null, res);
+            }
 
         } catch (error) {
             console.error(error);
@@ -38,7 +45,7 @@ const AdminController = {
 
         } catch (error) {
             console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
         }
     },
 
@@ -50,7 +57,7 @@ const AdminController = {
             const triageTime = await CareFlowReports.getAverageTriageTime(period.period);
             const totalTime = await CareFlowReports.getAverageCareFlowTime(period.period);
 
-            HandleResponse(true, 200, AdminResponses.ShowedQueueReport, { consultTime, triageTime, totalTime }, res);
+            HandleResponse(true, 200, AdminResponses.ShowedCareFlowReport, { consultTime, triageTime, totalTime }, res);
 
         } catch (error) {
             console.error(error);
@@ -75,11 +82,11 @@ const AdminController = {
         }
     },
 
-    async searchPatient(req: Request, res: Response) {
-        const patientData = req.body;
+    async searchPatient(req: Request<{}, {}, Patient['cpf']>, res: Response) {
+        const patientData: Patient['cpf'] = req.body;
 
         try {
-            const patient = await PatientManager.search(patientData);
+            const patient = await PatientManager.findByCpf(patientData);
 
             if (patient) {
                 HandleResponse(true, 200, AdminResponses.PatientFounded, patient, res);
@@ -92,8 +99,8 @@ const AdminController = {
         }
     },
 
-    async createTriageCategory(req: Request, res: Response) {
-        const newTriageCategory = req.body;
+    async createTriageCategory(req: Request<{}, {}, TriageCategory>, res: Response) {
+        const newTriageCategory: TriageCategory = req.body;
 
         try {
             const result = await TriageCategoryManager.createCategory(newTriageCategory);
@@ -111,8 +118,8 @@ const AdminController = {
         }
     },
 
-    async updateTriageCategory(req: Request, res: Response) {
-        const triageCategoryData = req.body;
+    async updateTriageCategory(req: Request<{}, {}, UpdateTriageCategory>, res: Response) {
+        const triageCategoryData: UpdateTriageCategory = req.body;
 
         try {
             const result = await TriageCategoryManager.updateCategory(triageCategoryData.name, triageCategoryData.limitMinutes);

@@ -7,7 +7,7 @@ import { CreateTicket } from "../services/queue/services/ticketService";
 import { calledsList, Result } from "../services/queue/services/called";
 import { CareFlowService } from "../services/hospital/startCareFlow";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
-import { QueueReturns } from "../utils/queueUtils/queueEnuns";
+import { QueueResponses } from "../utils/queueUtils/queueEnuns";
 import { CareFlowResponses } from "../utils/systemUtils/CareFlowResponses";
 import { PatientResponses } from "../utils/personsUtils/generalEnuns";
 import { ServerResponses } from "../utils/systemUtils/serverResponses";
@@ -83,9 +83,9 @@ export const HospitalController = {
         const newTriageCategory: ChangeTriageCategory = req.body;
 
         try {
-            const result = await TriageService.changeSeverity(newTriageCategory.careFlow_id, newTriageCategory.newTriageCategory);
+            const result = await TriageService.changeTriageCategory(newTriageCategory.careFlow_id, newTriageCategory.newTriageCategory);
 
-            if (result.status === QueueReturns.EmptyQueue || result.status === QueueReturns.NotFound) {
+            if (result.status === QueueResponses.EmptyQueue || result.status === QueueResponses.NotFound) {
                 HandleResponse(false, 400, result.status, null, res);
             } else {
                 HandleResponse(true, 200, result.status, result.node, res);
@@ -108,7 +108,7 @@ export const HospitalController = {
             } else {
                 const result = await calledsList.searchCalled(confirmStartData.careFlow_id);
 
-                if (result.status === QueueReturns.EmptyQueue || result.status === QueueReturns.NotFound) {
+                if (result.status === QueueResponses.EmptyQueue || result.status === QueueResponses.NotFound) {
                     HandleResponse(false, 400, result.status, null, res);
                 } else {
                     if (result.message === Result.PatientCalled) {

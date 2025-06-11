@@ -47,7 +47,7 @@ export class PatientManager {
         }
     };
 
-    static async search(cpf: string): Promise<Patient|void> {
+    static async findByCpf(cpf: string): Promise<Patient|void> {
         const db = await openDb();
         try {
             const patient: Patient | undefined = await db.get('SELECT * FROM Patient WHERE cpf = ?', [cpf]);
@@ -59,5 +59,19 @@ export class PatientManager {
         } catch (error) {
             console.error(error);
         }
-    }
+    };
+
+    static async findById(id: number): Promise<Patient|void> {
+        const db = await openDb();
+
+        try {
+            const patient: Patient | undefined = await db.get('SELECT * FROM Patient WHERE id = ?', [id]);
+
+            if (patient) {
+                return patient
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 }

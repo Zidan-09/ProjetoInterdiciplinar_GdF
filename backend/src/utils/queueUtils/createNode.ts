@@ -1,20 +1,9 @@
 import { openDb } from "../../db";
-import { TriageCategory, EndTriage } from "../../entities/careFlow";
-import { criteria } from "../../entities/criteria";
-
-async function searchCareFlow(careFlowId: number) {
-    const db = await openDb()
-    const row: any = await db.get('SELECT * FROM CareFlow WHERE id = ?', [careFlowId])
-    console.log(row)
-    const name = await searchPatientDB(row.patient_id)
-    return [row.patient_id, name]
-}
-
-async function searchPatientDB(patient_id: number) {
-    const db = await openDb()
-    const rows: any = await db.get('SELECT * FROM Patient WHERE id = ?', [patient_id]);
-    return rows;
-}
+import { EndTriage } from "../../entities/careFlow";
+import { Patient } from "../../entities/patient";
+import { TriageCategoryManager } from "../../services/adm/triageCategoryManager";
+import { PatientManager } from "../../services/hospital/patientManager";
+import { findById } from "../systemUtils/searchCareFlow";
 
 class NodeRecep {
     ticket: string | null;
@@ -40,8 +29,9 @@ class NodeTriage {
     }
 
     static async create(patient_id: number): Promise<NodeTriage> {
-        const row: any = await searchPatientDB(patient_id);
-        return new NodeTriage(patient_id, row.name);
+        const patient = await PatientManager.findById(patient_id);
+
+        return new NodeTriage(patient_id, patient!.name);
     }
 };
 
@@ -50,49 +40,28 @@ class NodeConsult {
     patient_name: string;
     triageCategory: number;
     time: Date;
-    limitDate: number;
+    limitDate: Date;
     maxPriority: boolean;
     pointer: null | NodeConsult;
 
-    constructor(patientTriage: EndTriage, patient_name: string) {
+    constructor(patientTriage: EndTriage, patient_name: string, triageCategory: number, limitDate: number) {
         this.triage = patientTriage;
         this.patient_name = patient_name;
-        this.pointer = null;
+        this.triageCategory = triageCategory;
         this.time = new Date();
+        this.limitDate = this.limitDate = new Date(Date.now() + limitDate * 60000);
         this.maxPriority = false;
-
-        if (!patientTriage.triageCategory) {
-            throw new Error('Categoria de triagem ausente')
-        };
-
-        switch (patientTriage.triageCategory!) {
-            case TriageCategory.NonUrgent: 
-                this.triageCategory = 1;
-                this.limitDate = criteria.nonUrgent
-                break;
-            case TriageCategory.Standard:
-                this.triageCategory = 2;
-                this.limitDate = criteria.standard
-                break;
-            case TriageCategory.Urgent:
-                this.triageCategory = 3;
-                this.limitDate = criteria.urgent
-                break;
-            case TriageCategory.VeryUrgent:
-                this.triageCategory = 4;
-                this.limitDate = criteria.veryUrgent
-                break;
-            case TriageCategory.Immediate:
-                this.triageCategory = 5;
-                this.limitDate = criteria.immediate
-                this.maxPriority = true;
-                break;
-        }
+        this.pointer = null;
     }
 
     static async create(patientTriage: EndTriage) {
-        const row: any = await searchCareFlow(patientTriage.careFlow_id);
-        return new NodeConsult(patientTriage, row[1].name)
+        const db = await openDb();
+
+        const triageCategory = await TriageCategoryManager.findByName(patientTriage.triageCategory);
+
+        const careFlow = await findById(patientTriage.careFlow_id);
+        const patient = await PatientManager.findById(careFlow.patient_id);
+        return new NodeConsult(patientTriage, patient!.name, triageCategory.priority, triageCategory.limitMinutes);
     }
 };
 

@@ -1,9 +1,9 @@
 import { ConsultQueue } from "../../../entities/queue";
 import { NodeConsult } from "../../../utils/queueUtils/createNode";
-import { QueueReturns } from "../../../utils/queueUtils/queueEnuns";
+import { QueueResponses } from "../../../utils/queueUtils/queueEnuns";
 
 type SearchResult = {
-    status: QueueReturns;
+    status: QueueResponses;
     node?: NodeConsult;
 }
 class SearchQueue {
@@ -11,15 +11,15 @@ class SearchQueue {
         let temp: null | NodeConsult = ConsultQueue.getFirst();
 
         if (!temp) {
-            return { status: QueueReturns.EmptyQueue }
+            return { status: QueueResponses.EmptyQueue }
         } else {
             while (temp) {
                 if (temp.triage.careFlow_id == id) {
-                    return { status: QueueReturns.Found, node: temp }
+                    return { status: QueueResponses.Found, node: temp }
                 }
             }
 
-            return { status: QueueReturns.NotFound }
+            return { status: QueueResponses.NotFound }
         }
     }
 }

@@ -1,6 +1,6 @@
 import { RecepQueue, TriageQueue, ConsultQueue } from "../../../entities/queue";
 import { getSocketInstance } from "../../../socket";
-import { QueueReturns, TypeQueue } from "../../../utils/queueUtils/queueEnuns";
+import { QueueResponses, TypeQueue } from "../../../utils/queueUtils/queueEnuns";
 
 export class PatientCaller {
     static callNext(typeQueue: TypeQueue) {
@@ -11,7 +11,7 @@ export class PatientCaller {
         switch (typeQueue) {
             case TypeQueue.Recep:
                 call = RecepQueue.callNext();
-                if (call != QueueReturns.EmptyQueue) {
+                if (call != QueueResponses.EmptyQueue) {
                     io.emit(TypeQueue.Recep, {
                         called: call.ticket,
                         queue: TypeQueue.Recep
@@ -22,7 +22,7 @@ export class PatientCaller {
 
             case TypeQueue.Triage:
                 call = TriageQueue.callNext();
-                if (call != QueueReturns.EmptyQueue) {
+                if (call != QueueResponses.EmptyQueue) {
                     io.emit(TypeQueue.Triage, {
                         called: call.patient_name,
                         queue: TypeQueue.Triage
@@ -33,7 +33,7 @@ export class PatientCaller {
 
             case TypeQueue.Consult:
                 call = ConsultQueue.callNext();
-                if (call != QueueReturns.EmptyQueue) {
+                if (call != QueueResponses.EmptyQueue) {
                     io.emit(TypeQueue.Consult, {
                         called: call.patient_id,
                         queue: TypeQueue.Consult

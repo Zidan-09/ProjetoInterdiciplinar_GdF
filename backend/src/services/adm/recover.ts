@@ -1,4 +1,8 @@
 import { openDb } from "../../db";
+import { ConsultQueue, TriageQueue } from "../../entities/queue";
+import { Status } from "../../utils/enuns/generalEnuns";
+import { NodeConsult, NodeTriage } from "../../utils/queueUtils/createNode";
+import { searchTriage } from "../../utils/systemUtils/recoverUtil";
 
 export async function Recover() {
     const now = new Date();
@@ -14,11 +18,18 @@ export async function Recover() {
         );
 
         for (const flow of careFlows) {
-            switch (flow.status) {
-                case 'esperando triagem':
+            switch (flow.status as Status) {
+                case Status.WaitingTriage:
+                    const nodeTriage = await NodeTriage.create(flow.patient_id);
+                    TriageQueue.insertQueue(nodeTriage);
                     break;
-                case 'esperando consulta':
+
+                case Status.WaitingConsultation:
+                    const triage = await searchTriage(flow.id);
+                    const nodeConsult = await NodeConsult.create(triage!);
+                    ConsultQueue.insertQueue(nodeConsult);
                     break;
+
             }
         }
 

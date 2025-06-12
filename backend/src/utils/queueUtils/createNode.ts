@@ -1,4 +1,3 @@
-import { openDb } from "../../db";
 import { EndTriage } from "../../entities/careFlow";
 import { TriageCategoryManager } from "../../services/adm/triageCategoryManager";
 import { PatientManager } from "../../services/hospital/patientManager";
@@ -54,8 +53,6 @@ class NodeConsult {
     }
 
     static async create(patientTriage: EndTriage) {
-        const db = await openDb();
-
         const triageCategory = await TriageCategoryManager.findByName(patientTriage.triageCategory);
 
         const careFlow = await findById(patientTriage.careFlow_id);

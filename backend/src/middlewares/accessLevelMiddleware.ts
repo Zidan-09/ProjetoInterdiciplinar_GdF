@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { openDb } from "../db";
+import { db } from "../db";
 import { Jwt } from "../utils/systemUtils/security";
 import { JwtPayload } from "jsonwebtoken";
 import { EmployeeType } from "../utils/enuns/generalEnuns";
@@ -9,13 +9,12 @@ import { ServerResponses } from "../utils/enuns/allResponses";
 function accessMiddleware(requiredAccess: EmployeeType) {
     return async (req: Request, res: Response, next: NextFunction) => {
         const { authorization } = req.headers;
-        const db = await openDb();
 
         try {
             const token = authorization!.split(' ')[1];
             const valid = Jwt.verifyLoginToken(token) as JwtPayload;
 
-            const result = await db.get('SELECT accessLevel FROM Employee WHERE id = ?', [valid.id]);
+            const result = await db.execute('SELECT accessLevel FROM Employee WHERE id = ?', [valid.id]);
 
             if (result.accessLevel === requiredAccess) {
                 next();

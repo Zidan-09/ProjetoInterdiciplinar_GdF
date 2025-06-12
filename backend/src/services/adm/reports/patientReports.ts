@@ -1,4 +1,4 @@
-import { openDb } from "../../../db";
+import { db } from "../../../db";
 
 export const PatientReports = {
 }

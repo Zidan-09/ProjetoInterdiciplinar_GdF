@@ -1,4 +1,4 @@
-import { openDb } from "../../db";
+import { db } from "../../db";
 import { ConsultQueue, TriageQueue } from "../../entities/queue";
 import { Status } from "../../utils/enuns/generalEnuns";
 import { NodeConsult, NodeTriage } from "../../utils/queueUtils/createNode";
@@ -9,10 +9,8 @@ export async function Recover() {
     const yesterday = new Date(now);
     yesterday.setDate(now.getDate() - 1);
 
-    const db = await openDb();
-
     try {
-        const careFlows = await db.all(
+        const careFlows = await db.execute(
             'SELECT * FROM CareFlow WHERE checkInHospital >= ? ORDER BY checkInHospital DESC',
             [yesterday.toISOString()]
         );

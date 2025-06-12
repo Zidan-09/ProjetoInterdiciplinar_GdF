@@ -1,12 +1,10 @@
-import { openDb } from "../../db";
+import { db } from "../../db";
 import { TriageCategory } from "../../entities/triageCategory";
 
 export const TriageCategoryManager = {
     async createCategory(newTriageCategory: TriageCategory) {
-        const db = await openDb();
-
         try {
-            await db.run('INSERT INTO TriageCategory (name, color, limitMinutes, priority) VALUES (?, ?, ?, ?)', [newTriageCategory.name, newTriageCategory.color, newTriageCategory.limitMinutes, newTriageCategory.priority]);
+            await db.execute('INSERT INTO TriageCategory (name, color, limitMinutes, priority) VALUES (?, ?, ?, ?)', [newTriageCategory.name, newTriageCategory.color, newTriageCategory.limitMinutes, newTriageCategory.priority]);
             return newTriageCategory;
 
         } catch (error) {
@@ -15,10 +13,8 @@ export const TriageCategoryManager = {
     },
 
     async updateCategory(name: string, newLimitMinutes: number) {
-        const db = await openDb();
-
         try {
-            const result = await db.run('UPDATE TriageCategory SET limitMinutes = ? WHERE name = ?', [newLimitMinutes, name]);
+            const result = await db.execute('UPDATE TriageCategory SET limitMinutes = ? WHERE name = ?', [newLimitMinutes, name]);
             return result;
 
         } catch (error) {
@@ -27,10 +23,8 @@ export const TriageCategoryManager = {
     },
 
     async listCategories() {
-        const db = await openDb();
-
         try {
-            const categories = await db.all('SELECT * FROM TriageCategory');
+            const categories = await db.execute('SELECT * FROM TriageCategory');
             return categories;
         } catch (error) {
             console.error(error);
@@ -38,10 +32,8 @@ export const TriageCategoryManager = {
     },
 
     async findByName(name: string) {
-        const db = await openDb();
-
         try {
-            const triageCategory = await db.get('SELECT * FROM TriageCategory WHERE name = ?', [name]);
+            const triageCategory = await db.execute('SELECT * FROM TriageCategory WHERE name = ?', [name]);
             return triageCategory;
             
         } catch (error) {
@@ -50,10 +42,8 @@ export const TriageCategoryManager = {
     },
 
     async delete(name: string) {
-        const db = await openDb();
-
         try {
-            const result = await db.run('DELETE * FROM TriageCategory WHERE name = ?', [name]);
+            const result = await db.execute('DELETE * FROM TriageCategory WHERE name = ?', [name]);
 
             if (result) {
                 return result

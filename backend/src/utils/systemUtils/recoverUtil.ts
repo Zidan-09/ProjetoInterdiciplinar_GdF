@@ -1,11 +1,9 @@
-import { openDb } from "../../db";
+import { db } from "../../db";
 import { EndTriage } from "../../entities/careFlow";
 
 export async function searchTriage(careFlow_id: number) {
-    const db = await openDb();
-
     try {
-        const Triage = await db.get('SELECT Triage.* FROM CareFlow JOIN Triage ON Triage.triage_id = CareFlow.id WHERE CareFlow.id = ?', [careFlow_id]);
+        const Triage = await db.execute('SELECT Triage.* FROM CareFlow JOIN Triage ON Triage.triage_id = CareFlow.id WHERE CareFlow.id = ?', [careFlow_id]);
         const data: EndTriage = {
             careFlow_id: careFlow_id,
             vitalSigns: {

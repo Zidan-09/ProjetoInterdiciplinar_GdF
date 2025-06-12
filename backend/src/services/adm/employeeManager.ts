@@ -1,6 +1,6 @@
 import { Employee, Nurse, Doctor, User } from "../../entities/hospitalStaff";
 import { ValidateRegister } from "../../utils/personsUtils/validators";
-import { openDb } from "../../db";
+import { db } from "../../db";
 import { Hash, Jwt } from "../../utils/systemUtils/security"
 import { sendEmail } from "../../utils/personsUtils/email";
 import { EmployeeType } from "../../utils/enuns/generalEnuns";
@@ -23,25 +23,24 @@ export class EmployeeManager {
 
     static async authAccount<T extends Employee | Nurse | Doctor>(data: any, userData: User): Promise<EmployeeResponses> {
         const employeeData: T = data;
-        const db = await openDb();
 
         const valid: boolean = await ValidateRegister.verifyEmployee(employeeData);
 
         if (valid) {
             try {
-                const employee: any = await db.run("INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode, weeklyHours, accessLevel) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?)", [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode, employeeData.weeklyHours, employeeData.accessLevel]);
+                const employee: any = await db.execute("INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode, weeklyHours, accessLevel) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?)", [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode, employeeData.weeklyHours, employeeData.accessLevel]);
                 const employee_id = await employee.lastID;
-                await db.run('INSERT INTO User (user_id, username, password) VALUES (?, ?, ?)', [employee_id, userData.username, await Hash.hash(userData.password)])
+                await db.execute('INSERT INTO User (user_id, username, password) VALUES (?, ?, ?)', [employee_id, userData.username, await Hash.hash(userData.password)])
                 
                 switch (employeeData.accessLevel) {
                     case EmployeeType.Doctor:
                         const doctorData = employeeData as Doctor;
-                        await db.run('INSERT INTO Doctor (id, crm, specialty, onDuty) VALUES (?, ?, ?, ?)', [employee_id, doctorData.crm, doctorData.specialty, 0]);
+                        await db.execute('INSERT INTO Doctor (id, crm, specialty, onDuty) VALUES (?, ?, ?, ?)', [employee_id, doctorData.crm, doctorData.specialty, 0]);
                         break;
 
                     case EmployeeType.Nurse:
                         const nurseData = employeeData as Nurse;
-                        await db.run('INSERT INTO Nurse (id, coren, department, speciality, onDuty) VALUES (?, ?, ?, ?, ?)', [employee_id, nurseData.coren, nurseData.department, nurseData.specialty, 0]);
+                        await db.execute('INSERT INTO Nurse (id, coren, department, speciality, onDuty) VALUES (?, ?, ?, ?, ?)', [employee_id, nurseData.coren, nurseData.department, nurseData.specialty, 0]);
                         break;
                 }
 
@@ -57,21 +56,19 @@ export class EmployeeManager {
     };
     
     static async editEmployee<T extends Employee | Nurse | Doctor>(newUserData: T): Promise<AdminResponses|void> {
-        const db = await openDb();
-
-        const employee = await db.get('SELECT * FROM Employee WHERE registrationNumber = ? AND name = ? AND cpf = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf]);
         try {
-            const employee_id = employee.id;
-            await db.run('UPDATE Employee SET registrationNumber = ?, name = ?, cpf = ?, email = ?, phone = ?, dob = ?, address = ?, hireDate = ?, workShift = ?, status = ?, salary = ?, cnesCode = ?, weeklyHours = ?, accessLevel = ? WHERE id = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf, newUserData.email, newUserData.phone, newUserData.dob, newUserData.address, newUserData.workShift, newUserData.status, newUserData.salary, newUserData.cnesCode, newUserData.weeklyHours, newUserData.accessLevel, employee_id]);
+            const employee = await db.execute('SELECT * FROM Employee WHERE registrationNumber = ? AND name = ? AND cpf = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf]);
+            const employee_id = employee[0];
+            await db.execute('UPDATE Employee SET registrationNumber = ?, name = ?, cpf = ?, email = ?, phone = ?, dob = ?, address = ?, hireDate = ?, workShift = ?, status = ?, salary = ?, cnesCode = ?, weeklyHours = ?, accessLevel = ? WHERE id = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf, newUserData.email, newUserData.phone, newUserData.dob, newUserData.address, newUserData.workShift, newUserData.status, newUserData.salary, newUserData.cnesCode, newUserData.weeklyHours, newUserData.accessLevel, employee_id]);
 
             switch (newUserData.accessLevel) {
                 case EmployeeType.Doctor:
                     const doctorData = newUserData as Doctor;
-                    await db.run('UPDATE Doctor SET crm = ?, specialty = ? WHERE id = ?', [doctorData.crm, doctorData.specialty, employee_id]);
+                    await db.execute('UPDATE Doctor SET crm = ?, specialty = ? WHERE id = ?', [doctorData.crm, doctorData.specialty, employee_id]);
                     break;
                 case EmployeeType.Nurse:
                     const nurseData = newUserData as Nurse;
-                    await db.run('UPDATE Nurse SET coren = ?, department = ?, specialty = ? WHERE id = ?', [nurseData.coren, nurseData.department, nurseData.specialty, employee_id]);
+                    await db.execute('UPDATE Nurse SET coren = ?, department = ?, specialty = ? WHERE id = ?', [nurseData.coren, nurseData.department, nurseData.specialty, employee_id]);
                     break;
             }
             return AdminResponses.EmployeeEdited;
@@ -82,18 +79,16 @@ export class EmployeeManager {
     }
     
     static async showEmployeers(employeeType: EmployeeType): Promise<any[]|void> {
-        const db = await openDb();
         const employee: string = employeeType[0].toLowerCase() + employeeType.slice(1);
 
         try {
             if (employee === EmployeeType.Receptionist || employee === EmployeeType.Admin) {
-                const employers = await db.all('SELECT * FROM Employee WHERE accessLevel = ?', [employee]);
-                console.log(employers)
+                const employers = await db.execute('SELECT * FROM Employee WHERE accessLevel = ?', [employee]);
                 return employers;
                 
             } else {
                 const employee: string = employeeType[0].toUpperCase() + employeeType.slice(1);
-                const employers = await db.all(`SELECT Employee.*, ${employee}.* FROM ${employee} JOIN Employee ON Employee.id = ${employee}.id`);
+                const employers = await db.execute(`SELECT Employee.*, ${employee}.* FROM ${employee} JOIN Employee ON Employee.id = ${employee}.id`);
                 return employers;
             }
 

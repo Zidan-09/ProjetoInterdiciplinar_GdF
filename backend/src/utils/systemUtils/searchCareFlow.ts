@@ -1,10 +1,8 @@
-import { openDb } from "../../db";
+import { db } from "../../db";
 
 export async function findById(id: number) {
-    const db = await openDb();
-
     try {
-        const careFlow = await db.get('SELECT * FROM CareFlow WHERE id = ?', [id]);
+        const careFlow = await db.execute('SELECT * FROM CareFlow WHERE id = ?', [id]);
 
         if (careFlow) {
             return careFlow

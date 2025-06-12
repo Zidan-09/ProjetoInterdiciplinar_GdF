@@ -1,6 +1,5 @@
 import app from "./app";
 import { createServer } from "http";
-import { initDb } from "./db";
 import { StartSchedule } from "./utils/queueUtils/updateQueue";
 import { initSocket } from "./socket";
 require('dotenv').config();
@@ -12,7 +11,6 @@ async function start() {
     
     initSocket(httpServer);
 
-    await initDb();
     StartSchedule();
 
     httpServer.listen(PORT, () => {

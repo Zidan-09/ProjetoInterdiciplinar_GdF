@@ -1,10 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { Employee, Nurse, Doctor } from '../../entities/hospitalStaff';
 import jwt from 'jsonwebtoken';
-import { openDb } from '../../db';
+import { db } from '../../db';
 require('dotenv').config();
-
-const db = openDb();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const EXPIRATION = '72h';
@@ -16,7 +14,7 @@ export class Hash {
     };
 
     static async compare(id: number, password: string): Promise<boolean> {
-        const passworddb: any = (await db).get('SELECT password FROM User WHERE id = ?', [id]);
+        const passworddb: any = await db.execute('SELECT password FROM User WHERE id = ?', [id]);
         const valid = await bcrypt.compare(password, passworddb);
         return valid;
     };

@@ -1,5 +1,5 @@
 import { User } from "../../entities/hospitalStaff";
-import { openDb } from "../../db";
+import { db } from "../../db";
 import bcrypt from 'bcryptjs';
 import { Hash, Jwt } from "../../utils/systemUtils/security";
 import { sendEmail } from "../../utils/personsUtils/email";
@@ -7,10 +7,9 @@ import { sendEmail } from "../../utils/personsUtils/email";
 
 export const Login = {
     async loginUser(data: User) {
-        const db = await openDb();
         try {
-            const userData: any = await db.get('SELECT * FROM User WHERE username = ?', [data.username]);
-            const role: any = await db.get('SELECT accessLevel FROM Employee WHERE id = ?', [userData.user_id])
+            const userData: any = await db.execute('SELECT * FROM User WHERE username = ?', [data.username]);
+            const role: any = await db.execute('SELECT accessLevel FROM Employee WHERE id = ?', [userData.user_id])
 
             if (userData) {
                 const valid: boolean = await bcrypt.compare(data.password, userData.password);
@@ -36,11 +35,9 @@ export const Login = {
     },
 
     async newPassword(data: string) {
-        const db = await openDb();
-
         try {
             const password = Hash.hash(data);
-            await db.run('UPDATE User SET password = ?', [password]);
+            await db.execute('UPDATE User SET password = ?', [password]);
 
         } catch (error) {
             console.error(error);

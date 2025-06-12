@@ -47,7 +47,7 @@ class NodeConsult {
         this.patient_name = patient_name;
         this.triageCategory = triageCategory;
         this.time = new Date();
-        this.limitDate = this.limitDate = new Date(Date.now() + limitDate * 60000);
+        this.limitDate = new Date(Date.now() + limitDate * 60000);
         this.maxPriority = false;
         this.pointer = null;
     }

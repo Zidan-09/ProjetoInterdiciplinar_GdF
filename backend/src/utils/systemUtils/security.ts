@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { Employee, Nurse, Doctor } from '../../entities/hospitalStaff';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { db } from '../../db';
 import { RowDataPacket } from 'mysql2';
 require('dotenv').config();
@@ -43,7 +43,7 @@ export class Jwt {
 
     static verifyLoginToken(data: string) {
         try {
-            const token = jwt.verify(data, process.env.JWT_SECRET!);
+            const token = jwt.verify(data, process.env.JWT_SECRET!) as JwtPayload;
             return token;
             
         } catch (error) {

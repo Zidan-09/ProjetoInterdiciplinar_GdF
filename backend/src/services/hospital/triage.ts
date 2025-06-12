@@ -23,7 +23,12 @@ export const TriageService = {
 
         await db.execute("UPDATE Triage SET checkOutTriage = NOW(), systolicPreassure = ?, diastolicPreassure = ?, heartRate = ?, respiratoryRate = ?, bodyTemperature = ?, oxygenSaturation = ?, painLevel = ?, symptoms = ?, triageCategory_id = ? WHERE triage_id = ?", [data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, JSON.stringify(data.symptoms), triageCategory.id, data.careFlow_id]);
         await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.WaitingConsultation, data.careFlow_id])
-        const node: NodeConsult = await NodeConsult.create(data);
+        const node: NodeConsult | undefined = await NodeConsult.create(data);
+
+        if (!node) {
+            return undefined;
+        }
+        
         ConsultQueue.insertQueue(node);
         return data;
     },

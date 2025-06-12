@@ -13,9 +13,14 @@ export class EmployeeManager {
 
         if (valid) {     
             const token: string = Jwt.generateRegisterToken(employeeData);
-            sendEmail(employeeData.email, token);
+            const result = await sendEmail.auth(employeeData.email, token);
 
-            return EmployeeResponses.AwaitingConfirmation;
+            if (result) {
+                return EmployeeResponses.AwaitingConfirmation;
+            } else {
+                return EmployeeResponses.Error
+            }
+
 
         } else {
             return EmployeeResponses.AlreadyRegistered;

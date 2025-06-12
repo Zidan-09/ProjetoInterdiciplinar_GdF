@@ -286,6 +286,35 @@ const EmployersConstroller = {
             console.error(error);
             HandleResponse(false, 500, error as string, null, res);
         }
+    },
+
+    async forgotPassword(req: Request<{}, {}, { email: string }>, res: Response) {
+        const data = req.body;
+
+        try {
+            await Login.forgotPassword(data.email);
+
+        } catch (error) {
+            console.error(error);
+            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+        }
+    },
+
+    async changePassword(req: Request<{}, {}, { newPassword: string }>, res: Response) {
+        const data = req.body;
+
+        try {
+            const result = await Login.newPassword(data.newPassword);
+
+            if (result) {
+                HandleResponse(true, 200, EmployeeResponses.PasswordUpdated, null, res);
+            } else {
+                HandleResponse(false, 400, EmployeeResponses.Error, null, res);
+            }
+            
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
 

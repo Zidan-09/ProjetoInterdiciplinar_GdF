@@ -5,6 +5,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { EmployeeType } from "../utils/enuns/generalEnuns";
 import { HandleResponse } from "../utils/systemUtils/handleResponse";
 import { ServerResponses } from "../utils/enuns/allResponses";
+import { RowDataPacket } from "mysql2";
 
 function accessMiddleware(requiredAccess: EmployeeType) {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -14,9 +15,9 @@ function accessMiddleware(requiredAccess: EmployeeType) {
             const token = authorization!.split(' ')[1];
             const valid = Jwt.verifyLoginToken(token) as JwtPayload;
 
-            const result = await db.execute('SELECT accessLevel FROM Employee WHERE id = ?', [valid.id]);
+            const [result] = await db.execute<RowDataPacket[]>('SELECT accessLevel FROM Employee WHERE id = ?', [valid.id]);
 
-            if (result.accessLevel === requiredAccess) {
+            if (!result || result[0].accessLevel === requiredAccess) {
                 next();
 
             } else {

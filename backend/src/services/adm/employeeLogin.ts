@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import { Hash, Jwt } from "../../utils/systemUtils/security";
 import { sendEmail } from "../../utils/personsUtils/email";
 import { RowDataPacket } from "mysql2";
-
+import { EmployeeResponses } from "../../utils/enuns/allResponses";
 
 export const Login = {
     async loginUser(data: User) {
@@ -31,14 +31,33 @@ export const Login = {
         }
     },
 
-    async forgotPassword() {
-        // FAZER ENVIO DE EMAIL
+    async forgotPassword(email: string) {
+        try {
+            const [row] = await db.execute<RowDataPacket[]>('SELECT id FROM Employee WHERE email = ?', [email]);
+    
+            if (row.length) {
+                const token = Jwt.generateLoginToken(row[0].id);
+        
+                const result = await sendEmail.forgot(email, token);
+        
+                if (result) {
+                    return EmployeeResponses.AwaitingNewPassword;
+                }
+
+            } else {
+                return EmployeeResponses.EmailNonRegistered;
+            }
+        } catch (error) {
+            console.error(error);
+            return undefined;
+        }
     },
 
     async newPassword(data: string) {
         try {
             const password = Hash.hash(data);
             await db.execute('UPDATE User SET password = ?', [password]);
+            return true;
 
         } catch (error) {
             console.error(error);

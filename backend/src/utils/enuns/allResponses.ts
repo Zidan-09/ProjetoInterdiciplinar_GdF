@@ -42,11 +42,14 @@ enum PatientResponses {
 
 enum EmployeeResponses {
     AwaitingConfirmation = 'awaiting_employee_confirmation',
+    AwaitingNewPassword = 'awating_new_password',
+    PasswordUpdated = 'password_updated',
     RegistrationInProgress = 'registration_in_progress',
     AlreadyRegistered = 'already_registered',
     InvalidOrExpiredToken = 'invalid_or_expired_token',
     EmployeeRegistered = 'employee_registered',
     EmployeeLoggedIn = 'employee_logged_in',
+    EmailNonRegistered = 'email_non_registered',
     Error = 'unexpected_error'
 }
 

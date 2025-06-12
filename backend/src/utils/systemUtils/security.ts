@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { Employee, Nurse, Doctor } from '../../entities/hospitalStaff';
 import jwt from 'jsonwebtoken';
 import { db } from '../../db';
+import { RowDataPacket } from 'mysql2';
 require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -14,8 +15,8 @@ export class Hash {
     };
 
     static async compare(id: number, password: string): Promise<boolean> {
-        const passworddb: any = await db.execute('SELECT password FROM User WHERE id = ?', [id]);
-        const valid = await bcrypt.compare(password, passworddb);
+        const [passworddb]: any = await db.execute<RowDataPacket[]>('SELECT * FROM User WHERE id = ?', [id]);
+        const valid = await bcrypt.compare(password, passworddb[0].password);
         return valid;
     };
 };

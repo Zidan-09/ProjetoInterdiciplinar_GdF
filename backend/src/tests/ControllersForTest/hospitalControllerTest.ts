@@ -5,7 +5,7 @@ import { EndConsult, CareFlow, StartConsult, StartTriage, EndTriage, ChangeTriag
 import { CreateTicket } from "../../services/queue/services/ticketService";
 import { CareFlowService } from "../../services/hospital/startCareFlow";
 import { HandleResponseTest } from "./handleResponseTest";
-import { CareFlowResponses, PatientResponses, QueueResponses } from "../../utils/enuns/allResponses";
+import { CareFlowResponses, PatientResponses, QueueResponses, ServerResponses } from "../../utils/enuns/allResponses";
 
 type TicketRequest = { priority: number };
 
@@ -78,11 +78,16 @@ export const HospitalControllerTest = {
         try {
             const result = await TriageService.changeTriageCategory(data.careFlow_id, data.newTriageCategory);
 
-            if (result.status == QueueResponses.EmptyQueue || result.status == QueueResponses.NotFound) {
-                HandleResponseTest(false, 400, result.status, null);
+            if (result) {
+                if (result.status == QueueResponses.EmptyQueue || result.status == QueueResponses.NotFound) {
+                    HandleResponseTest(false, 400, result.status, null);
+                } else {
+                    HandleResponseTest(true, 200, result.status, result.node);
+                }
             } else {
-                HandleResponseTest(true, 200, result.status, result.node);
+                HandleResponseTest(false, 400, ServerResponses.ServerError, null);
             }
+            
         } catch (error) {
             console.error(error);
             HandleResponseTest(false, 500, error as string, null);

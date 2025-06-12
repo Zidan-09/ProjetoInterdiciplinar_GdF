@@ -1,14 +1,15 @@
 import { db } from "../../../db";
 import { getPeriodRange } from "../../../utils/systemUtils/getPeriod";
 import { Periods } from "../../../utils/enuns/periods";
+import { RowDataPacket } from "mysql2";
 
 export const QueueReports = {
     async getAverageQueueTimes(period: Periods) {
 
         const { startDate, endDate } = getPeriodRange(period);
-        const triageTime = await db.execute('SELECT CareFlow.checkInHospital, Triage.checkInTriage FROM CareFlow JOIN Triage ON CareFlow.id = Triage.triage_id WHERE checkInHospital >= ? AND checkInHospital <= ?', [startDate, endDate]);
+        const [triageTime] = await db.execute<RowDataPacket[]>('SELECT CareFlow.checkInHospital, Triage.checkInTriage FROM CareFlow JOIN Triage ON CareFlow.id = Triage.triage_id WHERE checkInHospital >= ? AND checkInHospital <= ?', [startDate, endDate]);
 
-        const consultTime = await db.execute('SELECT Triage.checkOutTriage, Consult.checkInConsult FROM Triage JOIN Consult ON Triage.triage_id = Consult.consult_id WHERE checkOutTriage >= ? AND checkInConsult <= ?', [startDate, endDate]);
+        const [consultTime] = await db.execute<RowDataPacket[]>('SELECT Triage.checkOutTriage, Consult.checkInConsult FROM Triage JOIN Consult ON Triage.triage_id = Consult.consult_id WHERE checkOutTriage >= ? AND checkInConsult <= ?', [startDate, endDate]);
 
         let triageQueueTime: number = 0;
         let consultQueueTime: number = 0;

@@ -3,24 +3,25 @@ import { db } from "../../db";
 import bcrypt from 'bcryptjs';
 import { Hash, Jwt } from "../../utils/systemUtils/security";
 import { sendEmail } from "../../utils/personsUtils/email";
+import { RowDataPacket } from "mysql2";
 
 
 export const Login = {
     async loginUser(data: User) {
         try {
-            const userData: any = await db.execute('SELECT * FROM User WHERE username = ?', [data.username]);
-            const role: any = await db.execute('SELECT accessLevel FROM Employee WHERE id = ?', [userData.user_id])
+            const [userData] = await db.execute<RowDataPacket[]>('SELECT * FROM User WHERE username = ?', [data.username]);
+            const [role] = await db.execute<RowDataPacket[]>('SELECT accessLevel FROM Employee WHERE id = ?', [userData[0].user_id])
 
             if (userData) {
-                const valid: boolean = await bcrypt.compare(data.password, userData.password);
+                const valid: boolean = await bcrypt.compare(data.password, userData[0].password);
 
                 if (valid) {
-                    const token = Jwt.generateLoginToken(userData.user_id);
+                    const token = Jwt.generateLoginToken(userData[0].user_id);
 
                     return {
-                        user: userData.username,
+                        user: userData[0].username,
                         token: token,
-                        role: role
+                        role: role[0]
                     }
                 }
             }

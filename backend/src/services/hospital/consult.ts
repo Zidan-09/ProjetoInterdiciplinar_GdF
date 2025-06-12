@@ -1,30 +1,33 @@
 import { StartConsult, EndConsult } from "../../entities/careFlow";
 import { Status } from "../../utils/enuns/generalEnuns";
 import { db } from "../../db";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 
-export class ConsultService {
-    static async startConsult(data: StartConsult): Promise<number|void> {
+export const ConsultService = {
+    async startConsult(data: StartConsult): Promise<number|void> {
         try {
-            const row: any = await db.execute(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, datetime('now'))`, [data.careFlow_id, data.doctor_id]);
+            const [result]: any = await db.execute<ResultSetHeader>(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())`, [data.careFlow_id, data.doctor_id]);
             await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InConsultation, data.careFlow_id])
-            const consult_id: number = await row.lastId
+            const consult_id: number = await result.insertId
             return consult_id;
 
         } catch (error) {
             console.error(error);
             return;
         }
-    };
+    },
 
-    static async endConsult(data: EndConsult) {
+    async endConsult(data: EndConsult) {
         try {
-            await db.execute(`UPDATE Consult SET checkOutConsult = datetime('now'), diagnosis = ?, prescriptions = ?, notes = ? WHERE consult_id = ?`, [data.diagnosis, JSON.stringify(data.prescriptions), data.notes, data.careFlow_id])
-            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.Attended, data.careFlow_id])
-            return await db.execute('SELECT * FROM Consult WHERE consult_id = ?', [data.careFlow_id]);
+            await db.execute(`UPDATE Consult SET checkOutConsult = NOW(), diagnosis = ?, prescriptions = ?, notes = ? WHERE consult_id = ?`, [data.diagnosis, JSON.stringify(data.prescriptions), data.notes, data.careFlow_id])
+            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.Attended, data.careFlow_id]);
+            const consult = await db.execute<RowDataPacket[]>('SELECT * FROM Consult WHERE consult_id = ?', [data.careFlow_id]);
+            return consult[0];
+            
         } catch (error) {
             console.error(error);
             return;
         }
-    };
+    }
 };

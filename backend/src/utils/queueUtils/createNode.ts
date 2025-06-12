@@ -55,9 +55,21 @@ class NodeConsult {
     static async create(patientTriage: EndTriage) {
         const triageCategory = await TriageCategoryManager.findByName(patientTriage.triageCategory);
 
-        const careFlow = await findById(patientTriage.careFlow_id);
-        const patient = await PatientManager.findById(careFlow.patient_id);
-        return new NodeConsult(patientTriage, patient!.name, triageCategory.priority, triageCategory.limitMinutes);
+        if (!triageCategory) {
+            return undefined
+
+        } else {
+            const careFlow = await findById(patientTriage.careFlow_id);
+
+            if (!careFlow) {
+                return undefined
+
+            } else {
+                const patient = await PatientManager.findById(careFlow.patient_id);
+                return new NodeConsult(patientTriage, patient!.name, triageCategory.priority, triageCategory.limitMinutes);
+            }
+        }
+
     }
 };
 

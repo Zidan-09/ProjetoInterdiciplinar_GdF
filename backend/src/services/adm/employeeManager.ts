@@ -5,6 +5,7 @@ import { Hash, Jwt } from "../../utils/systemUtils/security"
 import { sendEmail } from "../../utils/personsUtils/email";
 import { EmployeeType } from "../../utils/enuns/generalEnuns";
 import { AdminResponses, EmployeeResponses } from "../../utils/enuns/allResponses";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export class EmployeeManager {
     static async registerEmployee<T extends Employee | Nurse | Doctor>(employeeData: T): Promise<EmployeeResponses> {
@@ -28,8 +29,8 @@ export class EmployeeManager {
 
         if (valid) {
             try {
-                const employee: any = await db.execute("INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode, weeklyHours, accessLevel) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?)", [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode, employeeData.weeklyHours, employeeData.accessLevel]);
-                const employee_id = await employee.lastID;
+                const [employee] = await db.execute<ResultSetHeader>("INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode, weeklyHours, accessLevel) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), ?, ?, ?, ?, ?, ?)", [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode, employeeData.weeklyHours, employeeData.accessLevel]);
+                const employee_id = employee.insertId;
                 await db.execute('INSERT INTO User (user_id, username, password) VALUES (?, ?, ?)', [employee_id, userData.username, await Hash.hash(userData.password)])
                 
                 switch (employeeData.accessLevel) {
@@ -78,18 +79,18 @@ export class EmployeeManager {
         } 
     }
     
-    static async showEmployeers(employeeType: EmployeeType): Promise<any[]|void> {
+    static async showEmployeers(employeeType: EmployeeType): Promise<RowDataPacket|undefined> {
         const employee: string = employeeType[0].toLowerCase() + employeeType.slice(1);
 
         try {
             if (employee === EmployeeType.Receptionist || employee === EmployeeType.Admin) {
-                const employers = await db.execute('SELECT * FROM Employee WHERE accessLevel = ?', [employee]);
-                return employers;
+                const [employers] = await db.execute<RowDataPacket[]>('SELECT * FROM Employee WHERE accessLevel = ?', [employee]);
+                return employers[0];
                 
             } else {
                 const employee: string = employeeType[0].toUpperCase() + employeeType.slice(1);
-                const employers = await db.execute(`SELECT Employee.*, ${employee}.* FROM ${employee} JOIN Employee ON Employee.id = ${employee}.id`);
-                return employers;
+                const [employers] = await db.execute<RowDataPacket[]>(`SELECT Employee.*, ${employee}.* FROM ${employee} JOIN Employee ON Employee.id = ${employee}.id`);
+                return employers[0];
             }
 
         } catch (error) {

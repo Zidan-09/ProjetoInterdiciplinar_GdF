@@ -1,3 +1,4 @@
+import { RowDataPacket } from "mysql2";
 import { db } from "../../db";
 import { ConsultQueue, TriageQueue } from "../../entities/queue";
 import { Status } from "../../utils/enuns/generalEnuns";
@@ -10,7 +11,7 @@ export async function Recover() {
     yesterday.setDate(now.getDate() - 1);
 
     try {
-        const careFlows = await db.execute(
+        const [careFlows] = await db.execute<RowDataPacket[]>(
             'SELECT * FROM CareFlow WHERE checkInHospital >= ? ORDER BY checkInHospital DESC',
             [yesterday.toISOString()]
         );

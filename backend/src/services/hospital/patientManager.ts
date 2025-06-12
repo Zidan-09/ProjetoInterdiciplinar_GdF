@@ -3,21 +3,23 @@ import { Patient } from "../../entities/patient";
 import { db } from "../../db";
 import { ValidateRegister } from "../../utils/personsUtils/validators";
 import { TriageQueue } from "../../entities/queue";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export class PatientManager {
-    static async register(data: Patient): Promise<number|void> {
+    static async register(data: Patient): Promise<number|undefined> {
         try {
             const valid: boolean = await ValidateRegister.verifyPatient(data);
 
             if (valid) {
-                const patient: any = await db.execute('INSERT INTO Patient (name, dob, maritalStatus, cpf, rg, contact, gender, healthPlan, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.name, data.dob, data.maritalStatus, data.cpf, data.rg, data.contact, data.gender, data.healthPlan, data.address]);
-                const patient_id: number = patient.lastID!;
-                const nodeTriage: NodeTriage = await NodeTriage.create(patient_id!);
+                const [result] = await db.execute<ResultSetHeader>('INSERT INTO Patient (name, dob, maritalStatus, cpf, rg, contact, gender, healthPlan, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.name, data.dob, data.maritalStatus, data.cpf, data.rg, data.contact, data.gender, data.healthPlan, data.address]);
+                const patient_id: number = result.insertId;
+                const nodeTriage: NodeTriage = await NodeTriage.create(patient_id);
                 TriageQueue.insertQueue(nodeTriage);
                 return patient_id
 
             } else {
-                const patient: any = await db.execute('SELECT * FROM Patient WHERE name = ? AND cpf = ? AND rg = ?', [data.name, data.cpf, data.rg]);
+                const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM Patient WHERE name = ? AND cpf = ? AND rg = ?', [data.name, data.cpf, data.rg]);
+                const patient = result[0];
                 const patient_id: number = patient.id;
                 const nodeTriage: NodeTriage = await NodeTriage.create(patient_id!)
                 TriageQueue.insertQueue(nodeTriage);
@@ -30,12 +32,12 @@ export class PatientManager {
         }
     };
 
-    static async list(): Promise<Patient[]|void> {
+    static async list(): Promise<RowDataPacket|undefined> {
         try {
-            const patients: Patient[] | undefined = await db.execute('SELECT * FROM Patient');
+            const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM Patient');
 
-            if (patients) {
-                return patients
+            if (result) {
+                return result[0]
             }
 
         } catch (error) {
@@ -43,12 +45,12 @@ export class PatientManager {
         }
     };
 
-    static async findByCpf(cpf: string): Promise<Patient|void> {
+    static async findByCpf(cpf: string): Promise<RowDataPacket|undefined> {
         try {
-            const patient: Patient | undefined = await db.execute('SELECT * FROM Patient WHERE cpf = ?', [cpf]);
+            const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM Patient WHERE cpf = ?', [cpf]);
 
-            if (patient) {
-                return patient
+            if (result) {
+                return result[0]
             }
 
         } catch (error) {
@@ -56,13 +58,14 @@ export class PatientManager {
         }
     };
 
-    static async findById(id: number): Promise<Patient|void> {
+    static async findById(id: number): Promise<RowDataPacket|undefined> {
         try {
-            const patient: Patient | undefined = await db.execute('SELECT * FROM Patient WHERE id = ?', [id]);
+            const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM Patient WHERE id = ?', [id]);
 
-            if (patient) {
-                return patient
+            if (result) {
+                return result[0]
             }
+
         } catch (error) {
             console.error(error);
         }

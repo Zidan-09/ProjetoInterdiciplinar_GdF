@@ -6,6 +6,7 @@ type SearchResult = {
     status: QueueResponses;
     node?: NodeConsult;
 }
+
 class SearchQueue {
     static search(id: number): SearchResult {
         let temp: null | NodeConsult = ConsultQueue.getFirst();

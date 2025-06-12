@@ -1,41 +1,41 @@
 import { CareFlow } from "../../entities/careFlow";
 import { Doctor, Employee, Nurse } from "../../entities/hospitalStaff";
 import { db } from "../../db";
+import { RowDataPacket } from "mysql2";
 
 export class ValidateRegister {
-	static async verifyPatient(patient: CareFlow['patient']): Promise<boolean> {
+	static async verifyPatient(patient: CareFlow['patient']): Promise<boolean|undefined> {
 		try {
-			const row = await db.execute(
+			const [row] = await db.execute<RowDataPacket[]>(
 				'SELECT * FROM Patient WHERE name = ? AND cpf = ? AND rg = ?',
 				[patient.name, patient.cpf, patient.rg]
 			);
 
-			if (row) {
+			if (row.length) {
 				return false;
+			} else {
+				return true;
 			}
 
-			return true;
 		} catch (error) {
 			console.error(error);
-			return false;
 		}
 	};
 
-	static async verifyEmployee(user: Employee | Doctor | Nurse): Promise<boolean> {
+	static async verifyEmployee(user: Employee | Doctor | Nurse): Promise<boolean|undefined> {
 		try {
-			const row = await db.execute(
+			const [row] = await db.execute<RowDataPacket[]>(
 				'SELECT * FROM Employee WHERE name = ? AND cpf = ?',
 				[user.name, user.cpf]
 			);
 			
-			if (row) {
+			if (row.length) {
 				return false;
 			} else {
 				return true;
 			}
 		} catch (error) {
-			console.log('Erro na busca', error);
-			return false;
+			console.error(error);
 		}
 	}
 }

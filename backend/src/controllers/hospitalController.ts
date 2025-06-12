@@ -81,11 +81,16 @@ export const HospitalController = {
         try {
             const result = await TriageService.changeTriageCategory(newTriageCategory.careFlow_id, newTriageCategory.newTriageCategory);
 
-            if (result.status === QueueResponses.EmptyQueue || result.status === QueueResponses.NotFound) {
-                HandleResponse(false, 400, result.status, null, res);
+            if (result) {
+                if (result.status === QueueResponses.EmptyQueue || result.status === QueueResponses.NotFound) {
+                    HandleResponse(false, 400, result.status, null, res);
+                } else {
+                    HandleResponse(true, 200, result.status, result.node, res);
+                }
             } else {
-                HandleResponse(true, 200, result.status, result.node, res);
+                HandleResponse(false, 400, ServerResponses.ServerError, null, res);
             }
+            
         } catch (error) {
             console.error(error);
             HandleResponse(false, 500, ServerResponses.ServerError, null, res);

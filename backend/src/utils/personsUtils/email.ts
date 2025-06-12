@@ -42,7 +42,7 @@ export const sendEmail = {
     },
 
     async forgot(email: string, token: string) {
-        const link = `http://localhost:3333/employee/forgot?=token=${token}`;
+        const link = `http://localhost:3333/employee/forgot?token=${token}`;
 
         const html = `
         <p> Olá! <p>

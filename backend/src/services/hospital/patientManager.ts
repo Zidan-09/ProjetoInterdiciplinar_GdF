@@ -8,7 +8,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 export class PatientManager {
     static async register(data: Patient): Promise<number|undefined> {
         try {
-            const valid: boolean = await ValidateRegister.verifyPatient(data);
+            const valid: boolean | undefined = await ValidateRegister.verifyPatient(data);
 
             if (valid) {
                 const [result] = await db.execute<ResultSetHeader>('INSERT INTO Patient (name, dob, maritalStatus, cpf, rg, contact, gender, healthPlan, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.name, data.dob, data.maritalStatus, data.cpf, data.rg, data.contact, data.gender, data.healthPlan, data.address]);
@@ -28,20 +28,21 @@ export class PatientManager {
 
         } catch (error) {
             console.error(error);
-            return;
+            return undefined;
         }
     };
 
-    static async list(): Promise<RowDataPacket|undefined> {
+    static async list(): Promise<RowDataPacket[]|undefined> {
         try {
             const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM Patient');
 
             if (result) {
-                return result[0]
+                return result
             }
 
         } catch (error) {
             console.error(error);
+            return undefined;
         }
     };
 
@@ -55,6 +56,7 @@ export class PatientManager {
 
         } catch (error) {
             console.error(error);
+            return undefined;
         }
     };
 
@@ -68,6 +70,7 @@ export class PatientManager {
 
         } catch (error) {
             console.error(error);
+            return undefined;
         }
     };
 }

@@ -26,13 +26,14 @@ export const TriageCategoryManager = {
         }
     },
 
-    async listCategories(): Promise<RowDataPacket|undefined> {
+    async listCategories(): Promise<RowDataPacket[]|undefined> {
         try {
             const [categories] = await db.execute<RowDataPacket[]>('SELECT * FROM TriageCategory');
-            return categories[0];
+            return categories;
 
         } catch (error) {
             console.error(error);
+            return undefined;
         }
     },
 
@@ -43,16 +44,18 @@ export const TriageCategoryManager = {
             
         } catch (error) {
             console.error(error);
+            return undefined;
         }
     },
 
     async delete(name: string): Promise<AdminResponses|undefined> {
         try {
-            await db.execute('DELETE * FROM TriageCategory WHERE name = ?', [name]);
+            await db.execute('DELETE FROM TriageCategory WHERE name = ?', [name]);
             return AdminResponses.DeletedCategory
             
         } catch (error) {
-            console.error(error)
+            console.error(error);
+            return undefined;
         }
     }
 }

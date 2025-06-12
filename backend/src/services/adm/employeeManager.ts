@@ -25,7 +25,7 @@ export class EmployeeManager {
     static async authAccount<T extends Employee | Nurse | Doctor>(data: any, userData: User): Promise<EmployeeResponses> {
         const employeeData: T = data;
 
-        const valid: boolean = await ValidateRegister.verifyEmployee(employeeData);
+        const valid: boolean | undefined = await ValidateRegister.verifyEmployee(employeeData);
 
         if (valid) {
             try {
@@ -58,8 +58,8 @@ export class EmployeeManager {
     
     static async editEmployee<T extends Employee | Nurse | Doctor>(newUserData: T): Promise<AdminResponses|void> {
         try {
-            const employee = await db.execute('SELECT * FROM Employee WHERE registrationNumber = ? AND name = ? AND cpf = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf]);
-            const employee_id = employee[0];
+            const [employee] = await db.execute<RowDataPacket[]>('SELECT * FROM Employee WHERE registrationNumber = ? AND name = ? AND cpf = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf]);
+            const employee_id = employee[0].id;
             await db.execute('UPDATE Employee SET registrationNumber = ?, name = ?, cpf = ?, email = ?, phone = ?, dob = ?, address = ?, hireDate = ?, workShift = ?, status = ?, salary = ?, cnesCode = ?, weeklyHours = ?, accessLevel = ? WHERE id = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf, newUserData.email, newUserData.phone, newUserData.dob, newUserData.address, newUserData.workShift, newUserData.status, newUserData.salary, newUserData.cnesCode, newUserData.weeklyHours, newUserData.accessLevel, employee_id]);
 
             switch (newUserData.accessLevel) {
@@ -79,18 +79,18 @@ export class EmployeeManager {
         } 
     }
     
-    static async showEmployeers(employeeType: EmployeeType): Promise<RowDataPacket|undefined> {
+    static async showEmployeers(employeeType: EmployeeType): Promise<RowDataPacket[]|undefined> {
         const employee: string = employeeType[0].toLowerCase() + employeeType.slice(1);
 
         try {
             if (employee === EmployeeType.Receptionist || employee === EmployeeType.Admin) {
                 const [employers] = await db.execute<RowDataPacket[]>('SELECT * FROM Employee WHERE accessLevel = ?', [employee]);
-                return employers[0];
+                return employers;
                 
             } else {
                 const employee: string = employeeType[0].toUpperCase() + employeeType.slice(1);
                 const [employers] = await db.execute<RowDataPacket[]>(`SELECT Employee.*, ${employee}.* FROM ${employee} JOIN Employee ON Employee.id = ${employee}.id`);
-                return employers[0];
+                return employers;
             }
 
         } catch (error) {

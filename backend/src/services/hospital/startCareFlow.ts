@@ -12,21 +12,23 @@ export const CareFlowService = {
 
         } catch (error) {
             console.error(error);
+            return undefined;
         }
     },
 
-    async noShow(careFlow_id: number): Promise<number|undefined> {
+    async noShow(careFlow_id: number): Promise<RowDataPacket|undefined> {
         try {
             await db.execute<ResultSetHeader>('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.NoShow, careFlow_id]);
             const [rows] = await db.execute<RowDataPacket[]>('SELECT * FROM CareFlow WHERE id = ?', [careFlow_id]);
             if (!rows.length) {
                 return undefined;
             } else {
-                return rows[0].id
+                return rows[0]
             }
             
         } catch (error) {
             console.error(error);
+            return undefined;
         }
     }
 }

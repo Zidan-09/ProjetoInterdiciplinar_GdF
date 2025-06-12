@@ -12,10 +12,10 @@ export const CareFlowReports = {
         const [rows] = await db.execute<RowDataPacket[]>('SELECT checkInConsult, checkOutConsult FROM Consult WHERE checkInConsult >= ? AND checkOutConsult <= ?', [startDate, endDate]);
         
         for (let i = 0; i < rows.length; i++) {
-            consultTime += rows[i].CheckOutConsult - rows[i].CheckInConsult;
+            consultTime += rows[i].checkOutConsult - rows[i].checkInConsult;
         }
 
-        return consultTime;
+        return rows.length ? consultTime / rows.length : 0;
     },
 
     async getAverageTriageTime(period: Periods) {
@@ -23,13 +23,13 @@ export const CareFlowReports = {
         const { startDate, endDate } = getPeriodRange(period);
         let triageTime: number = 0;
 
-        const [rows] = await db.execute<RowDataPacket[]>('SELECT checkInTriage, checkOutTriageonsult WHERE checkInTriage >= ? AND checkOutTriage <= ?', [startDate, endDate]);
+        const [rows] = await db.execute<RowDataPacket[]>('SELECT checkInTriage, checkOutTriage FROM Triage WHERE checkInTriage >= ? AND checkOutTriage <= ?', [startDate, endDate]);
         
         for (let i = 0; i < rows.length; i++) {
             triageTime += rows[i].checkOutTriage - rows[i].checkInTriage;
         }
 
-        return triageTime;
+        return rows.length ? triageTime / rows.length : 0;
     },
 
     async getAverageCareFlowTime(period: Periods) {
@@ -37,13 +37,13 @@ export const CareFlowReports = {
         const { startDate, endDate } = getPeriodRange(period);
         let careFlowTime: number = 0;
 
-        const [rows] = await db.execute<RowDataPacket[]>('SELECT CareFlow.checkInHospital, Consult.checkOutConsult JOIN Careflow ON Consult.id = CareFlow.id WHERE checkInHospital >= ? AND checkOutConsult <= ?', [startDate, endDate]);
+        const [rows] = await db.execute<RowDataPacket[]>('SELECT CareFlow.checkInHospital, Consult.checkOutConsult FROM Consult JOIN CareFlow ON Consult.consult_id = CareFlow.id WHERE checkInHospital >= ? AND checkOutConsult <= ?', [startDate, endDate]);
 
         for (let i = 0; i < rows.length; i++) {
             careFlowTime += rows[i].checkInHospital;
         }
 
-        return careFlowTime;
+        return rows.length ? careFlowTime / rows.length : 0;
     },
 
     async showAllCareFlows() {
@@ -74,6 +74,6 @@ export const CareFlowReports = {
 
         const [careFlows] = await db.execute<RowDataPacket[]>('SELECT CareFlow.*, Triage.*, Consult.* FROM CareFlow LEFT JOIN Triage ON CareFlow.id = Triage.id LEFT JOIN Consult ON CareFlow.id = Consult.id WHERE CareFlow.checkInHospital BETWEEN ? AND ?', [startDate, endDate]);
 
-        return careFlows[0]
+        return careFlows
     }
 }

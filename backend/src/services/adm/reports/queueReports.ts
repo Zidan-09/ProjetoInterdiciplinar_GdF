@@ -5,40 +5,49 @@ import { RowDataPacket } from "mysql2";
 
 export const QueueReports = {
     async getAverageQueueTimes(period: Periods) {
-
         const { startDate, endDate } = getPeriodRange(period);
-        const [triageTime] = await db.execute<RowDataPacket[]>('SELECT CareFlow.checkInHospital, Triage.checkInTriage FROM CareFlow JOIN Triage ON CareFlow.id = Triage.triage_id WHERE checkInHospital >= ? AND checkInHospital <= ?', [startDate, endDate]);
 
-        const [consultTime] = await db.execute<RowDataPacket[]>('SELECT Triage.checkOutTriage, Consult.checkInConsult FROM Triage JOIN Consult ON Triage.triage_id = Consult.consult_id WHERE checkOutTriage >= ? AND checkInConsult <= ?', [startDate, endDate]);
+        const [triageRows] = await db.execute<RowDataPacket[]>(
+            `SELECT CareFlow.checkInHospital, Triage.checkInTriage 
+             FROM CareFlow 
+             JOIN Triage ON CareFlow.id = Triage.triage_id 
+             WHERE checkInHospital BETWEEN ? AND ?`,
+            [startDate, endDate]
+        );
 
-        let triageQueueTime: number = 0;
-        let consultQueueTime: number = 0;
+        const [consultRows] = await db.execute<RowDataPacket[]>(
+            `SELECT Triage.checkOutTriage, Consult.checkInConsult 
+             FROM Triage 
+             JOIN Consult ON Triage.triage_id = Consult.consult_id 
+             WHERE checkOutTriage BETWEEN ? AND ?`,
+            [startDate, endDate]
+        );
 
-        let checkInHospital: Date;
-        let checkInTriage: Date;
-
-        for (let i = 0; i < triageTime.length; i++) {
-            checkInHospital = new Date(triageTime[i].checkInHospital);
-            checkInTriage = new Date(triageTime[i].checkInTriage);
-
-            triageQueueTime += checkInTriage.getTime() - checkInHospital.getTime();
+        let triageQueueTime = 0;
+        for (const row of triageRows) {
+            if (row.checkInHospital && row.checkInTriage) {
+                const checkInHospital = new Date(row.checkInHospital);
+                const checkInTriage = new Date(row.checkInTriage);
+                if (!isNaN(checkInHospital.getTime()) && !isNaN(checkInTriage.getTime())) {
+                    triageQueueTime += checkInTriage.getTime() - checkInHospital.getTime();
+                }
+            }
         }
 
-        let checkOutTriage: Date;
-        let checkInConsult: Date;
-        for (let i = 0; i < consultTime.length; i++) {
-            checkOutTriage = new Date(consultTime[i].checkOutTriage);
-            checkInConsult = new Date(consultTime[i].checkInConsult);
-
-            consultQueueTime += checkInConsult.getTime() - checkOutTriage.getTime();
+        let consultQueueTime = 0;
+        for (const row of consultRows) {
+            if (row.checkOutTriage && row.checkInConsult) {
+                const checkOutTriage = new Date(row.checkOutTriage);
+                const checkInConsult = new Date(row.checkInConsult);
+                if (!isNaN(checkOutTriage.getTime()) && !isNaN(checkInConsult.getTime())) {
+                    consultQueueTime += checkInConsult.getTime() - checkOutTriage.getTime();
+                }
+            }
         }
-
-        const triageResult: number = triageQueueTime / triageTime.length;
-        const consultResult: number = consultQueueTime / consultTime.length;
 
         return {
-            triageQueueTime: triageResult,
-            consultQueueTime: consultResult
-        }
+            triageQueueTime: triageRows.length ? triageQueueTime / triageRows.length : 0,
+            consultQueueTime: consultRows.length ? consultQueueTime / consultRows.length : 0
+        };
     }
 }

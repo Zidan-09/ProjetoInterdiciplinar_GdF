@@ -4,6 +4,7 @@ import { ConsultQueue, TriageQueue } from "../../entities/queue";
 import { Status } from "../../utils/enuns/generalEnuns";
 import { NodeConsult, NodeTriage } from "../../utils/queueUtils/createNode";
 import { searchTriage } from "../../utils/systemUtils/recoverUtil";
+import { EndTriage } from "../../entities/careFlow";
 
 export async function Recover() {
     const now = new Date();
@@ -24,11 +25,15 @@ export async function Recover() {
                     break;
 
                 case Status.WaitingConsultation:
-                    const triage = await searchTriage(flow.id);
-                    const nodeConsult = await NodeConsult.create(triage!);
-                    ConsultQueue.insertQueue(nodeConsult);
-                    break;
+                    const triage: EndTriage | undefined = await searchTriage(flow.id);
 
+                    if (triage) {
+                        const nodeConsult = await NodeConsult.create(triage);
+                        if (nodeConsult) {
+                            ConsultQueue.insertQueue(nodeConsult);
+                        }
+                    }
+                    break;
             }
         }
 

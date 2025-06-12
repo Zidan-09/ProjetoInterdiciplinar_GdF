@@ -5,7 +5,7 @@ import { ConsultService } from "../services/hospital/consult";
 import { EndConsult, CareFlow, StartConsult, StartTriage, EndTriage, ChangeTriageCategory } from "../entities/careFlow";
 import { CreateTicket } from "../services/queue/services/ticketService";
 import { CareFlowService } from "../services/hospital/startCareFlow";
-import { HandleResponse } from "../utils/systemUtils/handleResponse";
+import { ErrorResponse, HandleResponse } from "../utils/systemUtils/handleResponse";
 import { ServerResponses, CareFlowResponses, PatientResponses, QueueResponses } from "../utils/enuns/allResponses";
 
 type TicketRequest = { priority: number };
@@ -19,8 +19,7 @@ export const HospitalController = {
             HandleResponse(true, 201, CareFlowResponses.TicketCreationSucess, ticket, res);
     
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -40,8 +39,7 @@ export const HospitalController = {
                 HandleResponse(false, 400, PatientResponses.Error, data, res);
             }
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res)
+            ErrorResponse(error, res);
         }
     },
 
@@ -57,8 +55,7 @@ export const HospitalController = {
             }
             
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -70,8 +67,7 @@ export const HospitalController = {
 
             HandleResponse(true, 200, CareFlowResponses.TriageEnded, result, res);
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -92,8 +88,7 @@ export const HospitalController = {
             }
             
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -112,8 +107,7 @@ export const HospitalController = {
             }
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -129,8 +123,7 @@ export const HospitalController = {
                 HandleResponse(false, 400, CareFlowResponses.ConsultFailed, null, res);
             }
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     }
 }

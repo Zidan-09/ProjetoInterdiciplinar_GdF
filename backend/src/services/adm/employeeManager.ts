@@ -7,8 +7,8 @@ import { EmployeeType } from "../../utils/enuns/generalEnuns";
 import { AdminResponses, EmployeeResponses } from "../../utils/enuns/allResponses";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
-export class EmployeeManager {
-    static async registerEmployee<T extends Employee | Nurse | Doctor>(employeeData: T): Promise<EmployeeResponses> {
+export const EmployeeManager = {
+    async registerEmployee<T extends Employee | Nurse | Doctor>(employeeData: T): Promise<EmployeeResponses> {
         const valid = await ValidateRegister.verifyEmployee(employeeData);
 
         if (valid) {     
@@ -25,9 +25,9 @@ export class EmployeeManager {
         } else {
             return EmployeeResponses.AlreadyRegistered;
         }
-    }
+    },
 
-    static async authAccount<T extends Employee | Nurse | Doctor>(data: any, userData: User): Promise<EmployeeResponses> {
+    async authAccount<T extends Employee | Nurse | Doctor>(data: any, userData: User): Promise<EmployeeResponses> {
         const employeeData: T = data;
 
         const valid: boolean | undefined = await ValidateRegister.verifyEmployee(employeeData);
@@ -59,9 +59,9 @@ export class EmployeeManager {
         } else {
             return EmployeeResponses.RegistrationInProgress
         }
-    };
+    },
     
-    static async editEmployee<T extends Employee | Nurse | Doctor>(newUserData: T): Promise<AdminResponses|void> {
+    async editEmployee<T extends Employee | Nurse | Doctor>(newUserData: T): Promise<AdminResponses|void> {
         try {
             const [employee] = await db.execute<RowDataPacket[]>('SELECT * FROM Employee WHERE registrationNumber = ? AND name = ? AND cpf = ?', [newUserData.registrationNumber, newUserData.name, newUserData.cpf]);
             const employee_id = employee[0].id;
@@ -82,9 +82,31 @@ export class EmployeeManager {
         } catch (error) {
             console.error(error)
         } 
-    }
+    },
+
+    async delete(data: Employee): Promise<AdminResponses|undefined> {
+        try {
+            const [row] = await db.execute<RowDataPacket[]>('SELECT id FROM Employee WHERE name = ? AND cpf = ?', [data.name, data.cpf]);
+
+            if (!row.length) {
+                return AdminResponses.EmployeeNotFound
+            }
+
+            const id = row[0];
+            const [result] = await db.execute<ResultSetHeader>('DELETE FROM Employee WHERE id = ?', [id]);
+
+            if (result.affectedRows > 0) {
+                return AdminResponses.DeletedEmployee;
+            } else {
+                return AdminResponses.DeleteEmployeeFailed;
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    },
     
-    static async showEmployeers(employeeType: EmployeeType): Promise<RowDataPacket[]|undefined> {
+    async showEmployeers(employeeType: EmployeeType): Promise<RowDataPacket[]|undefined> {
         const employee: string = employeeType[0].toLowerCase() + employeeType.slice(1);
 
         try {

@@ -4,7 +4,7 @@ import { EmployeeManager } from "../services/adm/employeeManager";
 import { EmployeeType } from "../utils/enuns/generalEnuns";
 import { Login } from "../services/adm/employeeLogin";
 import { Jwt } from "../utils/systemUtils/security";
-import { HandleResponse } from "../utils/systemUtils/handleResponse";
+import { HandleResponse, ErrorResponse } from "../utils/systemUtils/handleResponse";
 import { ValidateRegister } from "../utils/personsUtils/validators";
 import { Periods } from "../utils/enuns/periods";
 import { CareFlowReports } from "../services/adm/reports/careFlowReports";
@@ -13,7 +13,8 @@ import { PatientManager } from "../services/hospital/patientManager";
 import { TriageCategoryManager } from "../services/adm/triageCategoryManager";
 import { Patient } from "../entities/patient";
 import { TriageCategory, UpdateTriageCategory } from "../entities/triageCategory";
-import { EmployeeResponses, ServerResponses, AdminResponses } from "../utils/enuns/allResponses";
+import { EmployeeResponses, AdminResponses, ServerResponses } from "../utils/enuns/allResponses";
+import { Recover } from "../services/adm/recover";
 
 type Params = { employee: EmployeeType }
 type AdminParams = { period: Periods }
@@ -31,8 +32,7 @@ const AdminController = {
             }
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -44,8 +44,7 @@ const AdminController = {
             HandleResponse(true, 200, AdminResponses.ShowedQueueReport, queueTimes, res);
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -60,8 +59,7 @@ const AdminController = {
             HandleResponse(true, 200, AdminResponses.ShowedCareFlowReport, { consultTime, triageTime, totalTime }, res);
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -77,8 +75,7 @@ const AdminController = {
             }
     
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res)
+            ErrorResponse(error, res);
         }
     },
 
@@ -94,8 +91,7 @@ const AdminController = {
                 HandleResponse(false, 404, AdminResponses.PatientNotFound, null, res);
             }
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -113,8 +109,7 @@ const AdminController = {
             }
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -132,8 +127,7 @@ const AdminController = {
             }
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -147,8 +141,7 @@ const AdminController = {
                 HandleResponse(false, 400, AdminResponses.TriageCateoriesFetchFailed, null, res);
             }
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -163,22 +156,22 @@ const AdminController = {
                 HandleResponse(false, 400, AdminResponses.DeleteCategoryFailed, null, res);
             }
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
-    async recorver(req: Request, res: Response) {
+    async recover(req: Request, res: Response) {
         try {
+            await Recover();
+            HandleResponse(true, 200, ServerResponses.SystemRecovered, null, res);
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     }
 }
 
-const EmployersConstroller = {
+const EmployeesConstroller = {
     async register<T extends Employee | Nurse | Doctor>(req: Request<{}, {}, T>, res: Response) {
         const data: T = req.body;
 
@@ -198,8 +191,7 @@ const EmployersConstroller = {
             }
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -210,13 +202,29 @@ const EmployersConstroller = {
             await EmployeeManager.editEmployee(newData);
             HandleResponse(true, 200, AdminResponses.EmployeeEdited, newData, res);
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            ErrorResponse(error, res);
         }
     },
     
-    async delete<T extends Employee | Nurse | Doctor>(req: Request, res: Response) {
-        const employee: T = req.body;
+    async delete(req: Request<{}, {}, Employee>, res: Response) {
+        const employee: Employee = req.body;
+
+        try {
+            const result = await EmployeeManager.delete(employee);
+
+            if (result) {
+                if (result === AdminResponses.DeleteEmployeeFailed) {
+                    HandleResponse(false, 400, result, null, res);
+                } else {
+                    HandleResponse(true, 200, result, null, res);
+                }
+                
+            } else {
+                HandleResponse(false, 400, EmployeeResponses.Error, null, res);
+            }
+        } catch (error) {
+            ErrorResponse(error, res);
+        }
     },
 
     async showEmployeers(req: Request<Params>, res: Response) {
@@ -232,8 +240,7 @@ const EmployersConstroller = {
             }
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -244,11 +251,13 @@ const EmployersConstroller = {
             const data = Jwt.verifyRegisterToken(token);
 
             if (data) {
-                HandleResponse(true, 200, "TESTE", data, res);
+                HandleResponse(true, 200, EmployeeResponses.AwaitingConfirmation, data, res);
+            } else {
+                HandleResponse(false, 400, EmployeeResponses.Error, null, res);
             }
 
         } catch (error) {
-            console.error(error)
+            ErrorResponse(error, res);
         }
     },
 
@@ -265,8 +274,7 @@ const EmployersConstroller = {
             }
             
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -279,12 +287,11 @@ const EmployersConstroller = {
             if (logged) {
                 HandleResponse(true, 200, EmployeeResponses.EmployeeLoggedIn, logged, res);
             } else {
-                HandleResponse(false, 400, 'Username or password invalid', null, res);
+                HandleResponse(false, 400, EmployeeResponses.InvalidInput, null, res);
             }
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, error as string, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -295,8 +302,7 @@ const EmployersConstroller = {
             await Login.forgotPassword(data.email);
 
         } catch (error) {
-            console.error(error);
-            HandleResponse(false, 500, ServerResponses.ServerError, null, res);
+            ErrorResponse(error, res);
         }
     },
 
@@ -313,9 +319,9 @@ const EmployersConstroller = {
             }
             
         } catch (error) {
-            console.error(error);
+            ErrorResponse(error, res);
         }
     }
 }
 
-export { AdminController, EmployersConstroller };
+export { AdminController, EmployeesConstroller };

@@ -31,7 +31,11 @@ enum AdminResponses {
     TriageCategoryCreateFailed = 'triage_category_create_failed',
 
     DeletedCategory = 'deleted_category',
-    DeleteCategoryFailed = 'delete_category_failed'
+    DeleteCategoryFailed = 'delete_category_failed',
+
+    DeletedEmployee = 'deleted_employee',
+    DeleteEmployeeFailed = 'delete_employee_failed',
+    EmployeeNotFound = 'employee_not_found'
 }
 
 enum PatientResponses {
@@ -50,6 +54,7 @@ enum EmployeeResponses {
     EmployeeRegistered = 'employee_registered',
     EmployeeLoggedIn = 'employee_logged_in',
     EmailNonRegistered = 'email_non_registered',
+    InvalidInput = 'invalid_input',
     Error = 'unexpected_error'
 }
 
@@ -68,6 +73,7 @@ enum CareFlowResponses {
 }
 
 enum ServerResponses {
+    SystemRecovered = 'system_recovered',
     MissingToken = 'missing_token',
     InvalidToken = 'invalid_token',
     Unauthorized = 'unauthorized',

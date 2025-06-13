@@ -8,6 +8,6 @@ import { db } from './db';
   } catch (error) {
     console.error('❌ Erro ao conectar ao banco de dados:', error);
   } finally {
-    await db.end(); // fecha o pool após o teste
+    await db.end();
   }
 })();

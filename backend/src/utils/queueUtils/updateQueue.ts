@@ -4,7 +4,10 @@ import { PriorityHandler } from '../../services/queue/managers/priorityHandler';
 export function StartSchedule() {
     cron.schedule('* * * * *', () => {
         console.log('Atualizando Fila');
-        const result: string = PriorityHandler.verify();
-        console.log('Resultado:', result)
+        const result = PriorityHandler.verify();
+
+        if (result) {
+            console.log('Resultado:', result);
+        }
     })
 }

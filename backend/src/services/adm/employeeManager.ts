@@ -48,7 +48,15 @@ export const EmployeeManager = {
 
                     case EmployeeType.Nurse:
                         const nurseData = employeeData as Nurse;
-                        await db.execute('INSERT INTO Nurse (nur_id, coren, department, speciality, onDuty) VALUES (?, ?, ?, ?, ?)', [employee_id, nurseData.coren, nurseData.department, nurseData.specialty, 0]);
+                        await db.execute('INSERT INTO Nurse (nur_id, coren, department, specialty, onDuty) VALUES (?, ?, ?, ?, ?)', [employee_id, nurseData.coren, nurseData.department, nurseData.specialty, 0]);
+                        break;
+
+                    case EmployeeType.Admin:
+                        await db.execute('INSERT INTO Admin (admin_id) VALUES (?)', [employee_id]);
+                        break;
+
+                    case EmployeeType.Receptionist:
+                        await db.execute('INSERT INTO Receptionist (recep_id) VALUES (?)', [employee_id]);
                         break;
                 }
 

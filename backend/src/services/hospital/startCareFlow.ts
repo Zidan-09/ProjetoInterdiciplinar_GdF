@@ -6,7 +6,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 export const CareFlowService = {
     async startCareFlow(patient_id: number, data: CareFlow): Promise<number|undefined> {
         try {
-            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO CareFlow (patient_id, receptionist_id, checkInHospital, status) VALUES (?, ?, NOW(), ?)`, [patient_id, data.receptionist_id, Status.WaitingTriage]);
+            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO CareFlow (receptionist_id, patient_id, checkInHospital, status) VALUES (?, ?, NOW(), ?)`, [patient_id, data.receptionist_id, Status.WaitingTriage]);
             const careFlow_Id: number = result.insertId
             return careFlow_Id;
 

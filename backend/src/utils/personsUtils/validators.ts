@@ -1,10 +1,10 @@
-import { CareFlow } from "../../entities/careFlow";
 import { Doctor, Employee, Nurse } from "../../entities/hospitalStaff";
 import { db } from "../../db";
 import { RowDataPacket } from "mysql2";
+import { Patient } from "../../entities/patient";
 
 export class ValidateRegister {
-	static async verifyPatient(patient: CareFlow['patient']): Promise<boolean|undefined> {
+	static async verifyPatient(patient: Patient): Promise<boolean|undefined> {
 		try {
 			const [row] = await db.execute<RowDataPacket[]>(
 				'SELECT * FROM Patient WHERE name = ? AND cpf = ? AND rg = ?',

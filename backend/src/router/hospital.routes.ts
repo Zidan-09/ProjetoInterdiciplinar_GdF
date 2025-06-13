@@ -9,7 +9,7 @@ hospitalRouter.post('/ticket', loginVerify, AccessLevelMiddleware.receptionist, 
 hospitalRouter.post('/patient/register', loginVerify, AccessLevelMiddleware.receptionist, HospitalController.register);
 hospitalRouter.post('/triageInit', loginVerify, AccessLevelMiddleware.nurse, HospitalController.triageInit);
 hospitalRouter.post('/triageEnd', loginVerify, AccessLevelMiddleware.nurse, HospitalController.triageEnd);
-hospitalRouter.post('/consultInit', loginVerify, AccessLevelMiddleware.doctor, HospitalController.consultConfirm);
+hospitalRouter.post('/consultInit', loginVerify, AccessLevelMiddleware.doctor, HospitalController.consultInit);
 hospitalRouter.post('/consultEnd', loginVerify, AccessLevelMiddleware.doctor, HospitalController.consultEnd);
 
 export default hospitalRouter;

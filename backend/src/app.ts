@@ -14,5 +14,4 @@ app.use('/hospital', hospitalRouter);
 app.use('/employee', employeeRouter);
 app.use('/queue', queueRouter);
 app.use('/admin', adminRouter);
-
 export default app;

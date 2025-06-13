@@ -21,7 +21,7 @@ export const ConsultService = {
 
         } catch (error) {
             console.error(error);
-            return undefined;;
+            return undefined;
         }
     },
 
@@ -34,7 +34,7 @@ export const ConsultService = {
             
         } catch (error) {
             console.error(error);
-            return undefined;;
+            return undefined;
         }
     }
 };

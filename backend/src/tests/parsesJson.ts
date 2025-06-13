@@ -10,13 +10,14 @@ import whisActivateJson from '../Json/Auth/authAccountA.json';
 import whisJson from '../Json/Register/adminRegister.json';
 
 import patientJson from '../Json/careFlow/patientRegister.json';
-import { CareFlow, EndConsult, StartConsult, StartTriage, EndTriage } from '../entities/careFlow';
+import { EndConsult, StartConsult, StartTriage, EndTriage } from '../entities/careFlow';
 
 import triageInitJson from '../Json/careFlow/startTriage.json';
 import triageEndJson from '../Json/careFlow/endTriage.json';
 
 import consultInitJson from '../Json/careFlow/startConsult.json';
 import consultEndJson from '../Json/careFlow/endConsult.json';
+import { Patient } from '../entities/patient';
 
 const chichi: Employee = {
     registrationNumber: chichiJson.registrationNumber,
@@ -180,24 +181,20 @@ const whisActivate: ConfirmUser<Employee> = {
     }
 }
 
-const patientRegister: CareFlow = {
-    receptionist_id: patientJson.receptionist_id,
-    patient: {
-        name: patientJson.patient.name,
-        dob: new Date(patientJson.patient.dob),
-        maritalStatus: patientJson.patient.maritalStatus as MaritalStatus,
-        cpf: patientJson.patient.cpf,
-        rg: patientJson.patient.rg,
-        contact: patientJson.patient.contact,
-        gender: patientJson.patient.gender as Gender,
-        healthPlan: patientJson.patient.healthPlan,
-        address: patientJson.patient.address
-    }
+const patientRegister: Patient = {
+    name: patientJson.name,
+    dob: new Date(patientJson.dob),
+    maritalStatus: patientJson.maritalStatus as MaritalStatus,
+    cpf: patientJson.cpf,
+    rg: patientJson.rg,
+    contact: patientJson.contact,
+    gender: patientJson.gender as Gender,
+    healthPlan: patientJson.healthPlan,
+    address: patientJson.address
 }
 
 const triageInitData: StartTriage = {
     careFlow_id: triageInitJson.careFlow_id,
-    nurse_id: triageInitJson.nurse_id,
 }
 
 const triageEndData: EndTriage = {
@@ -220,7 +217,6 @@ const triageEndData: EndTriage = {
 const consultInitData: StartConsult = {
     careFlow_id: consultInitJson.careFlow_id,
     confirm: consultInitJson.confirm,
-    doctor_id: consultInitJson.doctor_id
 }
 
 const consultEndData: EndConsult = {

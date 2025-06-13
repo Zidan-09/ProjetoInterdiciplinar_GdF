@@ -1,8 +1,6 @@
-import { CareFlow } from "../../entities/careFlow";
 import { Status } from "../../utils/enuns/generalEnuns";
 import { db } from "../../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-import jwt from 'jsonwebtoken';
 import { Jwt } from "../../utils/systemUtils/security";
 
 export const CareFlowService = {

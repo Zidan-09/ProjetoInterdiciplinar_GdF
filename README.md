@@ -1,4 +1,4 @@
-# Projeto Integrador - Gerenciamento de Filas em Pronto-Socorro
+# Projeto Interdiciplinar - Gerenciamento de Filas em Pronto-Socorro
 
 Este projeto tem como objetivo desenvolver um sistema completo para gerenciamento de filas em unidades de pronto atendimento (UPAs e hospitais), com foco na triagem eficiente, atendimento ordenado e controle administrativo de pacientes.
 🛠 Tecnologias Utilizadas
@@ -15,16 +15,16 @@ Este projeto tem como objetivo desenvolver um sistema completo para gerenciament
 
 📁 Estrutura do Projeto
 
-ProjetoIntegrador_GdF-master/
+ProjetoInterdiciplinar_GdF-master/
 │
 ├── backend/
 │   ├── src/
 │   │   ├── app.ts              # Inicialização do app
 │   │   ├── server.ts           # Inicialização do servidor
+│   │   ├── socket.ts           # Inicialização do socket
 │   │   ├── db.ts               # Configuração do banco de dados
 │   │   ├── Json/               # Arquivos JSON com dados de teste
 │   │   └── (demais pastas de serviços e modelos)
-│   ├── database.db             # Banco de dados SQLite
 │   ├── package.json            # Dependências do projeto
 │   └── tsconfig.json           # Configurações do TypeScript
 
@@ -40,7 +40,7 @@ ProjetoIntegrador_GdF-master/
 
     Geração de relatórios administrativos.
 
-    (Planejado) Comunicação em tempo real para chamadas.
+    Comunicação em tempo real para chamadas.
 
 ▶️ Como Executar o Projeto
 Pré-requisitos

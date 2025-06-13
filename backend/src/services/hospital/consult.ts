@@ -2,12 +2,19 @@ import { StartConsult, EndConsult } from "../../entities/careFlow";
 import { Status } from "../../utils/enuns/generalEnuns";
 import { db } from "../../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { Jwt } from "../../utils/systemUtils/security";
 
 
 export const ConsultService = {
-    async startConsult(data: StartConsult): Promise<number|void> {
+    async startConsult(data: StartConsult, token: string): Promise<number|void> {
         try {
-            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())`, [data.careFlow_id, data.doctor_id]);
+            const doctor_id = Jwt.verifyLoginToken(token);
+
+            if (!doctor_id) {
+                return;
+            }
+
+            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())`, [data.careFlow_id, doctor_id]);
             await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InConsultation, data.careFlow_id])
             const consult_id: number = result.insertId
             return consult_id;

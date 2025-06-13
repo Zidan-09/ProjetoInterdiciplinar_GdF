@@ -2,11 +2,19 @@ import { CareFlow } from "../../entities/careFlow";
 import { Status } from "../../utils/enuns/generalEnuns";
 import { db } from "../../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import jwt from 'jsonwebtoken';
+import { Jwt } from "../../utils/systemUtils/security";
 
 export const CareFlowService = {
-    async startCareFlow(patient_id: number, data: CareFlow): Promise<number|undefined> {
+    async startCareFlow(patient_id: number, token: string): Promise<number|undefined> {
         try {
-            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO CareFlow (patient_id, receptionist_id, checkInHospital, status) VALUES (?, ?, NOW(), ?)`, [patient_id, data.receptionist_id, Status.WaitingTriage]);
+            const receptionist_id = Jwt.verifyLoginToken(token);
+
+            if (!receptionist_id) {
+                return undefined;
+            }
+
+            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO CareFlow (receptionist_id, patient_id, checkInHospital, status) VALUES (?, ?, NOW(), ?)`, [patient_id, receptionist_id, Status.WaitingTriage]);
             const careFlow_Id: number = result.insertId
             return careFlow_Id;
 

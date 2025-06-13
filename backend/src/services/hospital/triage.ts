@@ -8,12 +8,19 @@ import { ConsultQueue } from "../../entities/queue";
 import { TriageCategory } from "../../entities/triageCategory";
 import { TriageCategoryManager } from "../adm/triageCategoryManager";
 import { RowDataPacket } from "mysql2";
+import { Jwt } from "../../utils/systemUtils/security";
 
 
 export const TriageService = {
-    async startTriage(data: StartTriage): Promise<StartTriage|undefined> {
+    async startTriage(data: StartTriage, token: string): Promise<StartTriage|undefined> {
         try {
-            await db.execute("INSERT INTO Triage (triage_id, nurse_id, checkInTriage) VALUES (?, ?, NOW())", [data.careFlow_id, data.nurse_id]);
+            const nurse_id = Jwt.verifyLoginToken(token);
+
+            if (!nurse_id) {
+                return undefined;
+            }
+
+            await db.execute("INSERT INTO Triage (triage_id, nurse_id, checkInTriage) VALUES (?, ?, NOW())", [data.careFlow_id, nurse_id]);
             await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InTriage, data.careFlow_id])
             return data;
 

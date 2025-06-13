@@ -1,14 +1,11 @@
 {
-    "receptionist_id": 1,
-    "patient": {
-        "name": "Rogério",
-        "dob": "1990-04-12T00:00:00.000Z",
-        "maritalStatus": "Single",
-        "cpf": "546.456.789-10",
-        "rg": "834522",
-        "contact": "(86) 99523-5628",
-        "gender": "Male",
-        "healthPlan": "Sus",
-        "address": "Rua Catapimbas, 164"
-    }
+    "name": "Rogério",
+    "dob": "1990-04-12T00:00:00.000Z",
+    "maritalStatus": "Single",
+    "cpf": "546.456.789-10",
+    "rg": "834522",
+    "contact": "(86) 99523-5628",
+    "gender": "Male",
+    "healthPlan": "Sus",
+    "address": "Rua Catapimbas, 164"
 }

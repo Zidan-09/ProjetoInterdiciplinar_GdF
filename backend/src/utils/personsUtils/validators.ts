@@ -11,7 +11,7 @@ export class ValidateRegister {
 				[patient.name, patient.cpf, patient.rg]
 			);
 
-			if (row.length) {
+			if (row.length > 0) {
 				return false;
 			} else {
 				return true;
@@ -29,7 +29,7 @@ export class ValidateRegister {
 				[user.name, user.cpf]
 			);
 			
-			if (row.length) {
+			if (row.length > 0) {
 				return false;
 			} else {
 				return true;

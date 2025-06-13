@@ -7,6 +7,8 @@ import { EmployeeType } from "../../utils/enuns/generalEnuns";
 import { AdminResponses, EmployeeResponses } from "../../utils/enuns/allResponses";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
+type Role = 'Doctor' | 'Nurse' | 'Receptionist' | 'Admin';
+
 export const EmployeeManager = {
     async registerEmployee<T extends Employee | Nurse | Doctor>(employeeData: T): Promise<EmployeeResponses> {
         const valid = await ValidateRegister.verifyEmployee(employeeData);
@@ -41,12 +43,12 @@ export const EmployeeManager = {
                 switch (employeeData.accessLevel) {
                     case EmployeeType.Doctor:
                         const doctorData = employeeData as Doctor;
-                        await db.execute('INSERT INTO Doctor (id, crm, specialty, onDuty) VALUES (?, ?, ?, ?)', [employee_id, doctorData.crm, doctorData.specialty, 0]);
+                        await db.execute('INSERT INTO Doctor (doc_id, crm, specialty, onDuty) VALUES (?, ?, ?, ?)', [employee_id, doctorData.crm, doctorData.specialty, 0]);
                         break;
 
                     case EmployeeType.Nurse:
                         const nurseData = employeeData as Nurse;
-                        await db.execute('INSERT INTO Nurse (id, coren, department, speciality, onDuty) VALUES (?, ?, ?, ?, ?)', [employee_id, nurseData.coren, nurseData.department, nurseData.specialty, 0]);
+                        await db.execute('INSERT INTO Nurse (nur_id, coren, department, speciality, onDuty) VALUES (?, ?, ?, ?, ?)', [employee_id, nurseData.coren, nurseData.department, nurseData.specialty, 0]);
                         break;
                 }
 
@@ -70,11 +72,11 @@ export const EmployeeManager = {
             switch (newUserData.accessLevel) {
                 case EmployeeType.Doctor:
                     const doctorData = newUserData as Doctor;
-                    await db.execute('UPDATE Doctor SET crm = ?, specialty = ? WHERE id = ?', [doctorData.crm, doctorData.specialty, employee_id]);
+                    await db.execute('UPDATE Doctor SET crm = ?, specialty = ? WHERE doc_id = ?', [doctorData.crm, doctorData.specialty, employee_id]);
                     break;
                 case EmployeeType.Nurse:
                     const nurseData = newUserData as Nurse;
-                    await db.execute('UPDATE Nurse SET coren = ?, department = ?, specialty = ? WHERE id = ?', [nurseData.coren, nurseData.department, nurseData.specialty, employee_id]);
+                    await db.execute('UPDATE Nurse SET coren = ?, department = ?, specialty = ? WHERE nur_id = ?', [nurseData.coren, nurseData.department, nurseData.specialty, employee_id]);
                     break;
             }
             return AdminResponses.EmployeeEdited;
@@ -107,16 +109,23 @@ export const EmployeeManager = {
     },
     
     async showEmployeers(employeeType: EmployeeType): Promise<RowDataPacket[]|undefined> {
-        const employee: string = employeeType[0].toLowerCase() + employeeType.slice(1);
+        const employeeData: string = employeeType[0].toLowerCase() + employeeType.slice(1);
+
+        const primaryKey: Record<EmployeeType, string> = {
+            receptionist: 'recep_id',
+            nurse: 'nur_id',
+            doctor: 'doc_id',
+            admin: 'admin_id',
+        }
 
         try {
-            if (employee === EmployeeType.Receptionist || employee === EmployeeType.Admin) {
-                const [employers] = await db.execute<RowDataPacket[]>('SELECT * FROM Employee WHERE accessLevel = ?', [employee]);
+            if (employeeData === EmployeeType.Receptionist || employeeData === EmployeeType.Admin) {
+                const [employers] = await db.execute<RowDataPacket[]>('SELECT * FROM Employee WHERE accessLevel = ?', [employeeData]);
                 return employers;
                 
             } else {
-                const employee: string = employeeType[0].toUpperCase() + employeeType.slice(1);
-                const [employers] = await db.execute<RowDataPacket[]>(`SELECT Employee.*, ${employee}.* FROM ${employee} JOIN Employee ON Employee.id = ${employee}.id`);
+                const employee: string = employeeType[0].toUpperCase() + employeeType.slice(1) as keyof typeof primaryKey;
+                const [employers] = await db.execute<RowDataPacket[]>(`SELECT Employee.*, ${employee}.* FROM ${employee} JOIN Employee ON Employee.id = ${employee}.${primaryKey[employeeType]}`);
                 return employers;
             }
 

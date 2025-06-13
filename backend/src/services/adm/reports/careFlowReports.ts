@@ -4,7 +4,7 @@ import { Periods } from "../../../utils/enuns/periods";
 import { getPeriodRange } from "../../../utils/systemUtils/getPeriod";
 
 export const CareFlowReports = {
-    async getAverageConsultTime(period: Periods) {
+    async getAverageConsultTime(period: Periods): Promise<number> {
 
         const { startDate, endDate } = getPeriodRange(period);
         let consultTime: number = 0;
@@ -18,7 +18,7 @@ export const CareFlowReports = {
         return rows.length ? consultTime / rows.length : 0;
     },
 
-    async getAverageTriageTime(period: Periods) {
+    async getAverageTriageTime(period: Periods): Promise<number> {
 
         const { startDate, endDate } = getPeriodRange(period);
         let triageTime: number = 0;
@@ -32,7 +32,7 @@ export const CareFlowReports = {
         return rows.length ? triageTime / rows.length : 0;
     },
 
-    async getAverageCareFlowTime(period: Periods) {
+    async getAverageCareFlowTime(period: Periods): Promise<number> {
 
         const { startDate, endDate } = getPeriodRange(period);
         let careFlowTime: number = 0;
@@ -46,7 +46,7 @@ export const CareFlowReports = {
         return rows.length ? careFlowTime / rows.length : 0;
     },
 
-    async showAllCareFlows() {
+    async showAllCareFlows(): Promise<RowDataPacket[]|undefined> {
 
         try {
             const [careFlows] = await db.execute<RowDataPacket[]>('SELECT CareFlow.*, Triage.*, Consult.* FROM CareFlow LEFT JOIN Triage ON CareFlow.id = Triage.triage_id LEFT JOIN Consult ON CareFlow.id = Consult.consult_id');
@@ -68,12 +68,16 @@ export const CareFlowReports = {
         }
     },
 
-    async getPeriodCareFlow(period: Periods) {
+    async getPeriodCareFlow(period: Periods): Promise<RowDataPacket[]|undefined> {
+        try {
+            const { startDate, endDate } = getPeriodRange(period);
+    
+            const [careFlows] = await db.execute<RowDataPacket[]>('SELECT CareFlow.*, Triage.*, Consult.* FROM CareFlow LEFT JOIN Triage ON CareFlow.id = Triage.id LEFT JOIN Consult ON CareFlow.id = Consult.id WHERE CareFlow.checkInHospital BETWEEN ? AND ?', [startDate, endDate]);
+            return careFlows
 
-        const { startDate, endDate } = getPeriodRange(period);
-
-        const [careFlows] = await db.execute<RowDataPacket[]>('SELECT CareFlow.*, Triage.*, Consult.* FROM CareFlow LEFT JOIN Triage ON CareFlow.id = Triage.id LEFT JOIN Consult ON CareFlow.id = Consult.id WHERE CareFlow.checkInHospital BETWEEN ? AND ?', [startDate, endDate]);
-
-        return careFlows
+        } catch (error) {
+            console.error(error);
+            return undefined;
+        }
     }
 }

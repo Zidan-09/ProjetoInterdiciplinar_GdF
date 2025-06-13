@@ -2,18 +2,18 @@ import { ConsultQueue } from "../../../entities/queue";
 import { NodeConsult } from "../../../utils/queueUtils/createNode";
 
 enum VerifyResponse {
-    EmptyQueue = 'Fila vazia',
-    UpdatedQueue = 'Fila atualizada'
+    UpdatedQueue = 'updated_queue'
 }
 
 export class PriorityHandler {
-    static verify(): VerifyResponse {
+    static verify(): VerifyResponse | undefined {
         const nodesToSort: NodeConsult[] = [];
 
         let temp: NodeConsult | null = ConsultQueue.getFirst();
 
         if (!temp) {
-            return VerifyResponse.EmptyQueue;
+            return undefined;
+
         } else {
             const dateNow = new Date();
 

@@ -6,7 +6,7 @@ import { NodeConsult, NodeTriage } from "../../utils/queueUtils/createNode";
 import { searchTriage } from "../../utils/systemUtils/recoverUtil";
 import { EndTriage } from "../../entities/careFlow";
 
-export async function Recover() {
+export async function Recover(): Promise<boolean|undefined> {
     const now = new Date();
     const yesterday = new Date(now);
     yesterday.setDate(now.getDate() - 1);
@@ -36,8 +36,10 @@ export async function Recover() {
                     break;
             }
         }
+        return true;
 
     } catch (error) {
         console.error(error);
+        return undefined;
     }
 }

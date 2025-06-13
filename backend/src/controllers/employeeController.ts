@@ -109,7 +109,7 @@ export const EmployeesConstroller = {
             if (done === EmployeeResponses.Error || done === EmployeeResponses.RegistrationInProgress) {
                 HandleResponse(false, 400, done, null, res);
             } else {
-                HandleResponse(true, 200, done, data && user, res);
+                HandleResponse(true, 200, done, { data, user }, res);
             }
             
         } catch (error) {

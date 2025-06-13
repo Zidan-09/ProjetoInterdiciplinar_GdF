@@ -14,7 +14,9 @@ adminRouter.delete('/triageCategory/delete/byName/:triageCategory', loginVerify,
 adminRouter.get('/careFlow/list', loginVerify, AccessLevelMiddleware.admin, AdminController.listCareFlows);
 adminRouter.get('/list/patient', loginVerify, AccessLevelMiddleware.admin, AdminController.listPatients);
 
-adminRouter.get('/queue/report', loginVerify, AccessLevelMiddleware.admin, AdminController.queueReport);
-adminRouter.get('/careFlow/report', loginVerify, AccessLevelMiddleware.admin, AdminController.careFlowTimeReport);
+adminRouter.get('/queue/report/:period', loginVerify, AccessLevelMiddleware.admin, AdminController.queueReport);
+adminRouter.get('/careFlow/report/:period', loginVerify, AccessLevelMiddleware.admin, AdminController.careFlowTimeReport);
+
+adminRouter.get('/patient/left/:period', loginVerify, AccessLevelMiddleware.admin, AdminController.leftBeforeConsult);
 
 export default adminRouter;

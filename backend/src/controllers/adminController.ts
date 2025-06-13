@@ -9,6 +9,7 @@ import { Patient } from "../entities/patient";
 import { TriageCategory, UpdateTriageCategory } from "../entities/triageCategory";
 import { AdminResponses, ServerResponses } from "../utils/enuns/allResponses";
 import { Recover } from "../services/adm/recover";
+import { PatientReports } from "../services/adm/reports/patientReports";
 
 type AdminParams = { period: Periods }
 type Category = { triageCategory: string }
@@ -67,6 +68,24 @@ export const AdminController = {
                 HandleResponse(false, 400, AdminResponses.ShowPatientsFailed, null, res);
             }
     
+        } catch (error) {
+            ErrorResponse(error, res);
+        }
+    },
+
+    async leftBeforeConsult(req: Request<AdminParams>, res: Response) {
+        const period = req.params;
+
+        try {
+            const result = await PatientReports.getLeftBeforeConsult(period.period);
+            
+            if (result) {
+                HandleResponse(true, 200, AdminResponses.ShowedLeftBeforeConsult, result, res);
+
+            } else {
+                HandleResponse(false, 400, AdminResponses.ShowLeftBeforeConsultFailed, null, res);
+            }
+
         } catch (error) {
             ErrorResponse(error, res);
         }

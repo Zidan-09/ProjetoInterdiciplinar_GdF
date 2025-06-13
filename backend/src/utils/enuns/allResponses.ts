@@ -15,6 +15,9 @@ enum AdminResponses {
     ShowedPatients = 'showed_patients',
     ShowPatientsFailed = 'show_patients_failed',
 
+    ShowedLeftBeforeConsult = 'showed_left_before_consult',
+    ShowLeftBeforeConsultFailed = 'show_left_before_consult_failed',
+
     PatientFounded = 'patient_founded',
     PatientNotFound = 'patient_not_found',
 

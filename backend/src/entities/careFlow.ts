@@ -1,5 +1,3 @@
-import { Patient } from "./patient";
-
 interface VitalSigns {
     bloodPreassure: { systolicPreassure: number; diastolicPreassure: number };
     heartRate: number;
@@ -8,14 +6,8 @@ interface VitalSigns {
     oxygenSaturation: number;
 };
 
-interface CareFlow {
-    receptionist_id: number;
-    patient: Patient
-};
-
 interface StartTriage {
     careFlow_id: number;
-    nurse_id: number;
 };
 
 interface EndTriage {
@@ -33,7 +25,6 @@ interface ChangeTriageCategory {
 
 interface StartConsult {
     careFlow_id: number;
-    doctor_id: number;
     confirm: boolean;
 };
 
@@ -44,4 +35,4 @@ interface EndConsult {
     notes: string | null;
 };
 
-export { VitalSigns, CareFlow, StartTriage, EndTriage, ChangeTriageCategory, StartConsult, EndConsult }
+export { VitalSigns, StartTriage, EndTriage, ChangeTriageCategory, StartConsult, EndConsult }

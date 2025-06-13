@@ -13,7 +13,7 @@ interface Employee{
     salary: number;
     cnesCode: string;
     weeklyHours: number;
-    accessLevel: string;
+    accessLevel: EmployeeType;
 };
 
 interface Doctor extends Employee {

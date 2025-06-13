@@ -7,7 +7,7 @@ import { EmployeeType } from "../../utils/enuns/generalEnuns";
 import { AdminResponses, EmployeeResponses } from "../../utils/enuns/allResponses";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
-type Role = 'doctor' | 'nurse' | 'receptionist' | 'admin';
+type Role = 'Doctor' | 'Nurse' | 'Receptionist' | 'Admin';
 
 export const EmployeeManager = {
     async registerEmployee<T extends Employee | Nurse | Doctor>(employeeData: T): Promise<EmployeeResponses> {
@@ -109,9 +109,9 @@ export const EmployeeManager = {
     },
     
     async showEmployeers(employeeType: EmployeeType): Promise<RowDataPacket[]|undefined> {
-        const employee: string = employeeType[0].toLowerCase() + employeeType.slice(1);
+        const employeeData: string = employeeType[0].toLowerCase() + employeeType.slice(1);
 
-        const primaryKey: Record<Role, string> = {
+        const primaryKey: Record<EmployeeType, string> = {
             receptionist: 'recep_id',
             nurse: 'nur_id',
             doctor: 'doc_id',
@@ -119,13 +119,13 @@ export const EmployeeManager = {
         }
 
         try {
-            if (employee === EmployeeType.Receptionist || employee === EmployeeType.Admin) {
-                const [employers] = await db.execute<RowDataPacket[]>('SELECT * FROM Employee WHERE accessLevel = ?', [employee]);
+            if (employeeData === EmployeeType.Receptionist || employeeData === EmployeeType.Admin) {
+                const [employers] = await db.execute<RowDataPacket[]>('SELECT * FROM Employee WHERE accessLevel = ?', [employeeData]);
                 return employers;
                 
             } else {
-                const employee: string = employeeType[0].toUpperCase() + employeeType.slice(1);
-                const [employers] = await db.execute<RowDataPacket[]>(`SELECT Employee.*, ${employee}.* FROM ${employee} JOIN Employee ON Employee.id = ${employee}.${primaryKey[employee as Role]}`);
+                const employee: string = employeeType[0].toUpperCase() + employeeType.slice(1) as keyof typeof primaryKey;
+                const [employers] = await db.execute<RowDataPacket[]>(`SELECT Employee.*, ${employee}.* FROM ${employee} JOIN Employee ON Employee.id = ${employee}.${primaryKey[employeeType]}`);
                 return employers;
             }
 

@@ -81,6 +81,7 @@ enum ServerResponses {
     InvalidInput = 'invalid_input',
     MissingFields = 'missing_fields',
     NotFound = 'not_found',
+    DataBaseError = 'data_base_error',
     ServerError = 'server_error',
 }
 

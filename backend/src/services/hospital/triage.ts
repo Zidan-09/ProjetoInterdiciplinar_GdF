@@ -11,26 +11,38 @@ import { RowDataPacket } from "mysql2";
 
 
 export const TriageService = {
-    async startTriage(data: StartTriage) {
-        await db.execute("INSERT INTO Triage (triage_id, nurse_id, checkInTriage) VALUES (?, ?, NOW())", [data.careFlow_id, data.nurse_id]);
-        await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InTriage, data.careFlow_id])
-        return data;
-    },
-    
-    async endTriage(data: EndTriage) {
-        const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM TriageCategory WHERE name = ?', [data.triageCategory]);
-        const triageCategory = result[0];
+    async startTriage(data: StartTriage): Promise<StartTriage|undefined> {
+        try {
+            await db.execute("INSERT INTO Triage (triage_id, nurse_id, checkInTriage) VALUES (?, ?, NOW())", [data.careFlow_id, data.nurse_id]);
+            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InTriage, data.careFlow_id])
+            return data;
 
-        await db.execute("UPDATE Triage SET checkOutTriage = NOW(), systolicPreassure = ?, diastolicPreassure = ?, heartRate = ?, respiratoryRate = ?, bodyTemperature = ?, oxygenSaturation = ?, painLevel = ?, symptoms = ?, triageCategory_id = ? WHERE triage_id = ?", [data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, JSON.stringify(data.symptoms), triageCategory.id, data.careFlow_id]);
-        await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.WaitingConsultation, data.careFlow_id])
-        const node: NodeConsult | undefined = await NodeConsult.create(data);
-
-        if (!node) {
+        } catch (error) {
+            console.error(error);
             return undefined;
         }
-        
-        ConsultQueue.insertQueue(node);
-        return data;
+    },
+    
+    async endTriage(data: EndTriage): Promise<EndTriage|undefined> {
+        try {
+            const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM TriageCategory WHERE name = ?', [data.triageCategory]);
+            const triageCategory = result[0];
+    
+            await db.execute("UPDATE Triage SET checkOutTriage = NOW(), systolicPreassure = ?, diastolicPreassure = ?, heartRate = ?, respiratoryRate = ?, bodyTemperature = ?, oxygenSaturation = ?, painLevel = ?, symptoms = ?, triageCategory_id = ? WHERE triage_id = ?", [data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, JSON.stringify(data.symptoms), triageCategory.id, data.careFlow_id]);
+            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.WaitingConsultation, data.careFlow_id])
+            const node: NodeConsult | undefined = await NodeConsult.create(data);
+    
+            if (!node) {
+                return undefined;
+            }
+            
+            ConsultQueue.insertQueue(node);
+            return data;
+
+        } catch (error) {
+            console.error(error);
+            return undefined;
+        }
     },
 
     async changeTriageCategory(careFlow_id: number, newSeverity: TriageCategory['name']): Promise<SearchResult|undefined> {

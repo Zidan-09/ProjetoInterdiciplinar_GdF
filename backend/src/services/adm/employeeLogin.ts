@@ -7,7 +7,7 @@ import { RowDataPacket } from "mysql2";
 import { EmployeeResponses } from "../../utils/enuns/allResponses";
 
 export const Login = {
-    async loginUser(data: User) {
+    async loginUser(data: User): Promise<{ user: string, token: string, role: RowDataPacket } | undefined> {
         try {
             const [userData] = await db.execute<RowDataPacket[]>('SELECT * FROM User WHERE username = ?', [data.username]);
             const [role] = await db.execute<RowDataPacket[]>('SELECT accessLevel FROM Employee WHERE id = ?', [userData[0].user_id])
@@ -31,7 +31,7 @@ export const Login = {
         }
     },
 
-    async forgotPassword(email: string) {
+    async forgotPassword(email: string): Promise<EmployeeResponses|undefined> {
         try {
             const [row] = await db.execute<RowDataPacket[]>('SELECT id FROM Employee WHERE email = ?', [email]);
     
@@ -53,7 +53,7 @@ export const Login = {
         }
     },
 
-    async newPassword(data: string) {
+    async newPassword(data: string): Promise<boolean|undefined> {
         try {
             const password = Hash.hash(data);
             await db.execute('UPDATE User SET password = ?', [password]);
@@ -61,6 +61,7 @@ export const Login = {
 
         } catch (error) {
             console.error(error);
+            return undefined;
         }
     }
 }

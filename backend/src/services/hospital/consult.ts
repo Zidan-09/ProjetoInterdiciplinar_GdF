@@ -18,7 +18,7 @@ export const ConsultService = {
         }
     },
 
-    async endConsult(data: EndConsult) {
+    async endConsult(data: EndConsult): Promise<RowDataPacket|undefined> {
         try {
             await db.execute(`UPDATE Consult SET checkOutConsult = NOW(), diagnosis = ?, prescriptions = ?, notes = ? WHERE consult_id = ?`, [data.diagnosis, JSON.stringify(data.prescriptions), data.notes, data.careFlow_id])
             await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.Attended, data.careFlow_id]);

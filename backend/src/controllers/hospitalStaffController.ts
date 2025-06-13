@@ -125,8 +125,8 @@ export const EmployeesConstroller = {
 
             if (logged) {
                 HandleResponse(true, 200, EmployeeResponses.EmployeeLoggedIn, logged, res);
-            } else {
-                HandleResponse(false, 400, EmployeeResponses.InvalidInput, null, res);
+            } else if (logged == ServerResponses.DataBaseError) {
+                HandleResponse(false, 400, ServerResponses.InvalidInput, null, res);
             }
 
         } catch (error) {

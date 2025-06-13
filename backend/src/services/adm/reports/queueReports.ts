@@ -4,7 +4,7 @@ import { Periods } from "../../../utils/enuns/periods";
 import { RowDataPacket } from "mysql2";
 
 export const QueueReports = {
-    async getAverageQueueTimes(period: Periods) {
+    async getAverageQueueTimes(period: Periods): Promise<{ triageQueueTime: number, consultQueueTime: number }> {
         const { startDate, endDate } = getPeriodRange(period);
 
         const [triageRows] = await db.execute<RowDataPacket[]>(

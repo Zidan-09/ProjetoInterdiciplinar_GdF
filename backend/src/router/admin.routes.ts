@@ -12,7 +12,7 @@ adminRouter.put('/triageCategory/edit', loginVerify, AccessLevelMiddleware.admin
 adminRouter.delete('/triageCategory/delete/byName/:triageCategory', loginVerify, AccessLevelMiddleware.admin, passwordVerify, AdminController.deleteTriageCategory);
 
 adminRouter.get('/careFlow/list', loginVerify, AccessLevelMiddleware.admin, AdminController.listCareFlows);
-adminRouter.get('/list/patient', loginVerify, AccessLevelMiddleware.admin, AdminController.listPatients);
+adminRouter.get('/patient/list', loginVerify, AccessLevelMiddleware.admin, AdminController.listPatients);
 
 adminRouter.get('/queue/report/:period', loginVerify, AccessLevelMiddleware.admin, AdminController.queueReport);
 adminRouter.get('/careFlow/report/:period', loginVerify, AccessLevelMiddleware.admin, AdminController.careFlowTimeReport);

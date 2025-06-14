@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "ts-node src/server.ts",
     "test": "ts-node src/tests/test.ts",
+    "pass": "ts-node src/tests/hash.ts",
     "build": "tsc"
   },
   "dependencies": {

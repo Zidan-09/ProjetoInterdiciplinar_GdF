@@ -8,6 +8,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors:{
+        "verdao":{
+          light:"#69CEC3",
+          DEFAULT:"#5aada4",
+        },
+        "verdin": "#8be1d8"
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

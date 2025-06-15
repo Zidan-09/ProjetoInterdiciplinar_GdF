@@ -6,6 +6,7 @@ import { sendEmail } from "../../utils/personsUtils/email";
 import { EmployeeType } from "../../utils/enuns/generalEnuns";
 import { AdminResponses, EmployeeResponses } from "../../utils/enuns/allResponses";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { ConvertDate } from "../../utils/systemUtils/convertDate";
 
 type Role = 'Doctor' | 'Nurse' | 'Receptionist' | 'Admin';
 
@@ -36,7 +37,8 @@ export const EmployeeManager = {
 
         if (valid) {
             try {
-                const [employee] = await db.execute<ResultSetHeader>("INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode, weeklyHours, accessLevel) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?)", [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, employeeData.dob, employeeData.address, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode, employeeData.weeklyHours, employeeData.accessLevel]);
+                const dob = ConvertDate(new Date(employeeData.dob));                
+                const [employee] = await db.execute<ResultSetHeader>("INSERT INTO Employee (registrationNumber, name, cpf, email, phone, dob, address, hireDate, workShift, status, salary, cnesCode, weeklyHours, accessLevel) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?)", [employeeData.registrationNumber, employeeData.name, employeeData.cpf, employeeData.email, employeeData.phone, dob, employeeData.address, employeeData.workShift, employeeData.status, employeeData.salary, employeeData.cnesCode, employeeData.weeklyHours, employeeData.accessLevel]);
                 const employee_id = employee.insertId;
                 await db.execute('INSERT INTO User (user_id, username, password) VALUES (?, ?, ?)', [employee_id, userData.username, await Hash.hash(userData.password)])
                 

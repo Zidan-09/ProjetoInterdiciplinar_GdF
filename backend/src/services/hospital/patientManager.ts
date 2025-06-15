@@ -4,6 +4,7 @@ import { db } from "../../db";
 import { ValidateRegister } from "../../utils/personsUtils/validators";
 import { TriageQueue } from "../../entities/queue";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { ConvertDate } from "../../utils/systemUtils/convertDate";
 
 export class PatientManager {
     static async register(data: Patient): Promise<number|undefined> {
@@ -11,7 +12,8 @@ export class PatientManager {
             const valid: boolean | undefined = await ValidateRegister.verifyPatient(data);
 
             if (valid) {
-                const [result] = await db.execute<ResultSetHeader>('INSERT INTO Patient (name, dob, maritalStatus, cpf, rg, contact, gender, healthPlan, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.name, new Date(data.dob), data.maritalStatus, data.cpf, data.rg, data.contact, data.gender, data.healthPlan, data.address]);
+                const dob = ConvertDate(new Date(data.dob));
+                const [result] = await db.execute<ResultSetHeader>('INSERT INTO Patient (name, dob, maritalStatus, cpf, rg, contact, gender, healthPlan, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.name, dob, data.maritalStatus, data.cpf, data.rg, data.contact, data.gender, data.healthPlan, data.address]);
                 const patient_id: number = result.insertId;
                 const nodeTriage: NodeTriage = await NodeTriage.create(patient_id);
                 TriageQueue.insertQueue(nodeTriage);

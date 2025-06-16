@@ -11,11 +11,13 @@ export const Login = {
         try {
             const [userData] = await db.execute<RowDataPacket[]>('SELECT * FROM User WHERE username = ?', [data.username]);
             const [role] = await db.execute<RowDataPacket[]>('SELECT accessLevel FROM Employee WHERE id = ?', [userData[0].user_id])
-
-            if (userData.length) {
+            console.log('Dados encontrados:', userData);
+            if (userData.length > 0) {
+                console.log('Entrou 1')
                 const valid: boolean = await bcrypt.compare(data.password, userData[0].password);
 
                 if (valid) {
+                    console.log('Entrou 2')
                     const token = Jwt.generateLoginToken(userData[0].user_id);
 
                     return {

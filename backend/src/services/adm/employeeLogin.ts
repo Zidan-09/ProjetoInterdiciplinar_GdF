@@ -9,6 +9,7 @@ import { EmployeeResponses } from "../../utils/enuns/allResponses";
 export const Login = {
     async loginUser(data: User): Promise<{ user: string, token: string, role: RowDataPacket } | undefined> {
         try {
+            console.log('Entrou na função de login')
             const [userData] = await db.execute<RowDataPacket[]>('SELECT * FROM User WHERE username = ?', [data.username]);
             const [role] = await db.execute<RowDataPacket[]>('SELECT accessLevel FROM Employee WHERE id = ?', [userData[0].user_id])
             console.log('Dados encontrados:', userData);

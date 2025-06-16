@@ -1,6 +1,6 @@
 import { TypeQueue } from "../../utils/queueUtils/queueEnuns";
-import { ShowQueue } from "../../services/queue/services/showQueue";
-import { PatientCaller } from "../../services/queue/services/patientCaller";
+import { showQueue } from "../../services/queue/services/showQueue";
+import { callNext } from "../../services/queue/services/patientCaller";
 import { HandleResponseTest } from "./handleResponseTest";
 import { QueueResponses } from "../../utils/enuns/allResponses";
 
@@ -12,7 +12,7 @@ export const QueueControllerTest = {
         console.log(queue);
 
         try {
-            const queueT = ShowQueue.showQueue(queue);
+            const queueT = showQueue(queue);
 
             if (queueT) {
                 HandleResponseTest(true, 200, queue.typeQueue, queueT);
@@ -30,7 +30,7 @@ export const QueueControllerTest = {
         const queue: Params = request;
 
         try {
-            const called: string = PatientCaller.callNext(queue.typeQueue);
+            const called: string = callNext(queue.typeQueue);
 
             if (called == QueueResponses.EmptyQueue) {
                 HandleResponseTest(false, 400, called, null);

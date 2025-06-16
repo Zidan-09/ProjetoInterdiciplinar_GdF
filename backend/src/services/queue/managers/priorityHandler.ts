@@ -5,8 +5,8 @@ enum VerifyResponse {
     UpdatedQueue = 'updated_queue'
 }
 
-export class PriorityHandler {
-    static verify(): VerifyResponse | undefined {
+export const PriorityHandler = {
+    verify(): VerifyResponse | undefined {
         const nodesToSort: NodeConsult[] = [];
 
         let temp: NodeConsult | null = ConsultQueue.getFirst();
@@ -35,10 +35,9 @@ export class PriorityHandler {
 
             return VerifyResponse.UpdatedQueue;
         }
-    }
+    },
 
-
-    static toSort(node: NodeConsult): void {
+    toSort(node: NodeConsult): void {
         if (ConsultQueue.getFirst() != node) {
 
             let temp: NodeConsult | null = ConsultQueue.getFirst();
@@ -67,5 +66,5 @@ export class PriorityHandler {
             node.pointer = current.pointer;
             current.pointer = node;
         }
-    };
+    }
 }

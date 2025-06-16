@@ -3,7 +3,7 @@ import { PatientManager } from "../services/hospital/patientManager";
 import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";
 import { EndConsult, StartConsult, StartTriage, EndTriage, ChangeTriageCategory } from "../entities/careFlow";
-import { CreateTicket } from "../services/queue/services/ticketService";
+import { createTicket } from "../services/queue/services/ticketService";
 import { CareFlowService } from "../services/hospital/startCareFlow";
 import { ErrorResponse, HandleResponse } from "../utils/systemUtils/handleResponse";
 import { ServerResponses, CareFlowResponses, PatientResponses, QueueResponses } from "../utils/enuns/allResponses";
@@ -15,7 +15,7 @@ export const HospitalController = {
     async createTicket(req: Request<{}, {}, TicketRequest>, res: Response) {
         try {
             const data: TicketRequest = req.body;
-            const ticket: string = CreateTicket.createTicket(data.priority)
+            const ticket: string = createTicket(data.priority)
 
             HandleResponse(true, 201, CareFlowResponses.TicketCreationSucess, ticket, res);
     

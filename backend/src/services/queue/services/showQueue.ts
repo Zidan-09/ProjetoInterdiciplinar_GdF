@@ -1,43 +1,42 @@
 import { ConsultQueue, RecepQueue, TriageQueue } from "../../../entities/queue";
 import { TypeQueue } from "../../../utils/queueUtils/queueEnuns";
 
-export class ShowQueue {
-    static showQueue(queue: { typeQueue: TypeQueue }) {
-        let queueList = [];
 
-        switch (queue.typeQueue) {
-            case TypeQueue.Recep:
-                let tempR = RecepQueue.getFirst();
+export function showQueue(queue: { typeQueue: TypeQueue }) {
+    let queueList = [];
 
-                for (let i = 0; i < RecepQueue.getQty(); i++) {
-                    if (tempR) {
-                    queueList.push(tempR.ticket);
-                    tempR = tempR.pointer
-                    }
+    switch (queue.typeQueue) {
+        case TypeQueue.Recep:
+            let tempR = RecepQueue.getFirst();
+
+            for (let i = 0; i < RecepQueue.getQty(); i++) {
+                if (tempR) {
+                queueList.push(tempR.ticket);
+                tempR = tempR.pointer
                 }
-                break;
+            }
+            break;
 
-            case TypeQueue.Triage:
-                let tempT = TriageQueue.getFirst();
+        case TypeQueue.Triage:
+            let tempT = TriageQueue.getFirst();
 
-                for (let i = 0; i < TriageQueue.getQty(); i++) {
-                    if (tempT) {
-                    queueList.push(tempT.patient_name);
-                    tempT = tempT.pointer
-                    }
+            for (let i = 0; i < TriageQueue.getQty(); i++) {
+                if (tempT) {
+                queueList.push(tempT.patient_name);
+                tempT = tempT.pointer
                 }
-                break;
-            case TypeQueue.Consult:
-                let tempC = ConsultQueue.getFirst();
+            }
+            break;
+        case TypeQueue.Consult:
+            let tempC = ConsultQueue.getFirst();
 
-                for (let i = 0; i < ConsultQueue.getQty(); i++) {
-                    if (tempC) {
-                    queueList.push(tempC.patient_name);
-                    tempC = tempC.pointer
-                    }
+            for (let i = 0; i < ConsultQueue.getQty(); i++) {
+                if (tempC) {
+                queueList.push(tempC.patient_name);
+                tempC = tempC.pointer
                 }
-                break;
-        }
-        return queueList;
+            }
+            break;
     }
+    return queueList;
 }

@@ -6,8 +6,8 @@ import { TriageQueue } from "../../entities/queue";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { ConvertDate } from "../../utils/systemUtils/convertDate";
 
-export class PatientManager {
-    static async register(data: Patient): Promise<number|undefined> {
+export const PatientManager = {
+    async register(data: Patient): Promise<number|undefined> {
         try {
             const valid: boolean | undefined = await ValidateRegister.verifyPatient(data);
 
@@ -32,9 +32,9 @@ export class PatientManager {
             console.error(error);
             return undefined;
         }
-    };
+    },
 
-    static async list(): Promise<RowDataPacket[]|undefined> {
+    async list(): Promise<RowDataPacket[]|undefined> {
         try {
             const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM Patient');
 
@@ -46,9 +46,9 @@ export class PatientManager {
             console.error(error);
             return undefined;
         }
-    };
+    },
 
-    static async findByCpf(cpf: string): Promise<RowDataPacket|undefined> {
+    async findByCpf(cpf: string): Promise<RowDataPacket|undefined> {
         try {
             const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM Patient WHERE cpf = ?', [cpf]);
 
@@ -60,9 +60,9 @@ export class PatientManager {
             console.error(error);
             return undefined;
         }
-    };
+    },
 
-    static async findById(id: number): Promise<RowDataPacket|undefined> {
+    async findById(id: number): Promise<RowDataPacket|undefined> {
         try {
             const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM Patient WHERE pat_id = ?', [id]);
 
@@ -74,5 +74,5 @@ export class PatientManager {
             console.error(error);
             return undefined;
         }
-    };
+    }
 }

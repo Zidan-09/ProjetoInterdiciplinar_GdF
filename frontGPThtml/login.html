@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 400px;
+      margin: 40px auto;
+    }
+    label, input {
+      display: block;
+      margin: 10px 0;
+    }
+    #resultado {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      background: #f0f0f0;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Login do Funcionário</h2>
+  <form id="loginForm">
+    <label for="username">Usuário:</label>
+    <input type="text" id="username" required>
+
+    <label for="password">Senha:</label>
+    <input type="password" id="password" required>
+
+    <button type="submit">Entrar</button>
+  </form>
+
+  <div id="resultado"></div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault(); // Impede a página de recarregar
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('http://localhost:3333/employee/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (data.status) {
+          document.getElementById('resultado').innerText = 
+            `Login realizado com sucesso!\nUsuário: ${data.data.user}\nToken: ${data.data.token}\nFunção: ${data.data.role}`;
+        } else {
+          document.getElementById('resultado').innerText = `Erro: ${data.message}`;
+        }
+      } catch (error) {
+        document.getElementById('resultado').innerText = 'Erro ao conectar com a API.';
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>

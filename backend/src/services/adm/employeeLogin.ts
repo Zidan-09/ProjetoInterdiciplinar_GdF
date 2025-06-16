@@ -21,7 +21,7 @@ export const Login = {
                     return {
                         user: userData[0].username,
                         token: token,
-                        role: role[0]
+                        role: role[0].accessLevel
                     }
                 }
             }

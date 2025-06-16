@@ -1,16 +1,21 @@
 // services/auth.ts
-import axiosInstance from './api';
+import api from './api';
 
 export const login = async (username: string, password: string) => {
-  const res = await axiosInstance.post('/employee/login', { username, password });
-  const { token, user } = res.data.data;
-  const { accessLevel } = res.data.role;
+  try {
+    const response = await api.post('/employee/login', { username, password });
 
-  localStorage.setItem('token', token);
-  localStorage.setItem('user', user);
-  localStorage.setItem('accessLevel', accessLevel);
+    const { user, token, role } = response.data.data;
 
-  return accessLevel;
+    // Armazena dados no localStorage
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', user);
+    localStorage.setItem('accessLevel', role);
+
+    return { user, token, role };
+  } catch (error) {
+    throw new Error('Login inválido');
+  }
 };
 
 export const logout = () => {
@@ -18,3 +23,29 @@ export const logout = () => {
   localStorage.removeItem('user');
   localStorage.removeItem('accessLevel');
 };
+
+// services/auth.ts
+// import api from './api';
+
+// export const login = async (username: string, password: string) => {
+//   try {
+//     const response = await api.post('/employee/login', { username, password });
+
+//     const { user, token, role } = response.data.data;
+
+//     localStorage.setItem('token', token);
+//     localStorage.setItem('user', user);
+//     localStorage.setItem('accessLevel', role);
+
+//     return {token, user, role};
+
+//   } catch (error) {
+//     throw new Error('Login inválido');
+//   }
+// };
+
+// export const logout = () => {
+//   localStorage.removeItem('token');
+//   localStorage.removeItem('user');
+//   localStorage.removeItem('accessLevel');
+// };

@@ -8,8 +8,6 @@ import { AdminResponses, EmployeeResponses } from "../../utils/enuns/allResponse
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { ConvertDate } from "../../utils/systemUtils/convertDate";
 
-type Role = 'Doctor' | 'Nurse' | 'Receptionist' | 'Admin';
-
 export const EmployeeManager = {
     async registerEmployee<T extends Employee | Nurse | Doctor>(employeeData: T): Promise<EmployeeResponses> {
         const valid = await ValidateRegister.verifyEmployee(employeeData);

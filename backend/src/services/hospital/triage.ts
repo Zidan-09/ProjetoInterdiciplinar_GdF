@@ -1,7 +1,7 @@
 import { NodeConsult } from "../../utils/queueUtils/createNode";
 import { EndTriage, StartTriage } from "../../entities/careFlow";
 import { Status } from "../../utils/enuns/generalEnuns";
-import { SearchQueue, SearchResult } from "./../queue/managers/searchQueue";
+import { searchQueue, SearchResult } from "./../queue/managers/searchQueue";
 import { db } from "../../db";
 import { QueueResponses } from "../../utils/enuns/allResponses";
 import { ConsultQueue } from "../../entities/queue";
@@ -53,7 +53,7 @@ export const TriageService = {
     },
 
     async changeTriageCategory(careFlow_id: number, newSeverity: TriageCategory['name']): Promise<SearchResult|undefined> {
-        const search = SearchQueue.search(careFlow_id);
+        const search = searchQueue(careFlow_id);
 
         if (search.status === QueueResponses.EmptyQueue || search.status === QueueResponses.NotFound) {
             return search;

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { ErrorResponse, HandleResponse } from "../utils/systemUtils/handleResponse";
 import { TypeQueue } from "../utils/queueUtils/queueEnuns";
-import { ShowQueue } from "../services/queue/services/showQueue";
-import { PatientCaller } from "../services/queue/services/patientCaller";
+import { showQueue } from "../services/queue/services/showQueue";
+import { callNext } from "../services/queue/services/patientCaller";
 import { QueueResponses, ServerResponses } from "../utils/enuns/allResponses";
 
 type Params = { typeQueue: TypeQueue }
@@ -12,7 +12,7 @@ export const QueueController = {
         const queueType: Params = req.params;
 
         try {
-            const queue = ShowQueue.showQueue(queueType);
+            const queue = showQueue(queueType);
 
             if (queue) {
                 HandleResponse(true, 200, queueType.typeQueue, queue, res);
@@ -29,7 +29,7 @@ export const QueueController = {
         const queue: TypeQueue = req.params.typeQueue;
 
         try {
-            const called: string = PatientCaller.callNext(queue);
+            const called: string = callNext(queue);
 
             if (called !== QueueResponses.EmptyQueue) {
                 HandleResponse(true, 200, QueueResponses.Called, called, res);

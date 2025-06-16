@@ -12,7 +12,7 @@ export const Login = {
             const [userData] = await db.execute<RowDataPacket[]>('SELECT * FROM User WHERE username = ?', [data.username]);
             const [role] = await db.execute<RowDataPacket[]>('SELECT accessLevel FROM Employee WHERE id = ?', [userData[0].user_id])
 
-            if (userData.length) {
+            if (userData.length > 0) {
                 const valid: boolean = await bcrypt.compare(data.password, userData[0].password);
 
                 if (valid) {

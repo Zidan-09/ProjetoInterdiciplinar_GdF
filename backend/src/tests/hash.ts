@@ -5,6 +5,6 @@ async function Hash(pass: string) {
     console.log(hashed);
 }
 
-const senha = 'Teste'; // <--- INSIRA SUA SENHA AQUI ENTRE AS ASPAS ' '
+const senha = 'whisShow10'; // <--- INSIRA SUA SENHA AQUI ENTRE AS ASPAS ' '
 
 Hash(senha);

@@ -1,23 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '../context/AuthContext';
-
 export default function AdminPage() {
-  const { role, logout } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (role !== 'admin') {
-      router.push('/');
-    }
-  }, [role, router]);
-
   return (
-    <div>
-      <h1>Área do Admin</h1>
-      <button onClick={logout}>Sair</button>
+    <div className="p-4">
+      <h1 className="text-3xl font-bold">Área Administrativa</h1>
+      <p>Bem-vindo, admin!</p>
     </div>
   );
 }

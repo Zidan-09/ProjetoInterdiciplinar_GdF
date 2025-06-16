@@ -1,28 +1,19 @@
+
 'use client';
 
-import { useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useAuth } from "../context/AuthContext";
 
 export default function ReceptionistPage() {
-  const { role, logout } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (role !== 'receptionist') {
-      alert('Acesso não autorizado!');
-      logout();
-    }
-  }, [role, logout, router]);
+  const { user, role } = useAuth();
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-2xl font-bold text-green-600">
-        ✅ Você está na área de recepcionista!
-      </h1>
-    </main>
+    <div className="p-4">
+      <h1 className="text-2xl">Painel da Recepção</h1>
+      <p>Bem-vindo, {user}! Seu papel é: {role}</p>
+    </div>
   );
 }
+
 // 'use client';
 
 // import { useEffect } from 'react';

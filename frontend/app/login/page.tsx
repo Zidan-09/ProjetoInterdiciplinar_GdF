@@ -1,53 +1,38 @@
-'use client';
-
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import api from '../../utils/api';
-import { useAuth } from '../context/AuthContext';
+'use client'
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginPage() {
-  const router = useRouter();
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await api.post('/login', { email, password });
-      const { token, role } = response.data;
-      login(token, role);
-      router.push(`/${role}`);  // Exemplo: /admin ou /receptionist
-    } catch (err: any) {
-      setError('Credenciais inválidas');
-    }
+    await login(username, password);
   };
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-64">
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h1 className="text-2xl mb-4">Login</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2"
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="text-black border p-2"
         />
         <input
           type="password"
-          placeholder="Senha"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border p-2"
+          className="text-black border p-2"
         />
-        <button type="submit" className="bg-blue-500 text-white p-2">
-          Entrar
-        </button>
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded">Login</button>
       </form>
-    </main>
+    </div>
   );
 }
 

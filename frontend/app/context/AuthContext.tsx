@@ -1,80 +1,71 @@
-'use client';
+'use client'
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '../../utils/api';
 
 interface AuthContextType {
-  role: string | null;
+  user: string | null;
   token: string | null;
+  role: string | null;
   login: (username: string, password: string) => Promise<void>;
-  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
 
-  // Carregar o token do localStorage ao abrir o site (para não perder o login após refresh)
-  useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    const savedRole = localStorage.getItem('role');
-    if (savedToken && savedRole) {
-      setToken(savedToken);
-      setRole(savedRole);
-    }
-  }, []);
-
   const login = async (username: string, password: string) => {
     try {
-      const res = await api.post('/employee/login', { username, password });
+      const res = await fetch('http://localhost:3333/employee/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-      if (res.data.status) {
-        const userRole = res.data.data.role.accessLevel;
-        const userToken = res.data.data.token;
+      if (!res.ok) {
+        throw new Error('Erro na requisição');
+      }
 
-        setRole(userRole);
-        setToken(userToken);
+      const data = await res.json();
 
-        localStorage.setItem('token', userToken);
-        localStorage.setItem('role', userRole);
+      if (data.status && data.data) {
+        setUser(data.data.user);
+        setToken(data.data.token);
+        setRole(data.data.role);
 
-        // Redireciona baseado no role
-        if (userRole === 'admin') {
+        // Redirecionamento baseado no role
+        if (data.data.role === 'admin') {
           router.push('/admin');
-        } else if (userRole === 'nurse') {
+        } else if (data.data.role === 'receptionist') {
+          router.push('/receptionist');
+        } else if (data.data.role === 'nurse') {
           router.push('/nurse');
         } else {
-          router.push('/');
+          router.push('/not-found');
         }
       } else {
-        alert('Login inválido');
+        alert('Login inválido!');
       }
     } catch (error) {
       console.error('Erro ao fazer login:', error);
-      alert('Erro ao fazer login');
+      alert('Erro ao conectar com o servidor.');
     }
   };
 
-  const logout = () => {
-    setRole(null);
-    setToken(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    router.push('/');
-  };
-
   return (
-    <AuthContext.Provider value={{ role, token, login, logout }}>
+    <AuthContext.Provider value={{ user, role, token, login }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth deve ser usado dentro de AuthProvider');

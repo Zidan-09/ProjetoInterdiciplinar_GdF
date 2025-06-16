@@ -1,17 +1,18 @@
 
+// app/recepcionista/page.tsx
 'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-import { useAuth } from "../context/AuthContext";
+export default function RecepcionistaPage() {
+  const router = useRouter();
 
-export default function ReceptionistPage() {
-  const { user, role } = useAuth();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) router.push('/login');
+  }, []);
 
-  return (
-    <div className="p-4">
-      <h1 className="text-2xl">Painel da Recepção</h1>
-      <p>Bem-vindo, {user}! Seu papel é: {role}</p>
-    </div>
-  );
+  return <div>Painel do Recepcionista</div>;
 }
 
 // 'use client';

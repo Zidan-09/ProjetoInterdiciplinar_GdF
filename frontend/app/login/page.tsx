@@ -1,40 +1,85 @@
+// pages/login.tsx
 'use client'
-import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { login } from '../../utils/api';
+import { saveToken } from '../../utils/auth';
 
 export default function LoginPage() {
-  const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await login(username, password);
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const response = await login(username, password);
+      console.log(response);
+      if (response.status) {
+        console.log("Login OK:", response.data);
+        saveToken(response.data.token);
+        const role = response.data.role.toLowerCase(); // lowercase para prevenir bugs
+        router.push(`/${role}`);
+      } else {
+        alert(response.message || 'Erro ao fazer login');
+      }
+    } catch (error) {
+      alert('Erro na requisição. Verifique a API.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-2xl mb-4">Login</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="text-black border p-2"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="text-black border p-2"
-        />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">Login</button>
-      </form>
-    </div>
+    <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '10rem' }}>
+      <h2>Login</h2>
+      <input placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+      <input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
+      <button onClick={handleLogin} disabled={loading}>
+        {loading ? 'Entrando...' : 'Entrar'}
+      </button>
+    </main>
   );
 }
+
+// 'use client'
+// import { useState } from "react";
+// import { useAuth } from "../context/AuthContext";
+
+// export default function LoginPage() {
+//   const { login } = useAuth();
+//   const [username, setUsername] = useState('');
+//   const [password, setPassword] = useState('');
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     await login(username, password);
+//   };
+
+//   return (
+//     <div className="flex flex-col items-center justify-center h-screen">
+//       <h1 className="text-2xl mb-4">Login</h1>
+//       <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+//         <input
+//           type="text"
+//           placeholder="Username"
+//           value={username}
+//           onChange={(e) => setUsername(e.target.value)}
+//           className="text-black border p-2"
+//         />
+//         <input
+//           type="password"
+//           placeholder="Password"
+//           value={password}
+//           onChange={(e) => setPassword(e.target.value)}
+//           className="text-black border p-2"
+//         />
+//         <button type="submit" className="bg-blue-500 text-white p-2 rounded">Login</button>
+//       </form>
+//     </div>
+//   );
+// }
 
 // 'use client';
 

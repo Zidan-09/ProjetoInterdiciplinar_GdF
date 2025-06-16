@@ -1,12 +1,17 @@
+// app/admin/page.tsx
 'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function AdminPage() {
-  return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold">Área Administrativa</h1>
-      <p>Bem-vindo, admin!</p>
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token){router.push('/login')};
+  }, []);
+
+  return <div>Painel do Admin</div>;
 }
 
 // 'use client';

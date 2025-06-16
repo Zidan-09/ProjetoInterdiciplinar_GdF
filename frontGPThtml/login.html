@@ -16,8 +16,11 @@
     #resultado {
       margin-top: 20px;
       white-space: pre-wrap;
-      background: #f0f0f0;
+      background: #f8d7da;
+      color: #842029;
       padding: 10px;
+      border: 1px solid #f5c2c7;
+      display: none; /* escondido por padrão */
     }
   </style>
 </head>
@@ -41,6 +44,8 @@
 
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
+      const resultado = document.getElementById('resultado');
+      resultado.style.display = 'none'; // limpa mensagem anterior
 
       try {
         const response = await fetch('http://localhost:3333/employee/login', {
@@ -54,36 +59,28 @@
         const data = await response.json();
 
         if (data.status) {
-          // Armazena o token no localStorage
           localStorage.setItem('token', data.data.token);
           localStorage.setItem('role', data.data.role);
 
-          // Redireciona de acordo com o papel do usuário
           switch (data.data.role.toLowerCase()) {
             case 'admin':
               window.location.href = 'admin.html';
               break;
-              
-            case 'doctor':
-              window.location.href = 'doctor.html';
-              break;
-
-            case 'nurse':
-              window.location.href = 'nurse.html';
-              break;
-
             case 'receptionist':
               window.location.href = 'receptionist.html';
               break;
-
             default:
-              document.getElementById('resultado').innerText = `Função não reconhecida: ${data.data.role}`;
+              resultado.innerText = `Função não reconhecida: ${data.data.role}`;
+              resultado.style.display = 'block';
           }
         } else {
-          document.getElementById('resultado').innerText = `Erro: ${data.message}`;
+          // Exibe a mensagem de erro da API
+          resultado.innerText = data.message || 'Erro desconhecido';
+          resultado.style.display = 'block';
         }
       } catch (error) {
-        document.getElementById('resultado').innerText = 'Erro ao conectar com a API.';
+        resultado.innerText = 'Erro ao conectar com a API.';
+        resultado.style.display = 'block';
         console.error(error);
       }
     });

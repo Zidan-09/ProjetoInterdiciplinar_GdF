@@ -37,7 +37,7 @@
 
   <script>
     document.getElementById('loginForm').addEventListener('submit', async function (e) {
-      e.preventDefault(); // Impede a página de recarregar
+      e.preventDefault();
 
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
@@ -54,8 +54,31 @@
         const data = await response.json();
 
         if (data.status) {
-          document.getElementById('resultado').innerText = 
-            `Login realizado com sucesso!\nUsuário: ${data.data.user}\nToken: ${data.data.token}\nFunção: ${data.data.role}`;
+          // Armazena o token no localStorage
+          localStorage.setItem('token', data.data.token);
+          localStorage.setItem('role', data.data.role);
+
+          // Redireciona de acordo com o papel do usuário
+          switch (data.data.role.toLowerCase()) {
+            case 'admin':
+              window.location.href = 'admin.html';
+              break;
+              
+            case 'doctor':
+              window.location.href = 'doctor.html';
+              break;
+
+            case 'nurse':
+              window.location.href = 'nurse.html';
+              break;
+
+            case 'receptionist':
+              window.location.href = 'receptionist.html';
+              break;
+
+            default:
+              document.getElementById('resultado').innerText = `Função não reconhecida: ${data.data.role}`;
+          }
         } else {
           document.getElementById('resultado').innerText = `Erro: ${data.message}`;
         }

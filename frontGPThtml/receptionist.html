@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel Recepcionista</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bem-vindo ao Painel da Recepção</h1>
+
+  <script>
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+
+    if (!token || role !== 'receptionist') {
+      alert('Acesso não autorizado. Redirecionando para login...');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

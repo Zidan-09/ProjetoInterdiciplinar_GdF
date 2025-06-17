@@ -1,38 +1,11 @@
-// app/admin/page.tsx
-'use client';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 export default function AdminPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token){router.push('/login')};
-  }, []);
-
-  return <div>Painel do Admin</div>;
+  return (
+    <ProtectedRoute allowedRole="admin">
+      <div style={{ textAlign: 'center', marginTop: '100px', fontFamily: 'sans-serif' }}>
+        <h1>Bem-vindo ao Painel do Administrador</h1>
+      </div>
+    </ProtectedRoute>
+  );
 }
-
-// 'use client';
-// import { useEffect } from 'react';
-// import { useRouter } from 'next/navigation';
-
-// export default function AdminPage() {
-//   const router = useRouter();
-
-//   useEffect(() => {
-//     const token = localStorage.getItem('token');
-//     const accessLevel = localStorage.getItem('accessLevel');
-
-//     if (!token || accessLevel !== 'admin') {
-//       router.push('/login');
-//     }
-//   }, []);
-
-//   return (
-//     <div className="p-10 text-center text-2xl text-blue-800">
-//       Bem-vindo à área do Administrador!
-//     </div>
-//   );
-// }

@@ -124,7 +124,7 @@ export const EmployeesConstroller = {
             const logged = await Login.loginUser(loginDataReq);
 
             if (logged) {
-                HandleResponse(false, 200, EmployeeResponses.EmployeeLoggedIn, logged, res);
+                HandleResponse(true, 200, EmployeeResponses.EmployeeLoggedIn, logged, res);
             } else if (logged == ServerResponses.DataBaseError) {
                 HandleResponse(false, 400, ServerResponses.DataBaseError, null, res);
             } else {

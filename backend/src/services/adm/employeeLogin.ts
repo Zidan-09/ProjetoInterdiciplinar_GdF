@@ -4,32 +4,36 @@ import bcrypt from 'bcryptjs';
 import { Hash, Jwt } from "../../utils/systemUtils/security";
 import { sendEmail } from "../../utils/personsUtils/email";
 import { RowDataPacket } from "mysql2";
-import { EmployeeResponses } from "../../utils/enuns/allResponses";
+import { EmployeeResponses, ServerResponses } from "../../utils/enuns/allResponses";
+import { Logged } from "../../entities/logged";
 
 export const Login = {
-    async loginUser(data: User): Promise<{ user: string, token: string, role: RowDataPacket } | undefined> {
+    async loginUser(data: User): Promise<Logged | ServerResponses> {
         try {
             const [userData] = await db.execute<RowDataPacket[]>('SELECT * FROM User WHERE username = ?', [data.username]);
+            
+            if (userData.length == 0) {
+                return ServerResponses.InvalidInput
+            }
+
             const [role] = await db.execute<RowDataPacket[]>('SELECT accessLevel FROM Employee WHERE id = ?', [userData[0].user_id])
-            console.log('Dados encontrados:', userData);
-            if (userData.length > 0) {
-                console.log('Entrou 1')
-                const valid: boolean = await bcrypt.compare(data.password, userData[0].password);
+            const valid: boolean = await bcrypt.compare(data.password, userData[0].password);
 
-                if (valid) {
-                    console.log('Entrou 2')
-                    const token = Jwt.generateLoginToken(userData[0].user_id);
+            if (valid) {
+                const token = Jwt.generateLoginToken(userData[0].user_id);
 
-                    return {
-                        user: userData[0].username,
-                        token: token,
-                        role: role[0].accessLevel
-                    }
+                return {
+                    user: userData[0].username,
+                    token: token,
+                    role: role[0].accessLevel
                 }
             }
 
+            return ServerResponses.InvalidInput;
+
         } catch (error) {
             console.error(error);
+            return ServerResponses.DataBaseError;
         }
     },
 

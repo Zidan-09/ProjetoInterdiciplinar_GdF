@@ -15,6 +15,7 @@ Este projeto tem como objetivo desenvolver um sistema completo para gerenciament
 
 📁 Estrutura do Projeto
 
+```plaintext
 ProjetoInterdisciplinar_GdF-master/
 │
 ├── backend/
@@ -31,22 +32,23 @@ ProjetoInterdisciplinar_GdF-master/
 ├── frontend/
 │   ├── app/
 │   │   ├── admin/              # Interface do administrador
-│   │   ├── auth/           # Interface de autenticação
-│   │   ├── calls/           # Interface do chamados
-│   │   ├── doctor/               # Interface do médico
-│   │   ├── login/               # Interface de login
+│   │   ├── auth/               # Interface de autenticação
+│   │   ├── calls/              # Interface do chamados
+│   │   ├── doctor/             # Interface do médico
+│   │   ├── login/              # Interface de login
 │   │   └── (demais rotas)
-│   ├── public/            # Imagens
+│   ├── public/                 # Imagens
 │   ├── package.json            # Dependências do projeto
 │   └── tsconfig.json           # Configurações do TypeScript
 │   └── (demais arquivos de configurações)
 ├── database/
 │   ├── db_generation_script.sql              # Script de definição do banco de dados
 ├── diagramas/
-│   ├── DiagramaDeClasse.drawio.svg              # Diagrama de classes
-│   ├── (demais diagramas que definem o projeto)              # Diagrama de classes
+│   ├── DiagramaDeClasse.drawio.svg           # Diagrama de classes
+│   ├── (demais diagramas que definem o projeto)
 ├── README.md
 ├── Sistema_de_Gerenciamento_de_Filas_em_PS.docx              # Documentação
+```
 
 ⚙️ Funcionalidades Principais
 

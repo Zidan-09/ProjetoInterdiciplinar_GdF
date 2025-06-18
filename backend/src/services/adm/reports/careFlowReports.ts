@@ -9,7 +9,7 @@ export const CareFlowReports = {
         const { startDate, endDate } = getPeriodRange(period);
         let consultTime: number = 0;
 
-        const [rows] = await db.execute<RowDataPacket[]>('SELECT checkInConsult, checkOutConsult FROM Consult WHERE checkInConsult >= ? AND checkOutConsult <= ?', [startDate, endDate]);
+        const [rows] = await db.execute<RowDataPacket[]>('SELECT checkInConsult, checkOutConsult FROM Consult WHERE checkInConsult BETWEEN ? AND ?', [startDate, endDate]);
         
         for (let i = 0; i < rows.length; i++) {
             consultTime += rows[i].checkOutConsult - rows[i].checkInConsult;
@@ -23,7 +23,7 @@ export const CareFlowReports = {
         const { startDate, endDate } = getPeriodRange(period);
         let triageTime: number = 0;
 
-        const [rows] = await db.execute<RowDataPacket[]>('SELECT checkInTriage, checkOutTriage FROM Triage WHERE checkInTriage >= ? AND checkOutTriage <= ?', [startDate, endDate]);
+        const [rows] = await db.execute<RowDataPacket[]>('SELECT checkInTriage, checkOutTriage FROM Triage WHERE checkInTriage BETWEEN ? AND ?', [startDate, endDate]);
         
         for (let i = 0; i < rows.length; i++) {
             triageTime += rows[i].checkOutTriage - rows[i].checkInTriage;

@@ -9,7 +9,7 @@ export const PatientReports = {
         try {
             const { startDate, endDate } = getPeriodRange(period);
 
-            const [qty] = await db.execute<RowDataPacket[]>('SELECT COUNT(*) AS total FROM CareFlow WHERE status = ? AND checkInHospital >= ? AND checkInHospital <= ?', [Status.NoShow, startDate, endDate]);
+            const [qty] = await db.execute<RowDataPacket[]>('SELECT COUNT(*) AS total FROM CareFlow WHERE status = ? AND checkInHospital BETWEEN ? AND ?', [Status.NoShow, startDate, endDate]);
             console.log(qty);
             return qty[0].total;
 

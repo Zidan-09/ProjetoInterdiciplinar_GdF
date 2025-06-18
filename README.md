@@ -1,21 +1,21 @@
-# Projeto Interdiciplinar - Gerenciamento de Filas em Pronto-Socorro
+# Projeto Interdisciplinar - Gerenciamento de Filas em Pronto-Socorro
 
 Este projeto tem como objetivo desenvolver um sistema completo para gerenciamento de filas em unidades de pronto atendimento (UPAs e hospitais), com foco na triagem eficiente, atendimento ordenado e controle administrativo de pacientes.
 🛠 Tecnologias Utilizadas
 
     Node.js com TypeScript
 
-    SQLite (persistência de dados local)
+    MySQL (Servidor acessado via Tailscale temporariamente)
 
     Express.js (API REST)
 
-    WebSocket (planejado ou já implementado para comunicação em tempo real)
+    WebSocket
 
-    Fetch API (para consumo da API via frontend HTML + JS)
+    NextJs (para consumo da API)
 
 📁 Estrutura do Projeto
 
-ProjetoInterdiciplinar_GdF-master/
+ProjetoInterdisciplinar_GdF-master/
 │
 ├── backend/
 │   ├── src/
@@ -24,9 +24,29 @@ ProjetoInterdiciplinar_GdF-master/
 │   │   ├── socket.ts           # Inicialização do socket
 │   │   ├── db.ts               # Configuração do banco de dados
 │   │   ├── Json/               # Arquivos JSON com dados de teste
-│   │   └── (demais pastas de serviços e modelos)
+│   │   └── (demais pastas de serviços e entidades)
 │   ├── package.json            # Dependências do projeto
 │   └── tsconfig.json           # Configurações do TypeScript
+│
+├── frontend/
+│   ├── app/
+│   │   ├── admin/              # Interface do administrador
+│   │   ├── auth/           # Interface de autenticação
+│   │   ├── calls/           # Interface do chamados
+│   │   ├── doctor/               # Interface do médico
+│   │   ├── login/               # Interface de login
+│   │   └── (demais rotas)
+│   ├── public/            # Imagens
+│   ├── package.json            # Dependências do projeto
+│   └── tsconfig.json           # Configurações do TypeScript
+│   └── (demais arquivos de configurações)
+├── database/
+│   ├── db_generation_script.sql              # Script de definição do banco de dados
+├── diagramas/
+│   ├── DiagramaDeClasse.drawio.svg              # Diagrama de classes
+│   ├── (demais diagramas que definem o projeto)              # Diagrama de classes
+├── README.md
+├── Sistema_de_Gerenciamento_de_Filas_em_PS.docx              # Documentação
 
 ⚙️ Funcionalidades Principais
 
@@ -69,7 +89,7 @@ npm run dev
 
 📄 Licença
 
-Este projeto é parte de um Projeto Integrador acadêmico. Licença livre para fins educacionais e demonstração.
+Este projeto é parte de um Projeto Interdisciplinar acadêmico. Licença livre para fins educacionais e demonstração.
 ✍️ Autores
 
     Desenvolvido por Samuel, Gabriel Lima e Gabriel Oliveira

@@ -54,9 +54,18 @@ npm install
 
 Executando
 
-npx ts-node src/server.ts
+npm run dev
 
-    O servidor será iniciado, e a API estará acessível em http://localhost:3000 (ou porta definida).
+    O servidor será iniciado, e a API estará acessível em http://localhost:3333 (ou porta definida).
+
+cd frontend
+npm install
+
+Executando
+
+npm run dev
+
+    O servidor será iniciado, e o frontend estará acessível em http://localhost:3000 (ou porta definida).
 
 📄 Licença
 

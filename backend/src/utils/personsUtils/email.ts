@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 
 export const sendEmail = {
     async auth(email: string, token: string) {
-        const link = `http://localhost:3333/employee/activateAccount?token=${token}`;
+        const link = `http://localhost:3000/auth?token=${token}`;
     
         const html = `
         <p> Olá! <p>

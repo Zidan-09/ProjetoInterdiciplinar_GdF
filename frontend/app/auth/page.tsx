@@ -3,10 +3,9 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
 
 interface DecodedToken {
-  [key: string]: any; // você pode tipar isso melhor se souber o conteúdo do JWT
+  [key: string]: any;
 }
 
 export default function ConfirmPage() {
@@ -17,20 +16,8 @@ export default function ConfirmPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [decodedData, setDecodedData] = useState<DecodedToken | null>(null);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (token) {
-      try {
-        const decoded = jwtDecode(token) as DecodedToken;
-        setDecodedData(decoded);
-      } catch (err) {
-        setError("Token inválido ou expirado.");
-      }
-    }
-  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +34,7 @@ export default function ConfirmPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          data: decodedData,
+          data: token,
           user: {
             username,
             password,

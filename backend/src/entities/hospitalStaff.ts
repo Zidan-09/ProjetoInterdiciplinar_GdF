@@ -32,8 +32,8 @@ interface User {
     password: string;
 }       
 
-interface ConfirmUser<T extends Employee | Nurse | Doctor> {
-    data: T
+interface ConfirmUser {
+    data: string
     user: User;
 }
 

@@ -83,24 +83,7 @@ export const EmployeesConstroller = {
         }
     },
 
-    async activateAccount(req: Request, res: Response) {
-        const token = req.query.token as string;
-        
-        try {
-            const data = Jwt.verifyRegisterToken(token);
-
-            if (data) {
-                HandleResponse(true, 200, EmployeeResponses.AwaitingConfirmation, data, res);
-            } else {
-                HandleResponse(false, 400, EmployeeResponses.Error, null, res);
-            }
-
-        } catch (error) {
-            ErrorResponse(error, res);
-        }
-    },
-
-    async authAccount(req: Request<{}, {}, ConfirmUser<Employee | Nurse | Doctor>>, res: Response) {
+    async authAccount(req: Request<{}, {}, ConfirmUser>, res: Response) {
         const { data, user } = req.body;
 
         try {

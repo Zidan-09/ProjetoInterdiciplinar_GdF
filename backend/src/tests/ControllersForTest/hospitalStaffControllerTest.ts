@@ -78,21 +78,6 @@ class EmployersConstrollerTest {
         }
     };
 
-    static async activateAccount(query: string) {
-        const token = query;
-        
-        try {
-            const data = Jwt.verifyRegisterToken(token);
-
-            if (data) {
-                HandleResponseTest(true, 200, "TESTE", data);
-            }
-
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
     static async authAccount(request: ConfirmUser<Employee | Nurse | Doctor>) {
         const { data, user } = request;
 

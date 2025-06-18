@@ -28,9 +28,13 @@ export const EmployeeManager = {
         }
     },
 
-    async authAccount<T extends Employee | Nurse | Doctor>(data: any, userData: User): Promise<EmployeeResponses> {
-        const employeeData: T = data;
+    async authAccount<T extends Employee | Nurse | Doctor>(data: string, userData: User): Promise<EmployeeResponses> {
+        const employeeData: T | undefined = Jwt.verifyRegisterToken(data);
 
+        if (!employeeData) {
+            return EmployeeResponses.InvalidOrExpiredToken;
+        }
+        
         const valid: boolean | undefined = await ValidateRegister.verifyEmployee(employeeData);
 
         if (valid) {

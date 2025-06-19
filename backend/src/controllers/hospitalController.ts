@@ -12,10 +12,10 @@ import { Patient } from "../entities/patient";
 type TicketRequest = { priority: number };
 
 export const HospitalController = {
-    async createTicket(req: Request<{}, {}, TicketRequest>, res: Response) {
+    async createTicket(req: Request<TicketRequest>, res: Response) {
         try {
-            const data: TicketRequest = req.body;
-            const ticket: string = createTicket(data.priority)
+            const { priority }: TicketRequest = req.params;
+            const ticket: string = createTicket(priority);
 
             HandleResponse(true, 201, CareFlowResponses.TicketCreationSucess, ticket, res);
     

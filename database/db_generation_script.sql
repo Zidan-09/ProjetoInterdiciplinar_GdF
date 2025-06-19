@@ -22,25 +22,25 @@ DROP TABLE IF EXISTS `interproject`.`employee` ;
 
 CREATE TABLE IF NOT EXISTS `interproject`.`employee` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `registrationNumber` INT NULL DEFAULT NULL,
+  `registrationNumber` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
   `cpf` CHAR(11) NOT NULL,
   `email` VARCHAR(50) NOT NULL,
   `phone` VARCHAR(15) NOT NULL,
-  `dob` DATETIME NOT NULL,
+  `dob` DATE NOT NULL,
   `address` TEXT NOT NULL,
-  `hireDate` DATETIME NOT NULL,
-  `workShift` ENUM('morning', 'afternoon', 'night', 'full-time') NULL DEFAULT NULL,
-  `status` ENUM('active', 'onLeave', 'Resigned') NULL DEFAULT NULL,
-  `salary` DECIMAL(10,2) NULL DEFAULT NULL,
+  `hireDate` DATE NOT NULL,
+  `workShift` ENUM('morning', 'afternoon', 'night', 'full-time') NOT NULL,
+  `status` ENUM('active', 'onLeave', 'Resigned') NOT NULL,
+  `salary` DECIMAL(10,2) NOT NULL,
   `cnesCode` CHAR(10) NOT NULL,
-  `weeklyHours` INT NULL DEFAULT NULL,
+  `weeklyHours` INT NOT NULL,
   `accessLevel` ENUM('admin', 'nurse', 'doctor', 'receptionist') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email` (`email` ASC) VISIBLE,
   UNIQUE INDEX `cpf` (`cpf` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 5
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -89,18 +89,18 @@ DROP TABLE IF EXISTS `interproject`.`patient` ;
 CREATE TABLE IF NOT EXISTS `interproject`.`patient` (
   `pat_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
-  `dob` DATETIME NOT NULL,
+  `dob` DATE NOT NULL,
   `maritalStatus` ENUM('single', 'married', 'divorced', 'separeted', 'widowed') NOT NULL,
   `cpf` CHAR(11) NOT NULL,
   `rg` CHAR(7) NOT NULL,
   `contact` VARCHAR(15) NOT NULL,
   `gender` ENUM('male', 'female', 'other') NOT NULL,
   `healthPlan` VARCHAR(50) NULL DEFAULT NULL,
-  `address` TEXT NOT NULL,
+  `address` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`pat_id`),
   UNIQUE INDEX `cpf` (`cpf` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `interproject`.`doctor` (
   `doc_id` INT NOT NULL,
   `crm` CHAR(10) NOT NULL,
   `specialty` VARCHAR(20) NOT NULL,
-  `onDuty` TINYINT(1) NULL DEFAULT NULL,
+  `onDuty` TINYINT(1) NULL DEFAULT 0,
   PRIMARY KEY (`doc_id`),
   UNIQUE INDEX `specialty` (`specialty` ASC) VISIBLE,
   CONSTRAINT `doctor_ibfk_1`
@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `interproject`.`nurse` (
   `coren` VARCHAR(20) NOT NULL,
   `department` VARCHAR(50) NOT NULL,
   `specialty` VARCHAR(20) NOT NULL,
-  `onDuty` TINYINT(1) NULL DEFAULT NULL,
+  `onDuty` TINYINT(1) NULL DEFAULT 0,
   PRIMARY KEY (`nur_id`),
   UNIQUE INDEX `coren` (`coren` ASC) VISIBLE,
   UNIQUE INDEX `specialty` (`specialty` ASC) VISIBLE,

@@ -1,55 +1,56 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function RegisterForm() {
-  const [role, setRole] = useState('');
   const [formData, setFormData] = useState({
 
-    
-    registrationNumber:'',
-    name: '',
-    cpf: '',
-    email:'',
-    phone: '',
-    dob:'',
-    address: '',
-    workShift:'',//ENUM(MANHA, TARDE, NOITE)
-    status:'', //ENUM(ATVO, AFASTADO, INATIVO)
-    salary:'',
-    cnesCode:'',
-    acessLevel:'',
-    weeklyHours:'',
-    department:'',
-    crm: '',
-    coren: '',
-    specialty:'',
+    registrationNumber:"",
+    name: "",
+    cpf: "",
+    email:"",
+    phone: "",
+    dob:"",
+    address: "",
+    workShift:"",//ENUM(MANHA, TARDE, NOITE)
+    status:"", //ENUM(ATVO, AFASTADO, INATIVO)
+    salary:"",
+    cnesCode:"",
+    acessLevel:"",
+    weeklyHours:"",
+    department:"",
+    crm: "",
+    coren: "",
+    specialty:"",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const {name, value} = e.target;
-
-    if (name === 'acessLevel'){
-        setFormData({...formData,acessLevel:value});
-    }else {
-        setFormData({...formData,[name]:value})
-    }
-};
+    setFormData({...formData,[name]:value});
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const playload = {
+        ...formData,
+        salary:Number(formData.salary),
+        weeklyHours:Number(formData.weeklyHours),
+        registrationNumber:Number(formData.registrationNumber),
+        role:formData.acessLevel,
+    };
+
     try {
-      const response = await fetch('http://localhost:3333/employee/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, role }),
+      const response = await fetch("http://localhost:3333/employee/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(playload),
       });
 
       const result = await response.json();
-      alert(result.message || 'Funcionário cadastrado com sucesso!');
+      alert(result.message || "Funcionário cadastrado com sucesso!");
     } catch (err) {
-      alert('Erro ao cadastrar funcionário.');
+      alert("Erro ao cadastrar funcionário.");
     }
   };
   const {acessLevel} = formData;
@@ -58,7 +59,7 @@ export default function RegisterForm() {
         <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-md">
         <div>
             <label>Número de Registro</label>
-            <input name="registrationNumber" onChange={handleChange} required/>
+            <input name="registrationNumber" type="number" onChange={handleChange} required/>
         </div>
 
         <div>
@@ -114,7 +115,7 @@ export default function RegisterForm() {
 
         <div>
             <label>Salário</label>
-            <input name="salary" onChange={handleChange} required />
+            <input name="salary" type="number"onChange={handleChange} required />
         </div>
 
         <div>
@@ -124,7 +125,7 @@ export default function RegisterForm() {
 
         <div>
             <label>Horas Semanais</label>
-            <input name="weeklyHours" onChange={handleChange} required />
+            <input name="weeklyHours" type="number" onChange={handleChange} required />
         </div>
 
         <div>
@@ -138,7 +139,7 @@ export default function RegisterForm() {
             </select>
         </div>    
 
-        {acessLevel === 'doctor' && (
+        {acessLevel === "doctor" && (
             <div>
                 <div>
                     <label>CRM</label>
@@ -151,19 +152,19 @@ export default function RegisterForm() {
             </div>
         )}
 
-        {acessLevel === 'nurse' && (
+        {acessLevel === "nurse" && (
             <div>
                 <div>
                     <label>COREN</label>
-                    <input name='coren' onChange={handleChange} required/>
+                    <input name="coren" onChange={handleChange} required/>
                 </div>
                 <div>
                     <label>Departamento</label>
-                    <input name='department' onChange={handleChange} required/>
+                    <input name="department" onChange={handleChange} required/>
                 </div>
                 <div>
                     <label>Especialidade</label>
-                    <input name='specialty' onChange={handleChange} required/>
+                    <input name="specialty" onChange={handleChange} required/>
                 </div>
             </div>
             )}
@@ -174,30 +175,30 @@ export default function RegisterForm() {
     }
 
 //-----------------------------------------------------
-// 'use client';
+// "use client";
 
-// import { useState } from 'react';
+// import { useState } from "react";
 
 // export default function RegisterForm() {
-//   const [role, setRole] = useState('');
+//   const [role, setRole] = useState("");
 //   const [formData, setFormData] = useState({
-//     registrationNumber:'',
-//     name: '',
-//     cpf: '',
-//     email:'',
-//     phone: '',
-//     dob:'',
-//     address: '',
-//     workShift:'',//ENUM(MANHA, TARDE, NOITE)
-//     status:'', //ENUM(ATVO, AFASTADO, INATIVO)
-//     salary:'',
-//     cnesCode:'',
-//     acessLevel:'',
-//     weeklyHours:'',
-//     department:'',
-//     crm: '',
-//     coren: '',
-//     specialty:'',
+//     registrationNumber:"",
+//     name: "",
+//     cpf: "",
+//     email:"",
+//     phone: "",
+//     dob:"",
+//     address: "",
+//     workShift:"",//ENUM(MANHA, TARDE, NOITE)
+//     status:"", //ENUM(ATVO, AFASTADO, INATIVO)
+//     salary:"",
+//     cnesCode:"",
+//     acessLevel:"",
+//     weeklyHours:"",
+//     department:"",
+//     crm: "",
+//     coren: "",
+//     specialty:"",
 //   });
 
 //   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -208,16 +209,16 @@ export default function RegisterForm() {
 //     e.preventDefault();
 
 //     try {
-//       const response = await fetch('http://localhost:3333/employee/register', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
+//       const response = await fetch("http://localhost:3333/employee/register", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({ ...formData, role }),
 //       });
 
 //       const result = await response.json();
-//       alert(result.message || 'Funcionário cadastrado com sucesso!');
+//       alert(result.message || "Funcionário cadastrado com sucesso!");
 //     } catch (err) {
-//       alert('Erro ao cadastrar funcionário.');
+//       alert("Erro ao cadastrar funcionário.");
 //     }
 //   };
 
@@ -292,7 +293,7 @@ export default function RegisterForm() {
 //             </select>
 //         </div>    
 
-//         {role === 'doctor' && (
+//         {role === "doctor" && (
 //         <div className="mt-4">
 //             <div className="flex flex-col mb-4">
 //             <label htmlFor="crm" className="mb-1 font-medium">CRM</label>
@@ -318,7 +319,7 @@ export default function RegisterForm() {
 //         )}
 
 
-//         {role === 'nurse' && (
+//         {role === "nurse" && (
 //             <div className="mt-4">
 //             <div className="flex flex-col mb-4">
 //             <label htmlFor="COREN" className="mb-1 font-medium">COREN</label>
@@ -360,20 +361,20 @@ export default function RegisterForm() {
 
 //--------------------------------
 
-// 'use client';
+// "use client";
 
-// import { useState } from 'react';
+// import { useState } from "react";
 
 // export default function RegisterForm() {
-//   const [role, setRole] = useState('');
+//   const [role, setRole] = useState("");
 //   const [formData, setFormData] = useState({
-//     name: '',
-//     email: '',
-//     birthDate: '',
-//     phone: '',
-//     crm: '',
-//     coren: '',
-//     cpf: '',
+//     name: "",
+//     email: "",
+//     birthDate: "",
+//     phone: "",
+//     crm: "",
+//     coren: "",
+//     cpf: "",
 //   });
 
 //   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -384,16 +385,16 @@ export default function RegisterForm() {
 //     e.preventDefault();
 
 //     try {
-//       const response = await fetch('http://localhost:3333/employee/register', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
+//       const response = await fetch("http://localhost:3333/employee/register", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({ ...formData, role }),
 //       });
 
 //       const result = await response.json();
-//       alert(result.message || 'Funcionário cadastrado com sucesso!');
+//       alert(result.message || "Funcionário cadastrado com sucesso!");
 //     } catch (err) {
-//       alert('Erro ao cadastrar funcionário.');
+//       alert("Erro ao cadastrar funcionário.");
 //     }
 //   };
 
@@ -430,21 +431,21 @@ export default function RegisterForm() {
 //         </select>
 //       </div>
 
-//       {role === 'doctor' && (
+//       {role === "doctor" && (
 //         <div>
 //           <label>CRM</label>
 //           <input name="crm" onChange={handleChange} required />
 //         </div>
 //       )}
 
-//       {role === 'nurse' && (
+//       {role === "nurse" && (
 //         <div>
 //           <label>COREN</label>
 //           <input name="coren" onChange={handleChange} required />
 //         </div>
 //       )}
 
-//       {role === 'receptionist' && (
+//       {role === "receptionist" && (
 //         <div>
 //           <label>CPF</label>
 //           <input name="cpf" onChange={handleChange} required />

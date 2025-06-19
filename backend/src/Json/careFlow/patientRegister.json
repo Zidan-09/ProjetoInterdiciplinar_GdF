@@ -1,10 +1,10 @@
 {
     "name": "Rogério",
-    "dob": "1990-04-12T00:00:00.000Z",
+    "dob": "1990-04-12",
     "maritalStatus": "Single",
-    "cpf": "546.456.789-10",
+    "cpf": "54645678910",
     "rg": "834522",
-    "contact": "(86) 99523-5628",
+    "contact": "86995235628",
     "gender": "Male",
     "healthPlan": "Sus",
     "address": "Rua Catapimbas, 164"

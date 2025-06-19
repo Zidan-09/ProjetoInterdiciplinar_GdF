@@ -5,7 +5,7 @@
         "cpf": "12353212423",
         "email": "chichi.receptionist@gmail.com",
         "phone": "86994533524",
-        "dob": "1986-05-05T00:00:00.000Z",
+        "dob": "1986-05-05",
         "address": "av. Paulista, 12",
         "workShift": "morning",
         "status": "active",
@@ -16,6 +16,6 @@
     },
     "user": {
         "username": "Chichi",
-        "password": "Chichi10"
+        "password": "1234"
     }
 }

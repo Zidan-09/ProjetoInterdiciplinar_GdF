@@ -3,13 +3,13 @@
     "name": "Whis",
     "cpf": "00100010110",
     "email": "whis.adm@gmail.com",
-    "phone": "1191234-5678",
-    "dob": "2007-02-28T00:00:00.000Z",
+    "phone": "11912345678",
+    "dob": "2007-02-28",
     "address": "Planeta Bills, Universo 7",
     "workShift": "morning",
     "status": "active",
     "salary": 2.50,
     "cnesCode": "12-32",
-    "accessLevel": "admin",
-    "weeklyHours": 40
+    "weeklyHours": 40,
+    "accessLevel": "admin"
 }

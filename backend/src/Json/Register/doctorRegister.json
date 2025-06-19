@@ -4,14 +4,14 @@
     "cpf": "77777777777",
     "email": "goku.medicogdf@gmail.com",
     "phone": "86994533524",
-    "dob": "1986-10-08T00:00:00.000Z",
+    "dob": "1986-10-08",
     "address": "Planeta Terra, Japão",
     "workShift": "morning",
     "status": "active",
     "salary": 40000,
     "cnesCode": "12-32",
-    "accessLevel": "doctor",
     "weeklyHours": 40,
+    "accessLevel": "doctor",
     "crm": "123/PI",
     "specialty": "cirurgião"
 }

@@ -4,12 +4,12 @@
     "cpf": "12353212423",
     "email": "chichi.receptionist@gmail.com",
     "phone": "86994533524",
-    "dob": "1986-05-05T00:00:00.000Z",
+    "dob": "1986-05-05",
     "address": "av. Paulista, 12",
     "workShift": "morning",
     "status": "active",
     "salary": 40000,
     "cnesCode": "12-32",
-    "accessLevel": "receptionist",
-    "weeklyHours": 40
+    "weeklyHours": 40,
+    "accessLevel": "receptionist"
 }

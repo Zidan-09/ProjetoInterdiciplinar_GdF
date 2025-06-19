@@ -9,13 +9,13 @@ import { ErrorResponse, HandleResponse } from "../utils/systemUtils/handleRespon
 import { ServerResponses, CareFlowResponses, PatientResponses, QueueResponses } from "../utils/enuns/allResponses";
 import { Patient } from "../entities/patient";
 
-type TicketRequest = { priority: number };
+type TicketRequest = { priority: string };
 
 export const HospitalController = {
     async createTicket(req: Request<TicketRequest>, res: Response) {
         try {
             const { priority }: TicketRequest = req.params;
-            const ticket: string = createTicket(priority);
+            const ticket: string = createTicket(parseInt(priority));
 
             HandleResponse(true, 201, CareFlowResponses.TicketCreationSucess, ticket, res);
     

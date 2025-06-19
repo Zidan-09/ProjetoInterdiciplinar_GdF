@@ -5,7 +5,7 @@ import { AccessLevelMiddleware } from "../middlewares/accessLevelMiddleware";
 
 const hospitalRouter = Router();
 
-hospitalRouter.post('/ticket', loginVerify, AccessLevelMiddleware.receptionist, HospitalController.createTicket);
+hospitalRouter.get('/ticket/:priority', loginVerify, AccessLevelMiddleware.receptionist, HospitalController.createTicket);
 hospitalRouter.post('/patient/register', loginVerify, AccessLevelMiddleware.receptionist, HospitalController.register);
 hospitalRouter.post('/triageInit', loginVerify, AccessLevelMiddleware.nurse, HospitalController.triageInit);
 hospitalRouter.post('/triageEnd', loginVerify, AccessLevelMiddleware.nurse, HospitalController.triageEnd);

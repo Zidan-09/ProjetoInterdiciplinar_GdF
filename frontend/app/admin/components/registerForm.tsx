@@ -51,7 +51,7 @@ export default function RegisterForm() {
     }
   };
   const {acessLevel} = formData;
-  ////////////////////aqui
+
   return (
         <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-md">
         <div>
@@ -91,6 +91,13 @@ export default function RegisterForm() {
 
         <div>
             <label>Turno</label>
+            <select name="workShift" onChange={handleChange} required >
+                <option value="">Selecione</option>
+                <option value="morning">Manhã</option>
+                <option value="afternoon">Tarde</option>
+                <option value="night">Noite</option>
+                <option value="full-time">Integral</option>
+            </select>
         </div>
 
         <div>
@@ -104,52 +111,63 @@ export default function RegisterForm() {
 
         <div>
             <label>Código CNES</label>
-            <input name="address" onChange={handleChange} required />
+            <input name="cnesCode" onChange={handleChange} required />
         </div>
 
         <div>
             <label>Horas Semanais</label>
-            <input name="address" onChange={handleChange} required />
+            <input name="weeklyHours" onChange={handleChange} required />
         </div>
 
         <div>
             <label>Cargo</label>
-            <select value={role} onChange={(e) => setRole(e.target.value)} required>
-            <option value="">Selecione</option>
-            <option value="admin">Admin</option>
-            <option value="doctor">Médico</option>
-            <option value="nurse">Enfermeiro</option>
-            <option value="receptionist">Recepcionista</option>
+            <select name="acessLevel" value={acessLevel} onChange={handleChange} required>
+                <option value="">Selecione</option>
+                <option value="admin">Admin</option>
+                <option value="doctor">Médico</option>
+                <option value="nurse">Enfermeiro</option>
+                <option value="receptionist">Recepcionista</option>
             </select>
         </div>    
 
-        {role === 'doctor' && (
-        <div className="mt-4">
-            <div className="flex flex-col mb-4">
-            <label htmlFor="crm" className="mb-1 font-medium">CRM</label>
-            <input
-                id="crm"
-                name="crm"
-                onChange={handleChange}
-                required
-                className="border p-2 rounded"
-            />
+        {acessLevel === 'doctor' && (
+            <div>
+                <div>
+                    <label>CRM</label>
+                    <input name="crm" onChange={handleChange}required/>
+                </div>
+                <div>
+                    <label>Especialidade</label>
+                    <input name='specialty' onChange={handleChange} required/>
+                </div>
             </div>
-            <div className="flex flex-col mb-4">
-            <label htmlFor="specialty" className="mb-1 font-medium">Especialidade</label>
-            <input
-                id="specialty"
-                name="specialty"
-                onChange={handleChange}
-                required
-                className="border p-2 rounded"
-            />
-            </div>
-        </div>
+        
+        // <div className="mt-4">
+        //     <div className="flex flex-col mb-4">
+        //     <label htmlFor="crm" className="mb-1 font-medium">CRM</label>
+        //     <input
+        //         id="crm"
+        //         name="crm"
+        //         onChange={handleChange}
+        //         required
+        //         className="border p-2 rounded"
+        //     />
+        //     </div>
+        //     <div className="flex flex-col mb-4">
+        //     <label htmlFor="specialty" className="mb-1 font-medium">Especialidade</label>
+        //     <input
+        //         id="specialty"
+        //         name="specialty"
+        //         onChange={handleChange}
+        //         required
+        //         className="border p-2 rounded"
+        //     />
+        //     </div>
+        // </div>
         )}
 
 
-        {role === 'nurse' && (
+        {acessLevel === 'nurse' && (
             <div className="mt-4">
             <div className="flex flex-col mb-4">
             <label htmlFor="COREN" className="mb-1 font-medium">COREN</label>

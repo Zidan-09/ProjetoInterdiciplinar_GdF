@@ -5,6 +5,8 @@ import { useState } from 'react';
 export default function RegisterForm() {
   const [role, setRole] = useState('');
   const [formData, setFormData] = useState({
+
+    
     registrationNumber:'',
     name: '',
     cpf: '',
@@ -102,6 +104,12 @@ export default function RegisterForm() {
 
         <div>
             <label>Status</label>
+            <select name="status" onChange={handleChange} required>
+                <option value="">Selecione</option>
+                <option value="active">Ativo</option>
+                <option value="onLeave">Afastado</option>
+                <option value="inactive">Inativo</option>
+            </select>
         </div>
 
         <div>
@@ -138,71 +146,29 @@ export default function RegisterForm() {
                 </div>
                 <div>
                     <label>Especialidade</label>
+                    <input name="specialty" onChange={handleChange}required/>
+                </div>
+            </div>
+        )}
+
+        {acessLevel === 'nurse' && (
+            <div>
+                <div>
+                    <label>COREN</label>
+                    <input name='coren' onChange={handleChange} required/>
+                </div>
+                <div>
+                    <label>Departamento</label>
+                    <input name='department' onChange={handleChange} required/>
+                </div>
+                <div>
+                    <label>Especialidade</label>
                     <input name='specialty' onChange={handleChange} required/>
                 </div>
             </div>
-        
-        // <div className="mt-4">
-        //     <div className="flex flex-col mb-4">
-        //     <label htmlFor="crm" className="mb-1 font-medium">CRM</label>
-        //     <input
-        //         id="crm"
-        //         name="crm"
-        //         onChange={handleChange}
-        //         required
-        //         className="border p-2 rounded"
-        //     />
-        //     </div>
-        //     <div className="flex flex-col mb-4">
-        //     <label htmlFor="specialty" className="mb-1 font-medium">Especialidade</label>
-        //     <input
-        //         id="specialty"
-        //         name="specialty"
-        //         onChange={handleChange}
-        //         required
-        //         className="border p-2 rounded"
-        //     />
-        //     </div>
-        // </div>
-        )}
+            )}
 
-
-        {acessLevel === 'nurse' && (
-            <div className="mt-4">
-            <div className="flex flex-col mb-4">
-            <label htmlFor="COREN" className="mb-1 font-medium">COREN</label>
-            <input
-                id="coren"
-                name="coren"
-                onChange={handleChange}
-                required
-                className="border p-2 rounded"
-            />
-            </div>
-            <div className="flex flex-col mb-4">
-            <label htmlFor="Departamento" className="mb-1 font-medium">Departamento</label>
-            <input
-                id="departiment"
-                name="departiment"
-                onChange={handleChange}
-                required
-                className="border p-2 rounded"
-            />
-            </div>
-            <div className="flex flex-col mb-4">
-            <label htmlFor="Especialidade" className="mb-1 font-medium">Especialidade</label>
-            <input
-                id="specialty"
-                name="specialty"
-                onChange={handleChange}
-                required
-                className="border p-2 rounded"
-            />
-            </div>
-        </div>
-        )}
-
-        <button type="submit">Cadastrar Funcionário</button>
+            <button type="submit">Cadastrar Funcionário</button>
         </form>
     );
     }

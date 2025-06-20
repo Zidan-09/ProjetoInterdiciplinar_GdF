@@ -20,24 +20,21 @@ const HomePage: React.FC = () => {
         backgroundAttachment: 'fixed'
       }}
     >
-      <div className="w-full max-w-6xl px-6 text-white pb-70 pl-10">
-        <div className="mb-3">
-          <h1 className="text-6xl font-bold mb-2 transform translate-y-50">
-            SISTEMA DE GERENCIAMENTO DE<br />
-            <span className="block mt-10">FILAS EM PRONTO-SOCORRO</span>
-          </h1>
-          <p className="text-xl mb-8">
-            Em situações de emergência, ninguém deveria esperar. Nosso sistema transforma o caos<br />
-            <span className='block mt-0'>das filas de pronto-socorro em um fluxo organizado, justo e eficiente</span>
-          </p>
-          
-          <button
-            onClick={handleLogin}
-            className="gap-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-lg py-4 px-8 rounded-lg backdrop-blur-sm border border-white/30 transition-all duration-300 hover:shadow-lg hover:scale-105"
-          >
-            Acessar o Sistema
-          </button>
-        </div>
+       <div className="w-full max-w-5xl text-white px-10">
+        <h1 className="text-6xl font-bold leading-tight mb-6">
+          SISTEMA DE GERENCIAMENTO DE<br />
+          <span className="block mt-2">FILAS EM PRONTO-SOCORRO</span>
+        </h1>
+        <p className="text-xl mb-8 leading-relaxed">
+          Em situações de emergência, ninguém deveria esperar. Nosso sistema transforma o caos<br />
+          das filas de pronto-socorro em um fluxo organizado, justo e eficiente
+        </p>
+        <button
+          onClick={handleLogin}
+          className="gap-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-lg py-4 px-8 rounded-lg backdrop-blur-sm border border-white/30 transition-all duration-300 hover:shadow-lg hover:scale-105"
+        >
+          Acessar o Sistema
+        </button>
       </div>
     </div>
   );

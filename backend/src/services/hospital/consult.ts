@@ -25,11 +25,11 @@ export const ConsultService = {
         }
     },
 
-    async endConsult(data: EndConsult): Promise<RowDataPacket|undefined> {
+    async endConsult(careFlow_id: number, data: EndConsult): Promise<RowDataPacket|undefined> {
         try {
-            await db.execute(`UPDATE Consult SET checkOutConsult = NOW(), diagnosis = ?, prescriptions = ?, notes = ? WHERE consult_id = ?`, [data.diagnosis, JSON.stringify(data.prescriptions), data.notes, data.careFlow_id])
-            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.Attended, data.careFlow_id]);
-            const [consult] = await db.execute<RowDataPacket[]>('SELECT * FROM Consult WHERE consult_id = ?', [data.careFlow_id]);
+            await db.execute(`UPDATE Consult SET checkOutConsult = NOW(), diagnosis = ?, prescriptions = ?, notes = ? WHERE consult_id = ?`, [data.diagnosis, JSON.stringify(data.prescriptions), data.notes, careFlow_id])
+            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.Attended, careFlow_id]);
+            const [consult] = await db.execute<RowDataPacket[]>('SELECT * FROM Consult WHERE consult_id = ?', [careFlow_id]);
             return consult[0];
             
         } catch (error) {

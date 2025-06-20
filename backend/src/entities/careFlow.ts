@@ -7,7 +7,6 @@ interface VitalSigns {
 };
 
 interface EndTriage {
-    careFlow_id: number;
     vitalSigns: VitalSigns;
     triageCategory: string;
     symptoms: string[];
@@ -20,7 +19,6 @@ interface ChangeTriageCategory {
 }
 
 interface EndConsult {
-    careFlow_id: number;
     diagnosis: string | null;
     prescriptions: string[] | null;
     notes: string | null;

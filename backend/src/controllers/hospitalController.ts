@@ -10,7 +10,7 @@ import { ServerResponses, CareFlowResponses, PatientResponses, QueueResponses } 
 import { Patient } from "../entities/patient";
 
 type TicketRequest = { priority: string };
-type Init = { careFlow_id: string };
+type CareFlowId = { careFlow_id: string };
 
 export const HospitalController = {
     async createTicket(req: Request<TicketRequest>, res: Response) {
@@ -47,7 +47,7 @@ export const HospitalController = {
         }
     },
 
-    async triageInit(req: Request<Init>, res: Response) {
+    async triageInit(req: Request<CareFlowId>, res: Response) {
         const { careFlow_id } = req.params;
         const { authorization } = req.headers;
 
@@ -66,11 +66,12 @@ export const HospitalController = {
         }
     },
 
-    async triageEnd(req: Request<{}, {}, EndTriage>, res: Response) {
+    async triageEnd(req: Request<CareFlowId, {}, EndTriage>, res: Response) {
+        const { careFlow_id } = req.params;
         const data: EndTriage = req.body;
 
         try {
-            const result = await TriageService.endTriage(data);
+            const result = await TriageService.endTriage(parseInt(careFlow_id), data);
 
             HandleResponse(true, 200, CareFlowResponses.TriageEnded, result, res);
         } catch (error) {
@@ -99,7 +100,7 @@ export const HospitalController = {
         }
     },
 
-    async consultInit(req: Request<Init>, res: Response) {
+    async consultInit(req: Request<CareFlowId>, res: Response) {
         const { careFlow_id } = req.params;
         const { authorization } = req.headers;
 
@@ -119,11 +120,12 @@ export const HospitalController = {
         }
     },
 
-    async consultEnd(req: Request<{}, {}, EndConsult>, res: Response) {
+    async consultEnd(req: Request<CareFlowId, {}, EndConsult>, res: Response) {
+        const { careFlow_id } = req.params;
         const endData: EndConsult = req.body;
 
         try {
-            const result = await ConsultService.endConsult(endData);
+            const result = await ConsultService.endConsult(parseInt(careFlow_id), endData);
     
             if (result) {
                 HandleResponse(true, 201, CareFlowResponses.ConsultEnded, result, res);

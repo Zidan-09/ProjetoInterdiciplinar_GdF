@@ -106,12 +106,12 @@ export const EmployeesConstroller = {
         try {
             const logged = await Login.loginUser(loginDataReq);
 
-            if (logged) {
-                HandleResponse(true, 200, EmployeeResponses.EmployeeLoggedIn, logged, res);
+            if (logged == ServerResponses.InvalidInput) {
+                HandleResponse(false, 400, ServerResponses.InvalidInput, null, res);
             } else if (logged == ServerResponses.DataBaseError) {
                 HandleResponse(false, 400, ServerResponses.DataBaseError, null, res);
             } else {
-                HandleResponse(false, 400, ServerResponses.InvalidInput, null, res);
+                HandleResponse(true, 200, EmployeeResponses.EmployeeLoggedIn, logged, res);
             }
 
         } catch (error) {

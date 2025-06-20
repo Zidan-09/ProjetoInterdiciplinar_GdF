@@ -3,8 +3,9 @@ import { getSocketInstance } from "../../../socket";
 import { TypeQueue } from "../../../utils/queueUtils/queueEnuns";
 import { calls } from "./called";
 import { QueueResponses } from "../../../utils/enuns/allResponses";
+import { NodeConsult, NodeTriage } from "../../../utils/queueUtils/createNode";
 
-export function callNext(typeQueue: TypeQueue) {
+export function callNext(typeQueue: TypeQueue): Promise<string|NodeTriage|NodeConsult> {
     const io = getSocketInstance();
 
     let call: any;
@@ -28,7 +29,8 @@ export function callNext(typeQueue: TypeQueue) {
                     called: call.patient_name,
                     queue: TypeQueue.Triage
                 })
-                return call.patient_name
+                
+                return call
             }
             break;
 

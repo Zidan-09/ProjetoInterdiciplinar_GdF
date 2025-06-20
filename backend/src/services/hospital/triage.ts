@@ -20,7 +20,7 @@ export const TriageService = {
                 return undefined;
             }
 
-            await db.execute("INSERT INTO Triage (triage_id, nurse_id, checkInTriage) VALUES (?, ?, NOW())", [data, nurse_id]);
+            await db.execute("INSERT INTO Triage (triage_id, nurse_id, checkInTriage) VALUES (?, ?, NOW())", [data, nurse_id.id]);
             await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InTriage, data])
             return data;
 
@@ -35,7 +35,7 @@ export const TriageService = {
             const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM TriageCategory WHERE name = ?', [data.triageCategory]);
             const triageCategory = result[0];
     
-            await db.execute("UPDATE Triage SET checkOutTriage = NOW(), systolicPreassure = ?, diastolicPreassure = ?, heartRate = ?, respiratoryRate = ?, bodyTemperature = ?, oxygenSaturation = ?, painLevel = ?, symptoms = ?, triageCategory_id = ? WHERE triage_id = ?", [data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, JSON.stringify(data.symptoms), triageCategory.id, careFlow_id]);
+            await db.execute("UPDATE Triage SET checkOutTriage = NOW(), systolicPressure = ?, diastolicPressure = ?, heartRate = ?, respiratoryRate = ?, bodyTemperature = ?, oxygenSaturation = ?, painLevel = ?, symptoms = ?, triageCategory_id = ? WHERE triage_id = ?", [data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, JSON.stringify(data.symptoms), triageCategory.id, careFlow_id]);
             await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.WaitingConsultation, careFlow_id])
             const node: NodeConsult | undefined = await NodeConsult.create(careFlow_id, data);
     

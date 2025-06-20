@@ -14,7 +14,7 @@ export const ConsultService = {
                 return;
             }
 
-            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())`, [data, doctor_id]);
+            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())`, [data, doctor_id.id]);
             await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InConsultation, data])
             const consult_id: number = result.insertId
             return consult_id;

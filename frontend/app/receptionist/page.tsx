@@ -2,7 +2,6 @@
 
 import { useAuth } from '../utils/authRedirect';
 import { useEffect, useState } from 'react';
-import PatientRegisterForm from './components/patientRegister';
 
 export default function ReceptionistPage() {
   useAuth('receptionist');
@@ -12,9 +11,56 @@ export default function ReceptionistPage() {
   const [queue, setQueue] = useState<string[]>([]);
   const [calledTicket, setCalledTicket] = useState<string | null>(null);
   const [calledHistory, setCalledHistory] = useState<string[]>([]);
-
+  const [formData, setFormData] = useState({
+    name: '',
+    dob: '',
+    maritalStatus: '',
+    cpf: '',
+    rg: '',
+    contact: '',
+    gender: '',
+    healthPlan: '',
+    address: '',
+  });
 
   const toggleForm = () => setShowForm((prev) => !prev);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const submitPatientForm = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return alert('Token não encontrado. Faça login novamente.');
+
+    try {
+      const response = await fetch('http://localhost:3333/hospital/patient', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (result.status) {
+        alert('Paciente cadastrado com sucesso!');
+        setFormData({
+          name: '', dob: '', maritalStatus: '', cpf: '', rg: '',
+          contact: '', gender: '', healthPlan: '', address: '',
+        });
+        setShowForm(false);
+      } else {
+        alert(`Erro: ${result.message || 'Erro ao cadastrar paciente.'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao conectar com o servidor.');
+    }
+  };
 
   const handleTicketPriorityChange = (priority: number) => {
     setTicketPriority(priority);
@@ -53,15 +99,15 @@ export default function ReceptionistPage() {
       const result = await response.json();
       if (result.status && result.data) {
         setCalledTicket(result.data);
-        setCalledHistory((prev)=>[...prev,result.data]);
-        fetchQueue(); // Atualiza a fila após chamada
+        setCalledHistory((prev) => [...prev, result.data]);
+        fetchQueue();
       } else {
         setCalledTicket(null);
-        alert("A fila esta vazia")
+        alert('A fila está vazia');
       }
     } catch (err) {
       console.error('Erro ao chamar próxima senha:', err);
-      alert("Erro ao chamar proxima senha")
+      alert('Erro ao chamar próxima senha');
     }
   };
 
@@ -87,11 +133,9 @@ export default function ReceptionistPage() {
       );
 
       const result = await response.json();
-      console.log('Resposta da API:', result);
-
       if (result.status && result.data) {
         alert(`Senha gerada com sucesso! Senha: ${result.data}`);
-        fetchQueue(); // Atualiza fila após gerar senha
+        fetchQueue();
       } else {
         alert(`Erro ao gerar a senha: ${result.message || 'Erro desconhecido'}`);
       }
@@ -116,12 +160,10 @@ export default function ReceptionistPage() {
     localStorage.setItem('calledHistory', JSON.stringify(calledHistory));
   }, [calledHistory]);
 
-
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Painel da Recepção</h1>
 
-      {/* Cadastro de Paciente */}
       <button
         onClick={toggleForm}
         className="bg-blue-600 text-white px-4 py-2 rounded mb-4"
@@ -130,8 +172,17 @@ export default function ReceptionistPage() {
       </button>
 
       {showForm && (
-        <div className="mt-4">
-          <PatientRegisterForm />
+        <div className="mt-4 space-y-2">
+          <input name="name" value={formData.name} onChange={handleInputChange} placeholder="Nome" className="border p-2 w-full" />
+          <input name="dob" value={formData.dob} onChange={handleInputChange} placeholder="Data de Nascimento (YYYY-MM-DD)" className="border p-2 w-full" />
+          <input name="maritalStatus" value={formData.maritalStatus} onChange={handleInputChange} placeholder="Estado Civil" className="border p-2 w-full" />
+          <input name="cpf" value={formData.cpf} onChange={handleInputChange} placeholder="CPF" className="border p-2 w-full" />
+          <input name="rg" value={formData.rg} onChange={handleInputChange} placeholder="RG" className="border p-2 w-full" />
+          <input name="contact" value={formData.contact} onChange={handleInputChange} placeholder="Contato" className="border p-2 w-full" />
+          <input name="gender" value={formData.gender} onChange={handleInputChange} placeholder="Gênero" className="border p-2 w-full" />
+          <input name="healthPlan" value={formData.healthPlan} onChange={handleInputChange} placeholder="Plano de Saúde" className="border p-2 w-full" />
+          <input name="address" value={formData.address} onChange={handleInputChange} placeholder="Endereço" className="border p-2 w-full" />
+          <button onClick={submitPatientForm} className="bg-green-600 text-white px-4 py-2 rounded">Salvar Paciente</button>
         </div>
       )}
 

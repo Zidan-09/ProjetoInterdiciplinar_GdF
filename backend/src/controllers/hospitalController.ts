@@ -83,7 +83,7 @@ export const HospitalController = {
         const newTriageCategory: ChangeTriageCategory = req.body;
 
         try {
-            const result = await TriageService.changeTriageCategory(newTriageCategory.careFlow_id, newTriageCategory.newTriageCategory);
+            const result = await TriageService.changeTriageCategory(newTriageCategory.patient_name, newTriageCategory.newTriageCategory);
 
             if (result) {
                 if (result.status === QueueResponses.EmptyQueue || result.status === QueueResponses.NotFound) {

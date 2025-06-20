@@ -28,7 +28,7 @@ export async function Recover(): Promise<boolean|undefined> {
                     const triage: EndTriage | undefined = await searchTriage(flow.id);
 
                     if (triage) {
-                        const nodeConsult = await NodeConsult.create(triage);
+                        const nodeConsult = await NodeConsult.create(flow.id, triage);
                         if (nodeConsult) {
                             ConsultQueue.insertQueue(nodeConsult);
                         }

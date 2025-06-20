@@ -14,7 +14,7 @@ interface EndTriage {
 };
 
 interface ChangeTriageCategory {
-    careFlow_id: number;
+    patient_name: string;
     newTriageCategory: string;
 }
 

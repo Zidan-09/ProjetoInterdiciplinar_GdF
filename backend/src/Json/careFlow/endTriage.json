@@ -1,8 +1,8 @@
 {
     "vitalSigns": {
-        "bloodPreassure": {
-            "systolicPreassure": 120,
-            "diastolicPreassure": 80
+        "bloodPressure": {
+            "systolicPressure": 120,
+            "diastolicPressure": 80
         },
         "heartRate": 120,
         "respiratoryRate": 50,

@@ -37,7 +37,7 @@ export const TriageService = {
     
             await db.execute("UPDATE Triage SET checkOutTriage = NOW(), systolicPreassure = ?, diastolicPreassure = ?, heartRate = ?, respiratoryRate = ?, bodyTemperature = ?, oxygenSaturation = ?, painLevel = ?, symptoms = ?, triageCategory_id = ? WHERE triage_id = ?", [data.vitalSigns.bloodPreassure.systolicPreassure, data.vitalSigns.bloodPreassure.diastolicPreassure, data.vitalSigns.heartRate, data.vitalSigns.respiratoryRate, data.vitalSigns.bodyTemperature, data.vitalSigns.oxygenSaturation, data.painLevel, JSON.stringify(data.symptoms), triageCategory.id, careFlow_id]);
             await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.WaitingConsultation, careFlow_id])
-            const node: NodeConsult | undefined = await NodeConsult.create(data);
+            const node: NodeConsult | undefined = await NodeConsult.create(careFlow_id, data);
     
             if (!node) {
                 return undefined;
@@ -52,8 +52,8 @@ export const TriageService = {
         }
     },
 
-    async changeTriageCategory(careFlow_id: number, newSeverity: TriageCategory['name']): Promise<SearchResult|undefined> {
-        const search = searchQueue(careFlow_id);
+    async changeTriageCategory(patientName: string, newSeverity: TriageCategory['name']): Promise<SearchResult|undefined> {
+        const search = searchQueue(patientName);
 
         if (search.status === QueueResponses.EmptyQueue || search.status === QueueResponses.NotFound) {
             return search;

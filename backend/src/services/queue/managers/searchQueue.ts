@@ -7,14 +7,14 @@ type SearchResult = {
     node?: NodeConsult;
 }
 
-function searchQueue(id: number): SearchResult {
+function searchQueue(patientName: string): SearchResult {
     let temp: null | NodeConsult = ConsultQueue.getFirst();
 
     if (!temp) {
         return { status: QueueResponses.EmptyQueue }
     } else {
         while (temp) {
-            if (temp.triage.careFlow_id == id) {
+            if (temp.patient_name == patientName) {
                 return { status: QueueResponses.Found, node: temp }
             }
         }

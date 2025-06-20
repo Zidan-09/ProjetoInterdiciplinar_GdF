@@ -52,14 +52,14 @@ class NodeConsult {
         this.pointer = null;
     }
 
-    static async create(patientTriage: EndTriage) {
+    static async create(careFlow_id: number, patientTriage: EndTriage) {
         const triageCategory = await TriageCategoryManager.findByName(patientTriage.triageCategory);
 
         if (!triageCategory) {
             return undefined
 
         } else {
-            const careFlow = await findById(patientTriage.careFlow_id);
+            const careFlow = await findById(careFlow_id);
 
             if (!careFlow) {
                 return undefined

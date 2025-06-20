@@ -6,10 +6,6 @@ interface VitalSigns {
     oxygenSaturation: number;
 };
 
-interface StartTriage {
-    careFlow_id: number;
-};
-
 interface EndTriage {
     careFlow_id: number;
     vitalSigns: VitalSigns;
@@ -23,11 +19,6 @@ interface ChangeTriageCategory {
     newTriageCategory: string;
 }
 
-interface StartConsult {
-    careFlow_id: number;
-    confirm: boolean;
-};
-
 interface EndConsult {
     careFlow_id: number;
     diagnosis: string | null;
@@ -35,4 +26,4 @@ interface EndConsult {
     notes: string | null;
 };
 
-export { VitalSigns, StartTriage, EndTriage, ChangeTriageCategory, StartConsult, EndConsult }
+export { VitalSigns, EndTriage, ChangeTriageCategory, EndConsult }

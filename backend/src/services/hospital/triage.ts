@@ -1,5 +1,5 @@
 import { NodeConsult } from "../../utils/queueUtils/createNode";
-import { EndTriage, StartTriage } from "../../entities/careFlow";
+import { EndTriage } from "../../entities/careFlow";
 import { Status } from "../../utils/enuns/generalEnuns";
 import { searchQueue, SearchResult } from "./../queue/managers/searchQueue";
 import { db } from "../../db";
@@ -12,7 +12,7 @@ import { Jwt } from "../../utils/systemUtils/security";
 
 
 export const TriageService = {
-    async startTriage(data: StartTriage, token: string): Promise<StartTriage|undefined> {
+    async startTriage(data: number, token: string): Promise<number|undefined> {
         try {
             const nurse_id = Jwt.verifyLoginToken(token);
 
@@ -20,8 +20,8 @@ export const TriageService = {
                 return undefined;
             }
 
-            await db.execute("INSERT INTO Triage (triage_id, nurse_id, checkInTriage) VALUES (?, ?, NOW())", [data.careFlow_id, nurse_id]);
-            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InTriage, data.careFlow_id])
+            await db.execute("INSERT INTO Triage (triage_id, nurse_id, checkInTriage) VALUES (?, ?, NOW())", [data, nurse_id]);
+            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InTriage, data])
             return data;
 
         } catch (error) {

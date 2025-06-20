@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { PatientManager } from "../services/hospital/patientManager";
 import { TriageService } from "../services/hospital/triage";
 import { ConsultService } from "../services/hospital/consult";
-import { EndConsult, StartConsult, StartTriage, EndTriage, ChangeTriageCategory } from "../entities/careFlow";
+import { EndConsult, EndTriage, ChangeTriageCategory } from "../entities/careFlow";
 import { createTicket } from "../services/queue/services/ticketService";
 import { CareFlowService } from "../services/hospital/startCareFlow";
 import { ErrorResponse, HandleResponse } from "../utils/systemUtils/handleResponse";
@@ -10,6 +10,7 @@ import { ServerResponses, CareFlowResponses, PatientResponses, QueueResponses } 
 import { Patient } from "../entities/patient";
 
 type TicketRequest = { priority: string };
+type Init = { careFlow_id: string };
 
 export const HospitalController = {
     async createTicket(req: Request<TicketRequest>, res: Response) {
@@ -46,13 +47,13 @@ export const HospitalController = {
         }
     },
 
-    async triageInit(req: Request<{}, {}, StartTriage>, res: Response) {
-        const data: StartTriage = req.body;
+    async triageInit(req: Request<Init>, res: Response) {
+        const { careFlow_id } = req.params;
         const { authorization } = req.headers;
 
         try {
             const token = authorization!.split(' ')[1];
-            const result = await TriageService.startTriage(data, token);
+            const result = await TriageService.startTriage(parseInt(careFlow_id), token);
 
             if (result) {
                 HandleResponse(true, 200, CareFlowResponses.TriageStarted, result, res);
@@ -98,21 +99,20 @@ export const HospitalController = {
         }
     },
 
-    async consultInit(req: Request<{}, {}, StartConsult>, res: Response) {
-        const confirmStartData: StartConsult = req.body;
+    async consultInit(req: Request<Init>, res: Response) {
+        const { careFlow_id } = req.params;
         const { authorization } = req.headers;
 
         try {
-            if (confirmStartData.confirm) {
-                const token = authorization!.split(' ')[1];
-                const careFlow_id: number | void = await ConsultService.startConsult(confirmStartData, token);
-                
-                HandleResponse(true, 200, CareFlowResponses.ConsultStarted, careFlow_id, res);
+            const token = authorization!.split(' ')[1];
+            const result = await ConsultService.startConsult(parseInt(careFlow_id), token);
 
+            if (result) {
+                HandleResponse(true, 200, CareFlowResponses.ConsultStarted, careFlow_id, res);
             } else {
-                CareFlowService.noShow(confirmStartData.careFlow_id);
-                HandleResponse(false, 200, CareFlowResponses.PatientNoShow, null, res);
+                HandleResponse(false, 400, CareFlowResponses.ConsultFailed, null, res);
             }
+            
 
         } catch (error) {
             ErrorResponse(error, res);

@@ -1,4 +1,4 @@
-import { StartConsult, EndConsult } from "../../entities/careFlow";
+import { EndConsult } from "../../entities/careFlow";
 import { Status } from "../../utils/enuns/generalEnuns";
 import { db } from "../../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
@@ -6,7 +6,7 @@ import { Jwt } from "../../utils/systemUtils/security";
 
 
 export const ConsultService = {
-    async startConsult(data: StartConsult, token: string): Promise<number|void> {
+    async startConsult(data: number, token: string): Promise<number|void> {
         try {
             const doctor_id = Jwt.verifyLoginToken(token);
 
@@ -14,8 +14,8 @@ export const ConsultService = {
                 return;
             }
 
-            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())`, [data.careFlow_id, doctor_id]);
-            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InConsultation, data.careFlow_id])
+            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())`, [data, doctor_id]);
+            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InConsultation, data])
             const consult_id: number = result.insertId
             return consult_id;
 

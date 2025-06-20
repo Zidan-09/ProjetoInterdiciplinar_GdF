@@ -200,8 +200,6 @@ export default function ReceptionistPage() {
         </div>
       )}
 
-      {/* Histórico de Senhas Chamadas */}
-        {/* Histórico de Senhas Chamadas */}
     <div className="mt-10">
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-xl">Histórico de Senhas Chamadas</h2>

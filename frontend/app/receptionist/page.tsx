@@ -35,7 +35,7 @@ export default function ReceptionistPage() {
     if (!token) return alert('Token não encontrado. Faça login novamente.');
 
     try {
-      const response = await fetch('http://localhost:3333/hospital/patient', {
+      const response = await fetch('http://localhost:3333/hospital/patient/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,8 +49,15 @@ export default function ReceptionistPage() {
       if (result.status) {
         alert('Paciente cadastrado com sucesso!');
         setFormData({
-          name: '', dob: '', maritalStatus: '', cpf: '', rg: '',
-          contact: '', gender: '', healthPlan: '', address: '',
+          name: '',
+          dob: '',
+          maritalStatus: '',
+          cpf: '',
+          rg: '',
+          contact: '',
+          gender: '',
+          healthPlan: '',
+          address: '',
         });
         setShowForm(false);
       } else {
@@ -175,14 +182,44 @@ export default function ReceptionistPage() {
         <div className="mt-4 space-y-2">
           <input name="name" value={formData.name} onChange={handleInputChange} placeholder="Nome" className="border p-2 w-full" />
           <input name="dob" value={formData.dob} onChange={handleInputChange} placeholder="Data de Nascimento (YYYY-MM-DD)" className="border p-2 w-full" />
-          <input name="maritalStatus" value={formData.maritalStatus} onChange={handleInputChange} placeholder="Estado Civil" className="border p-2 w-full" />
+
+          <select
+            name="maritalStatus"
+            value={formData.maritalStatus}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          >
+            <option value="">Selecione o Estado Civil</option>
+            <option value="single">Solteiro(a)</option>
+            <option value="married">Casado(a)</option>
+            <option value="divorced">Divorciado(a)</option>
+            <option value="separeted">Separado(a)</option>
+            <option value="widowed">Viúvo(a)</option>
+          </select>
+
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleInputChange}
+            className="border p-2 w-full"
+            required
+          >
+            <option value="">Selecione o Gênero</option>
+            <option value="male">Masculino</option>
+            <option value="female">Feminino</option>
+            <option value="other">Outro</option>
+          </select>
+
           <input name="cpf" value={formData.cpf} onChange={handleInputChange} placeholder="CPF" className="border p-2 w-full" />
           <input name="rg" value={formData.rg} onChange={handleInputChange} placeholder="RG" className="border p-2 w-full" />
           <input name="contact" value={formData.contact} onChange={handleInputChange} placeholder="Contato" className="border p-2 w-full" />
-          <input name="gender" value={formData.gender} onChange={handleInputChange} placeholder="Gênero" className="border p-2 w-full" />
           <input name="healthPlan" value={formData.healthPlan} onChange={handleInputChange} placeholder="Plano de Saúde" className="border p-2 w-full" />
           <input name="address" value={formData.address} onChange={handleInputChange} placeholder="Endereço" className="border p-2 w-full" />
-          <button onClick={submitPatientForm} className="bg-green-600 text-white px-4 py-2 rounded">Salvar Paciente</button>
+
+          <button onClick={submitPatientForm} className="bg-green-600 text-white px-4 py-2 rounded">
+            Salvar Paciente
+          </button>
         </div>
       )}
 
@@ -192,25 +229,19 @@ export default function ReceptionistPage() {
       <div className="space-x-4 mb-4">
         <button
           onClick={() => handleTicketPriorityChange(1)}
-          className={`px-4 py-2 rounded ${
-            ticketPriority === 1 ? 'bg-gray-500 text-white' : 'bg-gray-300'
-          }`}
+          className={`px-4 py-2 rounded ${ticketPriority === 1 ? 'bg-gray-500 text-white' : 'bg-gray-300'}`}
         >
           Sem Prioridade
         </button>
         <button
           onClick={() => handleTicketPriorityChange(2)}
-          className={`px-4 py-2 rounded ${
-            ticketPriority === 2 ? 'bg-yellow-600 text-white' : 'bg-yellow-500 text-white'
-          }`}
+          className={`px-4 py-2 rounded ${ticketPriority === 2 ? 'bg-yellow-600 text-white' : 'bg-yellow-500 text-white'}`}
         >
           Prioridade
         </button>
         <button
           onClick={() => handleTicketPriorityChange(3)}
-          className={`px-4 py-2 rounded ${
-            ticketPriority === 3 ? 'bg-red-700 text-white' : 'bg-red-600 text-white'
-          }`}
+          className={`px-4 py-2 rounded ${ticketPriority === 3 ? 'bg-red-700 text-white' : 'bg-red-600 text-white'}`}
         >
           Muita Prioridade
         </button>
@@ -223,7 +254,7 @@ export default function ReceptionistPage() {
         Gerar Senha
       </button>
 
-      {/* Fila Atual */}
+      {/* Fila Atual */}   
       <h2 className="text-xl mb-2">Fila de Atendimento</h2>
       <div className="bg-gray-100 p-4 rounded mb-4">
         {queue.length > 0 ? (
@@ -251,41 +282,36 @@ export default function ReceptionistPage() {
         </div>
       )}
 
-    <div className="mt-10">
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="text-xl">Histórico de Senhas Chamadas</h2>
-        {calledHistory.length > 0 && (
-          <button
-            onClick={() => {
-              if (confirm('Tem certeza que deseja limpar o histórico?')) {
-                setCalledHistory([]);
-                localStorage.removeItem('calledHistory');
-              }
-            }}
-            className="text-sm text-red-600 hover:underline"
-          >
-            Limpar Histórico
-          </button>
+      <div className="mt-10">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xl">Histórico de Senhas Chamadas</h2>
+          {calledHistory.length > 0 && (
+            <button
+              onClick={() => {
+                if (confirm('Tem certeza que deseja limpar o histórico?')) {
+                  setCalledHistory([]);
+                  localStorage.removeItem('calledHistory');
+                }
+              }}
+              className="text-sm text-red-600 hover:underline"
+            >
+              Limpar Histórico
+            </button>
+          )}
+        </div>
+
+        {calledHistory.length > 0 ? (
+          <ul className="bg-gray-50 p-4 rounded space-y-2">
+            {calledHistory.map((ticket, index) => (
+              <li key={index} className="flex items-center justify-between border-b pb-1">
+                <span className="text-gray-700">{ticket}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-500">Nenhuma senha chamada ainda.</p>
         )}
       </div>
-
-      {calledHistory.length > 0 ? (
-        <ul className="bg-gray-50 p-4 rounded space-y-2">
-          {calledHistory.map((ticket, index) => (
-            <li
-              key={index}
-              className="flex items-center justify-between border-b pb-1"
-            >
-              <span className="text-gray-700">{ticket}</span>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-gray-500">Nenhuma senha chamada ainda.</p>
-      )}
-    </div>
-
-
     </div>
   );
 }

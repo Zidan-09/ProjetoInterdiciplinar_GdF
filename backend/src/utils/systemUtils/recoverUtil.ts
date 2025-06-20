@@ -9,9 +9,9 @@ export async function searchTriage(careFlow_id: number) {
         
         const data: EndTriage = {
             vitalSigns: {
-                bloodPreassure: {
-                    systolicPreassure: Triage.vitalSigns.bloodPreassure.systolicPreassure,
-                    diastolicPreassure: Triage.vitalSigns.bloodPreassure.diastolicPreassure
+                bloodPressure: {
+                    systolicPressure: Triage.vitalSigns.bloodPressure.systolicPreassure,
+                    diastolicPressure: Triage.vitalSigns.bloodPressure.diastolicPreassure
                 },
                 heartRate: Triage.vitalSigns.heartRate,
                 respiratoryRate: Triage.vitalSigns.respiratoryRate,

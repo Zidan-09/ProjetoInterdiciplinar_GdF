@@ -1,7 +1,7 @@
 import { PatientManager } from "../../services/hospital/patientManager";
 import { TriageService } from "../../services/hospital/triage";
 import { ConsultService } from "../../services/hospital/consult";
-import { EndConsult, StartConsult, StartTriage, EndTriage, ChangeTriageCategory } from "../../entities/careFlow";
+import { EndConsult, EndTriage, ChangeTriageCategory } from "../../entities/careFlow";
 import { createTicket } from "../../services/queue/services/ticketService";
 import { CareFlowService } from "../../services/hospital/startCareFlow";
 import { HandleResponseTest } from "./handleResponseTest";
@@ -47,7 +47,7 @@ export const HospitalControllerTest = {
         }
     },
 
-    async startTriage(request: StartTriage, header: string) {
+    async startTriage(request: any, header: string) {
         const data = request;
         const token = header!.split(' ')[1];
 

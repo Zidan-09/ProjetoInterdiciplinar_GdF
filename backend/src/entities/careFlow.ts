@@ -1,5 +1,5 @@
 interface VitalSigns {
-    bloodPreassure: { systolicPreassure: number; diastolicPreassure: number };
+    bloodPressure: { systolicPressure: number; diastolicPressure: number };
     heartRate: number;
     respiratoryRate: number;
     bodyTemperature: number;

@@ -12,7 +12,7 @@ export const CareFlowService = {
                 return undefined;
             }
 
-            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO CareFlow (receptionist_id, patient_id, checkInHospital, status) VALUES (?, ?, NOW(), ?)`, [patient_id, receptionist_id, Status.WaitingTriage]);
+            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO CareFlow (receptionist_id, patient_id, checkInHospital, status) VALUES (?, ?, NOW(), ?)`, [receptionist_id.id, patient_id, Status.WaitingTriage]);
             const careFlow_Id: number = result.insertId
             return careFlow_Id;
 

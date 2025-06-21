@@ -3,48 +3,63 @@ import { getSocketInstance } from "../../../socket";
 import { TypeQueue } from "../../../utils/queueUtils/queueEnuns";
 import { calls } from "./called";
 import { QueueResponses } from "../../../utils/enuns/allResponses";
+import { CallTriage, CallConsult } from "../../../entities/careFlow";
 import { NodeConsult, NodeTriage } from "../../../utils/queueUtils/createNode";
 
-export function callNext(typeQueue: TypeQueue): Promise<string|NodeTriage|NodeConsult> {
+export function callNext(typeQueue: TypeQueue): Promise<string|CallTriage|CallConsult> {
     const io = getSocketInstance();
 
-    let call: any;
-
+    let call: string | CallTriage | CallConsult;
+    let temp: any;
+    
     switch (typeQueue) {
         case TypeQueue.Recep:
-            call = RecepQueue.callNext();
-            if (call != QueueResponses.EmptyQueue) {
+            temp = RecepQueue.callNext();
+            if (temp != QueueResponses.EmptyQueue) {
                 io.emit(TypeQueue.Recep, {
-                    called: call.ticket,
+                    called: temp.ticket,
                     queue: TypeQueue.Recep
                 })
-                return call.ticket
+                call = temp.ticket;
+                return Promise.resolve(call);
             }
-            return call;
+            return Promise.resolve(temp);
 
         case TypeQueue.Triage:
-            call = TriageQueue.callNext();
-            if (call != QueueResponses.EmptyQueue) {
+            temp = TriageQueue.callNext();
+            if (temp != QueueResponses.EmptyQueue) {
                 io.emit(TypeQueue.Triage, {
-                    called: call.patient_name,
+                    called: temp.patient_name,
                     queue: TypeQueue.Triage
                 })
-                
-                return call
+
+                call = {
+                    careFlow_id: temp.careFlow_id,
+                    patient_name: temp.patient_name
+                }
+
+                return Promise.resolve(call);
             }
-            return call;
+            return temp;
 
         case TypeQueue.Consult:
-            call = ConsultQueue.callNext();
-            if (call != QueueResponses.EmptyQueue) {
+            temp = ConsultQueue.callNext();
+            if (temp != QueueResponses.EmptyQueue) {
                 io.emit(TypeQueue.Consult, {
-                    called: call.patient_id,
+                    called: temp.patient_id,
                     queue: TypeQueue.Consult
                 })
-                calls(call);
 
-                return call
+                calls(temp);
+
+                call = {
+                    careFlow_id: temp.careFlow_id,
+                    patient_name: temp.patient_name,
+                    triage: temp.EndTriage
+                }
+
+                return Promise.resolve(call);
             }
-            return call;
+            return temp;
     }
 }

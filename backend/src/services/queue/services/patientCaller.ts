@@ -55,7 +55,7 @@ export function callNext(typeQueue: TypeQueue): Promise<string|CallTriage|CallCo
                 call = {
                     careFlow_id: temp.careFlow_id,
                     patient_name: temp.patient_name,
-                    triage: temp.EndTriage
+                    triage: temp.triage
                 }
 
                 return Promise.resolve(call);

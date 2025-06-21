@@ -3,8 +3,8 @@ import { ErrorResponse, HandleResponse } from "../utils/systemUtils/handleRespon
 import { TypeQueue } from "../utils/queueUtils/queueEnuns";
 import { showQueue } from "../services/queue/services/showQueue";
 import { callNext } from "../services/queue/services/patientCaller";
-import { QueueResponses, ServerResponses } from "../utils/enuns/allResponses";
-import { NodeConsult, NodeTriage } from "../utils/queueUtils/createNode";
+import { QueueResponses } from "../utils/enuns/allResponses";
+import { CallConsult, CallTriage } from "../entities/careFlow";
 
 type Params = { typeQueue: TypeQueue }
 
@@ -30,7 +30,7 @@ export const QueueController = {
         const queue: TypeQueue = req.params.typeQueue;
 
         try {
-            const called: NodeConsult | NodeTriage | string = await callNext(queue);
+            const called: string | CallTriage | CallConsult = await callNext(queue);
 
             if (called !== QueueResponses.EmptyQueue) {
                 HandleResponse(true, 200, QueueResponses.Called, called, res);

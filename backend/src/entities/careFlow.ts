@@ -6,6 +6,11 @@ interface VitalSigns {
     oxygenSaturation: number;
 };
 
+interface CallTriage {
+    careFlow_id: number;
+    patient_name: string;
+};
+
 interface EndTriage {
     vitalSigns: VitalSigns;
     triageCategory: string;
@@ -18,10 +23,16 @@ interface ChangeTriageCategory {
     newTriageCategory: string;
 }
 
+interface CallConsult {
+    careFlow_id: number;
+    patient_name: string;
+    triage: EndTriage;
+};
+
 interface EndConsult {
     diagnosis: string | null;
     prescriptions: string[] | null;
     notes: string | null;
 };
 
-export { VitalSigns, EndTriage, ChangeTriageCategory, EndConsult }
+export { VitalSigns, CallTriage, EndTriage, ChangeTriageCategory, CallConsult, EndConsult }

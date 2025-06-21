@@ -20,7 +20,7 @@ export function callNext(typeQueue: TypeQueue): Promise<string|NodeTriage|NodeCo
                 })
                 return call.ticket
             }
-            break;
+            return call;
 
         case TypeQueue.Triage:
             call = TriageQueue.callNext();
@@ -32,7 +32,7 @@ export function callNext(typeQueue: TypeQueue): Promise<string|NodeTriage|NodeCo
                 
                 return call
             }
-            break;
+            return call;
 
         case TypeQueue.Consult:
             call = ConsultQueue.callNext();
@@ -45,8 +45,6 @@ export function callNext(typeQueue: TypeQueue): Promise<string|NodeTriage|NodeCo
 
                 return call
             }
-            break;
+            return call;
     }
-
-    return call
 }

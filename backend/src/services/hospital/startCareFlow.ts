@@ -2,6 +2,8 @@ import { Status } from "../../utils/enuns/generalEnuns";
 import { db } from "../../db";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Jwt } from "../../utils/systemUtils/security";
+import { TriageQueue } from "../../entities/queue";
+import { NodeTriage } from "../../utils/queueUtils/createNode";
 
 export const CareFlowService = {
     async startCareFlow(patient_id: number, token: string): Promise<number|undefined> {
@@ -14,6 +16,8 @@ export const CareFlowService = {
 
             const [result] = await db.execute<ResultSetHeader>(`INSERT INTO CareFlow (receptionist_id, patient_id, checkInHospital, status) VALUES (?, ?, NOW(), ?)`, [receptionist_id.id, patient_id, Status.WaitingTriage]);
             const careFlow_Id: number = result.insertId
+            const nodeTriage: NodeTriage = await NodeTriage.create(careFlow_Id, patient_id);
+            TriageQueue.insertQueue(nodeTriage);
             return careFlow_Id;
 
         } catch (error) {

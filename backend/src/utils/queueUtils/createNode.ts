@@ -16,24 +16,27 @@ class NodeRecep {
 };
 
 class NodeTriage {
+    careFlow_id: number;
     patient_id: number;
     patient_name: string;
     pointer: null | NodeTriage;
 
-    constructor(patient_id: number, patient_name: string) {
+    constructor(careFlow_id: number, patient_id: number, patient_name: string) {
+        this.careFlow_id = careFlow_id;
         this.patient_id = patient_id;
         this.patient_name = patient_name;
         this.pointer = null;
     }
 
-    static async create(patient_id: number): Promise<NodeTriage> {
+    static async create(careFlow_Id: number, patient_id: number): Promise<NodeTriage> {
         const patient = await PatientManager.findById(patient_id);
 
-        return new NodeTriage(patient_id, patient!.name);
+        return new NodeTriage(careFlow_Id, patient_id, patient!.name);
     }
 };
 
 class NodeConsult {
+    careFlow_id: number;
     triage: EndTriage;
     patient_name: string;
     triageCategory: number;
@@ -42,7 +45,8 @@ class NodeConsult {
     maxPriority: boolean;
     pointer: null | NodeConsult;
 
-    constructor(patientTriage: EndTriage, patient_name: string, triageCategory: number, limitDate: number) {
+    constructor(careFlow_id: number, patientTriage: EndTriage, patient_name: string, triageCategory: number, limitDate: number) {
+        this.careFlow_id = careFlow_id;
         this.triage = patientTriage;
         this.patient_name = patient_name;
         this.triageCategory = triageCategory;
@@ -66,7 +70,7 @@ class NodeConsult {
 
             } else {
                 const patient = await PatientManager.findById(careFlow.patient_id);
-                return new NodeConsult(patientTriage, patient!.name, triageCategory.priority, triageCategory.limitMinutes);
+                return new NodeConsult(careFlow_id, patientTriage, patient!.name, triageCategory.priority, triageCategory.limitMinutes);
             }
         }
 

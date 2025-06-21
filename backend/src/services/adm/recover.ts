@@ -20,7 +20,7 @@ export async function Recover(): Promise<boolean|undefined> {
         for (const flow of careFlows) {
             switch (flow.status as Status) {
                 case Status.WaitingTriage:
-                    const nodeTriage = await NodeTriage.create(flow.patient_id);
+                    const nodeTriage = await NodeTriage.create(flow.id, flow.patient_id);
                     TriageQueue.insertQueue(nodeTriage);
                     break;
 

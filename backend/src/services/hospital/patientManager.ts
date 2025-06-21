@@ -1,8 +1,6 @@
-import { NodeTriage } from "../../utils/queueUtils/createNode";
 import { Patient } from "../../entities/patient";
 import { db } from "../../db";
 import { ValidateRegister } from "../../utils/personsUtils/validators";
-import { TriageQueue } from "../../entities/queue";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
 export const PatientManager = {
@@ -13,16 +11,12 @@ export const PatientManager = {
             if (valid) {
                 const [result] = await db.execute<ResultSetHeader>('INSERT INTO Patient (name, dob, maritalStatus, cpf, rg, contact, gender, healthPlan, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [data.name, data.dob, data.maritalStatus, data.cpf, data.rg, data.contact, data.gender, data.healthPlan, data.address]);
                 const patient_id: number = result.insertId;
-                const nodeTriage: NodeTriage = await NodeTriage.create(patient_id);
-                TriageQueue.insertQueue(nodeTriage);
                 return patient_id
 
             } else {
                 const [result] = await db.execute<RowDataPacket[]>('SELECT * FROM Patient WHERE name = ? AND cpf = ? AND rg = ?', [data.name, data.cpf, data.rg]);
                 const patient = result[0];
                 const patient_id: number = patient.pat_id;
-                const nodeTriage: NodeTriage = await NodeTriage.create(patient_id!)
-                TriageQueue.insertQueue(nodeTriage);
                 return patient_id
             }
 

@@ -7,10 +7,26 @@ export default function NursePage() {
 
   const [triageQueue, setTriageQueue] = useState<string[]>([]);
   const [calledPatient, setCalledPatient] = useState<{
-    patient_id: number;
     patient_name: string;
-    pointer: number | null;
+    careFlow_id: number;
   } | null>(null);
+  const [formVisible, setFormVisible] = useState(false);
+
+  const [formData, setFormData] = useState({
+    vitalSigns: {
+      bloodPressure: {
+        systolicPressure: 120,
+        diastolicPressure: 80,
+      },
+      heartRate: 80,
+      respiratoryRate: 20,
+      bodyTemperature: 36,
+      oxygenSaturation: 98,
+    },
+    painLevel: 0,
+    symptoms: '',
+    triageCategory: 'non_urgent',
+  });
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -30,7 +46,6 @@ export default function NursePage() {
 
     try {
       const response = await fetch('http://localhost:3333/queue/byName/triage', {
-        method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -49,28 +64,120 @@ export default function NursePage() {
 
     try {
       const response = await fetch('http://localhost:3333/queue/call/triage', {
-        method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       });
 
       const result = await response.json();
 
       if (result.status && result.data) {
-        const { patient_id, patient_name, pointer } = result.data;
-
-        // Salva o careFlow_id (pointer) no localStorage
-        if (pointer) {
-          localStorage.setItem('careFlow_id', pointer.toString());
-        }
-
-        setCalledPatient({ patient_id, patient_name, pointer });
-        fetchQueue(); // Atualiza a fila, mas continua visível
+        const { patient_name, careFlow_id } = result.data;
+        localStorage.setItem('careFlow_id', careFlow_id.toString());
+        setCalledPatient({ patient_name, careFlow_id });
+        setFormVisible(false);
+        fetchQueue();
       } else {
         alert('Nenhum paciente na fila.');
       }
     } catch (err) {
       console.error('Erro ao chamar paciente:', err);
-      alert('Erro ao chamar paciente');
+    }
+  };
+
+  const iniciarTriagem = async () => {
+    const token = localStorage.getItem('token');
+    const careFlow_id = calledPatient?.careFlow_id;
+    if (!token || !careFlow_id) return;
+
+    try {
+      const res = await fetch(`http://localhost:3333/hospital/triageInit/${careFlow_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const result = await res.json();
+      if (result.status) {
+        setFormVisible(true);
+      } else {
+        alert('Erro ao iniciar triagem');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const finalizarTriagem = async () => {
+    const token = localStorage.getItem('token');
+    const careFlow_id = calledPatient?.careFlow_id;
+    if (!token || !careFlow_id) return;
+
+    const payload = {
+      ...formData,
+      painLevel: Number(formData.painLevel),
+      vitalSigns: {
+        ...formData.vitalSigns,
+        bloodPressure: {
+          systolicPressure: Number(formData.vitalSigns.bloodPressure.systolicPressure),
+          diastolicPressure: Number(formData.vitalSigns.bloodPressure.diastolicPressure),
+        },
+        heartRate: Number(formData.vitalSigns.heartRate),
+        respiratoryRate: Number(formData.vitalSigns.respiratoryRate),
+        bodyTemperature: Number(formData.vitalSigns.bodyTemperature),
+        oxygenSaturation: Number(formData.vitalSigns.oxygenSaturation),
+      },
+      symptoms: formData.symptoms.split(',').map((s) => s.trim()),
+    };
+
+    try {
+      const res = await fetch(`http://localhost:3333/hospital/triageEnd/${careFlow_id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+      alert(result.message);
+      setFormVisible(false);
+      setCalledPatient(null);
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao finalizar triagem');
+    }
+  };
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+
+    if (name in formData.vitalSigns) {
+      setFormData({
+        ...formData,
+        vitalSigns: {
+          ...formData.vitalSigns,
+          [name]: Number(value),
+        },
+      });
+    } else if (name === 'systolicPressure' || name === 'diastolicPressure') {
+      setFormData({
+        ...formData,
+        vitalSigns: {
+          ...formData.vitalSigns,
+          bloodPressure: {
+            ...formData.vitalSigns.bloodPressure,
+            [name]: Number(value),
+          },
+        },
+      });
+    } else if (name === 'painLevel') {
+      setFormData({
+        ...formData,
+        painLevel: Number(value),
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
     }
   };
 
@@ -78,7 +185,6 @@ export default function NursePage() {
     <div className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Painel da Enfermeira</h1>
 
-      {/* Fila de triagem SEMPRE visível */}
       <h2 className="text-xl font-semibold mb-2">Fila de Triagem</h2>
       <div className="bg-gray-100 p-4 rounded mb-4">
         {triageQueue.length > 0 ? (
@@ -92,7 +198,6 @@ export default function NursePage() {
         )}
       </div>
 
-      {/* Botão de chamada */}
       <button
         onClick={callNextPatient}
         className="bg-purple-600 text-white px-4 py-2 rounded mb-6"
@@ -100,14 +205,67 @@ export default function NursePage() {
         Chamar Próximo Paciente
       </button>
 
-      {/* Paciente chamado exibido separadamente */}
       {calledPatient && (
-        <div className="bg-blue-50 p-4 rounded border border-blue-200">
+        <div className="bg-blue-50 p-4 rounded border border-blue-200 mb-4">
           <h2 className="text-lg font-semibold mb-2">Paciente Chamado:</h2>
-          <p><strong>ID:</strong> {calledPatient.patient_id}</p>
           <p><strong>Nome:</strong> {calledPatient.patient_name}</p>
-          <p><strong>ID do Atendimento (careFlow_id):</strong> {calledPatient.pointer ?? 'Não informado'}</p>
+          <p><strong>ID do Atendimento:</strong> {calledPatient.careFlow_id}</p>
+
+          {!formVisible && (
+            <button
+              onClick={iniciarTriagem}
+              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded"
+            >
+              Iniciar Triagem
+            </button>
+          )}
         </div>
+      )}
+
+      {formVisible && (
+        <form className="flex flex-col gap-2 bg-white p-4 rounded border border-gray-300">
+          <h2 className="text-xl font-semibold">Formulário de Triagem</h2>
+
+          <label>Pressão Sistólica</label>
+          <input type="number" name="systolicPressure" onChange={handleChange} value={formData.vitalSigns.bloodPressure.systolicPressure} />
+
+          <label>Pressão Diastólica</label>
+          <input type="number" name="diastolicPressure" onChange={handleChange} value={formData.vitalSigns.bloodPressure.diastolicPressure} />
+
+          <label>Frequência Cardíaca</label>
+          <input type="number" name="heartRate" onChange={handleChange} value={formData.vitalSigns.heartRate} />
+
+          <label>Frequência Respiratória</label>
+          <input type="number" name="respiratoryRate" onChange={handleChange} value={formData.vitalSigns.respiratoryRate} />
+
+          <label>Temperatura Corporal</label>
+          <input type="number" step="0.1" name="bodyTemperature" onChange={handleChange} value={formData.vitalSigns.bodyTemperature} />
+
+          <label>Saturação de Oxigênio</label>
+          <input type="number" name="oxygenSaturation" onChange={handleChange} value={formData.vitalSigns.oxygenSaturation} />
+
+          <label>Nível de Dor (0 a 10)</label>
+          <input type="number" name="painLevel" min={0} max={10} onChange={handleChange} value={formData.painLevel} />
+
+          <label>Sintomas (separados por vírgula)</label>
+          <input type="text" name="symptoms" onChange={handleChange} value={formData.symptoms} />
+
+          <label>Classificação de Risco</label>
+          <select name="triageCategory" value={formData.triageCategory} onChange={handleChange}>
+            <option value="non_urgent">Pouco Urgente</option>
+            <option value="urgent">Urgente</option>
+            <option value="very_urgent">Muito Urgente</option>
+            <option value="emergency">Emergência</option>
+          </select>
+
+          <button
+            type="button"
+            onClick={finalizarTriagem}
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded"
+          >
+            Finalizar Triagem
+          </button>
+        </form>
       )}
     </div>
   );

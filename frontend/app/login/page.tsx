@@ -24,10 +24,11 @@ export default function LoginPage() {
 
       const data = await res.json();
 
-      const loginValido = data.status === true ||
+      const loginValido =
+        data.status === true ||
         (data.message === 'employee_logged_in' &&
-         data.data?.token &&
-         data.data?.role);
+          data.data?.token &&
+          data.data?.role);
 
       if (loginValido) {
         localStorage.setItem('token', data.data.token);
@@ -59,45 +60,52 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '40px auto', fontFamily: 'sans-serif' }}>
-      <h2>Login do Funcionário</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Usuário:</label>
-        <input
-          type="text"
-          id="username"
-          required
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Login do Funcionário</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              Usuário:
+            </label>
+            <input
+              type="text"
+              id="username"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-        <label htmlFor="password">Senha:</label>
-        <input
-          type="password"
-          id="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Senha:
+            </label>
+            <input
+              type="password"
+              id="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-        <button type="submit">Entrar</button>
-      </form>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition"
+          >
+            Entrar
+          </button>
+        </form>
 
-      {error && (
-        <div
-          id="resultado"
-          style={{
-            marginTop: '20px',
-            whiteSpace: 'pre-wrap',
-            background: '#f8d7da',
-            color: '#842029',
-            padding: '10px',
-            border: '1px solid #f5c2c7',
-          }}
-        >
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="mt-4 bg-red-100 text-red-700 border border-red-400 rounded p-3 text-sm">
+            {error}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

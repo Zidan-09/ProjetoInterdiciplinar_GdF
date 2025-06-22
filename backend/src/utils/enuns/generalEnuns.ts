@@ -28,7 +28,7 @@ enum EmployeeType {
 enum Status {
     WaitingTriage = 'waiting_triage',
     WaitingConsultation = 'waiting_consultation',
-    InConsultation = 'in_consult',
+    InConsultation = 'in_consultation',
     InTriage = 'in_triage',
     Attended  = 'attended',
     NoShow = 'no_show'

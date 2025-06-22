@@ -1,178 +1,184 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-export default function RegisterForm() {
+export default function AdminRegisterEmployee() {
   const [formData, setFormData] = useState({
-
-    registrationNumber:"",
-    name: "",
-    cpf: "",
-    email:"",
-    phone: "",
-    dob:"",
-    address: "",
-    workShift:"",//ENUM(MANHA, TARDE, NOITE)
-    status:"", //ENUM(ATVO, AFASTADO, INATIVO)
-    salary:"",
-    cnesCode:"",
-    acessLevel:"",
-    weeklyHours:"",
-    department:"",
-    crm: "",
-    coren: "",
-    specialty:"",
+    registrationNumber: '',
+    name: '',
+    cpf: '',
+    email: '',
+    phone: '',
+    dob: '',
+    address: '',
+    workShift: '',
+    status: '',
+    salary: '',
+    cnesCode: '',
+    weeklyHours: '',
+    accessLevel: '',
+    department: '',
+    crm: '',
+    coren: '',
+    specialty: '',
   });
 
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const {name, value} = e.target;
-    setFormData({...formData,[name]:value});
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const playload = {
-        ...formData,
-        salary:Number(formData.salary),
-        weeklyHours:Number(formData.weeklyHours),
-        registrationNumber:Number(formData.registrationNumber),
-        role:formData.acessLevel,
-    };
+    const token = localStorage.getItem('token');  // Token do Admin
+    if (!token) {
+      setError('Token de admin não encontrado. Faça login como admin.');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    setMessage('');
 
     try {
-      const response = await fetch("http://localhost:3333/employee/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(playload),
+      const payload: any = {
+        registrationNumber: Number(formData.registrationNumber),
+        name: formData.name,
+        cpf: formData.cpf,
+        email: formData.email,
+        phone: formData.phone,
+        dob: formData.dob,
+        address: formData.address,
+        workShift: formData.workShift,
+        status: formData.status,
+        salary: Number(formData.salary),
+        cnesCode: formData.cnesCode,
+        weeklyHours: Number(formData.weeklyHours),
+        accessLevel: formData.accessLevel,
+      };
+
+      // Adicionar campos extras por cargo
+      if (formData.accessLevel === 'doctor') {
+        payload.crm = formData.crm;
+        payload.specialty = formData.specialty;
+      }
+
+      if (formData.accessLevel === 'nurse') {
+        payload.coren = formData.coren;
+        payload.department = formData.department;
+        payload.specialty = formData.specialty;
+      }
+
+      const response = await fetch('http://localhost:3333/employee/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
-      alert(result.message || "Funcionário cadastrado com sucesso!");
+
+      if (response.ok && result.status) {
+        setMessage('Funcionário cadastrado. Aguardando autenticação via e-mail.');
+      } else {
+        setError(result.message || 'Erro ao cadastrar funcionário.');
+      }
     } catch (err) {
-      alert("Erro ao cadastrar funcionário.");
+      console.error(err);
+      setError('Erro de conexão com o servidor.');
+    } finally {
+      setLoading(false);
     }
   };
-  const {acessLevel} = formData;
+
+  const { accessLevel } = formData;
 
   return (
-        <form onSubmit={handleSubmit} className="space-y-4 p-4 border rounded-md">
-        <div>
-            <label>Número de Registro</label>
-            <input name="registrationNumber" type="number" onChange={handleChange} required/>
-        </div>
+    <div className="max-w-xl mx-auto mt-10 p-6 border rounded shadow">
+      <h1 className="text-2xl font-bold mb-4">Cadastrar Novo Funcionário</h1>
 
-        <div>
-            <label>Nome</label>
-            <input name="name" onChange={handleChange} required />
-        </div>
+      {message && <p className="text-green-600 mb-4">{message}</p>}
+      {error && <p className="text-red-600 mb-4">{error}</p>}
 
-        <div>
-            <label>CPF</label>
-            <input name="cpf" onChange={handleChange} required />
-        </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
 
-        <div>
-            <label>Email</label>
-            <input name="email" type="email" onChange={handleChange} required />
-        </div>
+        <input name="registrationNumber" placeholder="Número de Registro" type="number" onChange={handleChange} required className="w-full border p-2 rounded" />
 
-        <div>
-            <label>Telefone</label>
-            <input name="phone" type="tel" onChange={handleChange} required />
-        </div>
+        <input name="name" placeholder="Nome" onChange={handleChange} required className="w-full border p-2 rounded" />
 
-        <div>
-            <label>Data de Nascimento</label>
-            <input name="dob" type="date" onChange={handleChange} required />
-        </div>
+        <input name="cpf" placeholder="CPF" onChange={handleChange} required className="w-full border p-2 rounded" />
 
-        <div>
-            <label>Endereço</label>
-            <input name="address" onChange={handleChange} required />
-        </div>
+        <input name="email" placeholder="Email" type="email" onChange={handleChange} required className="w-full border p-2 rounded" />
 
-        <div>
-            <label>Turno</label>
-            <select name="workShift" onChange={handleChange} required >
-                <option value="">Selecione</option>
-                <option value="morning">Manhã</option>
-                <option value="afternoon">Tarde</option>
-                <option value="night">Noite</option>
-                <option value="full-time">Integral</option>
-            </select>
-        </div>
+        <input name="phone" placeholder="Telefone" onChange={handleChange} required className="w-full border p-2 rounded" />
 
-        <div>
-            <label>Status</label>
-            <select name="status" onChange={handleChange} required>
-                <option value="">Selecione</option>
-                <option value="active">Ativo</option>
-                <option value="onLeave">Afastado</option>
-                <option value="inactive">Inativo</option>
-            </select>
-        </div>
+        <input name="dob" placeholder="Data de Nascimento" type="date" onChange={handleChange} required className="w-full border p-2 rounded" />
 
-        <div>
-            <label>Salário</label>
-            <input name="salary" type="number"onChange={handleChange} required />
-        </div>
+        <input name="address" placeholder="Endereço" onChange={handleChange} required className="w-full border p-2 rounded" />
 
-        <div>
-            <label>Código CNES</label>
-            <input name="cnesCode" onChange={handleChange} required />
-        </div>
+        <select name="workShift" onChange={handleChange} required className="w-full border p-2 rounded">
+          <option value="">Turno</option>
+          <option value="morning">Manhã</option>
+          <option value="afternoon">Tarde</option>
+          <option value="night">Noite</option>
+          <option value="full-time">Integral</option>
+        </select>
 
-        <div>
-            <label>Horas Semanais</label>
-            <input name="weeklyHours" type="number" onChange={handleChange} required />
-        </div>
+        <select name="status" onChange={handleChange} required className="w-full border p-2 rounded">
+          <option value="">Status</option>
+          <option value="active">Ativo</option>
+          <option value="on_leave">Afastado</option>
+          <option value="resigned">Inativo</option>
+        </select>
 
-        <div>
-            <label>Cargo</label>
-            <select name="acessLevel" value={acessLevel} onChange={handleChange} required>
-                <option value="">Selecione</option>
-                <option value="admin">Admin</option>
-                <option value="doctor">Médico</option>
-                <option value="nurse">Enfermeiro</option>
-                <option value="receptionist">Recepcionista</option>
-            </select>
-        </div>    
+        <input name="salary" placeholder="Salário" type="number" onChange={handleChange} required className="w-full border p-2 rounded" />
 
-        {acessLevel === "doctor" && (
-            <div>
-                <div>
-                    <label>CRM</label>
-                    <input name="crm" onChange={handleChange}required/>
-                </div>
-                <div>
-                    <label>Especialidade</label>
-                    <input name="specialty" onChange={handleChange}required/>
-                </div>
-            </div>
+        <input name="cnesCode" placeholder="Código CNES" onChange={handleChange} required className="w-full border p-2 rounded" />
+
+        <input name="weeklyHours" placeholder="Horas Semanais" type="number" onChange={handleChange} required className="w-full border p-2 rounded" />
+
+        <select name="accessLevel" onChange={handleChange} required className="w-full border p-2 rounded">
+          <option value="">Cargo</option>
+          <option value="admin">Admin</option>
+          <option value="doctor">Médico</option>
+          <option value="nurse">Enfermeiro</option>
+          <option value="receptionist">Recepcionista</option>
+        </select>
+
+        {accessLevel === 'doctor' && (
+          <>
+            <input name="crm" placeholder="CRM" onChange={handleChange} required className="w-full border p-2 rounded" />
+            <input name="specialty" placeholder="Especialidade" onChange={handleChange} required className="w-full border p-2 rounded" />
+          </>
         )}
 
-        {acessLevel === "nurse" && (
-            <div>
-                <div>
-                    <label>COREN</label>
-                    <input name="coren" onChange={handleChange} required/>
-                </div>
-                <div>
-                    <label>Departamento</label>
-                    <input name="department" onChange={handleChange} required/>
-                </div>
-                <div>
-                    <label>Especialidade</label>
-                    <input name="specialty" onChange={handleChange} required/>
-                </div>
-            </div>
-            )}
+        {accessLevel === 'nurse' && (
+          <>
+            <input name="coren" placeholder="COREN" onChange={handleChange} required className="w-full border p-2 rounded" />
+            <input name="department" placeholder="Departamento" onChange={handleChange} required className="w-full border p-2 rounded" />
+            <input name="specialty" placeholder="Especialidade" onChange={handleChange} required className="w-full border p-2 rounded" />
+          </>
+        )}
 
-            <button type="submit">Cadastrar Funcionário</button>
-        </form>
-    );
-    }
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full px-4 py-2 rounded text-white ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'}`}
+        >
+          {loading ? 'Enviando...' : 'Cadastrar Funcionário'}
+        </button>
+      </form>
+    </div>
+  );
+}
+
 
 //-----------------------------------------------------
 // "use client";

@@ -6,7 +6,7 @@ import { Jwt } from "../../utils/systemUtils/security";
 
 
 export const ConsultService = {
-    async startConsult(data: number, token: string): Promise<number|undefined> {
+    async startConsult(careFlow_id: number, token: string): Promise<number|undefined> {
         try {
             const doctor_id = Jwt.verifyLoginToken(token);
 
@@ -14,11 +14,9 @@ export const ConsultService = {
                 return undefined;
             }
 
-            const [result] = await db.execute<ResultSetHeader>(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())`, [data, doctor_id.id]);
-            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InConsultation, data])
-            const consult_id: number = result.insertId
-            console.log(consult_id);
-            return consult_id;
+            await db.execute<ResultSetHeader>(`INSERT INTO Consult (consult_id, doctor_id, checkInConsult) VALUES (?, ?, NOW())`, [careFlow_id, doctor_id.id]);
+            await db.execute('UPDATE CareFlow SET status = ? WHERE id = ?', [Status.InConsultation, careFlow_id])
+            return careFlow_id;
 
         } catch (error) {
             console.error(error);

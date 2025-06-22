@@ -11,7 +11,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div
-      className="relative min-h-screen w-full"  // Removido flex-center
+      className="relative min-h-screen w-full"
       style={{ 
         backgroundImage: "url('/AlbedoBase_XL_abstract_background_with_light_bluelight_aqua_gr_3.jpg')",
         backgroundSize: 'cover',

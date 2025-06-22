@@ -1,5 +1,4 @@
 {
-    "careFlow_id": 1,
     "diagnosis": "Gripe",
     "prescriptions": ["Benegripe"],
     "notes": "Tomar de 8 em 8 horas"

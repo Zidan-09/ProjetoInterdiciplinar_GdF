@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `interproject`.`careflow` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `interproject`.`triagecategory` (
   UNIQUE INDEX `color` (`color` ASC) VISIBLE,
   UNIQUE INDEX `priority` (`priority` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 6
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `interproject`.`triage` (
   `oxygenSaturation` INT NULL DEFAULT NULL,
   `painLevel` INT NULL DEFAULT NULL,
   `symptoms` TEXT NULL DEFAULT NULL,
-  `triageCategory_id` INT NOT NULL,
+  `triageCategory_id` INT NULL DEFAULT NU,
   INDEX `nurse_id` (`nurse_id` ASC) VISIBLE,
   INDEX `triage_ibfk_3` (`triageCategory_id` ASC) VISIBLE,
   PRIMARY KEY (`triage_id`),

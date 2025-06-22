@@ -33,7 +33,7 @@ export const EmployeeManager = {
         if (!employeeData) {
             return EmployeeResponses.InvalidOrExpiredToken;
         }
-        console.log(userData);
+
         const valid: boolean | undefined = await ValidateRegister.verifyEmployee(employeeData);
 
         if (valid) {

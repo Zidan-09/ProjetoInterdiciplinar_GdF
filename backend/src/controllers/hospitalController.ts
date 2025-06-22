@@ -108,7 +108,7 @@ export const HospitalController = {
             const token = authorization!.split(' ')[1];
             const result = await ConsultService.startConsult(parseInt(careFlow_id), token);
 
-            if (result) {
+            if (result !== undefined) {
                 HandleResponse(true, 200, CareFlowResponses.ConsultStarted, careFlow_id, res);
             } else {
                 HandleResponse(false, 400, CareFlowResponses.ConsultFailed, null, res);

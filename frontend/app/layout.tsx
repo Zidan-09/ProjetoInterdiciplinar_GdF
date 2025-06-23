@@ -1,10 +1,21 @@
 import './globals.css';
+import { ReactNode } from 'react';
+import { Inter } from 'next/font/google';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata = {
+  title: 'Sistema GDF',
+  description: 'Gerenciamento de filas em Pronto-Socorro',
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR">
-      <head />
-      <body className="bg-white text-gray-800 font-sans">{children}</body>
+      <head>
+        <link rel="icon" href="/Gemini_Generated_Image_9357q79357q79357w.png" />
+      </head>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

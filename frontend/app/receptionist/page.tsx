@@ -9,7 +9,6 @@ export default function ReceptionistPage() {
 
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
-  const [ticketPriority, setTicketPriority] = useState<number | null>(null);
   const [queue, setQueue] = useState<string[]>([]);
   const [calledTicket, setCalledTicket] = useState<string | null>(null);
   const [calledHistory, setCalledHistory] = useState<string[]>([]);
@@ -77,10 +76,6 @@ export default function ReceptionistPage() {
     }
   };
 
-  const handleTicketPriorityChange = (priority: number) => {
-    setTicketPriority(priority);
-  };
-
   const fetchQueue = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -115,7 +110,7 @@ export default function ReceptionistPage() {
       if (result.status && result.data) {
         setCalledTicket(result.data);
         setCalledHistory((prev) => [...prev, result.data]);
-        fetchQueue();
+        await fetchQueue();
       } else {
         setCalledTicket(null);
         alert('A fila está vazia');
@@ -126,12 +121,7 @@ export default function ReceptionistPage() {
     }
   };
 
-  const generateTicket = async () => {
-    if (ticketPriority === null) {
-      alert('Por favor, selecione uma prioridade para o ticket.');
-      return;
-    }
-
+  const generateTicket = async (priority: number) => {
     const token = localStorage.getItem('token');
     if (!token) {
       alert('Token não encontrado. Faça login novamente.');
@@ -140,7 +130,7 @@ export default function ReceptionistPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:3333/hospital/ticket/${ticketPriority}`,
+        `http://localhost:3333/hospital/ticket/${priority}`,
         {
           method: 'GET',
           headers: { Authorization: `Bearer ${token}` },
@@ -150,7 +140,7 @@ export default function ReceptionistPage() {
       const result = await response.json();
       if (result.status && result.data) {
         alert(`Senha gerada com sucesso! Senha: ${result.data}`);
-        fetchQueue();
+        await fetchQueue();
       } else {
         alert(`Erro ao gerar a senha: ${result.message || 'Erro desconhecido'}`);
       }
@@ -236,33 +226,26 @@ export default function ReceptionistPage() {
 
       <h2 className="text-xl mt-6 mb-2">Gerar Senha de Atendimento</h2>
 
-      <div className="space-x-4 mb-4">
+      <div className="space-x-4 mb-10">
         <button
-          onClick={() => handleTicketPriorityChange(1)}
-          className={`px-4 py-2 rounded ${ticketPriority === 1 ? 'bg-gray-500 text-white' : 'bg-gray-300'}`}
+          onClick={() => generateTicket(1)}
+          className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
         >
           Sem Prioridade
         </button>
         <button
-          onClick={() => handleTicketPriorityChange(2)}
-          className={`px-4 py-2 rounded ${ticketPriority === 2 ? 'bg-yellow-600 text-white' : 'bg-yellow-500 text-white'}`}
+          onClick={() => generateTicket(2)}
+          className="px-4 py-2 rounded bg-yellow-500 hover:bg-yellow-600 text-white"
         >
           Prioridade
         </button>
         <button
-          onClick={() => handleTicketPriorityChange(3)}
-          className={`px-4 py-2 rounded ${ticketPriority === 3 ? 'bg-red-700 text-white' : 'bg-red-600 text-white'}`}
+          onClick={() => generateTicket(3)}
+          className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white"
         >
           Muita Prioridade
         </button>
       </div>
-
-      <button
-        onClick={generateTicket}
-        className="bg-green-600 text-white px-6 py-2 rounded mb-10"
-      >
-        Gerar Senha
-      </button>
 
       <h2 className="text-xl mb-2">Fila de Atendimento</h2>
       <div className="bg-gray-100 p-4 rounded mb-4">

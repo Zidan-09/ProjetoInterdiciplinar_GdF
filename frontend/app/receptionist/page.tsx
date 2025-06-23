@@ -183,6 +183,7 @@ export default function ReceptionistPage() {
         <div className="mt-4 space-y-2">
           <input name="name" value={formData.name} onChange={handleInputChange} placeholder="Nome" className="border p-2 w-full" />
           <input name="dob" value={formData.dob} onChange={handleInputChange} placeholder="Data de Nascimento (YYYY-MM-DD)" className="border p-2 w-full" />
+          //botar o calendario
 
           <select
             name="maritalStatus"
@@ -229,7 +230,7 @@ export default function ReceptionistPage() {
       <div className="space-x-4 mb-10">
         <button
           onClick={() => generateTicket(1)}
-          className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+          className="px-4 py-2 rounded bg-green-400 hover:bg-green-500"
         >
           Sem Prioridade
         </button>
@@ -306,3 +307,4 @@ export default function ReceptionistPage() {
     </div>
   );
 }
+//tirar o historico de fila,pq vai ficar na tela de chamado

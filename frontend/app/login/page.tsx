@@ -63,44 +63,41 @@ export default function LoginPage() {
      <div className="relative min-h-screen flex items-center justify-center w-full overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed blur-[2px]"
           style={{ 
-          backgroundImage: "url('/AlbedoBase_XL_abstract_background_with_light_bluelight_aqua_gr_3.jpg')"
+          backgroundImage: "url('/v870-tang-36.jpg')"
         }}
       />
 
-      <div className="bg-white/20 p-8 rounded-lg shadow-lg w-full max-w-md 
+      <div className="bg-white/20 p-14 rounded-[40px] shadow-lg w-full max-w-md 
                   backdrop-blur-md border border-white/30">
           
-        <h2 className="text-2xl font-bold text-center mb-6 text-white drop-shadow-md">Login do Funcionário</h2>
+        <h2 className="text-3xl font-bold text-center mb-2 text-white drop-shadow-md">REALIZE<br />SEU LOGIN</h2>
+         <p className="text-xl text-center drop-shadow-md text-white mt-1 mb-6">Insira seu Usuário e Senha</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-              Usuário:
-            </label>
             <input
               type="text"
               id="username"
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              placeholder='Usuário'
               className="mt-1 w-full px-4 py-3 rounded-full border-2 border-white/30 
-             bg-transparent text-black placeholder-gray-600/80 
+             bg-white text-black placeholder-gray-600/80 
              focus:outline-none focus:border-white/80 focus:ring-2 
              focus:ring-white/30 transition-all backdrop-blur-sm"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Senha:
-            </label>
             <input
               type="password"
               id="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder='Senha'
               className="mt-1 w-full px-4 py-3 rounded-full border-2 border-white/30 
-             bg-transparent text-black placeholder-gray-600/80 
+             bg-white text-black placeholder-gray-600/80 
              focus:outline-none focus:border-white/80 focus:ring-2 
              focus:ring-white/30 transition-all backdrop-blur-sm"
             />
@@ -110,7 +107,7 @@ export default function LoginPage() {
             type="submit"
             className="w-full bg-verde text-white py-4 px-4 rounded-full hover:bg-verdeclaro transition mt-8 shadow-md"
           >
-            Entrar
+            Entrar &gt;
           </button>
         </form>
 
@@ -123,3 +120,4 @@ export default function LoginPage() {
     </div>
   );
 }
+//botar input branco

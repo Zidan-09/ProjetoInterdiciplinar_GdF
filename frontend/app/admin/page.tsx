@@ -13,3 +13,12 @@ export default function AdminPage() {
     </div>
   );
 }
+//Botao para tela de chamados(/calls)
+//ajeitar os campos
+//botar um fundo
+//dividir em seçoes,as funcionais(ver filas:Recepçao,triagem,consuta)
+//cadastrar funcionario
+//Editar funcionario
+//demitir(dois campos:nome e cpf) mandava um post e muda o status no banco de active para inative
+//ver os funcionarios
+//Botao de recuperar(recover)

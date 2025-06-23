@@ -230,3 +230,6 @@ export default function DoctorPage() {
     </div>
   );
 }
+//reaizar consulta(inicia consulta)
+//ver fila(bolinha com a cor para verificar)
+//Botar lugar para ver a fila

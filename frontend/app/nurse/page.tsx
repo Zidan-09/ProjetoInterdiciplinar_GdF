@@ -300,3 +300,10 @@ export default function NursePage() {
     </div>
   );
 }
+//separar por seçoes,iniciar triagem
+//realizar triagem
+//ver fila da triagem
+//alterar classificaçao de risco(fila da consulta)
+//Botao universal,aparecer em algum lugar
+//botao de chamar o proximo o botao fica em realizar triagem,e o de iniciar triagem fica em uma notificaço 
+//com o botao iniciar triagem e ao cliar,expande o formuario e o botao vira de finalizar

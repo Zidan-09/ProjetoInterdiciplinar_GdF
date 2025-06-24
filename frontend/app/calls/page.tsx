@@ -125,19 +125,16 @@ export default function ChamadosPage() {
         </div>
       </div>
 
-      {/* Rodapé fixo */}
       <div className="bg-verde text-white p-4 flex items-center justify-between h-20 overflow-hidden">
-      {/* Logo e nome */}
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center -space-x-5">
         <img 
           src="/Gemini_Generated_Image_9357q79357q79357.png" 
           alt="Logo" 
-          className="h-[100px] w-[120px] mt-2" 
+          className="h-[100px] w-[120px] mt-3 -ml-3" 
         />
-        <span className="text-lg font-semibold -left-1">Sistema GDF</span>
+        <span className="text-lg font-semibold leading-[1.2]">Sistema<br />GDF</span>
       </div>
 
-      {/* Data e hora (agora alinhado à direita) */}
       <div className="text-right">
         <p className="text-xl font-medium">
           {format(currentTime, "EEEE, d 'de' MMMM 'de' yyyy", { locale: ptBR })}

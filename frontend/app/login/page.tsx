@@ -70,8 +70,8 @@ export default function LoginPage() {
       <div className="bg-white/20 p-14 rounded-[40px] shadow-lg w-full max-w-md 
                   backdrop-blur-md border border-white/30">
           
-        <h2 className="text-3xl font-bold text-center mb-2 text-white drop-shadow-md">REALIZE<br />SEU LOGIN</h2>
-         <p className="text-xl text-center drop-shadow-md text-white mt-1 mb-6">Insira seu Usuário e Senha</p>
+        <h2 className="text-3xl font-bold text-center mb-2 text-white drop-shadow-md">REALIZE SEU LOGIN</h2>
+         <p className="text-xl text-center drop-shadow-md text-white mt-1 mb-3 font-sans">Insira seu Usuário e Senha</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
@@ -120,4 +120,3 @@ export default function LoginPage() {
     </div>
   );
 }
-//botar input branco

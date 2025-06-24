@@ -17,11 +17,22 @@ const HomePage: React.FC = () => {
         }}
       />
 
-       <div className="absolute bottom-44 left-10 text-white text-shadow">
-        <h1 className="text-6xl font-bold mb-3">
+       <div className="absolute bottom-44 left-10 text-white">
+
+        <div className="absolute -top-60 left-0">
+        <div className="flex items-center -space-x-5">
+        <img 
+          src="/Gemini_Generated_Image_9357q79357q79357.png" 
+          alt="Logo" 
+          className="h-[100px] w-[120px] mt-2 -ml-3" 
+        />
+        <span className="text-lg font-semibold leading-[1.2]">Sistema<br />GDF</span>
+      </div>
+      </div>
+        <h1 className="text-6xl font-bold mb-3 text-shadow">
           SISTEMA DE GERENCIAMENTO<br />DE FILAS EM PRONTO-SOCORRO
         </h1>
-        <p className="text-xl mb-8">
+        <p className="text-xl mb-8 text-shadow-sm">
           Em situações de emergência, ninguém deveria esperar. Nosso sistema transforma o caos<br />
           das filas de pronto-socorro em um fluxo organizado, justo e eficiente
         </p>
@@ -33,7 +44,6 @@ const HomePage: React.FC = () => {
         </button>
       </div>
     </div>
-    
   );
 };
 

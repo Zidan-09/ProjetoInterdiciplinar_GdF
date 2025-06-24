@@ -147,6 +147,12 @@ export default function ChamadosPage() {
   </div>
 );
 }
+// Quando um chamado for realizado, deve-se exibir como pop up de celular, ou seja, o chamado aparece na tela, é exibido durante 5 segundos e sai para o histórico;
+// Caso aconteça 2 chamados ao mesmo tempo, o que apareceu primeiro deve ser exibido e o próximo deve esperar o primeiro teminar a exibição (5 segundos)
+
+
+
+
 
 // "use client";
 

@@ -233,7 +233,7 @@ export default function ReceptionistPage() {
             <h2 className="text-xl font-bold mb-4">Cadastro de Paciente</h2>
             <div className="space-y-2">
               <input name="name" value={formData.name} onChange={handleInputChange} placeholder="Nome" className="border p-2 w-full" />
-              <input name="dob" value={formData.dob} onChange={handleInputChange} placeholder="Data de Nascimento (YYYY-MM-DD)" className="border p-2 w-full" />
+              <input name="dob" type="date" value={formData.dob} onChange={handleInputChange} placeholder="Data de Nascimento" className="border p-2 w-full" />
 
               <select name="maritalStatus" value={formData.maritalStatus} onChange={handleInputChange} className="border p-2 w-full">
                 <option value="">Estado Civil</option>

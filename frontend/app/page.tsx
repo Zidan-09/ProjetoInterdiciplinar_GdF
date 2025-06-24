@@ -27,12 +27,13 @@ const HomePage: React.FC = () => {
         </p>
         <button
           onClick={handleLogin}
-          className="gap-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-xl py-4 px-8 rounded-full backdrop-blur-sm border border-white/30 transition-all duration-300 hover:shadow-lg hover:scale-105"
+          className="gap-2 bg-white/20 hover:bg-white/30 text-white font-semibold text-xl py-4 px-8 rounded-full backdrop-blur-sm border border-white/30 transition-all duration-300 hover:shadow-lg hover:scale-105 shadow-md"
         >
           Começar
         </button>
       </div>
     </div>
+    
   );
 };
 

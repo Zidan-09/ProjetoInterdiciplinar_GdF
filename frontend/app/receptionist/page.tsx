@@ -170,11 +170,24 @@ export default function ReceptionistPage() {
         <button onClick={logout} className="mt-6 py-2 bg-red-600 rounded text-sm hover:bg-red-700">Sair</button>
       </div>
 
+      <div className="flex h-screen">
+      <div className="w-1/3 p-10">
+        <h2 className="text-xl text-gray-500 mb-2 whitespace-nowrap">Bem vindo de volta!👋</h2>
+        <h2 className="text-3xl font-bold text-gray-800">RECEPÇÃO</h2>
+      </div>
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="bg-white shadow-md rounded-lg w-full max-w-xl h-[95vh] p-6 overflow-y-auto">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">RECEPÇÃO</h2>
           </div>
+
+          {selectedOption === 'generate' && (
+            <div className="space-y-4">
+              <h2 className="text-lg font-semibold">Gerar Senha de Atendimento:</h2>
+              <button onClick={() => generateTicket(1)} className="w-full py-2 bg-green-400 hover:bg-green-500 text-white rounded">Não Prioridade</button>
+              <button onClick={() => generateTicket(2)} className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded">Prioridade</button>
+              <button onClick={() => generateTicket(3)} className="w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded">Muita Prioridade</button>
+            </div>
+          )}
 
           {selectedOption === 'form' && (
             <div className="grid grid-cols-2 gap-4">
@@ -228,14 +241,6 @@ export default function ReceptionistPage() {
             </div>
           )}
 
-          {selectedOption === 'generate' && (
-            <div className="space-y-4">
-              <h2 className="text-lg font-semibold">Gerar Senha de Atendimento:</h2>
-              <button onClick={() => generateTicket(1)} className="w-full py-2 bg-green-400 hover:bg-green-500 text-white rounded">Não Prioridade</button>
-              <button onClick={() => generateTicket(2)} className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded">Prioridade</button>
-              <button onClick={() => generateTicket(3)} className="w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded">Muita Prioridade</button>
-            </div>
-          )}
 
           {selectedOption === 'queue' && (
             <div>
@@ -257,6 +262,7 @@ export default function ReceptionistPage() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

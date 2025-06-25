@@ -1,0 +1,331 @@
+[
+    {
+        "checkInConsult": "2025-06-20 09:00:00",
+        "checkOutConsult": "2025-06-20 09:20:00",
+        "diagnosis": "Gripe comum",
+        "prescriptions": ["Paracetamol 500mg", "Descanso"],
+        "notes": "Paciente apresentou sintomas leves."
+    },
+    {
+        "checkInConsult": "2025-06-20 09:30:00",
+        "checkOutConsult": "2025-06-20 09:50:00",
+        "diagnosis": "Bronquite",
+        "prescriptions": ["Amoxicilina 500mg", "Inalação"],
+        "notes": "Paciente com tosse persistente."
+    },
+    {
+        "checkInConsult": "2025-06-20 10:00:00",
+        "checkOutConsult": "2025-06-20 10:15:00",
+        "diagnosis": "Dor abdominal",
+        "prescriptions": ["Buscopan", "Dieta leve"],
+        "notes": "Possível gastrite."
+    },
+    {
+        "checkInConsult": "2025-06-20 10:30:00",
+        "checkOutConsult": "2025-06-20 10:50:00",
+        "diagnosis": "Hipertensão leve",
+        "prescriptions": ["Losartana 50mg"],
+        "notes": "Paciente deve monitorar pressão."
+    },
+    {
+        "checkInConsult": "2025-06-20 11:00:00",
+        "checkOutConsult": "2025-06-20 11:20:00",
+        "diagnosis": "Infecção urinária",
+        "prescriptions": ["Ciprofloxacino 500mg"],
+        "notes": "Prescrição antibiótica iniciada."
+    },
+    {
+        "checkInConsult": "2025-06-20 11:30:00",
+        "checkOutConsult": "2025-06-20 11:50:00",
+        "diagnosis": "Enxaqueca",
+        "prescriptions": ["Ibuprofeno 400mg", "Repouso"],
+        "notes": "Paciente relatou dor intensa."
+    },
+    {
+        "checkInConsult": "2025-06-20 12:00:00",
+        "checkOutConsult": "2025-06-20 12:20:00",
+        "diagnosis": "Asma leve",
+        "prescriptions": ["Broncodilatador inalatório"],
+        "notes": "Orientado uso correto do inalador."
+    },
+    {
+        "checkInConsult": "2025-06-20 12:30:00",
+        "checkOutConsult": "2025-06-20 12:45:00",
+        "diagnosis": "Conjuntivite",
+        "prescriptions": ["Colírio antibiótico"],
+        "notes": "Paciente com olhos irritados."
+    },
+    {
+        "checkInConsult": "2025-06-20 13:00:00",
+        "checkOutConsult": "2025-06-20 13:20:00",
+        "diagnosis": "Cólica renal",
+        "prescriptions": ["Analgésicos", "Hidratação"],
+        "notes": "Paciente com dor intensa na região lombar."
+    },
+    {
+        "checkInConsult": "2025-06-20 13:30:00",
+        "checkOutConsult": "2025-06-20 13:50:00",
+        "diagnosis": "Gastrite",
+        "prescriptions": ["Omeprazol 20mg", "Dieta leve"],
+        "notes": "Orientações para evitar alimentos irritantes."
+    },
+    {
+        "checkInConsult": "2025-06-20 14:00:00",
+        "checkOutConsult": "2025-06-20 14:20:00",
+        "diagnosis": "Sinusite",
+        "prescriptions": ["Descongestionante nasal", "Analgésico"],
+        "notes": "Paciente com congestão nasal e dor facial."
+    },
+    {
+        "checkInConsult": "2025-06-20 14:30:00",
+        "checkOutConsult": "2025-06-20 14:50:00",
+        "diagnosis": "Dermatite",
+        "prescriptions": ["Pomada corticosteroide"],
+        "notes": "Lesões cutâneas localizadas."
+    },
+    {
+        "checkInConsult": "2025-06-20 15:00:00",
+        "checkOutConsult": "2025-06-20 15:25:00",
+        "diagnosis": "Otite média",
+        "prescriptions": ["Antibiótico oral", "Analgésico"],
+        "notes": "Paciente com dor e febre."
+    },
+    {
+        "checkInConsult": "2025-06-20 15:30:00",
+        "checkOutConsult": "2025-06-20 15:50:00",
+        "diagnosis": "Gripe",
+        "prescriptions": ["Paracetamol", "Repouso", "Hidratação"],
+        "notes": "Sintomas gripais leves."
+    },
+    {
+        "checkInConsult": "2025-06-20 16:00:00",
+        "checkOutConsult": "2025-06-20 16:20:00",
+        "diagnosis": "Artrite leve",
+        "prescriptions": ["Anti-inflamatório"],
+        "notes": "Dor nas articulações."
+    },
+    {
+        "checkInConsult": "2025-06-20 16:30:00",
+        "checkOutConsult": "2025-06-20 16:55:00",
+        "diagnosis": "Gastrite",
+        "prescriptions": ["Omeprazol 20mg", "Dieta leve"],
+        "notes": "Recomendações para evitar alimentos irritantes."
+    },
+    {
+        "checkInConsult": "2025-06-20 17:00:00",
+        "checkOutConsult": "2025-06-20 17:20:00",
+        "diagnosis": "Faringite",
+        "prescriptions": ["Analgésico", "Descanso vocal"],
+        "notes": "Inflamação na garganta."
+    },
+    {
+        "checkInConsult": "2025-06-20 17:30:00",
+        "checkOutConsult": "2025-06-20 17:50:00",
+        "diagnosis": "Cistite",
+        "prescriptions": ["Antibiótico", "Ingestão de líquidos"],
+        "notes": "Infecção urinária."
+    },
+    {
+        "checkInConsult": "2025-06-20 18:00:00",
+        "checkOutConsult": "2025-06-20 18:20:00",
+        "diagnosis": "Hipertensão controlada",
+        "prescriptions": ["Losartana 50mg"],
+        "notes": "Paciente estável, continuar tratamento."
+    },
+    {
+        "checkInConsult": "2025-06-20 18:30:00",
+        "checkOutConsult": "2025-06-20 18:50:00",
+        "diagnosis": "Dengue leve",
+        "prescriptions": ["Paracetamol", "Hidratação"],
+        "notes": "Sintomas leves, monitorar sinais de alerta."
+    },
+    {
+        "checkInConsult": "2025-06-20 19:00:00",
+        "checkOutConsult": "2025-06-20 19:20:00",
+        "diagnosis": "Refluxo gastroesofágico",
+        "prescriptions": ["Antiácido", "Dieta"],
+        "notes": "Evitar alimentos gordurosos."
+    },
+    {
+        "checkInConsult": "2025-06-20 19:30:00",
+        "checkOutConsult": "2025-06-20 19:50:00",
+        "diagnosis": "Dor muscular",
+        "prescriptions": ["Analgésico", "Repouso"],
+        "notes": "Provável esforço muscular."
+    },
+    {
+        "checkInConsult": "2025-06-20 20:00:00",
+        "checkOutConsult": "2025-06-20 20:20:00",
+        "diagnosis": "Alergia leve",
+        "prescriptions": ["Anti-histamínico"],
+        "notes": "Reação alérgica controlada."
+    },
+    {
+        "checkInConsult": "2025-06-20 20:30:00",
+        "checkOutConsult": "2025-06-20 20:50:00",
+        "diagnosis": "Cefaleia tensional",
+        "prescriptions": ["Ibuprofeno", "Repouso"],
+        "notes": "Paciente com estresse elevado."
+    },
+    {
+        "checkInConsult": "2025-06-20 21:00:00",
+        "checkOutConsult": "2025-06-20 21:20:00",
+        "diagnosis": "Infecção respiratória",
+        "prescriptions": ["Antibiótico", "Descanso"],
+        "notes": "Monitorar febre e tosse."
+    },
+    {
+        "checkInConsult": "2025-06-20 21:30:00",
+        "checkOutConsult": "2025-06-20 21:50:00",
+        "diagnosis": "Gastrite crônica",
+        "prescriptions": ["Omeprazol", "Dieta"],
+        "notes": "Controle dos sintomas."
+    },
+    {
+        "checkInConsult": "2025-06-20 22:00:00",
+        "checkOutConsult": "2025-06-20 22:20:00",
+        "diagnosis": "Conjuntivite viral",
+        "prescriptions": ["Compressa fria"],
+        "notes": "Sintomas leves, evitar coçar os olhos."
+    },
+    {
+        "checkInConsult": "2025-06-20 22:30:00",
+        "checkOutConsult": "2025-06-20 22:50:00",
+        "diagnosis": "Dor lombar",
+        "prescriptions": ["Analgésico", "Fisioterapia"],
+        "notes": "Orientado exercícios específicos."
+    },
+    {
+        "checkInConsult": "2025-06-20 23:00:00",
+        "checkOutConsult": "2025-06-20 23:20:00",
+        "diagnosis": "Dermatite atópica",
+        "prescriptions": ["Cremes hidratantes", "Pomada corticosteroide"],
+        "notes": "Cuidados com a pele."
+    },
+    {
+        "checkInConsult": "2025-06-20 23:30:00",
+        "checkOutConsult": "2025-06-20 23:50:00",
+        "diagnosis": "Cólica menstrual",
+        "prescriptions": ["Analgésico", "Compressa quente"],
+        "notes": "Alívio dos sintomas."
+    },
+    {
+        "checkInConsult": "2025-06-21 00:00:00",
+        "checkOutConsult": "2025-06-21 00:20:00",
+        "diagnosis": "Asma moderada",
+        "prescriptions": ["Corticosteroide inalatório", "Broncodilatador"],
+        "notes": "Orientado uso correto dos inaladores."
+    },
+    {
+        "checkInConsult": "2025-06-21 00:30:00",
+        "checkOutConsult": "2025-06-21 00:50:00",
+        "diagnosis": "Infecção de pele",
+        "prescriptions": ["Antibiótico tópico", "Higiene local"],
+        "notes": "Cuidados diários recomendados."
+    },
+    {
+        "checkInConsult": "2025-06-21 01:00:00",
+        "checkOutConsult": "2025-06-21 01:20:00",
+        "diagnosis": "Lombalgia",
+        "prescriptions": ["Analgésico", "Fisioterapia"],
+        "notes": "Exercícios indicados."
+    },
+    {
+        "checkInConsult": "2025-06-21 01:30:00",
+        "checkOutConsult": "2025-06-21 01:50:00",
+        "diagnosis": "Febre",
+        "prescriptions": ["Paracetamol", "Hidratação"],
+        "notes": "Monitorar temperatura."
+    },
+    {
+        "checkInConsult": "2025-06-21 02:00:00",
+        "checkOutConsult": "2025-06-21 02:20:00",
+        "diagnosis": "Sinusite crônica",
+        "prescriptions": ["Descongestionante nasal", "Antibiótico"],
+        "notes": "Tratamento prolongado."
+    },
+    {
+        "checkInConsult": "2025-06-21 02:30:00",
+        "checkOutConsult": "2025-06-21 02:50:00",
+        "diagnosis": "Gripe",
+        "prescriptions": ["Paracetamol", "Repouso"],
+        "notes": "Sintomas gripais comuns."
+    },
+    {
+        "checkInConsult": "2025-06-21 03:00:00",
+        "checkOutConsult": "2025-06-21 03:20:00",
+        "diagnosis": "Infecção urinária",
+        "prescriptions": ["Antibiótico", "Hidratação"],
+        "notes": "Orientações para prevenção."
+    },
+    {
+        "checkInConsult": "2025-06-21 03:30:00",
+        "checkOutConsult": "2025-06-21 03:50:00",
+        "diagnosis": "Dermatite",
+        "prescriptions": ["Pomada corticosteroide", "Hidratação"],
+        "notes": "Cuidados com a pele recomendados."
+    },
+    {
+        "checkInConsult": "2025-06-21 04:00:00",
+        "checkOutConsult": "2025-06-21 04:20:00",
+        "diagnosis": "Gastrite",
+        "prescriptions": ["Omeprazol", "Dieta leve"],
+        "notes": "Evitar alimentos irritantes."
+    },
+    {
+        "checkInConsult": "2025-06-21 04:30:00",
+        "checkOutConsult": "2025-06-21 04:50:00",
+        "diagnosis": "Cólica renal",
+        "prescriptions": ["Analgésicos", "Hidratação"],
+        "notes": "Paciente com dor intensa."
+    },
+    {
+        "checkInConsult": "2025-06-21 05:00:00",
+        "checkOutConsult": "2025-06-21 05:20:00",
+        "diagnosis": "Enxaqueca",
+        "prescriptions": ["Ibuprofeno", "Repouso"],
+        "notes": "Paciente relatou dor forte."
+    },
+    {
+        "checkInConsult": "2025-06-21 05:30:00",
+        "checkOutConsult": "2025-06-21 05:50:00",
+        "diagnosis": "Hipertensão leve",
+        "prescriptions": ["Losartana 50mg"],
+        "notes": "Monitorar pressão arterial."
+    },
+    {
+        "checkInConsult": "2025-06-21 06:00:00",
+        "checkOutConsult": "2025-06-21 06:20:00",
+        "diagnosis": "Faringite",
+        "prescriptions": ["Analgésico", "Descanso vocal"],
+        "notes": "Paciente com dor de garganta."
+    },
+    {
+        "checkInConsult": "2025-06-21 06:30:00",
+        "checkOutConsult": "2025-06-21 06:50:00",
+        "diagnosis": "Otite",
+        "prescriptions": ["Antibiótico", "Analgésico"],
+        "notes": "Inflamação no ouvido médio."
+    },
+    {
+        "checkInConsult": "2025-06-21 07:00:00",
+        "checkOutConsult": "2025-06-21 07:20:00",
+        "diagnosis": "Dor muscular",
+        "prescriptions": ["Analgésico", "Repouso"],
+        "notes": "Esforço físico recente."
+    },
+    {
+        "checkInConsult": "2025-06-21 07:30:00",
+        "checkOutConsult": "2025-06-21 07:50:00",
+        "diagnosis": "Alergia leve",
+        "prescriptions": ["Anti-histamínico"],
+        "notes": "Reação alérgica controlada."
+    },
+    {
+        "checkInConsult": "2025-06-21 08:00:00",
+        "checkOutConsult": "2025-06-21 08:20:00",
+        "diagnosis": "Conjuntivite",
+        "prescriptions": ["Colírio antibiótico"],
+        "notes": "Paciente com olhos irritados."
+    }
+]        

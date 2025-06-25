@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2";
-import { db } from "../../db";
+import { db } from "../db";
 
 export function waitTime(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));

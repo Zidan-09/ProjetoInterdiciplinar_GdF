@@ -89,3 +89,5 @@ async function importConsultsFromJson(filePath: string, careFlow_ids: number[]) 
         console.error(error);
     }
 }
+
+importPatientsFromJson('../Json/test/patients.json');

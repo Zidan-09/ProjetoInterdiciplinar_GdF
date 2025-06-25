@@ -90,4 +90,8 @@ async function importConsultsFromJson(filePath: string, careFlow_ids: number[]) 
     }
 }
 
-importPatientsFromJson('../Json/test/patients.json');
+async function start() {
+    await importPatientsFromJson('../Json/test/patients.json');
+}
+
+start();

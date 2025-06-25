@@ -162,8 +162,8 @@ export default function ReceptionistPage() {
         <div>
           <h1 className="text-lg uppercase font-bold tracking-wide mb-8">Sistema GdF</h1>
           <div className="space-y-2">
-            <div onClick={() => setSelectedOption('form')} className={`cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'form' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}>Cadastrar Paciente</div>
             <div onClick={() => setSelectedOption('generate')} className={`cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'generate' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}>Gerar Senha</div>
+            <div onClick={() => setSelectedOption('form')} className={`cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'form' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}>Cadastro do Paciente</div>
             <div onClick={() => { fetchQueue(); setSelectedOption('queue'); }} className={`cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'queue' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}>Fila Atual</div>
           </div>
         </div>
@@ -181,9 +181,9 @@ export default function ReceptionistPage() {
           </div>
 
           {selectedOption === 'generate' && (
-            <div className="space-y-4">
+            <div className="space-y-4 items-center">
               <h2 className="text-lg font-semibold">Gerar Senha de Atendimento:</h2>
-              <button onClick={() => generateTicket(1)} className="w-full py-2 bg-green-400 hover:bg-green-500 text-white rounded">Não Prioridade</button>
+              <button onClick={() => generateTicket(1)} className="w-full py-2 bg-green-400 hover:bg-green-500 text-white rounded">Sem Prioridade</button>
               <button onClick={() => generateTicket(2)} className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded">Prioridade</button>
               <button onClick={() => generateTicket(3)} className="w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded">Muita Prioridade</button>
             </div>
@@ -202,9 +202,12 @@ export default function ReceptionistPage() {
                       value={formData[field as keyof typeof formData]}
                       onChange={handleInputChange}
                       className="border p-2 w-full text-black rounded"
+                      required
                     >
-                      <option value="">{field === 'maritalStatus' ? 'Estado Civil' : 'Gênero'}</option>
-                      {field === 'maritalStatus' && (
+                      <option value="" disabled hidden>
+                        {field === 'maritalStatus' ? 'Selecione o Estado Civil' : 'Selecione o Gênero'}
+                        </option>
+                        {field === 'maritalStatus' && (
                         <>
                           <option value="single">Solteiro(a)</option>
                           <option value="married">Casado(a)</option>
@@ -244,10 +247,10 @@ export default function ReceptionistPage() {
 
           {selectedOption === 'queue' && (
             <div>
-              <h2 className="text-lg font-semibold mb-2">Fila Atual:</h2>
+              <h2 className="text-lg font-semibold mb-2 text-black">Fila Atual:</h2>
               <div className="bg-gray-100 rounded p-3 mb-4">
                 {queue.length > 0 ? (
-                  <ul className="list-disc ml-5 space-y-1">{queue.map((ticket, i) => <li key={i}>{ticket}</li>)}</ul>
+                  <ul className="list-disc ml-5 space-y-1 text-black">{queue.map((ticket, i) => <li key={i}>{ticket}</li>)}</ul>
                 ) : (
                   <p>Nenhuma senha na fila.</p>
                 )}

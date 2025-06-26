@@ -1,7 +1,6 @@
 import { RecepQueue, TriageQueue, ConsultQueue } from "../../../entities/queue";
 import { getSocketInstance } from "../../../socket";
 import { TypeQueue } from "../../../utils/queueUtils/queueEnuns";
-import { calls } from "./called";
 import { QueueResponses } from "../../../utils/enuns/allResponses";
 import { CallTriage, CallConsult } from "../../../entities/careFlow";
 import { NodeConsult, NodeTriage } from "../../../utils/queueUtils/createNode";
@@ -49,8 +48,6 @@ export function callNext(typeQueue: TypeQueue): Promise<string|CallTriage|CallCo
                     called: temp.patient_id,
                     queue: TypeQueue.Consult
                 })
-
-                calls(temp);
 
                 call = {
                     careFlow_id: temp.careFlow_id,

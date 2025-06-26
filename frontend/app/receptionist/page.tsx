@@ -3,16 +3,18 @@
 import { useAuth } from '../utils/authRedirect';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {LogOut, ClipboardList, UserPlus, List } from 'lucide-react';
+import { LogOut, ClipboardList, UserPlus, List } from 'lucide-react';
+import { toast, Toaster } from 'react-hot-toast';
 
 export default function ReceptionistPage() {
   useAuth('receptionist');
   const router = useRouter();
 
-  const [selectedOption, setSelectedOption] = useState<string>('form');
+  const [selectedOption, setSelectedOption] = useState<string>('generate');
   const [queue, setQueue] = useState<string[]>([]);
   const [calledTicket, setCalledTicket] = useState<string | null>(null);
   const [calledHistory, setCalledHistory] = useState<string[]>([]);
+  const [generatedTicket, setGeneratedTicket] = useState<string | null>(null); // NOVO
   const [formData, setFormData] = useState({
     name: '', dob: '', maritalStatus: '', cpf: '', rg: '',
     contact: '', gender: '', healthPlan: '', address: '',
@@ -41,6 +43,10 @@ export default function ReceptionistPage() {
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
+  };
+
+  const validateForm = () => {
+    return Object.values(formData).every(field => field.trim() !== '');
   };
 
   const fetchQueue = async () => {
@@ -73,16 +79,16 @@ export default function ReceptionistPage() {
         await fetchQueue();
       } else {
         setCalledTicket(null);
-        alert('A fila está vazia');
+        toast.error('A fila está vazia');
       }
     } catch (err) {
-      alert('Erro ao chamar próxima senha');
+      toast.error('Erro ao chamar próxima senha');
     }
   };
 
   const generateTicket = async (priority: number) => {
     const token = localStorage.getItem('token');
-    if (!token) return alert('Token não encontrado.');
+    if (!token) return toast.error('Token não encontrado.');
 
     try {
       const response = await fetch(`http://localhost:3333/hospital/ticket/${priority}`, {
@@ -90,19 +96,24 @@ export default function ReceptionistPage() {
       });
       const result = await response.json();
       if (result.status && result.data) {
-        alert(`Senha gerada: ${result.data}`);
+        setGeneratedTicket(result.data); // <- exibe senha na tela
         await fetchQueue();
       } else {
-        alert(`Erro: ${result.message || 'Erro ao gerar senha.'}`);
+        toast.error(result.message || 'Erro ao gerar senha.');
       }
     } catch {
-      alert('Erro ao conectar com o servidor.');
+      toast.error('Erro ao conectar com o servidor.');
     }
   };
 
   const submitPatientForm = async () => {
+    if (!validateForm()) {
+      toast.error('Por favor, preencha todos os campos antes de cadastrar.');
+      return;
+    }
+
     const token = localStorage.getItem('token');
-    if (!token) return alert('Token não encontrado.');
+    if (!token) return toast.error('Token não encontrado.');
 
     const cleanCPF = formData.cpf.replace(/\D/g, '');
     const cleanContact = formData.contact.replace(/\D/g, '');
@@ -125,17 +136,17 @@ export default function ReceptionistPage() {
 
       const result = await response.json();
       if (result.status) {
-        alert('Paciente cadastrado!');
+        toast.success('Paciente cadastrado com sucesso!');
         setFormData({
           name: '', dob: '', maritalStatus: '', cpf: '',
           rg: '', contact: '', gender: '', healthPlan: '', address: ''
         });
         setSelectedOption('form');
       } else {
-        alert(`Erro: ${result.message || 'Erro ao cadastrar.'}`);
+        toast.error(result.message || 'Erro ao cadastrar.');
       }
     } catch {
-      alert('Erro ao conectar com o servidor.');
+      toast.error('Erro ao conectar com o servidor.');
     }
   };
 
@@ -149,37 +160,59 @@ export default function ReceptionistPage() {
   }, [calledHistory]);
 
   return (
-    <div className="flex min-h-screen bg-white">
-      <div className="w-64 bg-teal-600 text-white p-4 flex flex-col justify-between">
-        <div>
-          <h1 className="text-lg uppercase font-bold tracking-wide mb-8">Sistema GdF</h1>
-          <div className="space-y-2">
-            <div onClick={() => setSelectedOption('generate')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'generate' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}><ClipboardList size={16} /> Gerar Senha</div>
-            <div onClick={() => setSelectedOption('form')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'form' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}><UserPlus size={16} /> Cadastro do Paciente</div>
-            <div onClick={() => { fetchQueue(); setSelectedOption('queue'); }} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'queue' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}><List size={16} /> Fila Atual</div>
-          </div>
-        </div>
-        <button onClick={logout} className="mt-6 py-2 bg-red-500 rounded-full text-sm hover:bg-red-700 flex items-center justify-center gap-2">
-          <LogOut size={16} /> Sair
-        </button>
-      </div>
-
-      <div className="flex-1 p-10">
-        <div className="mb-6">
-          <h2 className="text-md text-gray-500 -mb-1 whitespace-nowrap">Bem vindo de volta! 👋</h2>
-          <h2 className="text-3xl font-bold text-gray-800">RECEPÇÃO</h2>
-        </div>
-
-        {selectedOption === 'generate' && (
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold">Gerar Senha de Atendimento:</h2>
-            <div className="grid grid-cols-3 gap-4">
-              <button onClick={() => generateTicket(1)} className="py-2 bg-green-400 hover:bg-green-500 text-white rounded">Sem Prioridade</button>
-              <button onClick={() => generateTicket(2)} className="py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded">Prioridade</button>
-              <button onClick={() => generateTicket(3)} className="py-2 bg-red-600 hover:bg-red-700 text-white rounded">Muita Prioridade</button>
+    <>
+      <Toaster position="top-right" 
+        toastOptions={{
+          style: {
+            fontSize: '1.25rem',
+            padding: '14px 22px',
+            borderRadius: '12px',
+          },
+        }}
+      />
+      <div className="flex min-h-screen bg-white">
+        <div className="w-64 bg-teal-600 text-white p-4 flex flex-col justify-between">
+          <div>
+            <h1 className="text-lg uppercase font-bold tracking-wide mb-8">Sistema GdF</h1>
+            <div className="space-y-2">
+              <div onClick={() => setSelectedOption('generate')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'generate' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}><ClipboardList size={16} /> Gerar Senha</div>
+              <div onClick={() => setSelectedOption('form')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'form' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}><UserPlus size={16} /> Cadastro do Paciente</div>
+              <div onClick={() => { fetchQueue(); setSelectedOption('queue'); }} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'queue' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}><List size={16} /> Fila Atual</div>
             </div>
           </div>
-        )}
+          <button onClick={logout} className="mt-6 py-2 bg-red-500 rounded-full text-sm hover:bg-red-700 flex items-center justify-center gap-2">
+            <LogOut size={16} /> Sair
+          </button>
+        </div>
+
+        <div className="flex-1 p-10">
+          <div className="mb-6">
+            <h2 className="text-md text-gray-500 -mb-1 whitespace-nowrap">Bem vindo de volta! 👋</h2>
+            <h2 className="text-3xl font-bold text-gray-800">RECEPÇÃO</h2>
+          </div>
+
+          {selectedOption === 'generate' && (
+            <div className="space-y-10">
+
+              {generatedTicket && (
+                <div className="text-center bg-blue-100 border border-blue-300 rounded-xl py-7 px-7 shadow text-4xl font-bold text-blue-700">
+                  Senha gerada: {generatedTicket}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                <button onClick={() => generateTicket(1)} className="w-full py-4 bg-green-500 hover:bg-green-600 text-white text-lg font-semibold rounded-xl shadow">
+                  Sem Prioridade
+                </button>
+                <button onClick={() => generateTicket(2)} className="w-full py-4 bg-yellow-500 hover:bg-yellow-600 text-white text-lg font-semibold rounded-xl shadow">
+                  Prioridade
+                </button>
+                <button onClick={() => generateTicket(3)} className="w-full py-4 bg-red-600 hover:bg-red-700 text-white text-lg font-semibold rounded-xl shadow">
+                  Muita Prioridade
+                </button>
+              </div>
+            </div>
+          )}
 
         {selectedOption === 'form' && (
           <div className="bg-white shadow rounded-xl p-8 w-full max-w-full">
@@ -226,27 +259,42 @@ export default function ReceptionistPage() {
         )}
 
         {selectedOption === 'queue' && (
-          <div className="mt-8">
-            <h2 className="text-lg font-semibold mb-2 text-black">Fila Atual:</h2>
-            <div className="bg-gray-100 rounded p-4 mb-4">
-              {queue.length > 0 ? (
-                <ul className="list-disc ml-5 space-y-1 text-black">
-                  {queue.map((ticket, i) => <li key={i}>{ticket}</li>)}
-                </ul>
-              ) : (
-                <p>Nenhuma senha na fila.</p>
-              )}
-            </div>
-            <button onClick={callNextTicket} className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Chamar Próximo</button>
-            {calledTicket && (
-              <div className="mt-4 font-semibold">
-                Próximo chamado: <span className="text-green-600">{calledTicket}</span>
+        <div className="mt-8">
+          <div className="bg-white border border-gray-200 shadow rounded-xl p-6">
+            {queue.length > 0 ? (
+              <ul className="space-y-3">
+                {queue.map((ticket, i) => (
+                  <li key={i} className="px-4 py-2 rounded bg-gray-100 text-2xl font-medium text-gray-700">
+                    {ticket}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-center text-gray-500 italic py-4">
+                Nenhuma senha na fila no momento.
               </div>
             )}
           </div>
-        )}
+
+          <div className="mt-6 flex flex-col items-center">
+            <button
+              onClick={callNextTicket}
+              className="bg-verde hover:bg-verdeclaro text-white font-semibold px-6 py-3 rounded-full shadow-md transition"
+            >
+              Chamar Próximo
+            </button>
+
+            {calledTicket && (
+              <div className="mt-6 text-xl font-bold text-purple-700 bg-purple-100 border border-purple-300 px-6 py-4 rounded-xl shadow">
+                Próximo chamado: <span className="text-purple-800">{calledTicket}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       </div>
     </div>
+        </>
   );
 }
 

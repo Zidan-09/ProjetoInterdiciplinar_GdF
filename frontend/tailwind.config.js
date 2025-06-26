@@ -14,7 +14,7 @@ module.exports = {
       },
       colors:{
         'verde':'#69CEC3',
-        'verdeclaro':'#BCE9E3',
+        'verdeclaro':'#4FB8A8',
       },
     },
   },

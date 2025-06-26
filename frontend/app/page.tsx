@@ -29,18 +29,20 @@ const HomePage: React.FC = () => {
         <span className="text-lg font-semibold leading-[1.1]">Sistema<br />GDF</span>
       </div>
       </div>
-        <h1 className="text-6xl font-bold mb-7 text-shadow">
+      <div className="flex flex-col">
+        <h1 className="text-6xl font-bold text-shadow leading-tight mb-4">
           SISTEMA DE GERENCIAMENTO<br />DE FILAS EM PRONTO-SOCORRO
         </h1>
-        <p className="text-xl mb-10 text-shadow-sm">
+        <p className="relative -top-4 text-xl leading-snug mb-8 text-shadow-sm">
           Em situações de emergência, ninguém deveria esperar. Nosso sistema transforma o caos<br />
-          das filas de pronto-socorro em um fluxo organizado, justo e eficiente
+          das filas de pronto-socorro em um fluxo organizado, justo e eficiente.
         </p>
+        </div>
         <button
           onClick={handleLogin}
-          className="gap-1 bg-white/20 hover:bg-white/30 text-white font-semibold text-xl py-4 px-8 rounded-full backdrop-blur-sm border border-white/30 transition-all duration-300 hover:shadow-lg hover:scale-105 shadow-md"
+          className="relative -top-6 gap-1 bg-white/20 hover:bg-white/30 text-white font-semibold text-xl py-4 px-8 rounded-full backdrop-blur-sm border border-white/30 transition-all duration-300 hover:shadow-lg hover:scale-105 shadow-md"
         >
-          Começar
+          Começar &gt;
         </button>
       </div>
     </div>

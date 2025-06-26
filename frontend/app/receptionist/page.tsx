@@ -177,12 +177,12 @@ export default function ReceptionistPage() {
         }}
       />
       <div className="flex min-h-screen bg-white">
-        <div className="w-64 bg-teal-600 text-white p-4 flex flex-col justify-between">
+        <div className="w-64 bg-teal-600 text-white p-0 flex flex-col justify-between">
           <div className="flex gap-1 mb-6">
             <img 
             src="/Gemini_Generated_Image_9357q79357q79357.png"
             alt="Logo" 
-            className="h-[150px] w-[150px] -ml-4 -mt-3" />
+            className="h-[150px] w-[150px] ml-2 -mt-3" />
 
             <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
               Sistema<br />GdF
@@ -191,7 +191,7 @@ export default function ReceptionistPage() {
           <div className="space-y-2">
             <div onClick={() => setSelectedOption('generate')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedOption === 'generate' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}><ClipboardList size={16} /> Gerar Senha</div>
             <div onClick={() => setSelectedOption('form')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedOption === 'form' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}><UserPlus size={16} /> Cadastro do Paciente</div>
-            <div onClick={() => { fetchQueue(); setSelectedOption('queue'); }} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedOption === 'queue' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}><List size={16} /> Fila Atual</div>
+            <div onClick={() => { fetchQueue(); setSelectedOption('queue'); }} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded- w-full transition ${selectedOption === 'queue' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}><List size={16} /> Fila Atual</div>
           </div>
           <div className="flex-grow" />
           <button onClick={logout} className="mt-6 py-2 bg-red-500 rounded-full text-sm hover:bg-red-700 flex items-center justify-center gap-2">

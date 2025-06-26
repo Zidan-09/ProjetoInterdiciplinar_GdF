@@ -14,7 +14,7 @@ export default function ReceptionistPage() {
   const [queue, setQueue] = useState<string[]>([]);
   const [calledTicket, setCalledTicket] = useState<string | null>(null);
   const [calledHistory, setCalledHistory] = useState<string[]>([]);
-  const [generatedTicket, setGeneratedTicket] = useState<string | null>(null); // NOVO
+  const [generatedTicket, setGeneratedTicket] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '', dob: '', maritalStatus: '', cpf: '', rg: '',
     contact: '', gender: '', healthPlan: '', address: '',
@@ -23,6 +23,7 @@ export default function ReceptionistPage() {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    localStorage.removeItem('generatedTicket');
     router.push('/login');
   };
 
@@ -96,7 +97,8 @@ export default function ReceptionistPage() {
       });
       const result = await response.json();
       if (result.status && result.data) {
-        setGeneratedTicket(result.data); // <- exibe senha na tela
+        setGeneratedTicket(result.data);
+        localStorage.setItem('generatedTicket', result.data);
         await fetchQueue();
       } else {
         toast.error(result.message || 'Erro ao gerar senha.');
@@ -152,6 +154,10 @@ export default function ReceptionistPage() {
 
   useEffect(() => { fetchQueue(); }, []);
   useEffect(() => {
+    const savedTicket = localStorage.getItem('generatedTicket');
+    if (savedTicket) setGeneratedTicket(savedTicket);
+  }, []);
+  useEffect(() => {
     const stored = localStorage.getItem('calledHistory');
     if (stored) setCalledHistory(JSON.parse(stored));
   }, []);
@@ -161,7 +167,7 @@ export default function ReceptionistPage() {
 
   return (
     <>
-      <Toaster position="top-right" 
+      <Toaster position="top-right"
         toastOptions={{
           style: {
             fontSize: '1.25rem',
@@ -172,14 +178,22 @@ export default function ReceptionistPage() {
       />
       <div className="flex min-h-screen bg-white">
         <div className="w-64 bg-teal-600 text-white p-4 flex flex-col justify-between">
-          <div>
-            <h1 className="text-lg uppercase font-bold tracking-wide mb-8">Sistema GdF</h1>
-            <div className="space-y-2">
-              <div onClick={() => setSelectedOption('generate')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'generate' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}><ClipboardList size={16} /> Gerar Senha</div>
-              <div onClick={() => setSelectedOption('form')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'form' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}><UserPlus size={16} /> Cadastro do Paciente</div>
-              <div onClick={() => { fetchQueue(); setSelectedOption('queue'); }} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded transition ${selectedOption === 'queue' ? 'bg-white text-teal-600 font-semibold border-l-4 border-blue-400' : 'hover:bg-teal-700'}`}><List size={16} /> Fila Atual</div>
-            </div>
+          <div className="flex gap-1 mb-6">
+            <img 
+            src="/Gemini_Generated_Image_9357q79357q79357.png"
+            alt="Logo" 
+            className="h-[150px] w-[150px] -ml-4 -mt-3" />
+
+            <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
+              Sistema<br />GdF
+            </h1>
           </div>
+          <div className="space-y-2">
+            <div onClick={() => setSelectedOption('generate')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedOption === 'generate' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}><ClipboardList size={16} /> Gerar Senha</div>
+            <div onClick={() => setSelectedOption('form')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedOption === 'form' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}><UserPlus size={16} /> Cadastro do Paciente</div>
+            <div onClick={() => { fetchQueue(); setSelectedOption('queue'); }} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedOption === 'queue' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}><List size={16} /> Fila Atual</div>
+          </div>
+          <div className="flex-grow" />
           <button onClick={logout} className="mt-6 py-2 bg-red-500 rounded-full text-sm hover:bg-red-700 flex items-center justify-center gap-2">
             <LogOut size={16} /> Sair
           </button>
@@ -193,12 +207,14 @@ export default function ReceptionistPage() {
 
           {selectedOption === 'generate' && (
             <div className="space-y-10">
-
-              {generatedTicket && (
-                <div className="text-center bg-blue-100 border border-blue-300 rounded-xl py-7 px-7 shadow text-4xl font-bold text-blue-700">
-                  Senha gerada: {generatedTicket}
+              <div className="text-center bg-blue-100 border border-blue-300 rounded-xl py-6 px-6 shadow">
+                <div className="text-lg font-semibold text-blue-800 mb-2 uppercase tracking-wide">
+                  Senha Gerada
                 </div>
-              )}
+                <div className="text-4xl font-bold text-blue-700">
+                  {generatedTicket ?? 'Nenhuma senha gerada ainda'}
+                </div>
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
                 <button onClick={() => generateTicket(1)} className="w-full py-4 bg-green-500 hover:bg-green-600 text-white text-lg font-semibold rounded-xl shadow">

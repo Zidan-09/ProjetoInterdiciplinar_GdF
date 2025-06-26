@@ -59,7 +59,7 @@ async function importTriagesFromJson(filePath: string, careFlow_ids: number[]) {
 
         console.log(`Importando ${triages.length} triagens...`);
 
-        for (let i = 0; i < careFlow_ids.length; i++) {
+        for (let i = 0; i < triages.length; i++) {
             await db.execute<ResultSetHeader>("INSERT INTO Triage (triage_id, nurse_id, checkInTriage, checkOutTriage, systolicPressure, diastolicPressure, heartRate, respiratoryRate, bodyTemperature, oxygenSaturation, painLevel, symptoms, triageCategory_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [careFlow_ids[i], nurse_id, triages[i].checkInTriage, triages[i].checkOutTriage, triages[i].systolicPressure, triages[i].diastolicPressure, triages[i].heartRate, triages[i].respiratoryRate, triages[i].bodyTemperature, triages[i].oxygenSaturation, triages[i].painLevel, triages[i].symptoms, triages[i].triageCategory_id]);
         }
 
@@ -79,7 +79,7 @@ async function importConsultsFromJson(filePath: string, careFlow_ids: number[]) 
 
         console.log(`Importando ${consults.length} consultas...`);
 
-        for (let i = 0; i < careFlow_ids.length; i++) {
+        for (let i = 0; i < consults.length; i++) {
             await db.execute<ResultSetHeader>("INSERT INTO Consult (consult_id, doctor_id, checkInConsult, checkOutConsult, diagnosis, prescriptions, notes) VALUES (?, ?, ?, ?, ?, ?, ?)", [careFlow_ids[i], doctor_id, consults[i].checkInConsult, consults[i].checkOutConsult, consults[i].diagnosis, consults[i].prescriptions, consults[i].notes]);
         }
 
@@ -89,3 +89,12 @@ async function importConsultsFromJson(filePath: string, careFlow_ids: number[]) 
         console.error(error);
     }
 }
+
+async function start() {
+    const patients = await importPatientsFromJson('src/Json/test/patients.json');
+    const careFlows = await importCareFlowsFromJson('src/Json/test/careFlows.json', patients!);
+    await importTriagesFromJson('src/Json/test/triages.json', careFlows!);
+    await importConsultsFromJson('src/Json/test/consults.json', careFlows!);
+}
+
+export { start };

@@ -3,7 +3,7 @@
 import { useAuth } from '../utils/authRedirect';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, ClipboardList, UserPlus, List } from 'lucide-react';
+import { LogOut, ClipboardList, UserPlus, List, CheckCircle } from 'lucide-react';
 import { toast, Toaster } from 'react-hot-toast';
 
 export default function ReceptionistPage() {
@@ -14,7 +14,6 @@ export default function ReceptionistPage() {
   const [queue, setQueue] = useState<string[]>([]);
   const [calledTicket, setCalledTicket] = useState<string | null>(null);
   const [calledHistory, setCalledHistory] = useState<string[]>([]);
-  const [generatedTicket, setGeneratedTicket] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '', dob: '', maritalStatus: '', cpf: '', rg: '',
     contact: '', gender: '', healthPlan: '', address: '',
@@ -23,7 +22,6 @@ export default function ReceptionistPage() {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
-    localStorage.removeItem('generatedTicket');
     router.push('/login');
   };
 
@@ -97,8 +95,15 @@ export default function ReceptionistPage() {
       });
       const result = await response.json();
       if (result.status && result.data) {
-        setGeneratedTicket(result.data);
-        localStorage.setItem('generatedTicket', result.data);
+        toast.custom(() => (
+          <div className="bg-blue-100 text-blue-800 px-6 py-4 rounded-xl shadow-lg border border-blue-300 flex items-center space-x-4 text-lg">
+            <CheckCircle className="text-blue-500 w-6 h-6" />
+            <div>
+              <p className="font-bold">Senha Gerada</p>
+              <p className="text-2xl font-semibold">{result.data}</p>
+            </div>
+          </div>
+        ));
         await fetchQueue();
       } else {
         toast.error(result.message || 'Erro ao gerar senha.');
@@ -154,10 +159,6 @@ export default function ReceptionistPage() {
 
   useEffect(() => { fetchQueue(); }, []);
   useEffect(() => {
-    const savedTicket = localStorage.getItem('generatedTicket');
-    if (savedTicket) setGeneratedTicket(savedTicket);
-  }, []);
-  useEffect(() => {
     const stored = localStorage.getItem('calledHistory');
     if (stored) setCalledHistory(JSON.parse(stored));
   }, []);
@@ -176,144 +177,142 @@ export default function ReceptionistPage() {
           },
         }}
       />
-      <div className="flex min-h-screen bg-white">
-        <div className="w-64 bg-teal-600 text-white p-0 flex flex-col justify-between">
-          <div className="flex gap-1 mb-6">
-            <img 
-            src="/Gemini_Generated_Image_9357q79357q79357.png"
-            alt="Logo" 
-            className="h-[150px] w-[150px] ml-2 -mt-3" />
+      <div className="flex h-screen bg-white">
+  {/* Sidebar fixa com botão no rodapé */}
+  <div className="w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
+    <div>
+      <div className="flex gap-1 mb-6">
+        <img src="/Gemini_Generated_Image_9357q79357q79357.png" alt="Logo" className="h-[150px] w-[150px] ml-2 -mt-3" />
+        <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
+          Sistema<br />GdF
+        </h1>
+      </div>
 
-            <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
-              Sistema<br />GdF
-            </h1>
-          </div>
-          <div className="space-y-2">
-            <div onClick={() => setSelectedOption('generate')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedOption === 'generate' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}><ClipboardList size={16} /> Gerar Senha</div>
-            <div onClick={() => setSelectedOption('form')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedOption === 'form' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}><UserPlus size={16} /> Cadastro do Paciente</div>
-            <div onClick={() => { fetchQueue(); setSelectedOption('queue'); }} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded- w-full transition ${selectedOption === 'queue' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}><List size={16} /> Fila Atual</div>
-          </div>
-          <div className="flex-grow" />
-          <button onClick={logout} className="mt-6 py-2 bg-red-500 rounded-full text-sm hover:bg-red-700 flex items-center justify-center gap-2">
-            <LogOut size={16} /> Sair
-          </button>
-        </div>
-
-        <div className="flex-1 p-10">
-          <div className="mb-6">
-            <h2 className="text-md text-gray-500 -mb-1 whitespace-nowrap">Bem vindo de volta! 👋</h2>
-            <h2 className="text-3xl font-bold text-gray-800">RECEPÇÃO</h2>
-          </div>
-
-          {selectedOption === 'generate' && (
-            <div className="space-y-10">
-              <div className="text-center bg-blue-100 border border-blue-300 rounded-xl py-6 px-6 shadow">
-                <div className="text-lg font-semibold text-blue-800 mb-2 uppercase tracking-wide">
-                  Senha Gerada
-                </div>
-                <div className="text-4xl font-bold text-blue-700">
-                  {generatedTicket ?? 'Nenhuma senha gerada ainda'}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-                <button onClick={() => generateTicket(1)} className="w-full py-4 bg-green-500 hover:bg-green-600 text-white text-lg font-semibold rounded-xl shadow">
-                  Sem Prioridade
-                </button>
-                <button onClick={() => generateTicket(2)} className="w-full py-4 bg-yellow-500 hover:bg-yellow-600 text-white text-lg font-semibold rounded-xl shadow">
-                  Prioridade
-                </button>
-                <button onClick={() => generateTicket(3)} className="w-full py-4 bg-red-600 hover:bg-red-700 text-white text-lg font-semibold rounded-xl shadow">
-                  Muita Prioridade
-                </button>
-              </div>
-            </div>
-          )}
-
-        {selectedOption === 'form' && (
-          <div className="bg-white shadow rounded-xl p-8 w-full max-w-full">
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-5">
-              {['name', 'dob', 'maritalStatus', 'gender', 'cpf', 'rg', 'contact', 'healthPlan', 'address'].map((field, idx) => (
-                <div key={idx} className="col-span-2 sm:col-span-1">
-                  <label className="block text-sm text-gray-700 mb-1 font-medium capitalize">
-                    {field === 'dob' ? 'Data de Nascimento' : field === 'cpf' ? 'CPF' : field === 'rg' ? 'RG' : field === 'healthPlan' ? 'Plano de Saúde' : field === 'maritalStatus' ? 'Estado Civil' : field === 'gender' ? 'Gênero' : field === 'contact' ? 'Contato' : field === 'address' ? 'Endereço' : 'Nome'}
-                  </label>
-                  {['maritalStatus', 'gender'].includes(field) ? (
-                    <select name={field} value={formData[field as keyof typeof formData]} onChange={handleInputChange} className="border p-2 w-full text-black rounded">
-                      <option value="" disabled hidden>
-                        {field === 'maritalStatus' ? 'Selecione o Estado Civil' : 'Selecione o Gênero'}
-                      </option>
-                      {field === 'maritalStatus' && (
-                        <>
-                          <option value="single">Solteiro(a)</option>
-                          <option value="married">Casado(a)</option>
-                          <option value="divorced">Divorciado(a)</option>
-                          <option value="separeted">Separado(a)</option>
-                          <option value="widowed">Viúvo(a)</option>
-                        </>
-                      )}
-                      {field === 'gender' && (
-                        <>
-                          <option value="male">Masculino</option>
-                          <option value="female">Feminino</option>
-                          <option value="other">Outro</option>
-                        </>
-                      )}
-                    </select>
-                  ) : (
-                    <input name={field} type={field === 'dob' ? 'date' : 'text'} value={formData[field as keyof typeof formData]} onChange={handleInputChange} placeholder={field} className="border p-2 w-full rounded text-sm text-black" />
-                  )}
-                </div>
-              ))}
-              <div className="col-span-2">
-                <button onClick={submitPatientForm} className="w-full bg-emerald-600 text-white px-5 py-3 rounded-full hover:bg-emerald-700 mt-6 shadow">
-                  Cadastrar Paciente
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {selectedOption === 'queue' && (
-        <div className="mt-8">
-          <div className="bg-white border border-gray-200 shadow rounded-xl p-6">
-            {queue.length > 0 ? (
-              <ul className="space-y-3">
-                {queue.map((ticket, i) => (
-                  <li key={i} className="px-4 py-2 rounded bg-gray-100 text-2xl font-medium text-gray-700">
-                    {ticket}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="text-center text-gray-500 italic py-4">
-                Nenhuma senha na fila no momento.
-              </div>
-            )}
-          </div>
-
-          <div className="mt-6 flex flex-col items-center">
-            <button
-              onClick={callNextTicket}
-              className="bg-verde hover:bg-verdeclaro text-white font-semibold px-6 py-3 rounded-full shadow-md transition"
-            >
-              Chamar Próximo
-            </button>
-
-            {calledTicket && (
-              <div className="mt-6 text-xl font-bold text-purple-700 bg-purple-100 border border-purple-300 px-6 py-4 rounded-xl shadow">
-                Próximo chamado: <span className="text-purple-800">{calledTicket}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      <div className="space-y-2 px-3">
+        <div onClick={() => setSelectedOption('generate')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 w-full transition ${selectedOption === 'generate' ? 'bg-white text-teal-600 font-semibold shadow rounded-r-full' : 'hover:bg-teal-700'}`}><ClipboardList size={16} /> Gerar Senha</div>
+        <div onClick={() => setSelectedOption('form')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 w-full transition ${selectedOption === 'form' ? 'bg-white text-teal-600 font-semibold shadow rounded-r-full' : 'hover:bg-teal-700'}`}><UserPlus size={16} /> Cadastro do Paciente</div>
+        <div onClick={() => { fetchQueue(); setSelectedOption('queue'); }} className={`flex items-center gap-2 cursor-pointer px-3 py-2 w-full transition ${selectedOption === 'queue' ? 'bg-white text-teal-600 font-semibold shadow rounded-r-full' : 'hover:bg-teal-700'}`}><List size={16} /> Fila Atual</div>
       </div>
     </div>
-        </>
+
+    <div className="p-4">
+      <button onClick={logout} className="w-full py-2 bg-red-500 rounded-full text-sm hover:bg-red-700 flex items-center justify-center gap-2">
+        <LogOut size={16} /> Sair
+      </button>
+    </div>
+  </div>
+
+  {/* Conteúdo principal com scroll se necessário */}
+  <div className="flex-1 overflow-y-auto p-10">
+    <div className="mb-6">
+      <h2 className="text-md text-gray-500 -mb-1 whitespace-nowrap">Bem vindo de volta! 👋</h2>
+      <h2 className="text-3xl font-bold text-gray-800">RECEPÇÃO</h2>
+    </div>
+
+    {/* Geração de senha */}
+    {selectedOption === 'generate' && (
+      <div className="space-y-10">
+        <div className="text-center bg-blue-100 border rounded-xl py-6 px-6 shadow"></div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+          <button onClick={() => generateTicket(1)} className="w-full py-4 bg-green-500 hover:bg-green-600 text-white text-lg font-semibold rounded-xl shadow">Sem Prioridade</button>
+          <button onClick={() => generateTicket(2)} className="w-full py-4 bg-yellow-500 hover:bg-yellow-600 text-white text-lg font-semibold rounded-xl shadow">Prioridade</button>
+          <button onClick={() => generateTicket(3)} className="w-full py-4 bg-red-600 hover:bg-red-700 text-white text-lg font-semibold rounded-xl shadow">Muita Prioridade</button>
+        </div>
+      </div>
+    )}
+
+    {/* Cadastro de paciente */}
+    {selectedOption === 'form' && (
+      <div className="bg-white shadow rounded-xl p-8 w-full max-w-full">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-5">
+          {['name', 'dob', 'maritalStatus', 'gender', 'cpf', 'rg', 'contact', 'healthPlan', 'address'].map((field, idx) => (
+            <div key={idx} className="col-span-2 sm:col-span-1">
+              <label className="block text-sm text-gray-700 mb-1 font-medium capitalize">
+                {{
+                  name: 'Nome',
+                  dob: 'Data de Nascimento',
+                  maritalStatus: 'Estado Civil',
+                  gender: 'Gênero',
+                  cpf: 'CPF',
+                  rg: 'RG',
+                  contact: 'Contato',
+                  healthPlan: 'Plano de Saúde',
+                  address: 'Endereço'
+                }[field as keyof typeof formData]}
+              </label>
+              {['maritalStatus', 'gender'].includes(field) ? (
+                <select name={field} value={formData[field as keyof typeof formData]} onChange={handleInputChange} className="border p-2 w-full text-black rounded">
+                  <option value="" disabled hidden>
+                    {field === 'maritalStatus' ? 'Selecione o Estado Civil' : 'Selecione o Gênero'}
+                  </option>
+                  {field === 'maritalStatus' && (
+                    <>
+                      <option value="single">Solteiro(a)</option>
+                      <option value="married">Casado(a)</option>
+                      <option value="divorced">Divorciado(a)</option>
+                      <option value="separeted">Separado(a)</option>
+                      <option value="widowed">Viúvo(a)</option>
+                    </>
+                  )}
+                  {field === 'gender' && (
+                    <>
+                      <option value="male">Masculino</option>
+                      <option value="female">Feminino</option>
+                      <option value="other">Outro</option>
+                    </>
+                  )}
+                </select>
+              ) : (
+                <input name={field} type={field === 'dob' ? 'date' : 'text'} value={formData[field as keyof typeof formData]} onChange={handleInputChange} placeholder={field} className="border p-2 w-full rounded text-sm text-black" />
+              )}
+            </div>
+          ))}
+          <div className="col-span-2">
+            <button onClick={submitPatientForm} className="w-full bg-emerald-600 text-white px-5 py-3 rounded-full hover:bg-emerald-700 mt-6 shadow">Cadastrar Paciente</button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Fila atual com scroll interno */}
+    {selectedOption === 'queue' && (
+      <div className="mt-8 max-w-3xl">
+        <div className="bg-white border border-gray-200 shadow rounded-xl p-6 max-h-[400px] overflow-y-auto">
+          {queue.length > 0 ? (
+            <ul className="space-y-3">
+              {queue.map((ticket, i) => (
+                <li key={i} className="px-4 py-2 rounded bg-gray-100 text-2xl font-medium text-gray-700">
+                  {ticket}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-center text-gray-500 italic py-4">Nenhuma senha na fila no momento.</div>
+          )}
+        </div>
+
+        <div className="mt-6 flex flex-col items-center">
+          <button
+            onClick={callNextTicket}
+            className="bg-verde hover:bg-verdeclaro text-white font-semibold px-6 py-3 rounded-full shadow-md transition"
+          >
+            Chamar Próximo
+          </button>
+
+          {calledTicket && (
+            <div className="mt-6 text-xl font-bold text-purple-700 bg-purple-100 border border-purple-300 px-6 py-4 rounded-xl shadow">
+              Próximo chamado: <span className="text-purple-800">{calledTicket}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+</>
   );
 }
-
 
 
 

@@ -68,9 +68,9 @@ export default function LoginPage() {
       />
 
       {/* Card de login */}
-      <div className="bg-white/20 p-14 rounded-[40px] shadow-lg w-full max-w-md backdrop-blur-md border border-white/30">
+      <div className="bg-white/20 p-10 rounded-[40px] shadow-lg w-full max-w-sm backdrop-blur-md border border-white/30">
         <h2 className="text-3xl font-bold text-center mb-2 text-verde">REALIZE SEU LOGIN</h2>
-        <p className="text-xl text-center text-white mt-1 mb-3 font-sans">Insira seu Usuário e Senha</p>
+        <p className="text-xl text-center text-white mt-1 mb-3 font-sans drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">Insira seu Usuário e Senha</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Usuário */}

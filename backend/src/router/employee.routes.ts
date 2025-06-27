@@ -7,7 +7,7 @@ const employeeRouter: Router = Router();
 
 employeeRouter.post('/register', loginVerify, AccessLevelMiddleware.admin, EmployeesConstroller.register);
 employeeRouter.post('/authAccount', EmployeesConstroller.authAccount);
-employeeRouter.put('/edit', loginVerify, AccessLevelMiddleware.admin, EmployeesConstroller.edit);
+employeeRouter.patch('/edit', loginVerify, AccessLevelMiddleware.admin, EmployeesConstroller.edit);
 
 employeeRouter.get('/list/:employee', loginVerify, AccessLevelMiddleware.admin, EmployeesConstroller.showEmployeers);
 

@@ -46,8 +46,8 @@ export const QueueReports = {
         }
 
         return {
-            triageQueueTime: triageRows.length ? triageQueueTime / triageRows.length : 0,
-            consultQueueTime: consultRows.length ? consultQueueTime / consultRows.length : 0
+            triageQueueTime: triageRows.length ? parseFloat((triageQueueTime / triageRows.length).toFixed(2)) : 0,
+            consultQueueTime: consultRows.length ? parseFloat((consultQueueTime / consultRows.length).toFixed(2)) : 0
         };
     }
 }

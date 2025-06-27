@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut, ClipboardList, Users, PencilLine, PlusCircle, Monitor } from 'lucide-react';
 import { useAuth } from '../utils/authRedirect';
-import { toast } from 'react-hot-toast';
 import { UserCircle2 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -172,25 +171,22 @@ export default function AdminPage() {
             </div>
           </div>
         </div>
-
         <button onClick={logout} className="w-full py-2 mb-3 bg-red-500 rounded-full hover:bg-red-700 flex items-center justify-center gap-2">
           <LogOut size={16} /> Sair
         </button>
       </div>
 
-      {/* Main Section */}
       <div className="flex-1 ml-64 p-8">
         <div className="mb-6 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-800">PAINEL DO ADMINISTRADOR 👤</h1>
          <a
-      href="/calls"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center gap-2 rounded-full bg-orange-400 hover:bg-orange-300 text-white px-4 py-2 2-full cursor-pointer"
-    >
-      <Monitor size={16} /> Painel de Chamados
-    </a>
-
+            href="/calls"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 rounded-full bg-orange-400 hover:bg-orange-300 text-white px-4 py-2 2-full cursor-pointer"
+          >
+            <Monitor size={16} /> Painel de Chamados
+          </a>
         </div>
 
         {selectedSection === 'register' && (
@@ -381,7 +377,7 @@ export default function AdminPage() {
                 type="submit"
                 disabled={loading}
                 className={`w-full px-4 py-2 2-full text-white ${
-                  loading ? 'bg-gray-400' : 'bg-green-400 hover:bg-green-300'
+                loading ? 'bg-gray-400' : 'bg-green-400 hover:bg-green-300'
                 }`}
               >
                 {loading ? 'Enviando...' : 'Cadastrar Funcionário'}
@@ -415,15 +411,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
-
-
-//Botao para tela de chamados(/calls)
-//ajeitar os campos
-//botar um fundo
-//dividir em seçoes,as funcionais(ver filas:Recepçao,triagem,consuta)
-//cadastrar funcionario
-//Editar funcionario
-//demitir(dois campos:nome e cpf) mandava um post e muda o status no banco de active para inative
-//ver os funcionarios
-//Botao de recuperar(recover)

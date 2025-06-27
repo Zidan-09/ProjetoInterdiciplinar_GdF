@@ -45,7 +45,7 @@ export function callNext(typeQueue: TypeQueue): Promise<string|CallTriage|CallCo
             temp = ConsultQueue.callNext();
             if (temp != QueueResponses.EmptyQueue) {
                 io.emit(TypeQueue.Consult, {
-                    called: temp.patient_id,
+                    called: temp.patient_name,
                     queue: TypeQueue.Consult
                 })
 

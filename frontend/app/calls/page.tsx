@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
@@ -14,22 +14,21 @@ interface Chamado {
 }
 
 export default function ChamadosPage() {
-  const [isClient, setIsClient] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const [chamados, setChamados] = useState<Chamado[]>([]);
-  const [popupChamado, setPopupChamado] = useState<Chamado | null>(null);
   const [filaDeExibicao, setFilaDeExibicao] = useState<Chamado[]>([]);
+  const [popupChamado, setPopupChamado] = useState<Chamado | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    setIsClient(true);
+    setHasMounted(true);
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
+  // Conexão com WebSocket
   useEffect(() => {
-    if (!isClient) return;
-
     const socketInstance = io("http://localhost:3333");
     setSocket(socketInstance);
 
@@ -38,13 +37,13 @@ export default function ChamadosPage() {
     });
 
     const adicionarChamado = (data: { called: string; queue: string }) => {
-      const novoChamado = {
+      const novoChamado: Chamado = {
         tipo: data.queue,
         senha: data.called,
         nome: nomeFila(data.queue),
         timestamp: new Date(),
       };
-      setChamados((prev) => [novoChamado, ...prev]);
+
       setFilaDeExibicao((prev) => [...prev, novoChamado]);
     };
 
@@ -55,44 +54,52 @@ export default function ChamadosPage() {
     return () => {
       socketInstance.disconnect();
     };
-  }, [isClient]);
+  }, []);
 
+  // Exibir chamados sequencialmente
   useEffect(() => {
     if (!popupChamado && filaDeExibicao.length > 0) {
       const proximo = filaDeExibicao[0];
       setPopupChamado(proximo);
       setFilaDeExibicao((prev) => prev.slice(1));
 
-      const tocarAlertaEFalar = async () => {
+      const tocarESpeak = async () => {
         try {
           const audio = new Audio("/chamado.mp3");
-          audio.play();
 
-          audio.onended = () => {
-            const fala = new SpeechSynthesisUtterance();
-            fala.lang = 'pt-BR';
+          // Espera o áudio terminar
+          await new Promise<void>((resolve, reject) => {
+            audio.onended = () => resolve();
+            audio.onerror = () => reject("Erro ao carregar ou tocar o áudio.");
+            audio.play().catch(reject);
+          });
 
-            if (proximo.tipo === 'recep') {
-              fala.text = `Senha ${proximo.senha}, dirigir-se à recepção.`;
-            } else {
-              fala.text = `${proximo.senha}, dirigir-se à ${nomeFila(proximo.tipo).toLowerCase()}.`;
-            }
+          // Depois do som, fala
+          const fala = new SpeechSynthesisUtterance();
+          fala.lang = 'pt-BR';
+          fala.text = proximo.tipo === 'recep'
+            ? `Senha ${proximo.senha}, dirigir-se à recepção.`
+            : `${proximo.senha}, dirigir-se à ${proximo.nome.toLowerCase()}.`;
 
+          await new Promise<void>((resolve) => {
+            fala.onend = () => resolve();
+            fala.onerror = () => resolve();
             speechSynthesis.speak(fala);
+          });
 
-            fala.onend = () => {
-              setTimeout(() => {
-                setPopupChamado(null);
-              }, 1000);
-            };
-          };
-        } catch (error) {
-          console.error("Erro ao tocar som ou falar:", error);
+          // Após a fala, limpa o card e adiciona ao histórico
+          setChamados((prev) => [proximo, ...prev]);
+          setTimeout(() => {
+            setPopupChamado(null);
+          }, 1000);
+        } catch (err) {
+          console.error("Erro no áudio ou fala:", err);
+          setChamados((prev) => [proximo, ...prev]);
           setPopupChamado(null);
         }
       };
 
-      tocarAlertaEFalar();
+      tocarESpeak();
     }
   }, [popupChamado, filaDeExibicao]);
 
@@ -116,9 +123,7 @@ export default function ChamadosPage() {
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 p-6 overflow-y-auto flex flex-col justify-center items-center">
           {popupChamado ? (
-            <div
-              className="bg-white rounded-lg shadow-md p-10 border-l-8 border-blue-500 w-[700px] h-[400px] flex flex-col justify-center items-center space-y-4 animate-fade-in"
-            >
+            <div className="bg-white rounded-lg shadow-md p-10 border-l-8 border-blue-500 w-[700px] h-[400px] flex flex-col justify-center items-center space-y-4 animate-fade-in">
               <h2
                 className={`font-bold text-gray-800 animate-pulse ${
                   isSenhaPadrao(popupChamado.senha) ? "text-5xl" : "text-4xl"
@@ -149,8 +154,8 @@ export default function ChamadosPage() {
         <div className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto">
           <h2 className="text-xl font-bold mb-4 text-verde">Histórico</h2>
           <div className="space-y-3">
-            {chamados.slice(0, 10).map((c, index) => (
-              <div key={index} className="border-b pb-2 last:border-b-0">
+            {chamados.slice(0, 3).map((c, index) => (
+              <div key={index} className="border-b pb-2 last:border-b-0 text-verdeclaro">
                 <p className="text-sm font-medium">{c.nome}: {c.senha}</p>
                 <p className="text-xs text-gray-500">{formatarData(c.timestamp)}</p>
               </div>
@@ -168,16 +173,20 @@ export default function ChamadosPage() {
         <div className="flex flex-col items-end">
           <div className="flex items-center gap-2">
             <Calendar className="text-white w-5 h-5" />
-            <p className="text-xl font-medium">
-              {format(currentTime, "EEEE, d 'de' MMMM 'de' yyyy", { locale: ptBR })}
-            </p>
+            {hasMounted && (
+              <p className="text-xl font-medium">
+                {format(currentTime, "EEEE, d 'de' MMMM 'de' yyyy", { locale: ptBR })}
+              </p>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
             <Clock className="text-white w-5 h-5" />
-            <p className="text-2xl font-bold">
-              {format(currentTime, "HH:mm:ss", { locale: ptBR })}
-            </p>
+            {hasMounted && (
+              <p className="text-2xl font-bold">
+                {format(currentTime, "HH:mm:ss", { locale: ptBR })}
+              </p>
+            )}
           </div>
         </div>
       </div>

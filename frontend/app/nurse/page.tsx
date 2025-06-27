@@ -199,8 +199,11 @@ export default function NursePage() {
     </div>
   </div>
 
-      <div className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-4 text-gray-800">Triagem de Pacientes</h1>
+       <div className="flex-1 overflow-y-auto p-10">
+        <div className="mb-6">
+          <h2 className="text-md text-gray-500">Bem vindo, Enfermeira(o)! 👋</h2>
+          <h2 className="text-3xl font-bold text-gray-800">A TRIAGEM DOS PACIENTES</h2>
+        </div>
 
         {selectedSection === 'fila' && (
           <div className="bg-white border border-gray-200 shadow rounded-xl p-6">

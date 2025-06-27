@@ -96,8 +96,8 @@ export default function ReceptionistPage() {
       const result = await response.json();
       if (result.status && result.data) {
         toast.custom(() => (
-          <div className="bg-blue-100 text-blue-800 px-6 py-4 rounded-xl shadow-lg border border-blue-300 flex items-center space-x-4 text-lg">
-            <CheckCircle className="text-blue-500 w-6 h-6" />
+          <div className="bg-verde text-white px-6 py-4 rounded-xl shadow-lg border border-verdeclaro flex items-center space-x-4 text-lg">
+            <CheckCircle className="text-white w-6 h-6" />
             <div>
               <p className="font-bold">Senha Gerada</p>
               <p className="text-2xl font-semibold">{result.data}</p>
@@ -188,7 +188,7 @@ export default function ReceptionistPage() {
         </h1>
       </div>
 
-      <div className="space-y-2 px-3">
+      <div className="space-y-2 -px-1">
         <div onClick={() => setSelectedOption('generate')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 w-full transition ${selectedOption === 'generate' ? 'bg-white text-teal-600 font-semibold shadow rounded-r-full' : 'hover:bg-teal-700'}`}><ClipboardList size={16} /> Gerar Senha</div>
         <div onClick={() => setSelectedOption('form')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 w-full transition ${selectedOption === 'form' ? 'bg-white text-teal-600 font-semibold shadow rounded-r-full' : 'hover:bg-teal-700'}`}><UserPlus size={16} /> Cadastro do Paciente</div>
         <div onClick={() => { fetchQueue(); setSelectedOption('queue'); }} className={`flex items-center gap-2 cursor-pointer px-3 py-2 w-full transition ${selectedOption === 'queue' ? 'bg-white text-teal-600 font-semibold shadow rounded-r-full' : 'hover:bg-teal-700'}`}><List size={16} /> Fila Atual</div>
@@ -205,7 +205,7 @@ export default function ReceptionistPage() {
   {/* Conteúdo principal com scroll se necessário */}
   <div className="flex-1 overflow-y-auto p-10">
     <div className="mb-6">
-      <h2 className="text-md text-gray-500 -mb-1 whitespace-nowrap">Bem vindo de volta! 👋</h2>
+      <h2 className="text-md text-gray-500 -mb-1 whitespace-nowrap">Bem vindo! 👋</h2>
       <h2 className="text-3xl font-bold text-gray-800">RECEPÇÃO</h2>
     </div>
 
@@ -275,7 +275,7 @@ export default function ReceptionistPage() {
 
     {/* Fila atual com scroll interno */}
     {selectedOption === 'queue' && (
-      <div className="mt-8 max-w-3xl">
+      <div className="mt-8 max-w-8xl">
         <div className="bg-white border border-gray-200 shadow rounded-xl p-6 max-h-[400px] overflow-y-auto">
           {queue.length > 0 ? (
             <ul className="space-y-3">

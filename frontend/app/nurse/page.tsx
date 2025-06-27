@@ -175,14 +175,16 @@ export default function NursePage() {
 
   return (
     <div className="flex min-h-screen bg-white">
-      <div className="w-64 bg-teal-600 text-white p-4 flex flex-col justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-6">
-            <img src="/Gemini_Generated_Image_9357q79357q79357.png" alt="Logo" className="h-16 w-16" />
-            <h1 className="text-lg font-bold uppercase">Sistema GdF</h1>
-          </div>
+      <div className="w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
+    <div>
+      <div className="flex gap-1 mb-6">
+        <img src="/Gemini_Generated_Image_9357q79357q79357.png" alt="Logo" className="h-[150px] w-[150px] ml-2 -mt-3" />
+        <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
+          Sistema<br />GdF
+        </h1>
+      </div>
           <div className="space-y-2">
-            <div onClick={() => setSelectedSection('realizar')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'realizar' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
+            <div onClick={() => setSelectedSection('realizar')} className={`flex items-center gap-2 px-3 py-2 cursor-pointer rounded-r-full ${selectedSection === 'realizar' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
               <ClipboardList size={16} /> Realizar Triagem
             </div>
             <div onClick={() => setSelectedSection('fila')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'fila' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
@@ -190,13 +192,18 @@ export default function NursePage() {
             </div>
           </div>
         </div>
-        <button onClick={logout} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded mt-6 flex items-center gap-2">
-          <LogOut size={16} /> Sair
-        </button>
-      </div>
+        <div className="p-4">
+      <button onClick={logout} className="w-full py-2 bg-red-500 rounded-full text-sm hover:bg-red-700 flex items-center justify-center gap-2">
+        <LogOut size={16} /> Sair
+      </button>
+    </div>
+  </div>
 
-      <div className="flex-1 p-8">
-        <h1 className="text-2xl font-bold mb-4 text-gray-800">Triagem de Pacientes</h1>
+       <div className="flex-1 overflow-y-auto p-10">
+        <div className="mb-6">
+          <h2 className="text-md text-gray-500">Bem vindo, Enfermeira(o)! 👋</h2>
+          <h2 className="text-3xl font-bold text-gray-800">A TRIAGEM DOS PACIENTES</h2>
+        </div>
 
         {selectedSection === 'fila' && (
           <div className="bg-white border border-gray-200 shadow rounded-xl p-6">

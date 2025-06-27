@@ -165,9 +165,14 @@ export default function DoctorPage() {
   return (
     <div className="flex h-screen bg-white">
       <div className="w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
-        <div>
-          <div className="p-4 text-center text-xl font-bold tracking-wide">Sistema GdF</div>
-          <div className="space-y-2 px-3">
+    <div>
+      <div className="flex gap-1 mb-6">
+        <img src="/Gemini_Generated_Image_9357q79357q79357.png" alt="Logo" className="h-[150px] w-[150px] ml-2 -mt-3" />
+        <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
+          Sistema<br />GdF
+        </h1>
+      </div>
+          <div className="space-y-2 -px-1">
             <button onClick={() => setSelectedSection('realizar')} className={`w-full text-left px-3 py-2 rounded-r-full transition flex items-center gap-2 ${selectedSection === 'realizar' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}>
               <Stethoscope size={16} /> Realizar Consulta
             </button>
@@ -185,7 +190,7 @@ export default function DoctorPage() {
 
       <div className="flex-1 overflow-y-auto p-10">
         <div className="mb-6">
-          <h2 className="text-md text-gray-500">Bem vindo de volta, Doutor 👨‍⚕️</h2>
+          <h2 className="text-md text-gray-500">Bem vindo, Médico(a)! 👋</h2>
           <h2 className="text-3xl font-bold text-gray-800">CONSULTAS</h2>
         </div>
 
@@ -195,9 +200,15 @@ export default function DoctorPage() {
         {selectedSection === 'realizar' && (
           <div className="space-y-6">
             {!queueData ? (
-              <button onClick={callNextPatient} disabled={loading} className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full shadow">
-                Chamar Próximo Paciente
-              </button>
+              <div className="flex justify-center">
+            <button
+              onClick={callNextPatient}
+              className="bg-verde hover:bg-verdeclaro text-white px-6 py-3 rounded-full shadow"
+            >
+              {'Chamar Próximo Paciente'}
+            </button>
+          </div>
+
             ) : (
               <div className="bg-white shadow-lg rounded-xl p-6">
                 <div className="flex justify-between items-center">

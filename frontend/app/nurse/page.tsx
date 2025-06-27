@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, ClipboardList, UserPlus, List } from 'lucide-react';
+import { LogOut, ClipboardList, List } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 
 export default function NursePage() {
   const router = useRouter();
+  const [selectedSection, setSelectedSection] = useState<'realizar' | 'fila'>('realizar');
   const [triageQueue, setTriageQueue] = useState<string[]>([]);
   const [calledPatient, setCalledPatient] = useState<{ patient_name: string; careFlow_id: number } | null>(null);
   const [formVisible, setFormVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  
 
   const [formData, setFormData] = useState({
     vitalSigns: {
@@ -174,115 +175,101 @@ export default function NursePage() {
 
   return (
     <div className="flex min-h-screen bg-white">
-        <div className="w-64 bg-teal-600 text-white p-0 flex flex-col justify-between">
+      <div className="w-64 bg-teal-600 text-white p-4 flex flex-col justify-between">
         <div>
-          <div className="flex gap-1 mb-6">
-            <img 
-              src="/Gemini_Generated_Image_9357q79357q79357.png"
-              alt="Logo" 
-              className="h-[150px] w-[150px] ml-2 -mt-3" 
-            />
-            <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
-              Sistema<br />GdF
-            </h1>
+          <div className="flex items-center gap-2 mb-6">
+            <img src="/Gemini_Generated_Image_9357q79357q79357.png" alt="Logo" className="h-16 w-16" />
+            <h1 className="text-lg font-bold uppercase">Sistema GdF</h1>
           </div>
-
-          {/* Seção de menu */}
           <div className="space-y-2">
-            <div 
-              className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${'realizar' === 'realizar' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}
-            >
-              <ClipboardList size={16} />
-              Realizar Triagem
+            <div onClick={() => setSelectedSection('realizar')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'realizar' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
+              <ClipboardList size={16} /> Realizar Triagem
+            </div>
+            <div onClick={() => setSelectedSection('fila')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'fila' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
+              <List size={16} /> Ver Fila
             </div>
           </div>
         </div>
-
-        <button 
-          onClick={logout} 
-          className="mt-6 py-2 bg-red-500 rounded-full text-sm hover:bg-red-700 flex items-center justify-center gap-2"
-        >
+        <button onClick={logout} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded mt-6 flex items-center gap-2">
           <LogOut size={16} /> Sair
         </button>
       </div>
 
-        
-
       <div className="flex-1 p-8">
         <h1 className="text-2xl font-bold mb-4 text-gray-800">Triagem de Pacientes</h1>
 
-        <div className="bg-white border border-gray-200 shadow rounded-xl p-6">
-          {triageQueue.length > 0 ? (
-            <ul className="space-y-3 mb-6">
-              {triageQueue.map((ticket, i) => (
-                <li key={i} className="px-4 py-2 rounded bg-gray-100 text-2xl font-medium text-gray-700">
-                  {ticket}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="text-center text-gray-500 italic py-4">
-              Nenhuma paciente na fila no momento.
-            </div>
-          )}
-
-          <div className="mt-4 flex justify-center">
-            <button
-              onClick={callNextPatient}
-              className="bg-verde hover:verdeclaro text-white font-semibold px-6 py-3 rounded-full shadow-md transition"
-            >
-              Chamar Próximo
-            </button>
-          </div>
-        </div>
-
-        {calledPatient && (
-          <div className="mt-8 bg-blue-100 border border-blue-300 p-6 rounded-xl shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xl font-bold text-blue-800">Paciente Chamado</p>
-                <p className="text-gray-700">Nome: {calledPatient.patient_name}</p>
-                <p className="text-gray-700">ID: {calledPatient.careFlow_id}</p>
+        {selectedSection === 'fila' && (
+          <div className="bg-white border border-gray-200 shadow rounded-xl p-6">
+            {triageQueue.length > 0 ? (
+              <ul className="space-y-3 mb-6">
+                {triageQueue.map((ticket, i) => (
+                  <li key={i} className="px-4 py-2 rounded bg-gray-100 text-2xl font-medium text-gray-700">
+                    {ticket}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-center text-gray-500 italic py-4">
+                Nenhum paciente na fila no momento.
               </div>
-              {!formVisible && (
+            )}
+          </div>
+        )}
+
+        {selectedSection === 'realizar' && (
+          <div className="bg-white border border-gray-200 shadow rounded-xl p-2">
+            {!formVisible && (
+              <div className="text-center">
+                <p className="text-lg text-gray-600 mb-4">Clique abaixo para chamar o próximo paciente da fila</p>
                 <button
-                  onClick={iniciarTriagem}
-                  className="ml-4 bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-full shadow"
+                  onClick={callNextPatient}
+                  className="bg-verde hover:bg-verdeclaro text-white font-semibold px-6 py-3 rounded-full shadow-md"
                 >
-                  Iniciar Triagem
+                  Chamar Próximo Paciente
                 </button>
-              )}
-            </div>
+              </div>
+            )}
 
-            {formVisible && (
-              <form className="mt-6">
-                <h2 className="text-lg font-bold mb-4">Formulário de Triagem</h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input type="number" name="systolicPressure" placeholder="Pressão Sistólica" onChange={handleChange} value={formData.vitalSigns.bloodPressure.systolicPressure} className="border p-2 rounded" />
-                  <input type="number" name="diastolicPressure" placeholder="Pressão Diastólica" onChange={handleChange} value={formData.vitalSigns.bloodPressure.diastolicPressure} className="border p-2 rounded" />
-                  <input type="number" name="heartRate" placeholder="Frequência Cardíaca" onChange={handleChange} value={formData.vitalSigns.heartRate} className="border p-2 rounded" />
-                  <input type="number" name="respiratoryRate" placeholder="Frequência Respiratória" onChange={handleChange} value={formData.vitalSigns.respiratoryRate} className="border p-2 rounded" />
-                  <input type="number" name="bodyTemperature" placeholder="Temperatura Corporal" step="0.1" onChange={handleChange} value={formData.vitalSigns.bodyTemperature} className="border p-2 rounded" />
-                  <input type="number" name="oxygenSaturation" placeholder="Saturação de Oxigênio" onChange={handleChange} value={formData.vitalSigns.oxygenSaturation} className="border p-2 rounded" />
-                  <input type="number" name="painLevel" placeholder="Nível de Dor (0-10)" min={0} max={10} onChange={handleChange} value={formData.painLevel} className="border p-2 rounded" />
-                  <input type="text" name="symptoms" placeholder="Sintomas (separados por vírgula)" onChange={handleChange} value={formData.symptoms} className="border p-2 rounded" />
-                  <select name="triageCategory" value={formData.triageCategory} onChange={handleChange} className="border p-2 rounded">
-                    <option value="non_urgent">Pouco Urgente</option>
-                    <option value="urgent">Urgente</option>
-                    <option value="very_urgent">Muito Urgente</option>
-                    <option value="emergency">Emergência</option>
-                  </select>
+            {calledPatient && (
+              <div className="mt-8 bg-verde border border-verdeclaro p-6 rounded-lg shadow">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xl font-bold text-white">Paciente Chamado</p>
+                    <p className="text-white">Nome: {calledPatient.patient_name}</p>
+                    <p className="text-white">ID: {calledPatient.careFlow_id}</p>
+                  </div>
+                  {!formVisible && (
+                    <button onClick={iniciarTriagem} className="ml-4 bg-green-400 hover:bg-green-300 text-white px-5 py-2 rounded-full shadow">
+                      Iniciar Triagem
+                    </button>
+                  )}
                 </div>
 
-                <button
-                  onClick={finalizarTriagem}
-                  type="button"
-                  className="mt-6 w-full bg-green-600 text-white px-5 py-3 rounded-full hover:bg-green-700 shadow"
-                >
-                  Finalizar Triagem
-                </button>
-              </form>
+                {formVisible && (
+                  <form className="mt-5 max-h-[70vh] overflow-y-auto">
+                    <h2 className="text-lg font-bold mb-4 text-white">Formulário de Triagem</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input type="number" name="systolicPressure" placeholder="Pressão Sistólica" onChange={handleChange} value={formData.vitalSigns.bloodPressure.systolicPressure} className="border p-2 rounded text-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      <input type="number" name="diastolicPressure" placeholder="Pressão Diastólica" onChange={handleChange} value={formData.vitalSigns.bloodPressure.diastolicPressure} className="border p-2 rounded text-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      <input type="number" name="heartRate" placeholder="Frequência Cardíaca" onChange={handleChange} value={formData.vitalSigns.heartRate} className="border p-2 rounded text-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      <input type="number" name="respiratoryRate" placeholder="Frequência Respiratória" onChange={handleChange} value={formData.vitalSigns.respiratoryRate} className="border p-2 rounded text-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      <input type="number" name="bodyTemperature" placeholder="Temperatura Corporal" step="0.1" onChange={handleChange} value={formData.vitalSigns.bodyTemperature} className="border p-2 rounded text-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      <input type="number" name="oxygenSaturation" placeholder="Saturação de Oxigênio" onChange={handleChange} value={formData.vitalSigns.oxygenSaturation} className="border p-2 rounded text-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      <input type="number" name="painLevel" placeholder="Nível de Dor (0-10)" min={0} max={10} onChange={handleChange} value={formData.painLevel} className="border p-2 rounded text-black [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                      <input type="text" name="symptoms" placeholder="Sintomas (separados por vírgula)" onChange={handleChange} value={formData.symptoms} className="border-bg-verde p-2 rounded text-black" />
+                      <select name="triageCategory" value={formData.triageCategory} onChange={handleChange} className="border p-2 rounded text-black">
+                        <option value="non_urgent">Pouco Urgente</option>
+                        <option value="urgent">Urgente</option>
+                        <option value="very_urgent">Muito Urgente</option>
+                        <option value="emergency">Emergência</option>
+                      </select>
+                    </div>
+                    <button onClick={finalizarTriagem} type="button" className="mt-6 w-full bg-green-600 text-white px-5 py-3 rounded-full hover:bg-green-700 shadow">
+                      Finalizar Triagem
+                    </button>
+                  </form>
+                )}
+              </div>
             )}
           </div>
         )}
@@ -291,10 +278,13 @@ export default function NursePage() {
   );
 }
 
+
+
 // 'use client';
 
 // import { useEffect, useState } from 'react';
 // import { useRouter } from 'next/navigation';
+// import { LogOut, ClipboardList, UserPlus, List } from 'lucide-react';
 
 // export default function NursePage() {
 //   const router = useRouter();
@@ -303,6 +293,7 @@ export default function NursePage() {
 //   const [calledPatient, setCalledPatient] = useState<{ patient_name: string; careFlow_id: number } | null>(null);
 //   const [formVisible, setFormVisible] = useState(false);
 //   const [loading, setLoading] = useState(false);
+//   const [notification, setNotification] = useState<string | null>(null);
 
 //   const [formData, setFormData] = useState({
 //     vitalSigns: {
@@ -411,11 +402,12 @@ export default function NursePage() {
 //         body: JSON.stringify(payload),
 //       });
 //       const result = await res.json();
-//       alert(result.message);
+//       setNotification(result.message || 'Triagem finalizada com sucesso.');
 //       setFormVisible(false);
 //       setCalledPatient(null);
 //       resetForm();
 //       fetchQueue();
+//       setTimeout(() => setNotification(null), 5000);
 //     } catch (err) {
 //       console.error(err);
 //       alert('Erro ao finalizar triagem');
@@ -464,22 +456,48 @@ export default function NursePage() {
 //   };
 
 //   return (
-//     <div className="flex h-screen">
-//       <div className="w-56 bg-teal-500 text-white p-4 flex flex-col justify-between">
+//     <div className="flex min-h-screen bg-white">
+//       {/* Lateral */}
+//       <div className="w-64 bg-teal-600 text-white p-0 flex flex-col justify-between">
 //         <div>
-//           <h2 className="text-lg font-bold mb-6">Sistema GdF</h2>
-//           <button onClick={() => setSelectedSection('realizar')} className={`w-full mb-2 py-2 rounded ${selectedSection === 'realizar' ? 'bg-white text-black' : 'hover:bg-teal-600'}`}>
-//             Realizar Triagem
-//           </button>
-//           <button onClick={() => setSelectedSection('fila')} className={`w-full mb-2 py-2 rounded ${selectedSection === 'fila' ? 'bg-white text-black' : 'hover:bg-teal-600'}`}>
-//             Ver Fila da Triagem
-//           </button>
-//           <button onClick={() => setSelectedSection('alterar')} className={`w-full mb-2 py-2 rounded ${selectedSection === 'alterar' ? 'bg-white text-black' : 'hover:bg-teal-600'}`}>
-//             Alterar Classificação
-//           </button>
+//           <div className="flex gap-1 mb-6">
+//             <img 
+//               src="/Gemini_Generated_Image_9357q79357q79357.png"
+//               alt="Logo" 
+//               className="h-[150px] w-[150px] ml-2 -mt-3" 
+//             />
+//             <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
+//               Sistema<br />GdF
+//             </h1>
+//           </div>
+
+//           <div className="space-y-2">
+//             <div onClick={() => setSelectedSection('realizar')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedSection === 'realizar' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}>
+//               <ClipboardList size={16} /> Realizar Triagem
+//             </div>
+//             <div onClick={() => setSelectedSection('fila')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedSection === 'fila' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}>
+//               <List size={16} /> Ver Fila da Triagem
+//             </div>
+//             <div onClick={() => setSelectedSection('alterar')} className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full w-full transition ${selectedSection === 'alterar' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}>
+//               <UserPlus size={16} /> Alterar Classificação
+//             </div>
+//           </div>
 //         </div>
-//         <button onClick={logout} className="text-red-200 hover:underline text-left">Sair</button>
+
+//         <button 
+//           onClick={logout} 
+//           className="mt-6 py-2 bg-red-500 rounded-full text-sm hover:bg-red-700 flex items-center justify-center gap-2"
+//         >
+//           <LogOut size={16} /> Sair
+//         </button>
 //       </div>
+//       <div className="flex-1 p-6 overflow-y-auto bg-white">
+//         {notification && (
+//           <div className="mb-4 p-3 bg-green-100 text-green-800 rounded shadow text-center">
+//             {notification}
+//           </div>
+//         )}
+
 
 //       <div className="flex-1 p-6 overflow-y-auto bg-white">
 //         <h1 className="text-2xl font-bold mb-4 text-black">Bem-vinda, Enfermeira 👩‍⚕️</h1>
@@ -572,6 +590,7 @@ export default function NursePage() {
 //           </div>
 //         )}
 //       </div>
+//     </div>
 //     </div>
 //   );
 // }

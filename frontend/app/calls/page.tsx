@@ -95,17 +95,20 @@ export default function ChamadosPage() {
   return (
     <div className="flex flex-col h-screen bg-gray-100 relative">
       {popupChamado && (
-        <div className="absolute z-50 top-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white p-8 rounded-xl shadow-lg animate-pulse w-[500px]">
-          <h2 className="text-3xl font-bold mb-2">{popupChamado.nome}</h2>
-          <p className="text-5xl font-extrabold mb-1">{popupChamado.senha}</p>
-          <p className="text-lg">Por favor, dirigir-se à <strong>{popupChamado.nome}</strong>.</p>
-        </div>
-      )}
-
+  <div className="absolute z-50 top-17 left-1/2 -translate-x-1/2 bg-blue-600 text-white p-8 rounded-xl shadow-lg w-[500px]">
+    <h2 className="text-3xl font-bold mb-2 animate-pulse">{popupChamado.nome}</h2>
+    <p className="text-5xl font-extrabold mb-1 animate-pulse">{popupChamado.senha}</p>
+    <p className="text-lg">Por favor, dirigir-se à <strong>{popupChamado.nome}</strong>.</p>
+  </div>
+)}
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 p-6 overflow-y-auto">
           <h1 className="text-3xl font-bold mb-6 text-verde">CHAMADOS ATIVOS</h1>
-          {chamados.length === 0 ? (
+          {popupChamado ? (
+            <div className="flex items-center justify-center h-64">
+              <p className="text-gray-400 text-xl italic">Aguardando finalização do chamado atual...</p>
+            </div>
+          ) : chamados.length === 0 ? (
             <div className="flex items-center justify-center h-64">
               <p className="text-gray-500 text-lg">Nenhum chamado recebido ainda.</p>
             </div>
@@ -146,26 +149,26 @@ export default function ChamadosPage() {
         </div>
 
         <div className="flex flex-col items-end">
-          {/* Data com ícone de calendário */}
           <div className="flex items-center gap-2">
             <Calendar className="text-white w-5 h-5" />
             <p className="text-xl font-medium">
               {format(currentTime, "EEEE, d 'de' MMMM 'de' yyyy", { locale: ptBR })}
             </p>
           </div>
-          
-         
-        <div className="flex items-center gap-2">
-          <Clock className="text-white w-5 h-5" />
-          <p className="text-2xl font-bold">
-            {format(currentTime, "HH:mm:ss", { locale: ptBR })}
-          </p>
+
+          <div className="flex items-center gap-2">
+            <Clock className="text-white w-5 h-5" />
+            <p className="text-2xl font-bold">
+              {format(currentTime, "HH:mm:ss", { locale: ptBR })}
+            </p>
+          </div>
         </div>
-        </div>
-        </div>
-        </div>
+      </div>
+    </div>
   );
 }
+
+
 
 
 

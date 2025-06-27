@@ -165,8 +165,13 @@ export default function DoctorPage() {
   return (
     <div className="flex h-screen bg-white">
       <div className="w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
-        <div>
-          <div className="p-4 text-center text-xl font-bold tracking-wide">Sistema GdF</div>
+    <div>
+      <div className="flex gap-1 mb-6">
+        <img src="/Gemini_Generated_Image_9357q79357q79357.png" alt="Logo" className="h-[150px] w-[150px] ml-2 -mt-3" />
+        <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
+          Sistema<br />GdF
+        </h1>
+      </div>
           <div className="space-y-2 px-3">
             <button onClick={() => setSelectedSection('realizar')} className={`w-full text-left px-3 py-2 rounded-r-full transition flex items-center gap-2 ${selectedSection === 'realizar' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}>
               <Stethoscope size={16} /> Realizar Consulta

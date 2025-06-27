@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut, ClipboardList, Users, PencilLine, PlusCircle, Monitor } from 'lucide-react';
 import { useAuth } from '../utils/authRedirect';
-import toast from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
+import { UserCircle2 } from 'lucide-react';
 
 export default function AdminPage() {
   useAuth('admin');
   const router = useRouter();
-  const [selectedSection, setSelectedSection] = useState<'register' | 'queue' | 'edit' | 'list'>('register');
+  const [selectedSection, setSelectedSection] = useState<'register' | 'queue' | 'edit' | 'patient' |'list'>('register');
 
   const [formData, setFormData] = useState({
     accessLevel: '',
@@ -145,11 +146,13 @@ export default function AdminPage() {
   return (
     <div className="flex min-h-screen bg-white">
       {/* Sidebar */}
-      <div className="fixed w-64 bg-teal-600 text-white p-4 h-screen flex flex-col justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-6">
-            <img src="/Gemini_Generated_Image_9357q79357q79357.png" alt="Logo" className="h-16 w-16" />
-            <h1 className="text-lg font-bold uppercase">Sistema GdF</h1>
+      <div className="w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
+    <div>
+      <div className="flex gap-1 mb-6">
+        <img src="/Gemini_Generated_Image_9357q79357q79357.png" alt="Logo" className="h-[150px] w-[150px] ml-2 -mt-3" />
+        <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
+          Sistema<br />GdF
+        </h1>
           </div>
 
           <div className="space-y-2">
@@ -157,13 +160,16 @@ export default function AdminPage() {
               <PlusCircle size={16} /> Cadastrar Funcionário
             </div>
             <div onClick={() => setSelectedSection('queue')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'queue' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
-              <ClipboardList size={16} /> Ver Fila
+              <ClipboardList size={16} /> Ver Fila(em desenvol.)
             </div>
             <div onClick={() => setSelectedSection('edit')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'edit' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
-              <PencilLine size={16} /> Editar Funcionário
+              <PencilLine size={16} /> Editar Funcionário(em desenvol.)
             </div>
             <div onClick={() => setSelectedSection('list')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'list' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
-              <Users size={16} /> Ver Funcionários
+              <Users size={16} /> Ver Funcionários(em desenvol.)
+            </div>
+            <div onClick={() => setSelectedSection('patient')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'patient' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
+              <UserCircle2 size={16} /> Ver Pacientes(em desenvol.)
             </div>
           </div>
         </div>
@@ -174,17 +180,17 @@ export default function AdminPage() {
       </div>
 
       {/* Main Section */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 ml-64 p-8">
         <div className="mb-6 flex justify-between items-center">
-          <h1 className="text-2xl ml-80 font-bold text-gray-800">PAINEL DO ADMINISTRADOR 👤</h1>
+          <h1 className="text-2xl  font-bold text-gray-800">PAINEL DO ADMINISTRADOR 👤</h1>
          <a
-        href="/calls"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-2 bg-orange-400 hover:bg-orange-300 text-white px-4 py-2 rounded-full cursor-pointer"
-      >
-        <Monitor size={16} /> Painel de Chamados
-      </a>
+      href="/calls"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-2 bg-orange-400 hover:bg-orange-300 text-white px-4 py-2 rounded-full cursor-pointer"
+    >
+      <Monitor size={16} /> Painel de Chamados
+    </a>
 
         </div>
 

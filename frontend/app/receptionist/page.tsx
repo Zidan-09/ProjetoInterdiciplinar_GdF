@@ -178,7 +178,6 @@ export default function ReceptionistPage() {
         }}
       />
       <div className="flex h-screen bg-white">
-  {/* Sidebar fixa com botão no rodapé */}
   <div className="w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
     <div>
       <div className="flex gap-1 mb-6">
@@ -202,14 +201,12 @@ export default function ReceptionistPage() {
     </div>
   </div>
 
-  {/* Conteúdo principal com scroll se necessário */}
   <div className="flex-1 overflow-y-auto p-10">
     <div className="mb-6">
       <h2 className="text-md text-gray-500 -mb-1 whitespace-nowrap">Bem vindo! 👋</h2>
       <h2 className="text-3xl font-bold text-gray-800">RECEPÇÃO</h2>
     </div>
 
-    {/* Geração de senha */}
     {selectedOption === 'generate' && (
       <div className="space-y-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
@@ -220,7 +217,6 @@ export default function ReceptionistPage() {
       </div>
     )}
 
-    {/* Cadastro de paciente */}
     {selectedOption === 'form' && (
       <div className="bg-white shadow rounded-xl p-8 w-full max-w-full">
         <div className="grid grid-cols-2 md:grid-cols-2 gap-5">

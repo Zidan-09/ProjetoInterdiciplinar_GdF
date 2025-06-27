@@ -1,4 +1,3 @@
-// Nova versão estilizada da tela do médico com base na interface da recepcionista
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -6,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import { LogOut, Stethoscope, List } from 'lucide-react';
 
 interface QueuePatient {
-  patient_name: string;
-  triageCategory: string;
+  name: string;
 }
 
 interface QueueData {
@@ -61,7 +59,11 @@ export default function DoctorPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       const result = await res.json();
-      if (result.status && result.data) setConsultQueue(result.data);
+      if (result.status && result.data) {
+        const names: string[] = result.data;
+        const mapped: QueuePatient[] = names.map(name => ({ name }));
+        setConsultQueue(mapped);
+      }
     } catch (err) {
       console.error('Erro ao buscar fila:', err);
     }
@@ -152,18 +154,8 @@ export default function DoctorPage() {
     router.push('/login');
   };
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'non_urgent': return 'bg-green-400';
-      case 'urgent': return 'bg-yellow-300';
-      case 'very_urgent': return 'bg-orange-400';
-      case 'emergency': return 'bg-red-500';
-      default: return 'bg-gray-300';
-    }
-  };
-
   return (
-    <div className="flex h-screen bg-white">
+    <div className="flex min-h-screen bg-white">
       <div className="w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
     <div>
       <div className="flex gap-1 mb-6">
@@ -264,8 +256,8 @@ export default function DoctorPage() {
             {consultQueue.length > 0 ? (
               <ul className="space-y-2">
                 {consultQueue.map((p, i) => (
-                  <li key={i} className={`p-3 rounded text-black ${getCategoryColor(p.triageCategory)}`}>
-                    {p.patient_name} - {p.triageCategory}
+                  <li key={i} className="p-3 rounded text-black bg-gray-100 shadow">
+                    {p.name}
                   </li>
                 ))}
               </ul>

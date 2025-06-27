@@ -201,7 +201,7 @@ export default function NursePage() {
 
        <div className="flex-1 overflow-y-auto p-10">
         <div className="mb-6">
-          <h2 className="text-md text-gray-500">Bem vindo, Enfermeira(o)! 👋</h2>
+          <h2 className="text-md text-gray-500">Bem vindo Enfermeira(o)! 👋</h2>
           <h2 className="text-3xl font-bold text-gray-800">A TRIAGEM DOS PACIENTES</h2>
         </div>
 

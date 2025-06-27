@@ -212,12 +212,10 @@ export default function ReceptionistPage() {
     {/* Geração de senha */}
     {selectedOption === 'generate' && (
       <div className="space-y-10">
-        <div className="text-center bg-blue-100 border rounded-xl py-6 px-6 shadow"></div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-          <button onClick={() => generateTicket(1)} className="w-full py-4 bg-green-500 hover:bg-green-600 text-white text-lg font-semibold rounded-xl shadow">Sem Prioridade</button>
-          <button onClick={() => generateTicket(2)} className="w-full py-4 bg-yellow-500 hover:bg-yellow-600 text-white text-lg font-semibold rounded-xl shadow">Prioridade</button>
-          <button onClick={() => generateTicket(3)} className="w-full py-4 bg-red-600 hover:bg-red-700 text-white text-lg font-semibold rounded-xl shadow">Muita Prioridade</button>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
+          <button onClick={() => generateTicket(1)} className="w-full py-4 bg-green-500 hover:bg-green-600 text-white text-lg font-semibold rounded-full shadow">Sem Prioridade</button>
+          <button onClick={() => generateTicket(2)} className="w-full py-4 bg-yellow-500 hover:bg-yellow-600 text-white text-lg font-semibold rounded-full shadow">Prioridade</button>
+          <button onClick={() => generateTicket(3)} className="w-full py-4 bg-red-600 hover:bg-red-700 text-white text-lg font-semibold rounded-full shadow">Muita Prioridade</button>
         </div>
       </div>
     )}

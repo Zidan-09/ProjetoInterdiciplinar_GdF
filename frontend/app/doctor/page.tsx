@@ -1,7 +1,9 @@
+// Nova versão estilizada da tela do médico com base na interface da recepcionista
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { LogOut, Stethoscope, List } from 'lucide-react';
 
 interface QueuePatient {
   patient_name: string;
@@ -41,7 +43,7 @@ export default function DoctorPage() {
   const getToken = () => localStorage.getItem('token');
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = getToken();
     const role = localStorage.getItem('role');
     if (!token || role?.toLowerCase() !== 'doctor') {
       alert('Acesso não autorizado!');
@@ -55,10 +57,10 @@ export default function DoctorPage() {
     const token = getToken();
     if (!token) return;
     try {
-      const response = await fetch('http://localhost:3333/queue/byName/consult', {
+      const res = await fetch('http://localhost:3333/queue/byName/consult', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const result = await response.json();
+      const result = await res.json();
       if (result.status && result.data) setConsultQueue(result.data);
     } catch (err) {
       console.error('Erro ao buscar fila:', err);
@@ -71,21 +73,18 @@ export default function DoctorPage() {
     setError('');
     try {
       const token = getToken();
-      if (!token) throw new Error('Token não encontrado.');
-
-      const response = await fetch('http://localhost:3333/queue/call/consult', {
+      const res = await fetch('http://localhost:3333/queue/call/consult', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const result = await response.json();
-      if (response.ok && result.status) {
+      const result = await res.json();
+      if (res.ok && result.status) {
         setQueueData(result.data);
         setConsultStarted(false);
         fetchQueue();
       } else {
         setError(result.message || 'Nenhum paciente na fila.');
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError('Erro ao chamar paciente.');
     } finally {
       setLoading(false);
@@ -95,22 +94,15 @@ export default function DoctorPage() {
   const startConsult = async () => {
     if (!queueData) return;
     setLoading(true);
-    setError('');
     try {
       const token = getToken();
-      if (!token) throw new Error('Token não encontrado.');
-
-      const response = await fetch(`http://localhost:3333/hospital/consultInit/${queueData.careFlow_id}`, {
+      const res = await fetch(`http://localhost:3333/hospital/consultInit/${queueData.careFlow_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const result = await response.json();
-      if (result.status) {
-        setConsultStarted(true);
-      } else {
-        setError(result.message || 'Erro ao iniciar consulta.');
-      }
-    } catch (err) {
-      console.error(err);
+      const result = await res.json();
+      if (result.status) setConsultStarted(true);
+      else setError(result.message);
+    } catch {
       setError('Erro ao iniciar consulta.');
     } finally {
       setLoading(false);
@@ -122,21 +114,15 @@ export default function DoctorPage() {
     setLoading(true);
     try {
       const token = getToken();
-      if (!token) throw new Error('Token não encontrado.');
-
-      const response = await fetch(`http://localhost:3333/hospital/consultEnd/${queueData.careFlow_id}`, {
+      const res = await fetch(`http://localhost:3333/hospital/consultEnd/${queueData.careFlow_id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          diagnosis,
-          prescriptions,
-          notes,
-        }),
+        body: JSON.stringify({ diagnosis, prescriptions, notes }),
       });
-      const result = await response.json();
+      const result = await res.json();
       if (result.status) {
         setMessage('Consulta finalizada com sucesso.');
         setQueueData(null);
@@ -146,10 +132,9 @@ export default function DoctorPage() {
         setNotes('');
         fetchQueue();
       } else {
-        setError(result.message || 'Erro ao finalizar consulta.');
+        setError(result.message);
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError('Erro ao finalizar consulta.');
     } finally {
       setLoading(false);
@@ -169,118 +154,90 @@ export default function DoctorPage() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'non_urgent':
-        return 'bg-green-400';
-      case 'urgent':
-        return 'bg-yellow-300';
-      case 'very_urgent':
-        return 'bg-orange-400';
-      case 'emergency':
-        return 'bg-red-500';
-      default:
-        return 'bg-gray-300';
+      case 'non_urgent': return 'bg-green-400';
+      case 'urgent': return 'bg-yellow-300';
+      case 'very_urgent': return 'bg-orange-400';
+      case 'emergency': return 'bg-red-500';
+      default: return 'bg-gray-300';
     }
   };
 
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <div className="w-56 bg-teal-500 text-white p-4 flex flex-col justify-between">
+    <div className="flex h-screen bg-white">
+      <div className="w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
         <div>
-          <h2 className="text-lg font-bold mb-6">Sistema GdF</h2>
-          <button onClick={() => setSelectedSection('realizar')} className={`w-full mb-2 py-2 rounded ${selectedSection === 'realizar' ? 'bg-white text-black' : 'hover:bg-teal-600'}`}>
-            Realizar Consulta
-          </button>
-          <button onClick={() => setSelectedSection('fila')} className={`w-full mb-2 py-2 rounded ${selectedSection === 'fila' ? 'bg-white text-black' : 'hover:bg-teal-600'}`}>
-            Ver Fila de Consulta
+          <div className="p-4 text-center text-xl font-bold tracking-wide">Sistema GdF</div>
+          <div className="space-y-2 px-3">
+            <button onClick={() => setSelectedSection('realizar')} className={`w-full text-left px-3 py-2 rounded-r-full transition flex items-center gap-2 ${selectedSection === 'realizar' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}>
+              <Stethoscope size={16} /> Realizar Consulta
+            </button>
+            <button onClick={() => setSelectedSection('fila')} className={`w-full text-left px-3 py-2 rounded-r-full transition flex items-center gap-2 ${selectedSection === 'fila' ? 'bg-white text-teal-600 font-semibold shadow' : 'hover:bg-teal-700'}`}>
+              <List size={16} /> Ver Fila
+            </button>
+          </div>
+        </div>
+        <div className="p-4">
+          <button onClick={logout} className="w-full py-2 bg-red-500 rounded-full hover:bg-red-700 flex items-center justify-center gap-2">
+            <LogOut size={16} /> Sair
           </button>
         </div>
-        <button onClick={logout} className="text-red-200 hover:underline text-left">Sair</button>
       </div>
 
-      {/* Área de Conteúdo */}
-      <div className="flex-1 p-6 overflow-y-auto bg-white">
-        <h1 className="text-2xl font-bold mb-4 text-black">Bem-vindo, Doutor 👨‍⚕️</h1>
+      <div className="flex-1 overflow-y-auto p-10">
+        <div className="mb-6">
+          <h2 className="text-md text-gray-500">Bem vindo de volta, Doutor 👨‍⚕️</h2>
+          <h2 className="text-3xl font-bold text-gray-800">CONSULTAS</h2>
+        </div>
+
+        {message && <p className="text-green-600 font-semibold mb-4">{message}</p>}
+        {error && <p className="text-red-600 font-semibold mb-4">{error}</p>}
 
         {selectedSection === 'realizar' && (
-          <div>
-            {message && <p className="text-green-600">{message}</p>}
-            {error && <p className="text-red-600">{error}</p>}
-
-            {!queueData && (
-              <button
-                onClick={callNextPatient}
-                disabled={loading}
-                className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700"
-              >
-                {loading ? 'Chamando...' : 'Chamar Próximo Paciente'}
+          <div className="space-y-6">
+            {!queueData ? (
+              <button onClick={callNextPatient} disabled={loading} className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full shadow">
+                Chamar Próximo Paciente
               </button>
-            )}
-
-            {queueData && (
-              <div className="space-y-3 mt-4">
-                <h2 className="text-xl font-semibold">Paciente: {queueData.patient_name}</h2>
-                <p><strong>Pressão:</strong> {queueData.triage.vitalSigns.bloodPressure.systolicPressure}/{queueData.triage.vitalSigns.bloodPressure.diastolicPressure}</p>
-                <p><strong>Frequência Cardíaca:</strong> {queueData.triage.vitalSigns.heartRate} bpm</p>
-                <p><strong>Respiração:</strong> {queueData.triage.vitalSigns.respiratoryRate} rpm</p>
-                <p><strong>Temperatura:</strong> {queueData.triage.vitalSigns.bodyTemperature} °C</p>
-                <p><strong>Saturação:</strong> {queueData.triage.vitalSigns.oxygenSaturation}%</p>
-                <p><strong>Nível de Dor:</strong> {queueData.triage.painLevel}</p>
-                <p><strong>Sintomas:</strong> {queueData.triage.symptoms.join(', ')}</p>
-                <p><strong>Classificação:</strong> {queueData.triage.triageCategory}</p>
-
-                {!consultStarted && (
-                  <button
-                    onClick={startConsult}
-                    disabled={loading}
-                    className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-                  >
-                    {loading ? 'Iniciando...' : 'Iniciar Consulta'}
-                  </button>
-                )}
+            ) : (
+              <div className="bg-white shadow-lg rounded-xl p-6">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-xl text-verde font-bold">Paciente: {queueData.patient_name}</h2>
+                  {!consultStarted && (
+                    <button onClick={startConsult} disabled={loading} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                      {loading ? 'Iniciando...' : 'Iniciar Consulta'}
+                    </button>
+                  )}
+                </div>
+                <div className="mt-4 space-y-2 text-gray-700">
+                  <p><strong>Pressão:</strong> {queueData.triage.vitalSigns.bloodPressure.systolicPressure}/{queueData.triage.vitalSigns.bloodPressure.diastolicPressure}</p>
+                  <p><strong>Cardíaca:</strong> {queueData.triage.vitalSigns.heartRate} bpm</p>
+                  <p><strong>Respiração:</strong> {queueData.triage.vitalSigns.respiratoryRate} rpm</p>
+                  <p><strong>Temperatura:</strong> {queueData.triage.vitalSigns.bodyTemperature} °C</p>
+                  <p><strong>Saturação:</strong> {queueData.triage.vitalSigns.oxygenSaturation}%</p>
+                  <p><strong>Dor:</strong> {queueData.triage.painLevel}</p>
+                  <p><strong>Sintomas:</strong> {queueData.triage.symptoms.join(', ')}</p>
+                  <p><strong>Classificação:</strong> {queueData.triage.triageCategory}</p>
+                </div>
 
                 {consultStarted && (
-                  <div className="space-y-2">
-                    <textarea
-                      placeholder="Diagnóstico"
-                      value={diagnosis}
-                      onChange={(e) => setDiagnosis(e.target.value)}
-                      className="w-full border p-2 rounded"
-                    />
-                    <textarea
-                      placeholder="Notas/Observações"
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      className="w-full border p-2 rounded"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Adicionar Prescrição"
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          handleAddPrescription((e.target as HTMLInputElement).value);
-                          (e.target as HTMLInputElement).value = '';
-                        }
-                      }}
-                      className="w-full border p-2 rounded"
-                    />
+                  <div className="mt-5 space-y-4">
+                    <textarea placeholder="Diagnóstico" value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)} className="w-full border p-1 rounded text-black"></textarea>
+                    <textarea placeholder="Notas/Observações" value={notes} onChange={(e) => setNotes(e.target.value)} className="w-full border p-1 rounded text-black"></textarea>
+                    <input type="text" placeholder="Adicionar Prescrição" onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddPrescription((e.target as HTMLInputElement).value);
+                        (e.target as HTMLInputElement).value = '';
+                      }
+                    }} className="w-full border p-2 rounded text-black" />
                     {prescriptions.length > 0 && (
-                      <div>
-                        <p>Prescrições:</p>
-                        <ul className="list-disc ml-6">
-                          {prescriptions.map((p, idx) => (
-                            <li key={idx}>{p}</li>
-                          ))}
-                        </ul>
-                      </div>
+                      <ul className="list-disc ml-6 text-gray-700">
+                        {prescriptions.map((p, i) => (
+                          <li key={i}>{p}</li>
+                        ))}
+                      </ul>
                     )}
-
-                    <button
-                      onClick={endConsult}
-                      disabled={loading}
-                      className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
-                    >
+                    <button onClick={endConsult} disabled={loading} className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full">
                       {loading ? 'Finalizando...' : 'Finalizar Consulta'}
                     </button>
                   </div>
@@ -291,21 +248,18 @@ export default function DoctorPage() {
         )}
 
         {selectedSection === 'fila' && (
-          <div>
-            <h2 className="text-xl font-semibold mb-2">Fila de Consulta Atual</h2>
+          <div className="bg-white border rounded-xl p-6 shadow">
+            <h2 className="text-xl text-verde font-bold mb-4">Fila de Consulta</h2>
             {consultQueue.length > 0 ? (
-              <ul>
-                {consultQueue.map((p, idx) => (
-                  <li
-                    key={idx}
-                    className={`p-2 mb-1 rounded text-black ${getCategoryColor(p.triageCategory)}`}
-                  >
+              <ul className="space-y-2">
+                {consultQueue.map((p, i) => (
+                  <li key={i} className={`p-3 rounded text-black ${getCategoryColor(p.triageCategory)}`}>
                     {p.patient_name} - {p.triageCategory}
                   </li>
                 ))}
               </ul>
             ) : (
-              <p>Nenhum paciente na fila.</p>
+              <p className="text-gray-500 italic">Nenhum paciente na fila.</p>
             )}
           </div>
         )}
@@ -313,6 +267,8 @@ export default function DoctorPage() {
     </div>
   );
 }
+
+
 
 
 // 'use client';

@@ -1,4 +1,3 @@
-// Nova versão estilizada da tela do médico com base na interface da recepcionista
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -6,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import { LogOut, Stethoscope, List } from 'lucide-react';
 
 interface QueuePatient {
-  patient_name: string;
-  triageCategory: string;
+  name: string;
 }
 
 interface QueueData {
@@ -61,7 +59,11 @@ export default function DoctorPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
       const result = await res.json();
-      if (result.status && result.data) setConsultQueue(result.data);
+      if (result.status && result.data) {
+        const names: string[] = result.data;
+        const mapped: QueuePatient[] = names.map(name => ({ name }));
+        setConsultQueue(mapped);
+      }
     } catch (err) {
       console.error('Erro ao buscar fila:', err);
     }
@@ -152,18 +154,8 @@ export default function DoctorPage() {
     router.push('/login');
   };
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'non_urgent': return 'bg-green-400';
-      case 'urgent': return 'bg-yellow-300';
-      case 'very_urgent': return 'bg-orange-400';
-      case 'emergency': return 'bg-red-500';
-      default: return 'bg-gray-300';
-    }
-  };
-
   return (
-    <div className="flex h-screen bg-white">
+    <div className="flex min-h-screen bg-white">
       <div className="w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
     <div>
       <div className="flex gap-1 mb-6">
@@ -193,9 +185,6 @@ export default function DoctorPage() {
           <h2 className="text-md text-gray-500">Bem vindo, Médico(a)! 👋</h2>
           <h2 className="text-3xl font-bold text-gray-800">CONSULTAS</h2>
         </div>
-
-        {message && <p className="text-green-600 font-semibold mb-4">{message}</p>}
-        {error && <p className="text-red-600 font-semibold mb-4">{error}</p>}
 
         {selectedSection === 'realizar' && (
           <div className="space-y-6">
@@ -264,8 +253,8 @@ export default function DoctorPage() {
             {consultQueue.length > 0 ? (
               <ul className="space-y-2">
                 {consultQueue.map((p, i) => (
-                  <li key={i} className={`p-3 rounded text-black ${getCategoryColor(p.triageCategory)}`}>
-                    {p.patient_name} - {p.triageCategory}
+                  <li key={i} className="p-3 rounded text-black bg-gray-100 shadow">
+                    {p.name}
                   </li>
                 ))}
               </ul>
@@ -278,242 +267,3 @@ export default function DoctorPage() {
     </div>
   );
 }
-
-
-
-
-// 'use client';
-
-// import { useState } from 'react';
-
-// interface QueueData {
-//   careFlow_id: number;
-//   patient_name: string;
-//   triage: {
-//     vitalSigns: {
-//       bloodPressure: {
-//         systolicPressure: number;
-//         diastolicPressure: number;
-//       };
-//       heartRate: number;
-//       respiratoryRate: number;
-//       bodyTemperature: number;
-//       oxygenSaturation: number;
-//     };
-//     painLevel: number;
-//     symptoms: string[];
-//     triageCategory: string;
-//   };
-// }
-
-// export default function DoctorPage() {
-//   const [queueData, setQueueData] = useState<QueueData | null>(null);
-//   const [consultStarted, setConsultStarted] = useState(false);
-//   const [diagnosis, setDiagnosis] = useState('');
-//   const [prescriptions, setPrescriptions] = useState<string[]>([]);
-//   const [notes, setNotes] = useState('');
-//   const [message, setMessage] = useState('');
-//   const [error, setError] = useState('');
-//   const [loading, setLoading] = useState(false);
-
-//   const getToken = () => localStorage.getItem('token');
-
-//   const callNextPatient = async () => {
-//     setLoading(true);
-//     setMessage('');
-//     setError('');
-//     try {
-//       const token = getToken();
-//       if (!token) throw new Error('Token não encontrado. Faça login novamente.');
-
-//       const response = await fetch('http://localhost:3333/queue/call/consult', {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-//       const result = await response.json();
-//       if (response.ok && result.status) {
-//         setQueueData(result.data);
-//       } else {
-//         setError(result.message || 'Erro ao chamar próximo paciente.');
-//       }
-//     } catch (err) {
-//       console.error(err);
-//       setError('Falha ao conectar com o servidor.');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const startConsult = async () => {
-//     if (!queueData) return;
-
-//     setLoading(true);
-//     setMessage('');
-//     setError('');
-//     try {
-//       const token = getToken();
-//       if (!token) throw new Error('Token não encontrado. Faça login novamente.');
-
-//       const response = await fetch(`http://localhost:3333/hospital/consultInit/${queueData.careFlow_id}`, {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-//       const result = await response.json();
-//       if (response.ok && result.status) {
-//         setConsultStarted(true);
-//         setMessage('Consulta iniciada.');
-//       } else {
-//         setError(result.message || 'Erro ao iniciar consulta.');
-//       }
-//     } catch (err) {
-//       console.error(err);
-//       setError('Falha ao iniciar consulta.');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const endConsult = async () => {
-//     if (!queueData) return;
-
-//     setLoading(true);
-//     setMessage('');
-//     setError('');
-//     try {
-//       const token = getToken();
-//       if (!token) throw new Error('Token não encontrado. Faça login novamente.');
-
-//       const response = await fetch(`http://localhost:3333/hospital/consultEnd/${queueData.careFlow_id}`, {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${token}`,
-//         },
-//         body: JSON.stringify({
-//           diagnosis,
-//           prescriptions,
-//           notes,
-//         }),
-//       });
-
-//       const result = await response.json();
-//       if (response.ok && result.status) {
-//         setMessage('Consulta finalizada com sucesso.');
-//         setQueueData(null);
-//         setConsultStarted(false);
-//         setDiagnosis('');
-//         setPrescriptions([]);
-//         setNotes('');
-//       } else {
-//         setError(result.message || 'Erro ao finalizar consulta.');
-//       }
-//     } catch (err) {
-//       console.error(err);
-//       setError('Falha ao finalizar consulta.');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleAddPrescription = (prescription: string) => {
-//     if (prescription.trim() !== '') {
-//       setPrescriptions([...prescriptions, prescription]);
-//     }
-//   };
-
-//   return (
-//     <div className="max-w-xl mx-auto mt-8 p-4 border rounded shadow space-y-4">
-//       <h1 className="text-2xl font-bold">Atendimento Médico</h1>
-
-//       {message && <p className="text-green-600">{message}</p>}
-//       {error && <p className="text-red-600">{error}</p>}
-
-//       {!queueData && (
-//         <button
-//           onClick={callNextPatient}
-//           disabled={loading}
-//           className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-//         >
-//           {loading ? 'Chamando...' : 'Chamar Próximo Paciente'}
-//         </button>
-//       )}
-
-//       {queueData && (
-//         <div className="space-y-2">
-//           <h2 className="text-xl font-semibold">Paciente: {queueData.patient_name}</h2>
-//           <p><strong>Pressão:</strong> {queueData.triage.vitalSigns.bloodPressure.systolicPressure}/{queueData.triage.vitalSigns.bloodPressure.diastolicPressure}</p>
-//           <p><strong>Frequência Cardíaca:</strong> {queueData.triage.vitalSigns.heartRate} bpm</p>
-//           <p><strong>Respiração:</strong> {queueData.triage.vitalSigns.respiratoryRate} rpm</p>
-//           <p><strong>Temperatura:</strong> {queueData.triage.vitalSigns.bodyTemperature} °C</p>
-//           <p><strong>Saturação:</strong> {queueData.triage.vitalSigns.oxygenSaturation}%</p>
-//           <p><strong>Nível de Dor:</strong> {queueData.triage.painLevel}</p>
-//           <p><strong>Sintomas:</strong> {queueData.triage.symptoms.join(', ')}</p>
-//           <p><strong>Categoria da Triagem:</strong> {queueData.triage.triageCategory}</p>
-
-//           {!consultStarted && (
-//             <button
-//               onClick={startConsult}
-//               disabled={loading}
-//               className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-//             >
-//               {loading ? 'Iniciando...' : 'Iniciar Consulta'}
-//             </button>
-//           )}
-
-//           {consultStarted && (
-//             <div className="space-y-2 mt-4">
-//               <textarea
-//                 placeholder="Diagnóstico"
-//                 value={diagnosis}
-//                 onChange={(e) => setDiagnosis(e.target.value)}
-//                 className="w-full border p-2 rounded"
-//                 required
-//               />
-
-//               <textarea
-//                 placeholder="Notas/Observações"
-//                 value={notes}
-//                 onChange={(e) => setNotes(e.target.value)}
-//                 className="w-full border p-2 rounded"
-//               />
-
-//               <div>
-//                 <input
-//                   type="text"
-//                   placeholder="Adicionar Prescrição (ex: Benegripe)"
-//                   onKeyDown={(e) => {
-//                     if (e.key === 'Enter') {
-//                       e.preventDefault();
-//                       handleAddPrescription((e.target as HTMLInputElement).value);
-//                       (e.target as HTMLInputElement).value = '';
-//                     }
-//                   }}
-//                   className="w-full border p-2 rounded"
-//                 />
-//                 {prescriptions.length > 0 && (
-//                   <div>
-//                     <p>Prescrições:</p>
-//                     <ul className="list-disc ml-6">
-//                       {prescriptions.map((p, idx) => (
-//                         <li key={idx}>{p}</li>
-//                       ))}
-//                     </ul>
-//                   </div>
-//                 )}
-//               </div>
-
-//               <button
-//                 onClick={endConsult}
-//                 disabled={loading}
-//                 className="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-//               >
-//                 {loading ? 'Finalizando...' : 'Finalizar Consulta'}
-//               </button>
-//             </div>
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-//reaizar consulta(inicia consulta)
-//ver fila(bolinha com a cor para verificar)
-//Botar lugar para ver a fila

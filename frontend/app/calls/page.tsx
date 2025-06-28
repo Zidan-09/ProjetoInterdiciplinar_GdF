@@ -27,7 +27,6 @@ export default function ChamadosPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Conexão com WebSocket
   useEffect(() => {
     const socketInstance = io("http://localhost:3333");
     setSocket(socketInstance);
@@ -56,7 +55,6 @@ export default function ChamadosPage() {
     };
   }, []);
 
-  // Exibir chamados sequencialmente
   useEffect(() => {
     if (!popupChamado && filaDeExibicao.length > 0) {
       const proximo = filaDeExibicao[0];
@@ -67,14 +65,12 @@ export default function ChamadosPage() {
         try {
           const audio = new Audio("/chamado.mp3");
 
-          // Espera o áudio terminar
           await new Promise<void>((resolve, reject) => {
             audio.onended = () => resolve();
             audio.onerror = () => reject("Erro ao carregar ou tocar o áudio.");
             audio.play().catch(reject);
           });
 
-          // Depois do som, fala
           const fala = new SpeechSynthesisUtterance();
           fala.lang = 'pt-BR';
           fala.text = proximo.tipo === 'recep'
@@ -87,7 +83,6 @@ export default function ChamadosPage() {
             speechSynthesis.speak(fala);
           });
 
-          // Após a fala, limpa o card e adiciona ao histórico
           setChamados((prev) => [proximo, ...prev]);
           setTimeout(() => {
             setPopupChamado(null);

@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut, ClipboardList, Users, PencilLine, PlusCircle, Monitor } from 'lucide-react';
 import { useAuth } from '../utils/authRedirect';
-import { toast } from 'react-hot-toast';
 import { UserCircle2 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -145,57 +144,53 @@ export default function AdminPage() {
 
   return (
     <div className="flex min-h-screen bg-white">
-      {/* Sidebar */}
-      <div className="w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
+      <div className="fixed w-64 bg-teal-600 text-white flex flex-col justify-between h-screen">
     <div>
       <div className="flex gap-1 mb-6">
         <img src="/Gemini_Generated_Image_9357q79357q79357.png" alt="Logo" className="h-[150px] w-[150px] ml-2 -mt-3" />
         <h1 className="text-lg uppercase font-bold leading-tight tracking-wide -ml-8 mt-6">
           Sistema<br />GdF
         </h1>
-          </div>
+      </div>
 
           <div className="space-y-2">
-            <div onClick={() => setSelectedSection('register')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'register' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
+            <div onClick={() => setSelectedSection('register')} className={`flex items-center gap-2 px-3 py-2 cursor-pointer rounded-r-full ${selectedSection === 'register' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
               <PlusCircle size={16} /> Cadastrar Funcionário
             </div>
-            <div onClick={() => setSelectedSection('queue')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'queue' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
+            <div onClick={() => setSelectedSection('queue')} className={`flex items-center gap-2 px-3 py-2 rounded-r-full cursor-pointer ${selectedSection === 'queue' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
               <ClipboardList size={16} /> Ver Fila(em desenvol.)
             </div>
-            <div onClick={() => setSelectedSection('edit')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'edit' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
+            <div onClick={() => setSelectedSection('edit')} className={`flex items-center gap-2 rounded-r-full px-3 py-2 2 cursor-pointer ${selectedSection === 'edit' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
               <PencilLine size={16} /> Editar Funcionário(em desenvol.)
             </div>
-            <div onClick={() => setSelectedSection('list')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'list' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
+            <div onClick={() => setSelectedSection('list')} className={`flex items-center gap-2 rounded-r-full px-3 py-2 2 cursor-pointer ${selectedSection === 'list' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
               <Users size={16} /> Ver Funcionários(em desenvol.)
             </div>
-            <div onClick={() => setSelectedSection('patient')} className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer ${selectedSection === 'patient' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
+            <div onClick={() => setSelectedSection('patient')} className={`flex items-center gap-2 px-3 rounded-r-full py-2 2 cursor-pointer ${selectedSection === 'patient' ? 'bg-white text-teal-600 font-bold shadow' : 'hover:bg-teal-700'}`}>
               <UserCircle2 size={16} /> Ver Pacientes(em desenvol.)
             </div>
           </div>
         </div>
-
-        <button onClick={logout} className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded mt-6 flex items-center gap-2">
+        <button onClick={logout} className="w-full py-2 mb-3 bg-red-500 rounded-full hover:bg-red-700 flex items-center justify-center gap-2">
           <LogOut size={16} /> Sair
         </button>
       </div>
 
-      {/* Main Section */}
       <div className="flex-1 ml-64 p-8">
         <div className="mb-6 flex justify-between items-center">
-          <h1 className="text-2xl  font-bold text-gray-800">PAINEL DO ADMINISTRADOR 👤</h1>
+          <h1 className="text-2xl font-bold text-gray-800">PAINEL DO ADMINISTRADOR 👤</h1>
          <a
-      href="/calls"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center gap-2 bg-orange-400 hover:bg-orange-300 text-white px-4 py-2 rounded-full cursor-pointer"
-    >
-      <Monitor size={16} /> Painel de Chamados
-    </a>
-
+            href="/calls"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 rounded-full bg-orange-400 hover:bg-orange-300 text-white px-4 py-2 2-full cursor-pointer"
+          >
+            <Monitor size={16} /> Painel de Chamados
+          </a>
         </div>
 
         {selectedSection === 'register' && (
-          <div className="max-w-4xl w-full mx-auto p-6 border rounded shadow bg-white">
+          <div className="max-w-4xl w-full mx-auto p-6 border 2 shadow bg-white">
             <h1 className="text-2xl text-black font-bold mb-4">Cadastrar Novo Funcionário</h1>
             {message && <p className="text-green-600 mb-4">{message}</p>}
             {error && <p className="text-red-600 mb-4">{error}</p>}
@@ -205,7 +200,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.accessLevel}
                 required
-                className="text-black w-full border p-2 rounded"
+                className="text-black w-full border p-2 2"
               >
                 <option value="">Selecione o cargo</option>
                 <option value="admin">Admin</option>
@@ -223,7 +218,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.registrationNumber}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               />
               <input
                 name="name"
@@ -231,7 +226,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.name}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               />
               <input
                 name="cpf"
@@ -239,7 +234,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.cpf}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               />
               <input
                 name="email"
@@ -248,7 +243,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.email}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               />
               <input
                 name="phone"
@@ -256,7 +251,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.phone}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               />
               <input
                 name="dob"
@@ -265,7 +260,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.dob}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               />
               <input
                 name="address"
@@ -273,14 +268,14 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.address}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               />
               <select
                 name="workShift"
                 onChange={handleChange}
                 value={formData.workShift}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               >
                 <option value="">Turno</option>
                 <option value="morning">Manhã</option>
@@ -293,7 +288,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.status}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               >
                 <option value="">Status</option>
                 <option value="active">Ativo</option>
@@ -309,7 +304,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.salary}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               />
               <input
                 name="cnesCode"
@@ -317,7 +312,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.cnesCode}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               />
               <input
                 name="weeklyHours"
@@ -328,7 +323,7 @@ export default function AdminPage() {
                 onChange={handleChange}
                 value={formData.weeklyHours}
                 required
-                className="w-full border p-2 rounded text-black"
+                className="w-full border p-2 2 text-black"
               />
               {accessLevel === 'doctor' && (
                 <>
@@ -338,7 +333,7 @@ export default function AdminPage() {
                     onChange={handleChange}
                     value={formData.crm}
                     required
-                    className="w-full border p-2 rounded text-black"
+                    className="w-full border p-2 2 text-black"
                   />
                   <input
                     name="specialty"
@@ -346,7 +341,7 @@ export default function AdminPage() {
                     onChange={handleChange}
                     value={formData.specialty}
                     required
-                    className="w-full border p-2 rounded text-black"
+                    className="w-full border p-2 2 text-black"
                   />
                 </>
               )}
@@ -358,7 +353,7 @@ export default function AdminPage() {
                     onChange={handleChange}
                     value={formData.coren}
                     required
-                    className="w-full border p-2 rounded text-black"
+                    className="w-full border p-2 2 text-black"
                   />
                   <input
                     name="department"
@@ -366,7 +361,7 @@ export default function AdminPage() {
                     onChange={handleChange}
                     value={formData.department}
                     required
-                    className="w-full border p-2 rounded text-black"
+                    className="w-full border p-2 2 text-black"
                   />
                   <input
                     name="specialty"
@@ -374,15 +369,15 @@ export default function AdminPage() {
                     onChange={handleChange}
                     value={formData.specialty}
                     required
-                    className="w-full border p-2 rounded text-black"
+                    className="w-full border p-2 2 text-black"
                   />
                 </>
               )}
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full px-4 py-2 rounded-full text-white ${
-                  loading ? 'bg-gray-400' : 'bg-green-400 hover:bg-green-300'
+                className={`w-full px-4 py-2 2-full text-white ${
+                loading ? 'bg-gray-400' : 'bg-green-400 hover:bg-green-300'
                 }`}
               >
                 {loading ? 'Enviando...' : 'Cadastrar Funcionário'}
@@ -393,21 +388,21 @@ export default function AdminPage() {
         )}
 
         {selectedSection === 'queue' && (
-          <div className="border rounded p-6 shadow max-w-2xl">
+          <div className="border 2 p-6 shadow max-w-2xl">
             <h2 className="text-xl font-semibold mb-4">Lista de Atendimentos</h2>
             <p className="text-gray-500 italic">(Implementar lista de atendimentos com fetch)</p>
           </div>
         )}
 
         {selectedSection === 'edit' && (
-          <div className="border rounded p-6 shadow max-w-2xl">
+          <div className="border 2 p-6 shadow max-w-2xl">
             <h2 className="text-xl font-semibold mb-4">Editar Funcionário</h2>
             <p className="text-gray-500 italic">(Implementar edição de funcionário)</p>
           </div>
         )}
 
         {selectedSection === 'list' && (
-          <div className="border rounded p-6 shadow max-w-3xl">
+          <div className="border 2 p-6 shadow max-w-3xl">
             <h2 className="text-xl font-semibold mb-4">Funcionários Cadastrados</h2>
             <p className="text-gray-500 italic">(Implementar listagem de funcionários)</p>
           </div>
@@ -416,15 +411,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
-
-
-//Botao para tela de chamados(/calls)
-//ajeitar os campos
-//botar um fundo
-//dividir em seçoes,as funcionais(ver filas:Recepçao,triagem,consuta)
-//cadastrar funcionario
-//Editar funcionario
-//demitir(dois campos:nome e cpf) mandava um post e muda o status no banco de active para inative
-//ver os funcionarios
-//Botao de recuperar(recover)
